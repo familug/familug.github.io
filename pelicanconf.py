@@ -34,4 +34,4 @@ DEFAULT_PAGINATION = 10
 RELATIVE_URLS = True
 
 STATIC_PATHS = ['images']
-THEME = 'elegant'
+THEME = 'elegant'  # https://github.com/Pelican-Elegant/elegant
