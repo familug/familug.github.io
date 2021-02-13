@@ -97,7 +97,7 @@ https://www.vagrantup.com/docs/boxes/base#vagrant-user
 
 ## Kết luận
 Với những hiểu biết này, ta đã có thể tạo các máy ảo và dùng như
-vagrant, hay thạm chí tạo các vagrant box để tự dùng.
+vagrant, hay thậm chí tạo các vagrant box để tự dùng.
 
 https://www.vagrantup.com/docs/boxes/base
 
