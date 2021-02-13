@@ -27,7 +27,7 @@ thêm một dòng mới, chọn host port là 1 số từ 2222 đến 22XX,
 Guest Port là 22.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Port forwarding" src="https://familug.github.io/images/portforwarding.png"&gt;&lt;/p&gt;
 &lt;h3&gt;Cài OpenBSD&lt;/h3&gt;
-&lt;p&gt;Bật máy ảo lên, Install &amp;gt; hầu hét là enter chọn các
+&lt;p&gt;Bật máy ảo lên, Install &amp;gt; hầu hết là enter chọn các
 option mặc định, mất tầm 2 phút để cài.
 Khi có hỏi xedodm, chọn No, khi hỏi sshd, chọn yes.&lt;/p&gt;
 &lt;p&gt;Cài xong reboot máy ảo, vào Settings &amp;gt; Storage &amp;gt; bỏ file ISO
