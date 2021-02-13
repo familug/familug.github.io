@@ -1,5 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-13T01:00:00+07:00</updated><entry><title>Vagrant ssh (với VirtualBox backend) hoạt động thế nào?</title><link href="https://familug.github.io/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html" rel="alternate"></link><published>2021-02-13T01:00:00+07:00</published><updated>2021-02-13T01:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html</id><summary type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2020/02/vagrant.html"&gt;Vagrant&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-13T14:00:00+07:00</updated><entry><title>Cài đặt và chạy máy ảo OpenBSD 6.8 trên VirtualBox 6.0</title><link href="https://familug.github.io/cai-dat-va-chay-may-ao-openbsd-68-tren-virtualbox-60.html" rel="alternate"></link><published>2021-02-13T14:00:00+07:00</published><updated>2021-02-13T14:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/cai-dat-va-chay-may-ao-openbsd-68-tren-virtualbox-60.html</id><summary type="html">&lt;p&gt;Nếu vì một lý do gì bạn không dùng vagrant (không tin tưởng
+người build vagrant box chẳng hạn), việc tạo máy ảo OpenBSD
+trên VirtualBox không có gì phức tạp, nhưng cần chút chú ý.&lt;/p&gt;
+&lt;h3&gt;Tải file installXX.iso OpenBSD mới nhất&lt;/h3&gt;
+&lt;p&gt;Truy cập 
+https://www.openbsd.org/faq …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Nếu vì một lý do gì bạn không dùng vagrant (không tin tưởng
+người build vagrant box chẳng hạn), việc tạo máy ảo OpenBSD
+trên VirtualBox không có gì phức tạp, nhưng cần chút chú ý.&lt;/p&gt;
+&lt;h3&gt;Tải file installXX.iso OpenBSD mới nhất&lt;/h3&gt;
+&lt;p&gt;Truy cập 
+https://www.openbsd.org/faq/faq4.html#Download&lt;/p&gt;
+&lt;p&gt;rồi tìm tới file installXX.iso, chọn architecture phù hợp,
+thường là &lt;code&gt;amd64&lt;/code&gt;. Chú ý là file &lt;code&gt;.iso&lt;/code&gt; để tạo đĩa CD/cài
+máy ảo. File &lt;code&gt;.img&lt;/code&gt; là dùng để tạo USB.&lt;/p&gt;
+&lt;h3&gt;Tạo máy ảo mới trên VirtualBox&lt;/h3&gt;
+&lt;p&gt;New &amp;gt; BSD &amp;gt; OpenBSD 64 bits&lt;/p&gt;
+&lt;p&gt;Continue &amp;gt; Continue .... &amp;gt; Create&lt;/p&gt;
+&lt;p&gt;Trước khi bật máy ảo lên, chọn Settings &amp;gt; Storage &amp;gt; Chọn hình 
+đĩa CD rồi chọn tới file ISO vừa tải.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="virtualbox" src="https://familug.github.io/images/vbox.png"&gt;&lt;/p&gt;
+&lt;p&gt;QUAN TRỌNG: chọn Audio &amp;gt; bỏ tick "Enable audio" đi,
+nếu không, VirtualBox sẽ full CPU sau khi sleep mặc
+dù xem trên OpenBSD thì không thấy dùng CPU.&lt;/p&gt;
+&lt;p&gt;Settings &amp;gt; Network &amp;gt; Adapter 1 &amp;gt; NAT &amp;gt; Port forwarding,
+thêm một dòng mới, chọn host port là 1 số từ 2222 đến 22XX,
+Guest Port là 22.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Port forwarding" src="https://familug.github.io/images/portforwarding.png"&gt;&lt;/p&gt;
+&lt;h3&gt;Cài OpenBSD&lt;/h3&gt;
+&lt;p&gt;Bật máy ảo lên, Install &amp;gt; hầu hét là enter chọn các
+option mặc định, mất tầm 2 phút để cài.
+Khi có hỏi xedodm, chọn No, khi hỏi sshd, chọn yes.&lt;/p&gt;
+&lt;p&gt;Cài xong reboot máy ảo, vào Settings &amp;gt; Storage &amp;gt; bỏ file ISO
+đã nhét vào ra. Máy sẽ boot vào OpenBSD.&lt;/p&gt;
+&lt;h3&gt;SSH vào OpenBSD&lt;/h3&gt;
+&lt;p&gt;Chuột phải chọn máy ảo &amp;gt; Start &amp;gt; Headless start.
+Chờ vài giây rồi ssh vào máy:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="mi"&gt;2222&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Nhập password đã chọn lúc cài đặt.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p2222&lt;/span&gt;
+&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="nl"&gt;password&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; 
+&lt;span class="n"&gt;Last&lt;/span&gt; &lt;span class="nl"&gt;login&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Wed&lt;/span&gt; &lt;span class="n"&gt;Feb&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt; &lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;35&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;32&lt;/span&gt; &lt;span class="mi"&gt;2021&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="mf"&gt;10.0.2.2&lt;/span&gt;
+&lt;span class="n"&gt;OpenBSD&lt;/span&gt; &lt;span class="mf"&gt;6.8&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;GENERIC&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="mi"&gt;97&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Sun&lt;/span&gt; &lt;span class="n"&gt;Oct&lt;/span&gt;  &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="mi"&gt;18&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mo"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt; &lt;span class="n"&gt;MDT&lt;/span&gt; &lt;span class="mi"&gt;2020&lt;/span&gt;
+
+&lt;span class="n"&gt;Welcome&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="nl"&gt;OpenBSD&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;The&lt;/span&gt; &lt;span class="n"&gt;proactively&lt;/span&gt; &lt;span class="n"&gt;secure&lt;/span&gt; &lt;span class="n"&gt;Unix&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;like&lt;/span&gt; &lt;span class="n"&gt;operating&lt;/span&gt; &lt;span class="n"&gt;system&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+
+&lt;span class="n"&gt;Please&lt;/span&gt; &lt;span class="n"&gt;use&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;sendbug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;utility&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;report&lt;/span&gt; &lt;span class="n"&gt;bugs&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;system&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Before&lt;/span&gt; &lt;span class="n"&gt;reporting&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;bug&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;please&lt;/span&gt; &lt;span class="n"&gt;try&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;reproduce&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;latest&lt;/span&gt;
+&lt;span class="n"&gt;version&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;code&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;  &lt;span class="n"&gt;With&lt;/span&gt; &lt;span class="n"&gt;bug&lt;/span&gt; &lt;span class="n"&gt;reports&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;please&lt;/span&gt; &lt;span class="n"&gt;try&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;ensure&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt;
+&lt;span class="n"&gt;enough&lt;/span&gt; &lt;span class="n"&gt;information&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;reproduce&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;problem&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;enclosed&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
+&lt;span class="n"&gt;known&lt;/span&gt; &lt;span class="n"&gt;fix&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;exists&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;as&lt;/span&gt; &lt;span class="n"&gt;well&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+
+&lt;span class="n"&gt;obsd&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;                                      
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Xong.&lt;/p&gt;
+&lt;h3&gt;Kết luận&lt;/h3&gt;
+&lt;p&gt;Cài đặt máy ảo OpenBSD là một việc đơn giản, nhanh chóng.
+Have fun.&lt;/p&gt;</content><category term="frontpage"></category><category term="openbsd"></category><category term="virtualbox"></category></entry><entry><title>Vagrant ssh (với VirtualBox backend) hoạt động thế nào?</title><link href="https://familug.github.io/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html" rel="alternate"></link><published>2021-02-13T01:00:00+07:00</published><updated>2021-02-13T01:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html</id><summary type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2020/02/vagrant.html"&gt;Vagrant&lt;/a&gt;
 là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
 chui vào máy ảo mới tạo:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vagrant init
