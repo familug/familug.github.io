@@ -1,0 +1,3 @@
+pelican[markdown]
+invoke  # run task, make not avail somewhere
+ghp-import  # github pages support
