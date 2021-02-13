@@ -2,4 +2,94 @@
 <feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam - frontpage</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/frontpage.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-13T00:00:00+07:00</updated><entry><title>Hello, world! 2021</title><link href="https://familug.github.io/hello-world-2021.html" rel="alternate"></link><published>2021-02-13T00:00:00+07:00</published><updated>2021-02-13T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/hello-world-2021.html</id><content type="html">&lt;p&gt;Blog này sẽ thay thế www.familug.org từ 2021. Các bài viết cũ vẫn sẽ 
 tồn tại trên www.familug.org.
 Một trang mới cho FAMILUG: familug.github.io.&lt;/p&gt;
-&lt;p&gt;Chúc mừng năm mới 2021.&lt;/p&gt;</content><category term="frontpage"></category></entry></feed>
+&lt;p&gt;Chúc mừng năm mới 2021.&lt;/p&gt;</content><category term="frontpage"></category></entry><entry><title>Vagrant ssh (với VirtualBox backend) hoạt động thế nào?</title><link href="https://familug.github.io/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html" rel="alternate"></link><published>2021-02-13T00:00:00+07:00</published><updated>2021-02-13T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html</id><summary type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2020/02/vagrant.html"&gt;Vagrant&lt;/a&gt;
+là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
+chui vào máy ảo mới tạo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vagrant init
+vagrant up
+vagrant ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Bên dưới có rất nhiều "magic" xảy ra, đó là những giá trị mà Vagrant
+mang lại thay vì tạo máy ào …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2020/02/vagrant.html"&gt;Vagrant&lt;/a&gt;
+là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
+chui vào máy ảo mới tạo:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vagrant init
+vagrant up
+vagrant ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Bên dưới có rất nhiều "magic" xảy ra, đó là những giá trị mà Vagrant
+mang lại thay vì tạo máy ào bằng tay với VirtualBox/VMWare/KVM...&lt;/p&gt;
+&lt;p&gt;Vagrant ssh là câu lệnh thú vị và bất ngờ khi tìm hiểu: kết nối
+mạng từ máy thật (host) vào máy ảo (guest) như thế nào.&lt;/p&gt;
+&lt;p&gt;Test với máy ảo chạy fedora, không chỉnh sửa config gì sau khi &lt;code&gt;vagrant init&lt;/code&gt; ngoài box:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;  config.vm.box = &amp;quot;fedora/33-cloud-base&amp;quot;&lt;/span&gt;
+&lt;span class="err"&gt;  config.vm.box_version = &amp;quot;33.20201019.0&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Bật debug&lt;/h3&gt;
+&lt;p&gt;Cách đơn giản để tìm hiểu 1 phần mềm bất kỳ là bật chế độ 
+logging debug/verbose lên, vagrant không là ngoại lệ.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;VAGRANT_LOG=info vagrant ssh&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;có các chế độ log nhiều hơn như &lt;code&gt;VAGRANT_LOG=debug&lt;/code&gt; nhưng
+với info cũng đã đủ rồi:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;VAGRANT_LOG&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;info&lt;/span&gt; &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt;
+ &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;global&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Vagrant&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.2.6&lt;/span&gt;
+ &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;global&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Ruby&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.4.9&lt;/span&gt;
+ &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;global&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;RubyGems&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.6.14.4&lt;/span&gt;
+ &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;vagrant&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="err"&gt;`&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="err"&gt;`&lt;/span&gt; &lt;span class="nl"&gt;invoked&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ssh&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;...&lt;/span&gt;
+ &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;subprocess&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Starting&lt;/span&gt; &lt;span class="nl"&gt;process&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;/usr/local/bin/VBoxManage&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;showvminfo&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;63dfeb70-1337-4db3-84f4-4bf3514aa225&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;...&lt;/span&gt;
+ &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;ssh&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Invoking&lt;/span&gt; &lt;span class="nl"&gt;SSH&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;vagrant@127.0.0.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-p&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;2222&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;LogLevel=FATAL&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Compression=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;DSAAuthentication=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;IdentitiesOnly=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;StrictHostKeyChecking=no&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;UserKnownHostsFile=/dev/null&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-i&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/Users/user/me/fedora/.vagrant/machines/default/virtualbox/private_key&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;Last&lt;/span&gt; &lt;span class="nl"&gt;login&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Wed&lt;/span&gt; &lt;span class="n"&gt;Feb&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt; &lt;span class="mi"&gt;08&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;51&lt;/span&gt; &lt;span class="mi"&gt;2021&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="mf"&gt;10.0.2.2&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;vagrant ssh vào máy ảo qua &lt;code&gt;lo&lt;/code&gt; (loopback interface), dùng &lt;code&gt;127.0.0.1&lt;/code&gt; chứ
+không phải bất kỳ network interface nào khác.&lt;/p&gt;
+&lt;h3&gt;VirtualBox networking modes&lt;/h3&gt;
+&lt;p&gt;https://www.virtualbox.org/manual/ch06.html&lt;/p&gt;
+&lt;p&gt;VirtualBox có các networking modes sau: &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Network Address Translation (NAT). (máy guest có thể kết nối internet)&lt;/span&gt;
+&lt;span class="err"&gt;NAT Network. (các máy guest có thể kết nôí đến nhau)&lt;/span&gt;
+&lt;span class="err"&gt;Bridged networking. (máy guest sử dụng network thật mà máy host đang dùng)&lt;/span&gt;
+&lt;span class="err"&gt;Internal networking. (???)&lt;/span&gt;
+&lt;span class="err"&gt;Host-only networking. (máy guest sẽ có địa chỉ IP mà máy host có thể truy cập)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;img alt="NAT" src="https://familug.github.io/images/nat.png"&gt;&lt;/p&gt;
+&lt;p&gt;Mặc định, vagrant sẽ dùng NAT, máy guest sẽ có thể kết nối internet, vagrant
+sẽ cấu hình port forwarding, từ 1 port nào đó trên máy host, tới port 22 trên
+máy guest, để có thể ssh: &lt;code&gt;vagrant@127.0.0.1 -p 2222...&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Port forwarding" src="https://familug.github.io/images/portforwarding.png"&gt;&lt;/p&gt;
+&lt;p&gt;Khi cần chạy 1 service mà muốn các máy trong mạng đều truy cập được, máy ảo
+cần thêm 1 interface ở mode: bridge, nó sẽ hoạt động như 1 máy thật trong mạng,
+với IP của mạng thật.&lt;/p&gt;
+&lt;p&gt;Khi cần chạy 1 service mà muốn máy host truy cập được, có thể forward port
+với NAT nói trên, hoặc tạo 1 host-only interface.&lt;/p&gt;
+&lt;h3&gt;SSH Key&lt;/h3&gt;
+&lt;p&gt;Một Vagrant box tải từ vagrant cloud sẽ đảm bảo nó có sẵn user vagrant,
+cho phép ssh qua 1 cặp &lt;a href="https://github.com/hashicorp/vagrant/tree/main/keys"&gt;SSH key&lt;/a&gt;
+cung cấp sẵn. Sau lần đầu ssh vào,
+vagrant sẽ sinh 1 cặp key mới và thay thế cặp key mặc định này.
+https://www.vagrantup.com/docs/boxes/base#vagrant-user&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;~/me/fedora/.vagrant/machines/default/virtualbox/private_key&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Kết luận&lt;/h2&gt;
+&lt;p&gt;Với những hiểu biết này, ta đã có thể tạo các máy ảo và dùng như
+vagrant, hay thạm chí tạo các vagrant box để tự dùng.&lt;/p&gt;
+&lt;p&gt;https://www.vagrantup.com/docs/boxes/base&lt;/p&gt;
+&lt;h2&gt;Xem thêm&lt;/h2&gt;
+&lt;p&gt;Hướng dẫn vagrant cơ bản tại https://www.familug.org/2020/02/vagrant.html&lt;/p&gt;</content><category term="frontpage"></category><category term="sysadmin"></category><category term="virtualbox"></category><category term="vagrant"></category></entry></feed>
