@@ -10,9 +10,12 @@ distro phổ biến như Ubuntu, Debian...&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Nhưng nó vốn là một Linux distro như mọi distro khác, vậy nên dùng để tạo máy ảo
 là chuyện hoàn toàn bình thường.&lt;/p&gt;
 &lt;p&gt;Bài viết này giới thiệu cách tạo 1 môi trường dev Python trên máy ảo chạy Alpine Linux:&lt;/p&gt;
-&lt;p&gt;Tải file iso tối ưu cho virtual machine từ trang https://alpinelinux.org/downloads/
+&lt;p&gt;Tải file iso tối ưu cho virtual machine từ trang &lt;a href="https://alpinelinux.org/downloads/"&gt;AlpineLinux.org&lt;/a&gt;
 Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viết bài - 3.13&lt;/p&gt;
-&lt;p&gt;https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;File ISO này chỉ nặng có 41 MB:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ ls -lh /home/hvn/Downloads/alpine*.iso
 -rw-r--r--  &lt;span class="m"&gt;1&lt;/span&gt; hvn  hvn  &lt;span class="m"&gt;41&lt;/span&gt;.0M Feb &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:16 /home/hvn/Downloads/alpine-virt-3.13.2-x86_64.iso
