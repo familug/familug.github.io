@@ -15,10 +15,12 @@ là chuyện hoàn toàn bình thường.
 
 Bài viết này giới thiệu cách tạo 1 môi trường dev Python trên máy ảo chạy Alpine Linux:
 
-Tải file iso tối ưu cho virtual machine từ trang https://alpinelinux.org/downloads/
+Tải file iso tối ưu cho virtual machine từ trang [AlpineLinux.org](https://alpinelinux.org/downloads/)
 Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viết bài - 3.13
 
+```
 https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso
+```
 
 File ISO này chỉ nặng có 41 MB:
 
