@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam - en,</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/en.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-20T16:00:00+07:00</updated><entry><title>Using virtual machine via vmd on OpenBSD 6.8</title><link href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" rel="alternate"></link><published>2021-02-20T16:00:00+07:00</published><updated>2021-02-20T16:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-20:/using-virtual-machine-via-vmd-on-openbsd-68.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
+Instead of installing VirtualBox or look for kvm on OpenBSD, everything
+is already there, a built-in virtualization solution.&lt;/p&gt;
+&lt;h3&gt;Check wiki FAQ first&lt;/h3&gt;
+&lt;p&gt;https://www.openbsd.org/faq/faq16.html&lt;/p&gt;
+&lt;p&gt;it lists all features, not ready features, prequisites …&lt;/p&gt;</summary><content type="html">&lt;p&gt;OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
+Instead of installing VirtualBox or look for kvm on OpenBSD, everything
+is already there, a built-in virtualization solution.&lt;/p&gt;
+&lt;h3&gt;Check wiki FAQ first&lt;/h3&gt;
+&lt;p&gt;https://www.openbsd.org/faq/faq16.html&lt;/p&gt;
+&lt;p&gt;it lists all features, not ready features, prequisites, basic commands.&lt;/p&gt;
+&lt;h2&gt;Distro&lt;/h2&gt;
+&lt;p&gt;Sure run OpenBSD guest on OpenBSD host is "should just work", it's fully tested.
+But for Linux based OS, the options are not much:&lt;/p&gt;
+&lt;p&gt;It's a real coincidence, someone asked the question two days ago on Reddit:
+https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_install_in_vmd/&lt;/p&gt;
+&lt;p&gt;Thanks to the answers there, I tried many but success only some:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;AlpineLinux: use "Virtual" edition https://alpinelinux.org/downloads/
+  "it just works", just boot on and run &lt;code&gt;setup-alpine&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Debian: I used &lt;code&gt;debian-10.8.0-amd64-netinst.iso&lt;/code&gt;,
+  after start, type Tab, then enter &lt;code&gt;console=ttyS0,115200&lt;/code&gt; then enter,
+  the text-based-curse-like UI would work.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And these failed:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ubuntu: &lt;code&gt;ubuntu-20.04.2-live-server-amd64.iso&lt;/code&gt;, failed.&lt;/li&gt;
+&lt;li&gt;NixOS: failed at phase 2/3 of systemd.&lt;/li&gt;
+&lt;li&gt;ArchLinux: failed with error &lt;code&gt;ACPI BIOS Error (bug): A valid RSDP was not found (20200925/tbxfroot-210)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most of these default to use Video, thus must add boot parameter:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;type Tab, then enter &lt;code&gt;console=ttyS0,115200&lt;/code&gt; then enter,&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html&lt;/p&gt;
+&lt;h3&gt;Network&lt;/h3&gt;
+&lt;p&gt;Setup pf and sysctl as metioned in FAQ, &lt;code&gt;NAT for the VMs&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;http://www.openbsd.org/faq/faq16.html#VMMnet&lt;/p&gt;
+&lt;p&gt;After install, can ssh from OpenBSD host to guest via, change to your IP get from
+output of &lt;code&gt;ip ad&lt;/code&gt; after installed:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@100.64.1.3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Note that password login seems always fail even put correct password
+(or maybe Linux-based OS disabled them by default). Copy your pubkey
+to &lt;code&gt;/root/.ssh/authorized_keys&lt;/code&gt; then ssh would work.&lt;/p&gt;
+&lt;h3&gt;Commands&lt;/h3&gt;
+&lt;p&gt;Two major important commands:&lt;/p&gt;
+&lt;h4&gt;Create image&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vmctl create -s 10G image.qcow2
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;Start VM&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vmctl start \
+  -i 1 \ # 1 interface
+  -L \ # create interface
+  -c \ # auto connect console after started
+  -m 1G \ # 1G memory
+  -r file.iso \ # path to ISO file (CD)
+  -d image.qcow2 \ # image created above
+  myvm # name of VM
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vmctl status
+vmctl stop ID
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The start command would start and give the name temporary, after installed,
+create a file at &lt;code&gt;/etc/vm.conf&lt;/code&gt; with config like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vm &amp;quot;alpine&amp;quot; {
+    disable  # disable auto start when boot
+    memory 1G
+    disk &amp;quot;/root/linux.qcow2&amp;quot;
+    local interface
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Result&lt;/h3&gt;
+&lt;p&gt;VMs installed successfully run smoothly on vmd, low CPU usage (compare to
+VirtualBox on MacOS).&lt;/p&gt;
+&lt;p&gt;Have fun.&lt;/p&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="vmm"></category><category term="alpine"></category><category term="debian"></category></entry></feed>
