@@ -1,5 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-13T14:00:00+07:00</updated><entry><title>Cài đặt và chạy máy ảo OpenBSD 6.8 trên VirtualBox 6.0</title><link href="https://familug.github.io/cai-dat-va-chay-may-ao-openbsd-68-tren-virtualbox-60.html" rel="alternate"></link><published>2021-02-13T14:00:00+07:00</published><updated>2021-02-13T14:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/cai-dat-va-chay-may-ao-openbsd-68-tren-virtualbox-60.html</id><summary type="html">&lt;p&gt;Nếu vì một lý do gì bạn không dùng vagrant (không tin tưởng
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-20T00:00:00+07:00</updated><entry><title>Cài đặt và chạy máy ảo Alpine Linux 3.13</title><link href="https://familug.github.io/cai-dat-va-chay-may-ao-alpine-linux-313.html" rel="alternate"></link><published>2021-02-20T00:00:00+07:00</published><updated>2021-02-20T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-20:/cai-dat-va-chay-may-ao-alpine-linux-313.html</id><summary type="html">&lt;p&gt;Alpine linux là 1 linux distro bỗng chợt phổ biến nhờ Docker.
+Lý do chính Alpine Linux được dùng là vì nó nhẹ (về dung lượng), nên thích hợp
+cho việc build docker image, &lt;a href="https://www.familug.org/2020/11/kien-truc-docker-phong-van-best-practice.html"&gt;tạo docker image có size nhỏ hơn so với các
+distro phổ biến như Ubuntu, Debian …&lt;/a&gt;&lt;/p&gt;</summary><content type="html">&lt;p&gt;Alpine linux là 1 linux distro bỗng chợt phổ biến nhờ Docker.
+Lý do chính Alpine Linux được dùng là vì nó nhẹ (về dung lượng), nên thích hợp
+cho việc build docker image, &lt;a href="https://www.familug.org/2020/11/kien-truc-docker-phong-van-best-practice.html"&gt;tạo docker image có size nhỏ hơn so với các
+distro phổ biến như Ubuntu, Debian...&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="alpine" src="https://familug.github.io/images/alpinelinux-logo.svg"&gt;&lt;/p&gt;
+&lt;p&gt;Nhưng nó vốn là một Linux distro như mọi distro khác, vậy nên dùng để tạo máy ảo
+là chuyện hoàn toàn bình thường.&lt;/p&gt;
+&lt;p&gt;Bài viết này giới thiệu cách tạo 1 môi trường dev Python trên máy ảo chạy Alpine Linux:&lt;/p&gt;
+&lt;p&gt;Tải file iso tối ưu cho virtual machine từ trang https://alpinelinux.org/downloads/
+Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viết bài - 3.13&lt;/p&gt;
+&lt;p&gt;https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso&lt;/p&gt;
+&lt;p&gt;File ISO này chỉ nặng có 41 MB:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ ls -lh /home/hvn/Downloads/alpine*.iso
+-rw-r--r--  &lt;span class="m"&gt;1&lt;/span&gt; hvn  hvn  &lt;span class="m"&gt;41&lt;/span&gt;.0M Feb &lt;span class="m"&gt;20&lt;/span&gt; &lt;span class="m"&gt;10&lt;/span&gt;:16 /home/hvn/Downloads/alpine-virt-3.13.2-x86_64.iso
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Tạo máy ảo, chọn đĩa ISO này và bật máy ảo lên, bộ cài đặt bằng dòng lệnh của Alpine rất đơn giản, chỉ cần gõ alpine-setup rồi enter liên tục cho tới khi chọn ổ đĩa ảo (vda) , cho đến khi xong.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Welcome to Alpine Linux 3.13
+Kernel 5.10.16-0-virt on an x86_64 (/dev/ttyS0)
+
+localhost login: root
+Welcome to Alpine!
+
+The Alpine Wiki contains a large amount of how-to guides and general
+information about administrating Alpine systems.
+See &amp;lt;http://wiki.alpinelinux.org/&amp;gt;.
+
+You can setup the system with the command: setup-alpine
+
+You may change this message by editing /etc/motd.
+
+localhost:~# setup-alpine
+Available keyboard layouts:
+af     be     cn     fi     hu     it     lk     mm     pl     sy     uz
+al     bg     cz     fo     id     jp     lt     mt     pt     th     vn
+am     br     de     fr     ie     ke     lv     my     ro     tj
+ara    brai   dk     gb     il     kg     ma     ng     rs     tm
+at     by     dz     ge     in     kr     md     nl     ru     tr
+az     ca     ee     gh     iq     kz     me     no     se     tw
+ba     ch     epo    gr     ir     la     mk     ph     si     ua
+bd     cm     es     hr     is     latam  ml     pk     sk     us
+Select keyboard layout: [none]
+Enter system hostname (short form, e.g. &amp;#39;foo&amp;#39;) [localhost]
+Available interfaces are: eth0.
+Enter &amp;#39;?&amp;#39; for help on bridges, bonding and vlans.
+Which one do you want to initialize? (or &amp;#39;?&amp;#39; or &amp;#39;done&amp;#39;) [eth0]
+Ip address for eth0? (or &amp;#39;dhcp&amp;#39;, &amp;#39;none&amp;#39;, &amp;#39;?&amp;#39;) [dhcp]
+Do you want to do any manual network configuration? (y/n) [n]
+udhcpc: started, v1.32.1
+udhcpc: sending discover
+udhcpc: sending select for 100.64.1.3
+udhcpc: lease of 100.64.1.3 obtained, lease time 4294967295
+Changing password for root
+New password:
+Bad password: too many similar characters
+Retype password:
+passwd: password for root changed by root
+Which timezone are you in? (&amp;#39;?&amp;#39; for list) [UTC]
+ * Starting busybox acpid ...
+ [ ok ]
+ * Starting busybox crond ...
+ [ ok ]
+HTTP/FTP proxy URL? (e.g. &amp;#39;http://proxy:8080&amp;#39;, or &amp;#39;none&amp;#39;) [none]
+Which NTP client to run? (&amp;#39;busybox&amp;#39;, &amp;#39;openntpd&amp;#39;, &amp;#39;chrony&amp;#39; or &amp;#39;none&amp;#39;) [chrony]
+ * service chronyd added to runlevel default
+ * Caching service dependencies ...
+ [ ok ]
+ * Starting chronyd ...
+
+ [ ok ]
+
+Available mirrors:
+1) dl-cdn.alpinelinux.org
+2) uk.alpinelinux.org
+3) dl-2.alpinelinux.org
+4) dl-4.alpinelinux.org
+5) dl-5.alpinelinux.org
+6) mirror.yandex.ru
+7) mirrors.gigenet.com
+8) mirror1.hs-esslingen.de
+9) mirror.leaseweb.com
+10) mirror.fit.cvut.cz
+11) alpine.mirror.far.fi
+12) alpine.mirror.wearetriple.com
+13) mirror.clarkson.edu
+14) linorg.usp.br
+15) ftp.yzu.edu.tw
+16) mirror.aarnet.edu.au
+17) speglar.siminn.is
+18) mirrors.dotsrc.org
+19) ftp.halifax.rwth-aachen.de
+20) mirrors.tuna.tsinghua.edu.cn
+21) mirrors.ustc.edu.cn
+22) mirrors.xjtu.edu.cn
+23) mirrors.nju.edu.cn
+24) mirror.lzu.edu.cn
+25) ftp.acc.umu.se
+26) mirror.xtom.com.hk
+27) mirror.csclub.uwaterloo.ca
+28) alpinelinux.mirror.iweb.com
+29) pkg.adfinis.com
+30) mirror.ps.kz
+31) mirror.rise.ph
+32) mirror.operationtulip.com
+33) mirrors.ircam.fr
+34) alpine.42.fr
+35) mirror.math.princeton.edu
+36) mirrors.sjtug.sjtu.edu.cn
+37) ftp.icm.edu.pl
+38) mirror.ungleich.ch
+39) alpine.mirror.vexxhost.ca
+40) sjc.edge.kernel.org
+41) ewr.edge.kernel.org
+42) ams.edge.kernel.org
+43) download.nus.edu.sg
+44) alpine.yourlabs.org
+45) mirror.pit.teraswitch.com
+46) mirror.reenigne.net
+47) quantum-mirror.hu
+48) tux.rainside.sk
+49) alpine.cs.nctu.edu.tw
+50) mirror.ihost.md
+51) mirror.ette.biz
+52) mirror.lagoon.nc
+53) alpinelinux.c3sl.ufpr.br
+54) foobar.turbo.net.id
+55) alpine.ccns.ncku.edu.tw
+
+r) Add random from the above list
+f) Detect and add fastest mirror from above list
+e) Edit /etc/apk/repositories with text editor
+
+Enter mirror number (1-55) or URL to add (or r/f/e/done) [1] Added mirror dl-cdn.alpinelinux.org
+Updating repository indexes... done.
+Which SSH server? (&amp;#39;openssh&amp;#39;, &amp;#39;dropbear&amp;#39; or &amp;#39;none&amp;#39;) [openssh]
+ * service sshd added to runlevel default
+ * Caching service dependencies ...
+ [ ok ]
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
+ * Starting sshd ...
+ [ ok ]
+Available disks are:
+  vda   (10.7 GB 0x0b5d )
+Which disk(s) would you like to use? (or &amp;#39;?&amp;#39; for help or &amp;#39;none&amp;#39;) [none] vda
+The following disk is selected:
+  vda   (10.7 GB 0x0b5d )
+How would you like to use it? (&amp;#39;sys&amp;#39;, &amp;#39;data&amp;#39;, &amp;#39;lvm&amp;#39; or &amp;#39;?&amp;#39; for help) [?]
+
+You can select between &amp;#39;sys&amp;#39;, &amp;#39;data&amp;#39;, &amp;#39;lvm&amp;#39;, &amp;#39;lvmsys&amp;#39; or &amp;#39;lvmdata&amp;#39;.
+
+sys:
+  This mode is a traditional disk install. The following partitions will be
+  created on the disk: /boot, / (filesystem root) and swap.
+
+  This mode may be used for development boxes, desktops, virtual servers, etc.
+
+data:
+  This mode uses your disk(s) for data storage, not for the operating system.
+  The system itself will run from tmpfs (RAM).
+
+  Use this mode if you only want to use the disk(s) for a mailspool, databases,
+  logs, etc.
+
+lvm:
+  Enable logical volume manager and ask again for &amp;#39;sys&amp;#39; or &amp;#39;data&amp;#39;.
+
+lvmsys:
+  Same as &amp;#39;sys&amp;#39; but use logical volume manager for partitioning.
+
+lvmdata:
+  Same as &amp;#39;data&amp;#39; but use logical volume manager for partitioning.
+
+The following disk is selected:
+  vda   (10.7 GB 0x0b5d )
+How would you like to use it? (&amp;#39;sys&amp;#39;, &amp;#39;data&amp;#39;, &amp;#39;lvm&amp;#39; or &amp;#39;?&amp;#39; for help) [?] sys
+WARNING: The following disk(s) will be erased:
+  vda   (10.7 GB 0x0b5d )
+WARNING: Erase the above disk(s) and continue? (y/n) [n] y
+Creating file systems...
+Installing system on /dev/vda3:
+/mnt/boot is device /dev/vda1
+100% ████████████████████████████████████████████==&amp;gt; initramfs: creating /boot/initramfs-virt
+/boot is device /dev/vda1
+
+Installation is complete. Please reboot.
+
+# halt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Cài xong, reboot lại, dùng lệnh apk để cài các gói cần thiết để code Python&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="err"&gt;~&lt;/span&gt;&lt;span class="p"&gt;#&lt;/span&gt; &lt;span class="n"&gt;apk&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;tmux&lt;/span&gt; &lt;span class="n"&gt;vim&lt;/span&gt; &lt;span class="n"&gt;git&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Installing&lt;/span&gt; &lt;span class="n"&gt;libbz2&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.0&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Installing&lt;/span&gt; &lt;span class="n"&gt;libffi&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;3.3&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Installing&lt;/span&gt; &lt;span class="n"&gt;gdbm&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;1.19&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Installing&lt;/span&gt; &lt;span class="n"&gt;readline&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;8.1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Installing&lt;/span&gt; &lt;span class="n"&gt;sqlite&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;libs&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;3.34&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r0&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;Installing&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;3.8&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;Executing&lt;/span&gt; &lt;span class="n"&gt;busybox&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;1.32&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;r3&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;trigger&lt;/span&gt;
+&lt;span class="n"&gt;OK&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;179&lt;/span&gt; &lt;span class="n"&gt;MiB&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="mi"&gt;72&lt;/span&gt; &lt;span class="n"&gt;packages&lt;/span&gt;
+&lt;span class="n"&gt;localhost&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="err"&gt;~&lt;/span&gt;&lt;span class="p"&gt;#&lt;/span&gt; &lt;span class="n"&gt;python3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;this&lt;/span&gt;
+&lt;span class="n"&gt;The&lt;/span&gt; &lt;span class="n"&gt;Zen&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;by&lt;/span&gt; &lt;span class="n"&gt;Tim&lt;/span&gt; &lt;span class="n"&gt;Peters&lt;/span&gt;
+
+&lt;span class="n"&gt;Beautiful&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;ugly&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Explicit&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;implicit&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Simple&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;complex&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Complex&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;complicated&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Flat&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;nested&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Sparse&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;dense&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Readability&lt;/span&gt; &lt;span class="n"&gt;counts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Special&lt;/span&gt; &lt;span class="n"&gt;cases&lt;/span&gt; &lt;span class="n"&gt;aren&lt;/span&gt;&lt;span class="c"&gt;&amp;#39;t special enough to break the rules.&lt;/span&gt;
+&lt;span class="n"&gt;Although&lt;/span&gt; &lt;span class="n"&gt;practicality&lt;/span&gt; &lt;span class="n"&gt;beats&lt;/span&gt; &lt;span class="n"&gt;purity&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Errors&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;never&lt;/span&gt; &lt;span class="n"&gt;pass&lt;/span&gt; &lt;span class="n"&gt;silently&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Unless&lt;/span&gt; &lt;span class="n"&gt;explicitly&lt;/span&gt; &lt;span class="n"&gt;silenced&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="ow"&gt;In&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;face&lt;/span&gt; &lt;span class="k"&gt;of&lt;/span&gt; &lt;span class="n"&gt;ambiguity&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;refuse&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;temptation&lt;/span&gt; &lt;span class="k"&gt;to&lt;/span&gt; &lt;span class="n"&gt;guess&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;There&lt;/span&gt; &lt;span class="n"&gt;should&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt;&lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;preferably&lt;/span&gt; &lt;span class="n"&gt;only&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;obvious&lt;/span&gt; &lt;span class="n"&gt;way&lt;/span&gt; &lt;span class="k"&gt;to&lt;/span&gt; &lt;span class="k"&gt;do&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Although&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;way&lt;/span&gt; &lt;span class="n"&gt;may&lt;/span&gt; &lt;span class="k"&gt;not&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;obvious&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;first&lt;/span&gt; &lt;span class="n"&gt;unless&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt;&lt;span class="c"&gt;&amp;#39;re Dutch.&lt;/span&gt;
+&lt;span class="n"&gt;Now&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="n"&gt;never&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Although&lt;/span&gt; &lt;span class="n"&gt;never&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;often&lt;/span&gt; &lt;span class="n"&gt;better&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;right&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;now&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="k"&gt;If&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;implementation&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;hard&lt;/span&gt; &lt;span class="k"&gt;to&lt;/span&gt; &lt;span class="n"&gt;explain&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt;&lt;span class="c"&gt;&amp;#39;s a bad idea.&lt;/span&gt;
+&lt;span class="k"&gt;If&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;implementation&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;easy&lt;/span&gt; &lt;span class="k"&gt;to&lt;/span&gt; &lt;span class="n"&gt;explain&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;may&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;good&lt;/span&gt; &lt;span class="n"&gt;idea&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="n"&gt;Namespaces&lt;/span&gt; &lt;span class="n"&gt;are&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt; &lt;span class="n"&gt;honking&lt;/span&gt; &lt;span class="n"&gt;great&lt;/span&gt; &lt;span class="n"&gt;idea&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt; &lt;span class="k"&gt;let&lt;/span&gt;&lt;span class="c"&gt;&amp;#39;s do more of those!&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Kết luận&lt;/h3&gt;
+&lt;p&gt;Cài đặt máy ảo Alpine Linux là một việc đơn giản, nhanh chóng.&lt;/p&gt;
+&lt;p&gt;Happy hacking!&lt;/p&gt;</content><category term="frontpage"></category><category term="alpine"></category><category term="linux"></category><category term="virtual-machine"></category></entry><entry><title>Cài đặt và chạy máy ảo OpenBSD 6.8 trên VirtualBox 6.0</title><link href="https://familug.github.io/cai-dat-va-chay-may-ao-openbsd-68-tren-virtualbox-60.html" rel="alternate"></link><published>2021-02-13T14:00:00+07:00</published><updated>2021-02-13T14:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/cai-dat-va-chay-may-ao-openbsd-68-tren-virtualbox-60.html</id><summary type="html">&lt;p&gt;Nếu vì một lý do gì bạn không dùng vagrant (không tin tưởng
 người build vagrant box chẳng hạn), việc tạo máy ảo OpenBSD
 trên VirtualBox không có gì phức tạp, nhưng cần chút chú ý.&lt;/p&gt;
 &lt;h3&gt;Tải file installXX.iso OpenBSD mới nhất&lt;/h3&gt;
@@ -35,12 +266,12 @@ Khi có hỏi xedodm, chọn No, khi hỏi sshd, chọn yes.&lt;/p&gt;
 &lt;h3&gt;SSH vào OpenBSD&lt;/h3&gt;
 &lt;p&gt;Chuột phải chọn máy ảo &amp;gt; Start &amp;gt; Headless start.
 Chờ vài giây rồi ssh vào máy:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="mi"&gt;2222&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="mi"&gt;2222&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Nhập password đã chọn lúc cài đặt.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p2222&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p2222&lt;/span&gt;
 &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="nl"&gt;password&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; 
 &lt;span class="n"&gt;Last&lt;/span&gt; &lt;span class="nl"&gt;login&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Wed&lt;/span&gt; &lt;span class="n"&gt;Feb&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt; &lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;35&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;32&lt;/span&gt; &lt;span class="mi"&gt;2021&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="mf"&gt;10.0.2.2&lt;/span&gt;
 &lt;span class="n"&gt;OpenBSD&lt;/span&gt; &lt;span class="mf"&gt;6.8&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;GENERIC&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="mi"&gt;97&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Sun&lt;/span&gt; &lt;span class="n"&gt;Oct&lt;/span&gt;  &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="mi"&gt;18&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mo"&gt;00&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;46&lt;/span&gt; &lt;span class="n"&gt;MDT&lt;/span&gt; &lt;span class="mi"&gt;2020&lt;/span&gt;
@@ -54,7 +285,7 @@ Chờ vài giây rồi ssh vào máy:&lt;/p&gt;
 &lt;span class="n"&gt;known&lt;/span&gt; &lt;span class="n"&gt;fix&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;exists&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;include&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;as&lt;/span&gt; &lt;span class="n"&gt;well&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
 
 &lt;span class="n"&gt;obsd&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;                                      
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Xong.&lt;/p&gt;
@@ -63,20 +294,20 @@ Chờ vài giây rồi ssh vào máy:&lt;/p&gt;
 Have fun.&lt;/p&gt;</content><category term="frontpage"></category><category term="openbsd"></category><category term="virtualbox"></category></entry><entry><title>Vagrant ssh (với VirtualBox backend) hoạt động thế nào?</title><link href="https://familug.github.io/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html" rel="alternate"></link><published>2021-02-13T01:00:00+07:00</published><updated>2021-02-13T01:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-13:/vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html</id><summary type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2020/02/vagrant.html"&gt;Vagrant&lt;/a&gt;
 là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
 chui vào máy ảo mới tạo:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vagrant init
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vagrant init
 vagrant up
 vagrant ssh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Bên dưới có rất nhiều "magic" xảy ra, đó là những giá trị mà Vagrant
 mang lại thay vì tạo máy ào …&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2020/02/vagrant.html"&gt;Vagrant&lt;/a&gt;
 là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
 chui vào máy ảo mới tạo:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vagrant init
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vagrant init
 vagrant up
 vagrant ssh
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Bên dưới có rất nhiều "magic" xảy ra, đó là những giá trị mà Vagrant
@@ -84,21 +315,21 @@ mang lại thay vì tạo máy ào bằng tay với VirtualBox/VMWare/KVM...&lt;
 &lt;p&gt;Vagrant ssh là câu lệnh thú vị và bất ngờ khi tìm hiểu: kết nối
 mạng từ máy thật (host) vào máy ảo (guest) như thế nào.&lt;/p&gt;
 &lt;p&gt;Test với máy ảo chạy fedora, không chỉnh sửa config gì sau khi &lt;code&gt;vagrant init&lt;/code&gt; ngoài box:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;  config.vm.box = &amp;quot;fedora/33-cloud-base&amp;quot;&lt;/span&gt;
-&lt;span class="err"&gt;  config.vm.box_version = &amp;quot;33.20201019.0&amp;quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;  config.vm.box = &amp;quot;fedora/33-cloud-base&amp;quot;
+  config.vm.box_version = &amp;quot;33.20201019.0&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h3&gt;Bật debug&lt;/h3&gt;
 &lt;p&gt;Cách đơn giản để tìm hiểu 1 phần mềm bất kỳ là bật chế độ 
 logging debug/verbose lên, vagrant không là ngoại lệ.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;VAGRANT_LOG=info vagrant ssh&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;VAGRANT_LOG=info vagrant ssh
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;có các chế độ log nhiều hơn như &lt;code&gt;VAGRANT_LOG=debug&lt;/code&gt; nhưng
 với info cũng đã đủ rồi:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;VAGRANT_LOG&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;info&lt;/span&gt; &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;VAGRANT_LOG&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;info&lt;/span&gt; &lt;span class="n"&gt;vagrant&lt;/span&gt; &lt;span class="n"&gt;ssh&lt;/span&gt;
  &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;global&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Vagrant&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.2.6&lt;/span&gt;
  &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;global&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Ruby&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.4.9&lt;/span&gt;
  &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;global&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;RubyGems&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;2.6.14.4&lt;/span&gt;
@@ -109,7 +340,7 @@ với info cũng đã đủ rồi:&lt;/p&gt;
  &lt;span class="n"&gt;INFO&lt;/span&gt; &lt;span class="nl"&gt;ssh&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Invoking&lt;/span&gt; &lt;span class="nl"&gt;SSH&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;vagrant@127.0.0.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-p&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;2222&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;LogLevel=FATAL&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Compression=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;DSAAuthentication=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;IdentitiesOnly=yes&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;StrictHostKeyChecking=no&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-o&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;UserKnownHostsFile=/dev/null&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;-i&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/Users/user/me/fedora/.vagrant/machines/default/virtualbox/private_key&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="n"&gt;Last&lt;/span&gt; &lt;span class="nl"&gt;login&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Wed&lt;/span&gt; &lt;span class="n"&gt;Feb&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt; &lt;span class="mi"&gt;08&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;51&lt;/span&gt; &lt;span class="mi"&gt;2021&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="mf"&gt;10.0.2.2&lt;/span&gt;
 &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;vagrant&lt;/span&gt;&lt;span class="p"&gt;@&lt;/span&gt;&lt;span class="n"&gt;localhost&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;vagrant ssh vào máy ảo qua &lt;code&gt;lo&lt;/code&gt; (loopback interface), dùng &lt;code&gt;127.0.0.1&lt;/code&gt; chứ
@@ -117,12 +348,12 @@ không phải bất kỳ network interface nào khác.&lt;/p&gt;
 &lt;h3&gt;VirtualBox networking modes&lt;/h3&gt;
 &lt;p&gt;https://www.virtualbox.org/manual/ch06.html&lt;/p&gt;
 &lt;p&gt;VirtualBox có các networking modes sau: &lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;Network Address Translation (NAT). (máy guest có thể kết nối internet)&lt;/span&gt;
-&lt;span class="err"&gt;NAT Network. (các máy guest có thể kết nôí đến nhau)&lt;/span&gt;
-&lt;span class="err"&gt;Bridged networking. (máy guest sử dụng network thật mà máy host đang dùng)&lt;/span&gt;
-&lt;span class="err"&gt;Internal networking. (???)&lt;/span&gt;
-&lt;span class="err"&gt;Host-only networking. (máy guest sẽ có địa chỉ IP mà máy host có thể truy cập)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Network Address Translation (NAT). (máy guest có thể kết nối internet)
+NAT Network. (các máy guest có thể kết nôí đến nhau)
+Bridged networking. (máy guest sử dụng network thật mà máy host đang dùng)
+Internal networking. (???)
+Host-only networking. (máy guest sẽ có địa chỉ IP mà máy host có thể truy cập)
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;img alt="NAT" src="https://familug.github.io/images/nat.png"&gt;&lt;/p&gt;
@@ -141,13 +372,13 @@ cho phép ssh qua 1 cặp &lt;a href="https://github.com/hashicorp/vagrant/tree/
 cung cấp sẵn. Sau lần đầu ssh vào,
 vagrant sẽ sinh 1 cặp key mới và thay thế cặp key mặc định này.
 https://www.vagrantup.com/docs/boxes/base#vagrant-user&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;~/me/fedora/.vagrant/machines/default/virtualbox/private_key&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;~/me/fedora/.vagrant/machines/default/virtualbox/private_key
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Toàn bộ thông tin này có trong output bình thường của lệnh vagrant up
 khi chạy lần đầu:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ vagrant up&lt;span class="p"&gt;;&lt;/span&gt;                                                    &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ vagrant up&lt;span class="p"&gt;;&lt;/span&gt;                                                    &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;
 Bringing machine &lt;span class="s1"&gt;&amp;#39;default&amp;#39;&lt;/span&gt; up with &lt;span class="s1"&gt;&amp;#39;virtualbox&amp;#39;&lt;/span&gt; provider...
 &lt;span class="o"&gt;==&lt;/span&gt;&amp;gt; default: Importing base box &lt;span class="s1"&gt;&amp;#39;generic/openbsd6&amp;#39;&lt;/span&gt;...
 &lt;span class="o"&gt;==&lt;/span&gt;&amp;gt; default: Matching MAC address &lt;span class="k"&gt;for&lt;/span&gt; NAT networking...
@@ -176,7 +407,7 @@ Bringing machine &lt;span class="s1"&gt;&amp;#39;default&amp;#39;&lt;/span&gt; u
     default: Removing insecure key from the guest &lt;span class="k"&gt;if&lt;/span&gt; it&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;s present...
     default: Key inserted! Disconnecting and reconnecting using new SSH key...
 &lt;span class="o"&gt;==&lt;/span&gt;&amp;gt; default: Machine booted and ready!
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h2&gt;Kết luận&lt;/h2&gt;

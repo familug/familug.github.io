@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://familug.github.io/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://familug.github.io/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="alpine, linux, virtual-machine, frontpage, " />
+
+<meta property="og:title" content="Cài đặt và chạy máy ảo Alpine Linux 3.13 "/>
+<meta property="og:url" content="https://familug.github.io/cai-dat-va-chay-may-ao-alpine-linux-313.html" />
+<meta property="og:description" content="Alpine linux là 1 linux distro bỗng chợt phổ biến nhờ Docker. Lý do chính Alpine Linux được dùng là vì nó nhẹ (về dung lượng), nên thích hợp cho việc build docker image, tạo docker image có size nhỏ hơn so với các distro phổ biến như Ubuntu, Debian …" />
+<meta property="og:site_name" content="FAMILUG Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2021-02-20T00:00:00+07:00" />
+<meta name="twitter:title" content="Cài đặt và chạy máy ảo Alpine Linux 3.13 ">
+<meta name="twitter:description" content="Alpine linux là 1 linux distro bỗng chợt phổ biến nhờ Docker. Lý do chính Alpine Linux được dùng là vì nó nhẹ (về dung lượng), nên thích hợp cho việc build docker image, tạo docker image có size nhỏ hơn so với các distro phổ biến như Ubuntu, Debian …">
+
+        <title>Cài đặt và chạy máy ảo Alpine Linux 3.13  · FAMILUG Vietnam
+</title>
+        <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG Vietnam - Full Atom Feed" />
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://familug.github.io/"><span class=site-name>FAMILUG Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://familug.github.io
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://familug.github.io/categories.html">Categories</a></li>
+                                <li ><a href="https://familug.github.io/tags.html">Tags</a></li>
+                                <li ><a href="https://familug.github.io/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://familug.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://familug.github.io/cai-dat-va-chay-may-ao-alpine-linux-313.html">
+                Cài đặt và chạy máy ảo Alpine Linux 3.13
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Alpine linux là 1 linux distro bỗng chợt phổ biến nhờ Docker.
+Lý do chính Alpine Linux được dùng là vì nó nhẹ (về dung lượng), nên thích hợp
+cho việc build docker image, <a href="https://www.familug.org/2020/11/kien-truc-docker-phong-van-best-practice.html">tạo docker image có size nhỏ hơn so với các
+distro phổ biến như Ubuntu, Debian...</a>.</p>
+<p><img alt="alpine" src="https://familug.github.io/images/alpinelinux-logo.svg"></p>
+<p>Nhưng nó vốn là một Linux distro như mọi distro khác, vậy nên dùng để tạo máy ảo
+là chuyện hoàn toàn bình thường.</p>
+<p>Bài viết này giới thiệu cách tạo 1 môi trường dev Python trên máy ảo chạy Alpine Linux:</p>
+<p>Tải file iso tối ưu cho virtual machine từ trang https://alpinelinux.org/downloads/
+Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viết bài - 3.13</p>
+<p>https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso</p>
+<p>File ISO này chỉ nặng có 41 MB:</p>
+<div class="highlight"><pre><span></span>$ ls -lh /home/hvn/Downloads/alpine*.iso
+-rw-r--r--  <span class="m">1</span> hvn  hvn  <span class="m">41</span>.0M Feb <span class="m">20</span> <span class="m">10</span>:16 /home/hvn/Downloads/alpine-virt-3.13.2-x86_64.iso
+</pre></div>
+
+
+<p>Tạo máy ảo, chọn đĩa ISO này và bật máy ảo lên, bộ cài đặt bằng dòng lệnh của Alpine rất đơn giản, chỉ cần gõ alpine-setup rồi enter liên tục cho tới khi chọn ổ đĩa ảo (vda) , cho đến khi xong.</p>
+<div class="highlight"><pre><span></span>Welcome to Alpine Linux 3.13
+Kernel 5.10.16-0-virt on an x86_64 (/dev/ttyS0)
+
+localhost login: root
+Welcome to Alpine!
+
+The Alpine Wiki contains a large amount of how-to guides and general
+information about administrating Alpine systems.
+See &lt;http://wiki.alpinelinux.org/&gt;.
+
+You can setup the system with the command: setup-alpine
+
+You may change this message by editing /etc/motd.
+
+localhost:~# setup-alpine
+Available keyboard layouts:
+af     be     cn     fi     hu     it     lk     mm     pl     sy     uz
+al     bg     cz     fo     id     jp     lt     mt     pt     th     vn
+am     br     de     fr     ie     ke     lv     my     ro     tj
+ara    brai   dk     gb     il     kg     ma     ng     rs     tm
+at     by     dz     ge     in     kr     md     nl     ru     tr
+az     ca     ee     gh     iq     kz     me     no     se     tw
+ba     ch     epo    gr     ir     la     mk     ph     si     ua
+bd     cm     es     hr     is     latam  ml     pk     sk     us
+Select keyboard layout: [none]
+Enter system hostname (short form, e.g. &#39;foo&#39;) [localhost]
+Available interfaces are: eth0.
+Enter &#39;?&#39; for help on bridges, bonding and vlans.
+Which one do you want to initialize? (or &#39;?&#39; or &#39;done&#39;) [eth0]
+Ip address for eth0? (or &#39;dhcp&#39;, &#39;none&#39;, &#39;?&#39;) [dhcp]
+Do you want to do any manual network configuration? (y/n) [n]
+udhcpc: started, v1.32.1
+udhcpc: sending discover
+udhcpc: sending select for 100.64.1.3
+udhcpc: lease of 100.64.1.3 obtained, lease time 4294967295
+Changing password for root
+New password:
+Bad password: too many similar characters
+Retype password:
+passwd: password for root changed by root
+Which timezone are you in? (&#39;?&#39; for list) [UTC]
+ * Starting busybox acpid ...
+ [ ok ]
+ * Starting busybox crond ...
+ [ ok ]
+HTTP/FTP proxy URL? (e.g. &#39;http://proxy:8080&#39;, or &#39;none&#39;) [none]
+Which NTP client to run? (&#39;busybox&#39;, &#39;openntpd&#39;, &#39;chrony&#39; or &#39;none&#39;) [chrony]
+ * service chronyd added to runlevel default
+ * Caching service dependencies ...
+ [ ok ]
+ * Starting chronyd ...
+
+ [ ok ]
+
+Available mirrors:
+1) dl-cdn.alpinelinux.org
+2) uk.alpinelinux.org
+3) dl-2.alpinelinux.org
+4) dl-4.alpinelinux.org
+5) dl-5.alpinelinux.org
+6) mirror.yandex.ru
+7) mirrors.gigenet.com
+8) mirror1.hs-esslingen.de
+9) mirror.leaseweb.com
+10) mirror.fit.cvut.cz
+11) alpine.mirror.far.fi
+12) alpine.mirror.wearetriple.com
+13) mirror.clarkson.edu
+14) linorg.usp.br
+15) ftp.yzu.edu.tw
+16) mirror.aarnet.edu.au
+17) speglar.siminn.is
+18) mirrors.dotsrc.org
+19) ftp.halifax.rwth-aachen.de
+20) mirrors.tuna.tsinghua.edu.cn
+21) mirrors.ustc.edu.cn
+22) mirrors.xjtu.edu.cn
+23) mirrors.nju.edu.cn
+24) mirror.lzu.edu.cn
+25) ftp.acc.umu.se
+26) mirror.xtom.com.hk
+27) mirror.csclub.uwaterloo.ca
+28) alpinelinux.mirror.iweb.com
+29) pkg.adfinis.com
+30) mirror.ps.kz
+31) mirror.rise.ph
+32) mirror.operationtulip.com
+33) mirrors.ircam.fr
+34) alpine.42.fr
+35) mirror.math.princeton.edu
+36) mirrors.sjtug.sjtu.edu.cn
+37) ftp.icm.edu.pl
+38) mirror.ungleich.ch
+39) alpine.mirror.vexxhost.ca
+40) sjc.edge.kernel.org
+41) ewr.edge.kernel.org
+42) ams.edge.kernel.org
+43) download.nus.edu.sg
+44) alpine.yourlabs.org
+45) mirror.pit.teraswitch.com
+46) mirror.reenigne.net
+47) quantum-mirror.hu
+48) tux.rainside.sk
+49) alpine.cs.nctu.edu.tw
+50) mirror.ihost.md
+51) mirror.ette.biz
+52) mirror.lagoon.nc
+53) alpinelinux.c3sl.ufpr.br
+54) foobar.turbo.net.id
+55) alpine.ccns.ncku.edu.tw
+
+r) Add random from the above list
+f) Detect and add fastest mirror from above list
+e) Edit /etc/apk/repositories with text editor
+
+Enter mirror number (1-55) or URL to add (or r/f/e/done) [1] Added mirror dl-cdn.alpinelinux.org
+Updating repository indexes... done.
+Which SSH server? (&#39;openssh&#39;, &#39;dropbear&#39; or &#39;none&#39;) [openssh]
+ * service sshd added to runlevel default
+ * Caching service dependencies ...
+ [ ok ]
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
+ * Starting sshd ...
+ [ ok ]
+Available disks are:
+  vda   (10.7 GB 0x0b5d )
+Which disk(s) would you like to use? (or &#39;?&#39; for help or &#39;none&#39;) [none] vda
+The following disk is selected:
+  vda   (10.7 GB 0x0b5d )
+How would you like to use it? (&#39;sys&#39;, &#39;data&#39;, &#39;lvm&#39; or &#39;?&#39; for help) [?]
+
+You can select between &#39;sys&#39;, &#39;data&#39;, &#39;lvm&#39;, &#39;lvmsys&#39; or &#39;lvmdata&#39;.
+
+sys:
+  This mode is a traditional disk install. The following partitions will be
+  created on the disk: /boot, / (filesystem root) and swap.
+
+  This mode may be used for development boxes, desktops, virtual servers, etc.
+
+data:
+  This mode uses your disk(s) for data storage, not for the operating system.
+  The system itself will run from tmpfs (RAM).
+
+  Use this mode if you only want to use the disk(s) for a mailspool, databases,
+  logs, etc.
+
+lvm:
+  Enable logical volume manager and ask again for &#39;sys&#39; or &#39;data&#39;.
+
+lvmsys:
+  Same as &#39;sys&#39; but use logical volume manager for partitioning.
+
+lvmdata:
+  Same as &#39;data&#39; but use logical volume manager for partitioning.
+
+The following disk is selected:
+  vda   (10.7 GB 0x0b5d )
+How would you like to use it? (&#39;sys&#39;, &#39;data&#39;, &#39;lvm&#39; or &#39;?&#39; for help) [?] sys
+WARNING: The following disk(s) will be erased:
+  vda   (10.7 GB 0x0b5d )
+WARNING: Erase the above disk(s) and continue? (y/n) [n] y
+Creating file systems...
+Installing system on /dev/vda3:
+/mnt/boot is device /dev/vda1
+100% ████████████████████████████████████████████==&gt; initramfs: creating /boot/initramfs-virt
+/boot is device /dev/vda1
+
+Installation is complete. Please reboot.
+
+# halt
+</pre></div>
+
+
+<p>Cài xong, reboot lại, dùng lệnh apk để cài các gói cần thiết để code Python</p>
+<div class="highlight"><pre><span></span><span class="n">localhost</span><span class="p">:</span><span class="err">~</span><span class="p">#</span> <span class="n">apk</span> <span class="n">add</span> <span class="n">tmux</span> <span class="n">vim</span> <span class="n">git</span> <span class="n">python3</span>
+<span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">libbz2</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">.</span><span class="mi">8</span><span class="o">-</span><span class="n">r1</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">libffi</span> <span class="p">(</span><span class="mf">3.3</span><span class="o">-</span><span class="n">r2</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">gdbm</span> <span class="p">(</span><span class="mf">1.19</span><span class="o">-</span><span class="n">r0</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">4</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">readline</span> <span class="p">(</span><span class="mf">8.1</span><span class="p">.</span><span class="mi">0</span><span class="o">-</span><span class="n">r0</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">5</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">sqlite</span><span class="o">-</span><span class="n">libs</span> <span class="p">(</span><span class="mf">3.34</span><span class="p">.</span><span class="mi">1</span><span class="o">-</span><span class="n">r0</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">6</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">python3</span> <span class="p">(</span><span class="mf">3.8</span><span class="p">.</span><span class="mi">7</span><span class="o">-</span><span class="n">r1</span><span class="p">)</span>
+<span class="n">Executing</span> <span class="n">busybox</span><span class="o">-</span><span class="mf">1.32</span><span class="p">.</span><span class="mi">1</span><span class="o">-</span><span class="n">r3</span><span class="p">.</span><span class="n">trigger</span>
+<span class="n">OK</span><span class="p">:</span> <span class="mi">179</span> <span class="n">MiB</span> <span class="ow">in</span> <span class="mi">72</span> <span class="n">packages</span>
+<span class="n">localhost</span><span class="p">:</span><span class="err">~</span><span class="p">#</span> <span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">this</span>
+<span class="n">The</span> <span class="n">Zen</span> <span class="k">of</span> <span class="n">Python</span><span class="p">,</span> <span class="n">by</span> <span class="n">Tim</span> <span class="n">Peters</span>
+
+<span class="n">Beautiful</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">ugly</span><span class="p">.</span>
+<span class="n">Explicit</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">implicit</span><span class="p">.</span>
+<span class="n">Simple</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">complex</span><span class="p">.</span>
+<span class="n">Complex</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">complicated</span><span class="p">.</span>
+<span class="n">Flat</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">nested</span><span class="p">.</span>
+<span class="n">Sparse</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">dense</span><span class="p">.</span>
+<span class="n">Readability</span> <span class="n">counts</span><span class="p">.</span>
+<span class="n">Special</span> <span class="n">cases</span> <span class="n">aren</span><span class="c">&#39;t special enough to break the rules.</span>
+<span class="n">Although</span> <span class="n">practicality</span> <span class="n">beats</span> <span class="n">purity</span><span class="p">.</span>
+<span class="n">Errors</span> <span class="n">should</span> <span class="n">never</span> <span class="n">pass</span> <span class="n">silently</span><span class="p">.</span>
+<span class="n">Unless</span> <span class="n">explicitly</span> <span class="n">silenced</span><span class="p">.</span>
+<span class="ow">In</span> <span class="n">the</span> <span class="n">face</span> <span class="k">of</span> <span class="n">ambiguity</span><span class="p">,</span> <span class="n">refuse</span> <span class="n">the</span> <span class="n">temptation</span> <span class="k">to</span> <span class="n">guess</span><span class="p">.</span>
+<span class="n">There</span> <span class="n">should</span> <span class="n">be</span> <span class="n">one</span><span class="o">--</span> <span class="ow">and</span> <span class="n">preferably</span> <span class="n">only</span> <span class="n">one</span> <span class="o">--</span><span class="n">obvious</span> <span class="n">way</span> <span class="k">to</span> <span class="k">do</span> <span class="n">it</span><span class="p">.</span>
+<span class="n">Although</span> <span class="n">that</span> <span class="n">way</span> <span class="n">may</span> <span class="k">not</span> <span class="n">be</span> <span class="n">obvious</span> <span class="n">at</span> <span class="n">first</span> <span class="n">unless</span> <span class="n">you</span><span class="c">&#39;re Dutch.</span>
+<span class="n">Now</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">never</span><span class="p">.</span>
+<span class="n">Although</span> <span class="n">never</span> <span class="ow">is</span> <span class="n">often</span> <span class="n">better</span> <span class="n">than</span> <span class="o">*</span><span class="n">right</span><span class="o">*</span> <span class="n">now</span><span class="p">.</span>
+<span class="k">If</span> <span class="n">the</span> <span class="n">implementation</span> <span class="ow">is</span> <span class="n">hard</span> <span class="k">to</span> <span class="n">explain</span><span class="p">,</span> <span class="n">it</span><span class="c">&#39;s a bad idea.</span>
+<span class="k">If</span> <span class="n">the</span> <span class="n">implementation</span> <span class="ow">is</span> <span class="n">easy</span> <span class="k">to</span> <span class="n">explain</span><span class="p">,</span> <span class="n">it</span> <span class="n">may</span> <span class="n">be</span> <span class="n">a</span> <span class="n">good</span> <span class="n">idea</span><span class="p">.</span>
+<span class="n">Namespaces</span> <span class="n">are</span> <span class="n">one</span> <span class="n">honking</span> <span class="n">great</span> <span class="n">idea</span> <span class="o">--</span> <span class="k">let</span><span class="c">&#39;s do more of those!</span>
+</pre></div>
+
+
+<h3>Kết luận</h3>
+<p>Cài đặt máy ảo Alpine Linux là một việc đơn giản, nhanh chóng.</p>
+<p>Happy hacking!</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2021-02-20T00:00:00+07:00">Sat 20 February 2021</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://familug.github.io/categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://familug.github.io/tags.html#alpine-ref">alpine
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#linux-ref">linux
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#virtual-machine-ref">virtual-machine
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://familug.github.io/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
