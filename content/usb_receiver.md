@@ -5,10 +5,9 @@ Tags: linux, USB receiver, wireless mouse, bluetooth, solaar
 
 Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.
 
-## Chuột/phím bluetooh/không dây(wireless)
+## Chuột, phím bluetooth/không dây(wireless)
 - kết nối bluetooth sử dụng... bluetooth.
 - kết nối wireless sử dụng 1 thiết bị nhỏ cắm vào cổng USB, gọi là wireless USB receiver (đầu thu không dây).
-
 
 ![USB receiver/dongle]({static}/images/usb_receiver.webp)
 
