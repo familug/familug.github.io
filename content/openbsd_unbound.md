@@ -56,7 +56,7 @@ $ cat /etc/hostname.iwm0
 nwid "The Coffee House" wpakey thecoffeehouse
 dhcp
 ```
-It uses DHCP to get IP and DNS config, this in turns, re-write `/etcresolv.conf`
+It uses DHCP to get IP and DNS config, this in turns, re-write `/etc/resolv.conf`
 
 ```
 $ cat /etc/resolv.conf
