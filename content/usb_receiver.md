@@ -24,8 +24,7 @@ Bởi vì chúng không cần!
  Một USB receiver hiện đại (2020), của Logitech sử dụng công nghệ ["Unifying"](https://www.logitech.com/en-us/resource-center/what-is-unifying.html) có thể pair 1 lúc 6 thiết bị khác nhau.
  Trên Windows/MacOS có thể tải app [Options của Logitech](https://www.logitech.com/en-us/product/options) để cấu hình/pair các thiết bị.
 
- Trên Linux, dùng [Solaar](https://pwr-solaar.github.io/Solaar/) có sẵn trong repo [Ubuntu từ 16.04]
- (https://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=solaar&searchon=names)
+ Trên Linux, dùng [Solaar](https://pwr-solaar.github.io/Solaar/) có sẵn trong repo [Ubuntu từ 16.04](https://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=solaar&searchon=names).
 
 Sau khi pair xong, USB receiver và chuột/phím sẽ "nhớ" nhau, có thể dùng thoải mái ở các máy tính khác, khi cần thì pair lại, linh hoạt như các thiết bị bluetooth.
 
