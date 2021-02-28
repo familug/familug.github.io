@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-28T00:00:00+07:00</updated><entry><title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop</title><link href="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html" rel="alternate"></link><published>2021-02-28T00:00:00+07:00</published><updated>2021-02-28T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-28:/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-03-01T00:00:00+07:00</updated><entry><title>Cấu hình chuột/phím Logitech với USB receiver/dongle</title><link href="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html" rel="alternate"></link><published>2021-03-01T00:00:00+07:00</published><updated>2021-03-01T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html</id><summary type="html">&lt;p&gt;Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.&lt;/p&gt;
+&lt;h2&gt;Chuột/phím bluetooh/không dây(wireless)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;kết nối bluetooth sử dụng... bluetooth.&lt;/li&gt;
+&lt;li&gt;kết nối wireless sử dụng 1 thiết bị nhỏ cắm vào cổng USB, gọi là wireless USB …&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;p&gt;Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.&lt;/p&gt;
+&lt;h2&gt;Chuột/phím bluetooh/không dây(wireless)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;kết nối bluetooth sử dụng... bluetooth.&lt;/li&gt;
+&lt;li&gt;kết nối wireless sử dụng 1 thiết bị nhỏ cắm vào cổng USB, gọi là wireless USB receiver (đầu thu không dây).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="USB receiver/dongle" src="https://familug.github.io/images/usb_receiver.webp"&gt;&lt;/p&gt;
+&lt;p&gt;Khi bán các thiết bị chuột, bàn phím, cục USB receiver này thường đi kèm sẵn, khiến ta có thể lầm tưởng nó chỉ hoạt động được với thiết bị đi kèm, và mất cục nhỏ xíu đó là... tèo.&lt;/p&gt;
+&lt;p&gt;Thử tưởng tượng nhà sản xuất Logitech mỗi ngày sản xuất hàng ngàn con chuột máy tính ở 1 nhà máy, hàng ngàn USB receiver tại 1 nhà máy khác xa hàng ngàn cây số, làm sao để đảm bảo chúng khớp 1-1?&lt;/p&gt;
+&lt;p&gt;Bởi vì chúng không cần!
+ đảm bảo điều nói trên giống như ốc và vít phải sản xuất từng cặp vậy.&lt;/p&gt;
+&lt;p&gt;USB receiver có thể cấu hình lại và "pair" với các thiết bị khác nhau.&lt;/p&gt;
+&lt;h2&gt;Cấu hình USB receiver&lt;/h2&gt;
+&lt;p&gt;Một USB receiver hiện đại (2020), của Logitech sử dụng công nghệ &lt;a href="https://www.logitech.com/en-us/resource-center/what-is-unifying.html"&gt;"Unifying"&lt;/a&gt; có thể pair 1 lúc 6 thiết bị khác nhau.
+ Trên Windows/MacOS có thể tải app &lt;a href="https://www.logitech.com/en-us/product/options"&gt;Options của Logitech&lt;/a&gt; để cấu hình/pair các thiết bị.&lt;/p&gt;
+&lt;p&gt;Trên Linux, dùng &lt;a href="https://pwr-solaar.github.io/Solaar/"&gt;Solaar&lt;/a&gt; có sẵn trong repo [Ubuntu từ 16.04]
+ (https://packages.ubuntu.com/search?suite=default&amp;amp;section=all&amp;amp;arch=any&amp;amp;keywords=solaar&amp;amp;searchon=names)&lt;/p&gt;
+&lt;p&gt;Sau khi pair xong, USB receiver và chuột/phím sẽ "nhớ" nhau, có thể dùng thoải mái ở các máy tính khác, khi cần thì pair lại, linh hoạt như các thiết bị bluetooth.&lt;/p&gt;
+&lt;h2&gt;The end&lt;/h2&gt;</content><category term="frontpage"></category><category term="linux"></category><category term="USB receiver"></category><category term="wireless mouse"></category><category term="bluetooth"></category><category term="solaar"></category></entry><entry><title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop</title><link href="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html" rel="alternate"></link><published>2021-02-28T00:00:00+07:00</published><updated>2021-02-28T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-28:/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
 Using Unbound, you would not longer depends on other DNS provider, keep
 what domain you access to yourself.&lt;/p&gt;
 &lt;h2&gt;Enable and start unbound&lt;/h2&gt;
