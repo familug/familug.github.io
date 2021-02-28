@@ -13,6 +13,16 @@ what domain you access to yourself.
 # rcctl start unbound
 ```
 
+It now listens on port 53, on localhost address - good, sane default:
+
+```
+$ netstat -nl | grep 53
+tcp          0      0  127.0.0.1.53           *.*                    LISTEN
+udp          0      0  127.0.0.1.53           *.*
+tcp6         0      0  ::1.53                 *.*                    LISTEN
+udp6         0      0  ::1.53                 *.*
+```
+
 Now check using `dig`:
 
 ```
