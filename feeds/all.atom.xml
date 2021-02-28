@@ -1,5 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-20T16:00:00+07:00</updated><entry><title>Using virtual machine via vmd on OpenBSD 6.8</title><link href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" rel="alternate"></link><published>2021-02-20T16:00:00+07:00</published><updated>2021-02-20T16:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-20:/using-virtual-machine-via-vmd-on-openbsd-68.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/all.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-02-28T00:00:00+07:00</updated><entry><title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop</title><link href="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html" rel="alternate"></link><published>2021-02-28T00:00:00+07:00</published><updated>2021-02-28T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-28:/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
+Using Unbound, you would not longer depends on other DNS provider, keep
+what domain you access to yourself.&lt;/p&gt;
+&lt;h2&gt;Enable and start unbound&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# rcctl enable unbound
+# rcctl start unbound
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now check using &lt;code&gt;dig&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;
+
+&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="mf"&gt;9 …&lt;/span&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
+Using Unbound, you would not longer depends on other DNS provider, keep
+what domain you access to yourself.&lt;/p&gt;
+&lt;h2&gt;Enable and start unbound&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# rcctl enable unbound
+# rcctl start unbound
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now check using &lt;code&gt;dig&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;
+
+&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="mf"&gt;9.10.8&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;P1&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt; &lt;span class="nl"&gt;options&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;Got&lt;/span&gt; &lt;span class="nl"&gt;answer&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="o"&gt;-&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;HEADER&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;lt;-&lt;/span&gt; &lt;span class="nl"&gt;opcode&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;QUERY&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nl"&gt;status&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;NOERROR&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;7832&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="nl"&gt;flags&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;qr&lt;/span&gt; &lt;span class="n"&gt;rd&lt;/span&gt; &lt;span class="n"&gt;ra&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nl"&gt;QUERY&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nl"&gt;ANSWER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nl"&gt;AUTHORITY&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nl"&gt;ADDITIONAL&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;OPT&lt;/span&gt; &lt;span class="nl"&gt;PSEUDOSECTION&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nl"&gt;EDNS&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nl"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nl"&gt;flags&lt;/span&gt;&lt;span class="p"&gt;:;&lt;/span&gt; &lt;span class="nl"&gt;udp&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;4096&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;QUESTION&lt;/span&gt; &lt;span class="nl"&gt;SECTION&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;                       &lt;span class="n"&gt;IN&lt;/span&gt;      &lt;span class="n"&gt;A&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;ANSWER&lt;/span&gt; &lt;span class="nl"&gt;SECTION&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;                &lt;span class="mi"&gt;231&lt;/span&gt;     &lt;span class="n"&gt;IN&lt;/span&gt;      &lt;span class="n"&gt;A&lt;/span&gt;       &lt;span class="mf"&gt;104.21.61.168&lt;/span&gt;
+&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;                &lt;span class="mi"&gt;231&lt;/span&gt;     &lt;span class="n"&gt;IN&lt;/span&gt;      &lt;span class="n"&gt;A&lt;/span&gt;       &lt;span class="mf"&gt;172.67.212.45&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;Query&lt;/span&gt; &lt;span class="nl"&gt;time&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="n"&gt;msec&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="nl"&gt;SERVER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;127.0.0.1&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="mi"&gt;53&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;127.0.0.1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="nl"&gt;WHEN&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Sun&lt;/span&gt; &lt;span class="n"&gt;Feb&lt;/span&gt; &lt;span class="mi"&gt;28&lt;/span&gt; &lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;35&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mo"&gt;07&lt;/span&gt; &lt;span class="mi"&gt;2021&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;MSG&lt;/span&gt; &lt;span class="n"&gt;SIZE&lt;/span&gt;  &lt;span class="nl"&gt;rcvd&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;68&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The result is same as returned by &lt;code&gt;1.1.1.1&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="kt"&gt;short&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@1.1.1.1&lt;/span&gt;
+&lt;span class="mf"&gt;172.67.212.45&lt;/span&gt;
+&lt;span class="mf"&gt;104.21.61.168&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Config laptop to use the local DNS resolver&lt;/h2&gt;
+&lt;p&gt;Laptop uses wireless network often uses DHCP to config.&lt;/p&gt;
+&lt;p&gt;Example config:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ cat /etc/hostname.iwm0
+nwid &lt;span class="s2"&gt;&amp;quot;The Coffee House&amp;quot;&lt;/span&gt; wpakey thecoffeehouse
+dhcp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It uses DHCP to get IP and DNS config, this in turns, re-write &lt;code&gt;/etcresolv.conf&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ cat /etc/resolv.conf
+&lt;span class="c1"&gt;# Generated by iwm0 dhclient&lt;/span&gt;
+nameserver &lt;span class="m"&gt;8&lt;/span&gt;.8.8.8
+lookup file &lt;span class="nb"&gt;bind&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To override the nameserver, change DHCP client config:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ cat /etc/dhclient.conf
+supersede domain-name-servers &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To reconnect wireless network with new DHCP client config, run:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# sh -x /etc/netstart
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now DNS would be resolved using &lt;code&gt;unbound&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Happy OpenBSD using.&lt;/p&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="unbound"></category><category term="DNS"></category><category term="dhcp"></category></entry><entry><title>Using virtual machine via vmd on OpenBSD 6.8</title><link href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" rel="alternate"></link><published>2021-02-20T16:00:00+07:00</published><updated>2021-02-20T16:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-20:/using-virtual-machine-via-vmd-on-openbsd-68.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
 Instead of installing VirtualBox or look for kvm on OpenBSD, everything
 is already there, a built-in virtualization solution.&lt;/p&gt;
 &lt;h3&gt;Check wiki FAQ first&lt;/h3&gt;

@@ -15,18 +15,18 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="openbsd, vmm, alpine, debian, en,, " />
+<meta name="keywords" content="openbsd, unbound, DNS, dhcp, en,, " />
 
-<meta property="og:title" content="Using virtual machine via vmd on OpenBSD 6.8 "/>
-<meta property="og:url" content="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" />
-<meta property="og:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …" />
+<meta property="og:title" content="Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop "/>
+<meta property="og:url" content="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html" />
+<meta property="og:description" content="OpenBSD 6.8 comes with default installed Unbound daemon. Using Unbound, you would not longer depends on other DNS provider, keep what domain you access to yourself. Enable and start unbound # rcctl enable unbound # rcctl start unbound Now check using dig: $ dig pymi.vn @127.0.0.1 ; &lt;&lt;&gt;&gt; dig 9 …" />
 <meta property="og:site_name" content="FAMILUG Vietnam" />
 <meta property="og:article:author" content="hvn" />
-<meta property="og:article:published_time" content="2021-02-20T16:00:00+07:00" />
-<meta name="twitter:title" content="Using virtual machine via vmd on OpenBSD 6.8 ">
-<meta name="twitter:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …">
+<meta property="og:article:published_time" content="2021-02-28T00:00:00+07:00" />
+<meta name="twitter:title" content="Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop ">
+<meta name="twitter:description" content="OpenBSD 6.8 comes with default installed Unbound daemon. Using Unbound, you would not longer depends on other DNS provider, keep what domain you access to yourself. Enable and start unbound # rcctl enable unbound # rcctl start unbound Now check using dig: $ dig pymi.vn @127.0.0.1 ; &lt;&lt;&gt;&gt; dig 9 …">
 
-        <title>Using virtual machine via vmd on OpenBSD 6.8  · FAMILUG Vietnam
+        <title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop  · FAMILUG Vietnam
 </title>
         <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG Vietnam - Full Atom Feed" />
 
@@ -67,8 +67,8 @@
 <div class="row-fluid">
     <header class="page-header span10 offset2">
         <h1>
-            <a href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html">
-                Using virtual machine via vmd on OpenBSD 6.8
+            <a href="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html">
+                Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop
             </a>
         </h1>
     </header>
@@ -77,87 +77,77 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
             
-            <p>OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
-Instead of installing VirtualBox or look for kvm on OpenBSD, everything
-is already there, a built-in virtualization solution.</p>
-<h3>Check wiki FAQ first</h3>
-<p>https://www.openbsd.org/faq/faq16.html</p>
-<p>it lists all features, not ready features, prequisites, basic commands.</p>
-<h2>Distro</h2>
-<p>Sure run OpenBSD guest on OpenBSD host is "should just work", it's fully tested.
-But for Linux based OS, the options are not much:</p>
-<p>It's a real coincidence, someone asked the question two days ago on Reddit:
-https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_install_in_vmd/</p>
-<p>Thanks to the answers there, I tried many but success only some:</p>
-<ul>
-<li>AlpineLinux: use "Virtual" edition https://alpinelinux.org/downloads/
-  "it just works", just boot on and run <code>setup-alpine</code></li>
-<li>Debian: I used <code>debian-10.8.0-amd64-netinst.iso</code>,
-  after start, type Tab, then enter <code>console=ttyS0,115200</code> then enter,
-  the text-based-curse-like UI would work.</li>
-</ul>
-<p>And these failed:</p>
-<ul>
-<li>Ubuntu: <code>ubuntu-20.04.2-live-server-amd64.iso</code>, failed.</li>
-<li>NixOS: failed at phase 2/3 of systemd.</li>
-<li>ArchLinux: failed with error <code>ACPI BIOS Error (bug): A valid RSDP was not found (20200925/tbxfroot-210)</code></li>
-</ul>
-<p>Most of these default to use Video, thus must add boot parameter:</p>
-<blockquote>
-<p>type Tab, then enter <code>console=ttyS0,115200</code> then enter,</p>
-</blockquote>
-<p>https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html</p>
-<h3>Network</h3>
-<p>Setup pf and sysctl as metioned in FAQ, <code>NAT for the VMs</code></p>
-<p>http://www.openbsd.org/faq/faq16.html#VMMnet</p>
-<p>After install, can ssh from OpenBSD host to guest via, change to your IP get from
-output of <code>ip ad</code> after installed:</p>
-<div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="n">root</span><span class="mf">@100.64.1.3</span> <span class="o">-</span><span class="n">v</span>
+            <p>OpenBSD 6.8 comes with default installed Unbound daemon.
+Using Unbound, you would not longer depends on other DNS provider, keep
+what domain you access to yourself.</p>
+<h2>Enable and start unbound</h2>
+<div class="highlight"><pre><span></span># rcctl enable unbound
+# rcctl start unbound
 </pre></div>
 
 
-<p>Note that password login seems always fail even put correct password
-(or maybe Linux-based OS disabled them by default). Copy your pubkey
-to <code>/root/.ssh/authorized_keys</code> then ssh would work.</p>
-<h3>Commands</h3>
-<p>Two major important commands:</p>
-<h4>Create image</h4>
-<div class="highlight"><pre><span></span>vmctl create -s 10G image.qcow2
+<p>Now check using <code>dig</code>:</p>
+<div class="highlight"><pre><span></span><span class="err">$</span> <span class="n">dig</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@127.0.0.1</span>
+
+<span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">dig</span> <span class="mf">9.10.8</span><span class="o">-</span><span class="n">P1</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@127.0.0.1</span>
+<span class="p">;;</span> <span class="n">global</span> <span class="nl">options</span><span class="p">:</span> <span class="o">+</span><span class="n">cmd</span>
+<span class="p">;;</span> <span class="n">Got</span> <span class="nl">answer</span><span class="p">:</span>
+<span class="p">;;</span> <span class="o">-&gt;&gt;</span><span class="n">HEADER</span><span class="o">&lt;&lt;-</span> <span class="nl">opcode</span><span class="p">:</span> <span class="n">QUERY</span><span class="p">,</span> <span class="nl">status</span><span class="p">:</span> <span class="n">NOERROR</span><span class="p">,</span> <span class="kt">id</span><span class="o">:</span> <span class="mi">7832</span>
+<span class="p">;;</span> <span class="nl">flags</span><span class="p">:</span> <span class="n">qr</span> <span class="n">rd</span> <span class="n">ra</span><span class="p">;</span> <span class="nl">QUERY</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nl">ANSWER</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nl">AUTHORITY</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nl">ADDITIONAL</span><span class="p">:</span> <span class="mi">1</span>
+
+<span class="p">;;</span> <span class="n">OPT</span> <span class="nl">PSEUDOSECTION</span><span class="p">:</span>
+<span class="p">;</span> <span class="nl">EDNS</span><span class="p">:</span> <span class="nl">version</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nl">flags</span><span class="p">:;</span> <span class="nl">udp</span><span class="p">:</span> <span class="mi">4096</span>
+<span class="p">;;</span> <span class="n">QUESTION</span> <span class="nl">SECTION</span><span class="p">:</span>
+<span class="p">;</span><span class="n">pymi</span><span class="p">.</span><span class="n">vn</span><span class="p">.</span>                       <span class="n">IN</span>      <span class="n">A</span>
+
+<span class="p">;;</span> <span class="n">ANSWER</span> <span class="nl">SECTION</span><span class="p">:</span>
+<span class="n">pymi</span><span class="p">.</span><span class="n">vn</span><span class="p">.</span>                <span class="mi">231</span>     <span class="n">IN</span>      <span class="n">A</span>       <span class="mf">104.21.61.168</span>
+<span class="n">pymi</span><span class="p">.</span><span class="n">vn</span><span class="p">.</span>                <span class="mi">231</span>     <span class="n">IN</span>      <span class="n">A</span>       <span class="mf">172.67.212.45</span>
+
+<span class="p">;;</span> <span class="n">Query</span> <span class="nl">time</span><span class="p">:</span> <span class="mi">0</span> <span class="n">msec</span>
+<span class="p">;;</span> <span class="nl">SERVER</span><span class="p">:</span> <span class="mf">127.0.0.1</span><span class="err">#</span><span class="mi">53</span><span class="p">(</span><span class="mf">127.0.0.1</span><span class="p">)</span>
+<span class="p">;;</span> <span class="nl">WHEN</span><span class="p">:</span> <span class="n">Sun</span> <span class="n">Feb</span> <span class="mi">28</span> <span class="mi">22</span><span class="o">:</span><span class="mi">15</span><span class="o">:</span><span class="mi">35</span> <span class="o">+</span><span class="mo">07</span> <span class="mi">2021</span>
+<span class="p">;;</span> <span class="n">MSG</span> <span class="n">SIZE</span>  <span class="nl">rcvd</span><span class="p">:</span> <span class="mi">68</span>
 </pre></div>
 
 
-<h4>Start VM</h4>
-<div class="highlight"><pre><span></span>vmctl start \
-  -i 1 \ # 1 interface
-  -L \ # create interface
-  -c \ # auto connect console after started
-  -m 1G \ # 1G memory
-  -r file.iso \ # path to ISO file (CD)
-  -d image.qcow2 \ # image created above
-  myvm # name of VM
+<p>The result is same as returned by <code>1.1.1.1</code>:</p>
+<div class="highlight"><pre><span></span><span class="err">$</span> <span class="n">dig</span> <span class="o">+</span><span class="kt">short</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@1.1.1.1</span>
+<span class="mf">172.67.212.45</span>
+<span class="mf">104.21.61.168</span>
 </pre></div>
 
 
-<div class="highlight"><pre><span></span>vmctl status
-vmctl stop ID
+<h2>Config laptop to use the local DNS resolver</h2>
+<p>Laptop uses wireless network often uses DHCP to config.</p>
+<p>Example config:</p>
+<div class="highlight"><pre><span></span>$ cat /etc/hostname.iwm0
+nwid <span class="s2">&quot;The Coffee House&quot;</span> wpakey thecoffeehouse
+dhcp
 </pre></div>
 
 
-<p>The start command would start and give the name temporary, after installed,
-create a file at <code>/etc/vm.conf</code> with config like:</p>
-<div class="highlight"><pre><span></span>vm &quot;alpine&quot; {
-    disable  # disable auto start when boot
-    memory 1G
-    disk &quot;/root/linux.qcow2&quot;
-    local interface
-}
+<p>It uses DHCP to get IP and DNS config, this in turns, re-write <code>/etcresolv.conf</code></p>
+<div class="highlight"><pre><span></span>$ cat /etc/resolv.conf
+<span class="c1"># Generated by iwm0 dhclient</span>
+nameserver <span class="m">8</span>.8.8.8
+lookup file <span class="nb">bind</span>
 </pre></div>
 
 
-<h3>Result</h3>
-<p>VMs installed successfully run smoothly on vmd, low CPU usage (compare to
-VirtualBox on MacOS).</p>
-<p>Have fun.</p>
+<p>To override the nameserver, change DHCP client config:</p>
+<div class="highlight"><pre><span></span>$ cat /etc/dhclient.conf
+supersede domain-name-servers <span class="m">127</span>.0.0.1<span class="p">;</span>
+</pre></div>
+
+
+<p>To reconnect wireless network with new DHCP client config, run:</p>
+<div class="highlight"><pre><span></span># sh -x /etc/netstart
+</pre></div>
+
+
+<p>Now DNS would be resolved using <code>unbound</code>.</p>
+<p>Happy OpenBSD using.</p>
 
 
              
@@ -176,21 +166,21 @@ VirtualBox on MacOS).</p>
         </div>
         <section id="article-sidebar" class="span2">
             <h4>Published</h4>
-            <time itemprop="dateCreated" datetime="2021-02-20T16:00:00+07:00">Sat 20 February 2021</time>
+            <time itemprop="dateCreated" datetime="2021-02-28T00:00:00+07:00">Sun 28 February 2021</time>
             <h4>Category</h4>
             <a class="category-link" href="https://familug.github.io/categories.html#en-ref">en,</a>
             <h4>Tags</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://familug.github.io/tags.html#alpine-ref">alpine
-                    <span class="superscript">2</span>
+                <li><a href="https://familug.github.io/tags.html#dhcp-ref">dhcp
+                    <span class="superscript">1</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#debian-ref">debian
+                <li><a href="https://familug.github.io/tags.html#dns-ref">DNS
                     <span class="superscript">1</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#openbsd-ref">openbsd
                     <span class="superscript">3</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#vmm-ref">vmm
+                <li><a href="https://familug.github.io/tags.html#unbound-ref">unbound
                     <span class="superscript">1</span>
 </a></li>
             </ul>
