@@ -40,11 +40,10 @@ Most of these default to use Video, thus must add boot parameter:
 https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html
 
 ### Network
-Setup pf and sysctl as metioned in FAQ, `NAT for the VMs`
+Setup `pf` and `sysctl net.inet.ip.forwarding=1`
+as metioned in [FAQ, `NAT for the VMs`](http://www.openbsd.org/faq/faq16.html#VMMnet)
 
-http://www.openbsd.org/faq/faq16.html#VMMnet
-
-After install, can ssh from OpenBSD host to guest via, change to your IP get from
+After installed, can ssh from OpenBSD host to guest via, change to your IP get from
 output of `ip ad` after installed:
 
 ```
