@@ -17,8 +17,8 @@ cần thiết.
 Thứ công nghệ khiến mình bị shock nhất trong những năm đầu làm sysadmin,
 đó là OpenLDAP. Bạn sẽ không bao giờ hiểu được nó là thứ gì và tại sao lại cần,
 cho đến khi đi làm môi trường doanh nghiệp, khi công ty có hàng trăm hay hàng
-nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chả có lý do
-gì làm vậy cả.
+nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chẳng
+có lý do gì làm vậy.
 Ngắn gọn: OpenLDAP hay các hệ thống "Active Directory" thường dùng lưu trữ
 thông tin về các cá nhân, và nó hoạt động như 1 database tối ưu cho việc truy
 cập, người dùng có thể dùng 1 tài khoản để đăng nhập vào nhiều chương trình
@@ -35,23 +35,23 @@ giúp ích gì:
 - Cấu hình wifi
 - Terraform, Kubernetes
 - SaltStack, Ansible
-- Databases, NGINX, Jenkins, GitLab, ELK, Prometheus,...
+- Databases, NGINX, Jenkins, ELK, Prometheus,...
   các phần mềm mà chỉ doanh nghiệp,
-  hay server mới dùng chứ không ai cài trên máy cá nhân làm gì.
-- cấu hình giao diện đồ họa
+  hay trên server mới dùng chứ không ai cài trên máy cá nhân làm gì.
+- cấu hình giao diện đồ họa (DE, WM, X.org)
 
 ## Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc
 Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
 hữu dụng khi đi làm:
 
-- vi
-- top
 - ls
+- cd
 - cp
 - mv
 - mkdir
 - ps
 - top
+- vi
 
 .., xem thêm tại [đây](https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html).
 
@@ -59,7 +59,7 @@ Các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nha
 hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
 hay cả Windows Subsystem for Linux (WSL).
 
-- git
+- git/GitHub/GitLab
 - tmux
 - cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
   giống server khi cần thiết.
