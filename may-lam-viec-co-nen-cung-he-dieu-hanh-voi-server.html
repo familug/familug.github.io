@@ -15,18 +15,18 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="openbsd, vmm, alpine, debian, en,, " />
+<meta name="keywords" content="sysadmin, workstation, opinion, frontpage, " />
 
-<meta property="og:title" content="Using virtual machine via vmd on OpenBSD 6.8 "/>
-<meta property="og:url" content="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" />
-<meta property="og:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …" />
+<meta property="og:title" content="Máy làm việc có nên cùng hệ điều hành với server? "/>
+<meta property="og:url" content="https://familug.github.io/may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html" />
+<meta property="og:description" content="Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc &#34;nếu làm Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu&#34;, để có kinh nghiệm khi dùng hàng ngày ứng dụng cho công việc. Sau gần 8 năm đi làm (since 2013), kết luận hiện …" />
 <meta property="og:site_name" content="FAMILUG Vietnam" />
 <meta property="og:article:author" content="hvn" />
-<meta property="og:article:published_time" content="2021-02-20T16:00:00+07:00" />
-<meta name="twitter:title" content="Using virtual machine via vmd on OpenBSD 6.8 ">
-<meta name="twitter:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …">
+<meta property="og:article:published_time" content="2021-03-01T01:02:03+07:00" />
+<meta name="twitter:title" content="Máy làm việc có nên cùng hệ điều hành với server? ">
+<meta name="twitter:description" content="Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc &#34;nếu làm Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu&#34;, để có kinh nghiệm khi dùng hàng ngày ứng dụng cho công việc. Sau gần 8 năm đi làm (since 2013), kết luận hiện …">
 
-        <title>Using virtual machine via vmd on OpenBSD 6.8  · FAMILUG Vietnam
+        <title>Máy làm việc có nên cùng hệ điều hành với server?  · FAMILUG Vietnam
 </title>
         <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG Vietnam - Full Atom Feed" />
 
@@ -67,8 +67,8 @@
 <div class="row-fluid">
     <header class="page-header span10 offset2">
         <h1>
-            <a href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html">
-                Using virtual machine via vmd on OpenBSD 6.8
+            <a href="https://familug.github.io/may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html">
+                Máy làm việc có nên cùng hệ điều hành với server?
             </a>
         </h1>
     </header>
@@ -77,87 +77,71 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
             
-            <p>OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
-Instead of installing VirtualBox or look for kvm on OpenBSD, everything
-is already there, a built-in virtualization solution.</p>
-<h3>Check wiki FAQ first</h3>
-<p>https://www.openbsd.org/faq/faq16.html</p>
-<p>it lists all features, not ready features, prequisites, basic commands.</p>
-<h2>Distro</h2>
-<p>Sure run OpenBSD guest on OpenBSD host is "should just work", it's fully tested.
-But for Linux based OS, the options are not much:</p>
-<p>It's a real coincidence, someone asked the question two days ago on Reddit:
-https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_install_in_vmd/</p>
-<p>Thanks to the answers there, I tried many but success only some:</p>
+            <p>Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc "nếu làm
+Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu", để có kinh nghiệm
+khi dùng hàng ngày ứng dụng cho công việc.</p>
+<p><img alt="Photo by &lt;a href=&quot;https://unsplash.com/@xps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText&quot;&gt;XPS&lt;/a&gt; on &lt;a href=&quot;https://unsplash.com/@xps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText&quot;&gt;Unsplash&lt;/a&gt;" src="https://familug.github.io/images/xps.jpg"></p>
+<p>Sau gần 8 năm đi làm (since 2013), kết luận hiện tại mình đưa ra là: không
+cần thiết.</p>
+<h2>Kiến thức đi làm khác với kiến thức dùng hàng ngày</h2>
+<p>Thứ công nghệ khiến mình bị shock nhất trong những năm đầu làm sysadmin,
+đó là OpenLDAP. Bạn sẽ không bao giờ hiểu được nó là thứ gì và tại sao lại cần,
+cho đến khi đi làm môi trường doanh nghiệp, khi công ty có hàng trăm hay hàng
+nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chả có lý do
+gì làm vậy cả.
+Ngắn gọn: OpenLDAP hay các hệ thống "Active Directory" thường dùng lưu trữ
+thông tin về các cá nhân, và nó hoạt động như 1 database tối ưu cho việc truy
+cập, người dùng có thể dùng 1 tài khoản để đăng nhập vào nhiều chương trình
+như email, dịch vụ nội bộ a,b,c... lý do là LDAP đã quá phổ biến và các
+ngôn ngữ lập trình đều có sẵn thư viện giúp việc này chỉ mất &lt; 1 ngày để làm.</p>
+<p>Vậy nên cả ngày dùng Ubuntu, cũng chẳng giúp ích gì cho dùng OpenLDAP.</p>
+<p>Vài thứ kiến thức / công nghệ khác mà dùng máy cá nhân giống máy server không
+giúp ích gì:</p>
 <ul>
-<li>AlpineLinux: use "Virtual" edition https://alpinelinux.org/downloads/
-  "it just works", just boot on and run <code>setup-alpine</code></li>
-<li>Debian: I used <code>debian-10.8.0-amd64-netinst.iso</code>,
-  after start, type Tab, then enter <code>console=ttyS0,115200</code> then enter,
-  the text-based-curse-like UI would work.</li>
+<li>Kiến thức setup BIOS, Grub, format ổ cứng... khi server dùng cloud.</li>
+<li>Kiến thức về kết nối các thiết bị phần cứng: loa phím chuột</li>
+<li>Cấu hình wifi</li>
+<li>Terraform, Kubernetes</li>
+<li>SaltStack, Ansible</li>
+<li>Databases, NGINX, Jenkins, GitLab, ELK, Prometheus,...
+  các phần mềm mà chỉ doanh nghiệp,
+  hay server mới dùng chứ không ai cài trên máy cá nhân làm gì.</li>
+<li>cấu hình giao diện đồ họa</li>
 </ul>
-<p>And these failed:</p>
+<h2>Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc</h2>
+<p>Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
+hữu dụng khi đi làm:
+- vi
+- top
+- ls
+- cp
+- mv
+- mkdir
+- ps
+- top
+- git
+- tmux
+- cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
+  giống server khi cần thiết.
+...</p>
+<p>xem thêm tại <a href="https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html">đây</a>.</p>
+<p>Các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
+hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
+hay cả Windows Subsystem for Linux (WSL).</p>
 <ul>
-<li>Ubuntu: <code>ubuntu-20.04.2-live-server-amd64.iso</code>, failed.</li>
-<li>NixOS: failed at phase 2/3 of systemd.</li>
-<li>ArchLinux: failed with error <code>ACPI BIOS Error (bug): A valid RSDP was not found (20200925/tbxfroot-210)</code></li>
+<li>kiến thức network: ping, netstat, DNS, iptable, tcpdumb...</li>
+<li>kiến thức lập trình</li>
+<li>đọc log</li>
 </ul>
-<p>Most of these default to use Video, thus must add boot parameter:</p>
-<blockquote>
-<p>type Tab, then enter <code>console=ttyS0,115200</code> then enter,</p>
-</blockquote>
-<p>https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html</p>
-<h3>Network</h3>
-<p>Setup <code>pf</code> and <code>sysctl net.inet.ip.forwarding=1</code>
-as metioned in <a href="http://www.openbsd.org/faq/faq16.html#VMMnet">FAQ, <code>NAT for the VMs</code></a></p>
-<p>After installed, can ssh from OpenBSD host to guest via, change to your IP get from
-output of <code>ip ad</code> after installed:</p>
-<div class="highlight"><pre><span></span><code><span class="n">ssh</span> <span class="n">root</span><span class="mf">@100.64.1.3</span> <span class="o">-</span><span class="n">v</span>
-</code></pre></div>
-
-
-<p>Note that password login seems always fail even put correct password
-(or maybe Linux-based OS disabled them by default). Copy your pubkey
-to <code>/root/.ssh/authorized_keys</code> then ssh would work.</p>
-<h3>Commands</h3>
-<p>Two major important commands:</p>
-<h4>Create image</h4>
-<div class="highlight"><pre><span></span><code><span class="err">vmctl create -s 10G image.qcow2</span>
-</code></pre></div>
-
-
-<h4>Start VM</h4>
-<div class="highlight"><pre><span></span><code><span class="err">vmctl start \</span>
-<span class="err">  -i 1 \ # 1 interface</span>
-<span class="err">  -L \ # create interface</span>
-<span class="err">  -c \ # auto connect console after started</span>
-<span class="err">  -m 1G \ # 1G memory</span>
-<span class="err">  -r file.iso \ # path to ISO file (CD)</span>
-<span class="err">  -d image.qcow2 \ # image created above</span>
-<span class="err">  myvm # name of VM</span>
-</code></pre></div>
-
-
-<div class="highlight"><pre><span></span><code><span class="err">vmctl status</span>
-<span class="err">vmctl stop ID</span>
-</code></pre></div>
-
-
-<p>The start command would start and give the name temporary, after installed,
-create a file at <code>/etc/vm.conf</code> with config like:</p>
-<div class="highlight"><pre><span></span><code><span class="err">vm &quot;alpine&quot; {</span>
-<span class="err">    disable  # disable auto start when boot</span>
-<span class="err">    memory 1G</span>
-<span class="err">    disk &quot;/root/linux.qcow2&quot;</span>
-<span class="err">    local interface</span>
-<span class="err">}</span>
-</code></pre></div>
-
-
-<h3>Result</h3>
-<p>VMs installed successfully run smoothly on vmd, low CPU usage (compare to
-VirtualBox on MacOS).</p>
-<p>Have fun.</p>
+<p>Những thứ "căn bản" này, lại là thứ hữu ích.</p>
+<h2>Kết luận</h2>
+<p>Chuyện server chạy Ubuntu còn máy làm việc/cá nhân dùng MacOS, Windows (WSL),
+hay ArchLinux, OpenBSD đều hoàn toàn bình thường, OK. Thậm chí, các lập trình
+viên sang chảnh giờ đều dùng MacOS trong khi code đều chạy trên một Linux server
+nào đó như Ubuntu.</p>
+<p>Kinh nghiệm với một công nghệ nào đó, có giá trị ở một mức độ nhất định.
+Người dùng máy bàn Ubuntu 10 năm, giỏi cấu hình giao diện đẹp lóng lánh,
+cũng khó chắc mà đủ kiến thức và kinh nghiệm Kubernetes, hay OpenLDAP để đi làm.</p>
 
 
              
@@ -176,21 +160,18 @@ VirtualBox on MacOS).</p>
         </div>
         <section id="article-sidebar" class="span2">
             <h4>Published</h4>
-            <time itemprop="dateCreated" datetime="2021-02-20T16:00:00+07:00">Sat 20 February 2021</time>
+            <time itemprop="dateCreated" datetime="2021-03-01T01:02:03+07:00">Mon 01 March 2021</time>
             <h4>Category</h4>
-            <a class="category-link" href="https://familug.github.io/categories.html#en-ref">en,</a>
+            <a class="category-link" href="https://familug.github.io/categories.html#frontpage-ref">frontpage</a>
             <h4>Tags</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://familug.github.io/tags.html#alpine-ref">alpine
-                    <span class="superscript">2</span>
-</a></li>
-                <li><a href="https://familug.github.io/tags.html#debian-ref">debian
+                <li><a href="https://familug.github.io/tags.html#opinion-ref">opinion
                     <span class="superscript">1</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#openbsd-ref">openbsd
-                    <span class="superscript">3</span>
+                <li><a href="https://familug.github.io/tags.html#sysadmin-ref">sysadmin
+                    <span class="superscript">2</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#vmm-ref">vmm
+                <li><a href="https://familug.github.io/tags.html#workstation-ref">workstation
                     <span class="superscript">1</span>
 </a></li>
             </ul>

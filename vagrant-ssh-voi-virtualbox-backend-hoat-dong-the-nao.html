@@ -80,10 +80,10 @@
             <p><a href="https://www.familug.org/2020/02/vagrant.html">Vagrant</a>
 là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
 chui vào máy ảo mới tạo:</p>
-<div class="highlight"><pre><span></span>vagrant init
+<div class="highlight"><pre><span></span><code>vagrant init
 vagrant up
 vagrant ssh
-</pre></div>
+</code></pre></div>
 
 
 <p>Bên dưới có rất nhiều "magic" xảy ra, đó là những giá trị mà Vagrant
@@ -91,21 +91,21 @@ mang lại thay vì tạo máy ào bằng tay với VirtualBox/VMWare/KVM...</p>
 <p>Vagrant ssh là câu lệnh thú vị và bất ngờ khi tìm hiểu: kết nối
 mạng từ máy thật (host) vào máy ảo (guest) như thế nào.</p>
 <p>Test với máy ảo chạy fedora, không chỉnh sửa config gì sau khi <code>vagrant init</code> ngoài box:</p>
-<div class="highlight"><pre><span></span>  config.vm.box = &quot;fedora/33-cloud-base&quot;
-  config.vm.box_version = &quot;33.20201019.0&quot;
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="err">  config.vm.box = &quot;fedora/33-cloud-base&quot;</span>
+<span class="err">  config.vm.box_version = &quot;33.20201019.0&quot;</span>
+</code></pre></div>
 
 
 <h3>Bật debug</h3>
 <p>Cách đơn giản để tìm hiểu 1 phần mềm bất kỳ là bật chế độ 
 logging debug/verbose lên, vagrant không là ngoại lệ.</p>
-<div class="highlight"><pre><span></span>VAGRANT_LOG=info vagrant ssh
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="err">VAGRANT_LOG=info vagrant ssh</span>
+</code></pre></div>
 
 
 <p>có các chế độ log nhiều hơn như <code>VAGRANT_LOG=debug</code> nhưng
 với info cũng đã đủ rồi:</p>
-<div class="highlight"><pre><span></span><span class="err">$</span> <span class="n">VAGRANT_LOG</span><span class="o">=</span><span class="n">info</span> <span class="n">vagrant</span> <span class="n">ssh</span>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="n">VAGRANT_LOG</span><span class="o">=</span><span class="n">info</span> <span class="n">vagrant</span> <span class="n">ssh</span>
  <span class="n">INFO</span> <span class="nl">global</span><span class="p">:</span> <span class="n">Vagrant</span> <span class="nl">version</span><span class="p">:</span> <span class="mf">2.2.6</span>
  <span class="n">INFO</span> <span class="nl">global</span><span class="p">:</span> <span class="n">Ruby</span> <span class="nl">version</span><span class="p">:</span> <span class="mf">2.4.9</span>
  <span class="n">INFO</span> <span class="nl">global</span><span class="p">:</span> <span class="n">RubyGems</span> <span class="nl">version</span><span class="p">:</span> <span class="mf">2.6.14.4</span>
@@ -116,7 +116,7 @@ với info cũng đã đủ rồi:</p>
  <span class="n">INFO</span> <span class="nl">ssh</span><span class="p">:</span> <span class="n">Invoking</span> <span class="nl">SSH</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">ssh</span> <span class="p">[</span><span class="s">&quot;vagrant@127.0.0.1&quot;</span><span class="p">,</span> <span class="s">&quot;-p&quot;</span><span class="p">,</span> <span class="s">&quot;2222&quot;</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;LogLevel=FATAL&quot;</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;Compression=yes&quot;</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;DSAAuthentication=yes&quot;</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;IdentitiesOnly=yes&quot;</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;StrictHostKeyChecking=no&quot;</span><span class="p">,</span> <span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;UserKnownHostsFile=/dev/null&quot;</span><span class="p">,</span> <span class="s">&quot;-i&quot;</span><span class="p">,</span> <span class="s">&quot;/Users/user/me/fedora/.vagrant/machines/default/virtualbox/private_key&quot;</span><span class="p">]</span>
 <span class="n">Last</span> <span class="nl">login</span><span class="p">:</span> <span class="n">Wed</span> <span class="n">Feb</span> <span class="mi">10</span> <span class="mi">08</span><span class="o">:</span><span class="mi">22</span><span class="o">:</span><span class="mi">51</span> <span class="mi">2021</span> <span class="n">from</span> <span class="mf">10.0.2.2</span>
 <span class="p">[</span><span class="n">vagrant</span><span class="p">@</span><span class="n">localhost</span> <span class="o">~</span><span class="p">]</span><span class="err">$</span> 
-</pre></div>
+</code></pre></div>
 
 
 <p>vagrant ssh vào máy ảo qua <code>lo</code> (loopback interface), dùng <code>127.0.0.1</code> chứ
@@ -124,12 +124,12 @@ không phải bất kỳ network interface nào khác.</p>
 <h3>VirtualBox networking modes</h3>
 <p>https://www.virtualbox.org/manual/ch06.html</p>
 <p>VirtualBox có các networking modes sau: </p>
-<div class="highlight"><pre><span></span>Network Address Translation (NAT). (máy guest có thể kết nối internet)
-NAT Network. (các máy guest có thể kết nôí đến nhau)
-Bridged networking. (máy guest sử dụng network thật mà máy host đang dùng)
-Internal networking. (???)
-Host-only networking. (máy guest sẽ có địa chỉ IP mà máy host có thể truy cập)
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="err">Network Address Translation (NAT). (máy guest có thể kết nối internet)</span>
+<span class="err">NAT Network. (các máy guest có thể kết nôí đến nhau)</span>
+<span class="err">Bridged networking. (máy guest sử dụng network thật mà máy host đang dùng)</span>
+<span class="err">Internal networking. (???)</span>
+<span class="err">Host-only networking. (máy guest sẽ có địa chỉ IP mà máy host có thể truy cập)</span>
+</code></pre></div>
 
 
 <p><img alt="NAT" src="https://familug.github.io/images/nat.png"></p>
@@ -148,13 +148,13 @@ cho phép ssh qua 1 cặp <a href="https://github.com/hashicorp/vagrant/tree/mai
 cung cấp sẵn. Sau lần đầu ssh vào,
 vagrant sẽ sinh 1 cặp key mới và thay thế cặp key mặc định này.
 https://www.vagrantup.com/docs/boxes/base#vagrant-user</p>
-<div class="highlight"><pre><span></span>~/me/fedora/.vagrant/machines/default/virtualbox/private_key
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="err">~/me/fedora/.vagrant/machines/default/virtualbox/private_key</span>
+</code></pre></div>
 
 
 <p>Toàn bộ thông tin này có trong output bình thường của lệnh vagrant up
 khi chạy lần đầu:</p>
-<div class="highlight"><pre><span></span>$ vagrant up<span class="p">;</span>                                                    <span class="o">[</span><span class="m">0</span><span class="o">]</span>
+<div class="highlight"><pre><span></span><code>$ vagrant up<span class="p">;</span>                                                    <span class="o">[</span><span class="m">0</span><span class="o">]</span>
 Bringing machine <span class="s1">&#39;default&#39;</span> up with <span class="s1">&#39;virtualbox&#39;</span> provider...
 <span class="o">==</span>&gt; default: Importing base box <span class="s1">&#39;generic/openbsd6&#39;</span>...
 <span class="o">==</span>&gt; default: Matching MAC address <span class="k">for</span> NAT networking...
@@ -183,7 +183,7 @@ Bringing machine <span class="s1">&#39;default&#39;</span> up with <span class="
     default: Removing insecure key from the guest <span class="k">if</span> it<span class="err">&#39;</span>s present...
     default: Key inserted! Disconnecting and reconnecting using new SSH key...
 <span class="o">==</span>&gt; default: Machine booted and ready!
-</pre></div>
+</code></pre></div>
 
 
 <h2>Kết luận</h2>
@@ -216,7 +216,7 @@ vagrant, hay thậm chí tạo các vagrant box để tự dùng.</p>
             <h4>Tags</h4>
             <ul class="list-of-tags tags-in-article">
                 <li><a href="https://familug.github.io/tags.html#sysadmin-ref">sysadmin
-                    <span class="superscript">1</span>
+                    <span class="superscript">2</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#vagrant-ref">vagrant
                     <span class="superscript">1</span>
