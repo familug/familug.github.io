@@ -21,8 +21,16 @@ Bởi vì chúng không cần!
  USB receiver có thể cấu hình lại và "pair" với các thiết bị khác nhau.
 
 ## Cấu hình USB receiver
- Một USB receiver hiện đại (2020), của Logitech sử dụng công nghệ ["Unifying"](https://www.logitech.com/en-us/resource-center/what-is-unifying.html) có thể pair 1 lúc 6 thiết bị khác nhau.
- Trên Windows/MacOS có thể tải app [Options của Logitech](https://www.logitech.com/en-us/product/options) để cấu hình/pair các thiết bị.
+Một USB receiver hiện đại (2020), của Logitech sử dụng công nghệ ["Unifying"](https://www.logitech.com/en-us/resource-center/what-is-unifying.html) có thể pair 1 lúc 6 thiết bị khác nhau.
+
+Dấu `*` trên receiver trong hình là logo của công nghệ Logitech Unifying.
+
+```python
+python3 -c 'print("{} is the answer to life".format(ord("*")))'
+42 is the answer to life
+```
+
+Trên Windows/MacOS có thể tải app [Options của Logitech](https://www.logitech.com/en-us/product/options) để cấu hình/pair các thiết bị.
 
  Trên Linux, dùng [Solaar](https://pwr-solaar.github.io/Solaar/) có sẵn trong repo [Ubuntu từ 16.04](https://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=solaar&searchon=names).
 
