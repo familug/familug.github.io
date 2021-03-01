@@ -13,8 +13,8 @@ cần thiết.&lt;/p&gt;
 &lt;p&gt;Thứ công nghệ khiến mình bị shock nhất trong những năm đầu làm sysadmin,
 đó là OpenLDAP. Bạn sẽ không bao giờ hiểu được nó là thứ gì và tại sao lại cần,
 cho đến khi đi làm môi trường doanh nghiệp, khi công ty có hàng trăm hay hàng
-nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chả có lý do
-gì làm vậy cả.
+nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chẳng
+có lý do gì làm vậy.
 Ngắn gọn: OpenLDAP hay các hệ thống "Active Directory" thường dùng lưu trữ
 thông tin về các cá nhân, và nó hoạt động như 1 database tối ưu cho việc truy
 cập, người dùng có thể dùng 1 tài khoản để đăng nhập vào nhiều chương trình
@@ -29,30 +29,30 @@ giúp ích gì:&lt;/p&gt;
 &lt;li&gt;Cấu hình wifi&lt;/li&gt;
 &lt;li&gt;Terraform, Kubernetes&lt;/li&gt;
 &lt;li&gt;SaltStack, Ansible&lt;/li&gt;
-&lt;li&gt;Databases, NGINX, Jenkins, GitLab, ELK, Prometheus,...
+&lt;li&gt;Databases, NGINX, Jenkins, ELK, Prometheus,...
   các phần mềm mà chỉ doanh nghiệp,
-  hay server mới dùng chứ không ai cài trên máy cá nhân làm gì.&lt;/li&gt;
-&lt;li&gt;cấu hình giao diện đồ họa&lt;/li&gt;
+  hay trên server mới dùng chứ không ai cài trên máy cá nhân làm gì.&lt;/li&gt;
+&lt;li&gt;cấu hình giao diện đồ họa (DE, WM, X.org)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc&lt;/h2&gt;
 &lt;p&gt;Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
 hữu dụng khi đi làm:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;vi&lt;/li&gt;
-&lt;li&gt;top&lt;/li&gt;
 &lt;li&gt;ls&lt;/li&gt;
+&lt;li&gt;cd&lt;/li&gt;
 &lt;li&gt;cp&lt;/li&gt;
 &lt;li&gt;mv&lt;/li&gt;
 &lt;li&gt;mkdir&lt;/li&gt;
 &lt;li&gt;ps&lt;/li&gt;
 &lt;li&gt;top&lt;/li&gt;
+&lt;li&gt;vi&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;.., xem thêm tại &lt;a href="https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html"&gt;đây&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
 hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
 hay cả Windows Subsystem for Linux (WSL).&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;git&lt;/li&gt;
+&lt;li&gt;git/GitHub/GitLab&lt;/li&gt;
 &lt;li&gt;tmux&lt;/li&gt;
 &lt;li&gt;cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
   giống server khi cần thiết.&lt;/li&gt;
@@ -70,7 +70,11 @@ hay ArchLinux, OpenBSD đều hoàn toàn bình thường, OK. Thậm chí, các
 viên sang chảnh giờ đều dùng MacOS trong khi code đều chạy trên một Linux server
 nào đó như Ubuntu.&lt;/p&gt;
 &lt;p&gt;Xông lên và khám phá những thứ mới, những hệ điều hành mới, dùng 1 workstation
-OS giống máy server sẽ không giúp bạn quá nhiều.&lt;/p&gt;</content><category term="frontpage"></category><category term="sysadmin"></category><category term="workstation"></category><category term="opinion"></category></entry><entry><title>Cấu hình chuột/phím Logitech với USB receiver/dongle</title><link href="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html" rel="alternate"></link><published>2021-03-01T00:00:00+07:00</published><updated>2021-03-01T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html</id><summary type="html">&lt;p&gt;Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.&lt;/p&gt;
+OS giống máy server sẽ không giúp bạn quá nhiều. Nếu đã plan sau 5 năm trở
+thành senior DevOps, 2 năm đầu hãy dùng Ubuntu, rồi mỗi năm sau đó chuyển qua
+1 OS mới, càng khác biệt càng tốt: Fedora, ArchLinux, FreeBSD/OpenBSD...
+kinh nghiệm thu được sẽ nhiều hơn là 5 năm làm đi làm lại 1 vài task trên
+Ubuntu.&lt;/p&gt;</content><category term="frontpage"></category><category term="sysadmin"></category><category term="workstation"></category><category term="opinion"></category></entry><entry><title>Cấu hình chuột/phím Logitech với USB receiver/dongle</title><link href="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html" rel="alternate"></link><published>2021-03-01T00:00:00+07:00</published><updated>2021-03-01T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html</id><summary type="html">&lt;p&gt;Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.&lt;/p&gt;
 &lt;h2&gt;Chuột, phím bluetooth/không dây(wireless)&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;kết nối bluetooth sử dụng... bluetooth.&lt;/li&gt;
