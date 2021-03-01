@@ -43,6 +43,7 @@ giúp ích gì:
 ## Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc
 Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
 hữu dụng khi đi làm:
+
 - vi
 - top
 - ls
@@ -51,18 +52,17 @@ hữu dụng khi đi làm:
 - mkdir
 - ps
 - top
-- git
-- tmux
-- cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
-  giống server khi cần thiết.
-...
 
-xem thêm tại [đây](https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html).
+.., xem thêm tại [đây](https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html).
 
 Các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
 hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
 hay cả Windows Subsystem for Linux (WSL).
 
+- git
+- tmux
+- cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
+  giống server khi cần thiết.
 - kiến thức network: ping, netstat, DNS, iptable, tcpdumb...
 - kiến thức lập trình
 - đọc log
@@ -70,11 +70,14 @@ hay cả Windows Subsystem for Linux (WSL).
 Những thứ "căn bản" này, lại là thứ hữu ích.
 
 ## Kết luận
+Kinh nghiệm với một công nghệ nào đó, có giá trị ở một mức độ nhất định.
+Người dùng máy bàn Ubuntu 10 năm, giỏi cấu hình giao diện đẹp lóng lánh,
+cũng khó chắc mà đủ kiến thức và kinh nghiệm Kubernetes, hay OpenLDAP để đi làm.
+
 Chuyện server chạy Ubuntu còn máy làm việc/cá nhân dùng MacOS, Windows (WSL),
 hay ArchLinux, OpenBSD đều hoàn toàn bình thường, OK. Thậm chí, các lập trình
 viên sang chảnh giờ đều dùng MacOS trong khi code đều chạy trên một Linux server
 nào đó như Ubuntu.
 
-Kinh nghiệm với một công nghệ nào đó, có giá trị ở một mức độ nhất định.
-Người dùng máy bàn Ubuntu 10 năm, giỏi cấu hình giao diện đẹp lóng lánh,
-cũng khó chắc mà đủ kiến thức và kinh nghiệm Kubernetes, hay OpenLDAP để đi làm.
+Xông lên và khám phá những thứ mới, những hệ điều hành mới, dùng 1 workstation
+OS giống máy server sẽ không giúp bạn quá nhiều.
