@@ -80,4 +80,8 @@ viên sang chảnh giờ đều dùng MacOS trong khi code đều chạy trên m
 nào đó như Ubuntu.
 
 Xông lên và khám phá những thứ mới, những hệ điều hành mới, dùng 1 workstation
-OS giống máy server sẽ không giúp bạn quá nhiều.
+OS giống máy server sẽ không giúp bạn quá nhiều. Nếu đã plan sau 5 năm trở
+thành senior DevOps, 2 năm đầu hãy dùng Ubuntu, rồi mỗi năm sau đó chuyển qua
+1 OS mới, càng khác biệt càng tốt: Fedora, ArchLinux, FreeBSD/OpenBSD...
+kinh nghiệm thu được sẽ nhiều hơn là 5 năm làm đi làm lại 1 vài task trên
+Ubuntu.
