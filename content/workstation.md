@@ -7,6 +7,9 @@ Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ vi�
 Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu", để có kinh nghiệm
 khi dùng hàng ngày ứng dụng cho công việc.
 
+
+![Photo by <a href="https://unsplash.com/@xps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">XPS</a> on <a href="https://unsplash.com/@xps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>]({static}/images/xps.jpg)
+
 Sau gần 8 năm đi làm (since 2013), kết luận hiện tại mình đưa ra là: không
 cần thiết.
 
