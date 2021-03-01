@@ -36,38 +36,41 @@ giúp ích gì:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc&lt;/h2&gt;
 &lt;p&gt;Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
-hữu dụng khi đi làm:
-- vi
-- top
-- ls
-- cp
-- mv
-- mkdir
-- ps
-- top
-- git
-- tmux
-- cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
-  giống server khi cần thiết.
-...&lt;/p&gt;
-&lt;p&gt;xem thêm tại &lt;a href="https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html"&gt;đây&lt;/a&gt;.&lt;/p&gt;
+hữu dụng khi đi làm:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;vi&lt;/li&gt;
+&lt;li&gt;top&lt;/li&gt;
+&lt;li&gt;ls&lt;/li&gt;
+&lt;li&gt;cp&lt;/li&gt;
+&lt;li&gt;mv&lt;/li&gt;
+&lt;li&gt;mkdir&lt;/li&gt;
+&lt;li&gt;ps&lt;/li&gt;
+&lt;li&gt;top&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;.., xem thêm tại &lt;a href="https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html"&gt;đây&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
 hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
 hay cả Windows Subsystem for Linux (WSL).&lt;/p&gt;
 &lt;ul&gt;
+&lt;li&gt;git&lt;/li&gt;
+&lt;li&gt;tmux&lt;/li&gt;
+&lt;li&gt;cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
+  giống server khi cần thiết.&lt;/li&gt;
 &lt;li&gt;kiến thức network: ping, netstat, DNS, iptable, tcpdumb...&lt;/li&gt;
 &lt;li&gt;kiến thức lập trình&lt;/li&gt;
 &lt;li&gt;đọc log&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Những thứ "căn bản" này, lại là thứ hữu ích.&lt;/p&gt;
 &lt;h2&gt;Kết luận&lt;/h2&gt;
+&lt;p&gt;Kinh nghiệm với một công nghệ nào đó, có giá trị ở một mức độ nhất định.
+Người dùng máy bàn Ubuntu 10 năm, giỏi cấu hình giao diện đẹp lóng lánh,
+cũng khó chắc mà đủ kiến thức và kinh nghiệm Kubernetes, hay OpenLDAP để đi làm.&lt;/p&gt;
 &lt;p&gt;Chuyện server chạy Ubuntu còn máy làm việc/cá nhân dùng MacOS, Windows (WSL),
 hay ArchLinux, OpenBSD đều hoàn toàn bình thường, OK. Thậm chí, các lập trình
 viên sang chảnh giờ đều dùng MacOS trong khi code đều chạy trên một Linux server
 nào đó như Ubuntu.&lt;/p&gt;
-&lt;p&gt;Kinh nghiệm với một công nghệ nào đó, có giá trị ở một mức độ nhất định.
-Người dùng máy bàn Ubuntu 10 năm, giỏi cấu hình giao diện đẹp lóng lánh,
-cũng khó chắc mà đủ kiến thức và kinh nghiệm Kubernetes, hay OpenLDAP để đi làm.&lt;/p&gt;</content><category term="frontpage"></category><category term="sysadmin"></category><category term="workstation"></category><category term="opinion"></category></entry><entry><title>Cấu hình chuột/phím Logitech với USB receiver/dongle</title><link href="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html" rel="alternate"></link><published>2021-03-01T00:00:00+07:00</published><updated>2021-03-01T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html</id><summary type="html">&lt;p&gt;Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.&lt;/p&gt;
+&lt;p&gt;Xông lên và khám phá những thứ mới, những hệ điều hành mới, dùng 1 workstation
+OS giống máy server sẽ không giúp bạn quá nhiều.&lt;/p&gt;</content><category term="frontpage"></category><category term="sysadmin"></category><category term="workstation"></category><category term="opinion"></category></entry><entry><title>Cấu hình chuột/phím Logitech với USB receiver/dongle</title><link href="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html" rel="alternate"></link><published>2021-03-01T00:00:00+07:00</published><updated>2021-03-01T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html</id><summary type="html">&lt;p&gt;Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.&lt;/p&gt;
 &lt;h2&gt;Chuột, phím bluetooth/không dây(wireless)&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;kết nối bluetooth sử dụng... bluetooth.&lt;/li&gt;
