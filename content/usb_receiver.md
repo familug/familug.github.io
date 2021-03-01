@@ -30,9 +30,19 @@ python3 -c 'print("{} is the answer to life".format(ord("*")))'
 42 is the answer to life
 ```
 
+- Các receiver tương tự, nếu có logo chữ G là thuộc công nghệ Lightspeed, dành
+  cho dòng chơi game, thường có cả tên model luôn do chỉ hoạt động với model tương ứng.
+- Các receiver không có logo gọi là "nano receiver", thấy ở các sản phẩm giá
+  thấp [Logitech MK240](https://duckduckgo.com/?t=ffab&q=logitech+mk240&iax=images&ia=images),
+- các receiver to bằng 2 đốt ngón tay (như USB driver) gọi là micro receiver.
+
+
 Trên Windows/MacOS có thể tải app [Options của Logitech](https://www.logitech.com/en-us/product/options) để cấu hình/pair các thiết bị.
 
  Trên Linux, dùng [Solaar](https://pwr-solaar.github.io/Solaar/) có sẵn trong repo [Ubuntu từ 16.04](https://packages.ubuntu.com/search?suite=default&section=all&arch=any&keywords=solaar&searchon=names).
+
+> Solaar is a Linux manager for many Logitech keyboards, mice, and trackpads that connect wirelessly to a USB Unifying, Lightspeed, or Nano receiver, connect directly via a USB cable, or connect via Bluetooth. Solaar does not work with peripherals from other companies.
+
 
 Sau khi pair xong, USB receiver và chuột/phím sẽ "nhớ" nhau, có thể dùng thoải mái ở các máy tính khác, khi cần thì pair lại, linh hoạt như các thiết bị bluetooth.
 
