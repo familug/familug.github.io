@@ -27,22 +27,26 @@ giúp ích gì:&lt;/p&gt;
 &lt;li&gt;Kiến thức setup BIOS, Grub, format ổ cứng... khi server dùng cloud.&lt;/li&gt;
 &lt;li&gt;Kiến thức về kết nối các thiết bị phần cứng: loa phím chuột&lt;/li&gt;
 &lt;li&gt;Cấu hình wifi&lt;/li&gt;
+&lt;li&gt;cấu hình giao diện đồ họa (DE, WM, X.org)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Vài thứ kiến thức / công nghệ mà chỉ dùng khi đi làm, còn máy cá nhân không
+dùng bao giờ:&lt;/p&gt;
+&lt;ul&gt;
 &lt;li&gt;Terraform, Kubernetes&lt;/li&gt;
 &lt;li&gt;SaltStack, Ansible&lt;/li&gt;
-&lt;li&gt;Databases, NGINX, Jenkins, ELK, Prometheus,...
-  các phần mềm mà chỉ doanh nghiệp,
-  hay trên server mới dùng chứ không ai cài trên máy cá nhân làm gì.&lt;/li&gt;
-&lt;li&gt;cấu hình giao diện đồ họa (DE, WM, X.org)&lt;/li&gt;
+&lt;li&gt;Databases, NGINX, Jenkins, ELK, Prometheus,...&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc&lt;/h2&gt;
 &lt;p&gt;Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
 hữu dụng khi đi làm:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;ls&lt;/li&gt;
 &lt;li&gt;cd&lt;/li&gt;
 &lt;li&gt;cp&lt;/li&gt;
-&lt;li&gt;mv&lt;/li&gt;
+&lt;li&gt;find&lt;/li&gt;
+&lt;li&gt;grep&lt;/li&gt;
+&lt;li&gt;ls&lt;/li&gt;
 &lt;li&gt;mkdir&lt;/li&gt;
+&lt;li&gt;mv&lt;/li&gt;
 &lt;li&gt;ps&lt;/li&gt;
 &lt;li&gt;top&lt;/li&gt;
 &lt;li&gt;vi&lt;/li&gt;
