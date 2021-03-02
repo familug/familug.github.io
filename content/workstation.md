@@ -33,12 +33,14 @@ giúp ích gì:
 - Kiến thức setup BIOS, Grub, format ổ cứng... khi server dùng cloud.
 - Kiến thức về kết nối các thiết bị phần cứng: loa phím chuột
 - Cấu hình wifi
+- cấu hình giao diện đồ họa (DE, WM, X.org)
+
+Vài thứ kiến thức / công nghệ mà chỉ dùng khi đi làm, còn máy cá nhân không
+dùng bao giờ:
+
 - Terraform, Kubernetes
 - SaltStack, Ansible
 - Databases, NGINX, Jenkins, ELK, Prometheus,...
-  các phần mềm mà chỉ doanh nghiệp,
-  hay trên server mới dùng chứ không ai cài trên máy cá nhân làm gì.
-- cấu hình giao diện đồ họa (DE, WM, X.org)
 
 ## Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc
 Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
