@@ -46,11 +46,13 @@ dùng bao giờ:
 Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
 hữu dụng khi đi làm:
 
-- ls
 - cd
 - cp
-- mv
+- find
+- grep
+- ls
 - mkdir
+- mv
 - ps
 - top
 - vi
