@@ -19,7 +19,8 @@ Thứ công nghệ khiến mình bị shock nhất trong những năm đầu là
 cho đến khi đi làm môi trường doanh nghiệp, khi công ty có hàng trăm hay hàng
 nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chẳng
 có lý do gì làm vậy.
-Ngắn gọn: OpenLDAP hay các hệ thống "Active Directory" thường dùng lưu trữ
+Ngắn gọn: OpenLDAP/ActiveDirectory hay các hệ thống "directory" thường dùng lưu
+trữ
 thông tin về các cá nhân, và nó hoạt động như 1 database tối ưu cho việc truy
 cập, người dùng có thể dùng 1 tài khoản để đăng nhập vào nhiều chương trình
 như email, dịch vụ nội bộ a,b,c... lý do là LDAP đã quá phổ biến và các
@@ -39,8 +40,8 @@ Vài thứ kiến thức / công nghệ mà chỉ dùng khi đi làm, còn máy 
 dùng bao giờ:
 
 - Terraform, Kubernetes
-- SaltStack, Ansible
 - Databases, NGINX, Jenkins, ELK, Prometheus,...
+- SaltStack, Ansible (có thể dùng nhưng rất giới hạn).
 
 ## Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc
 Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
@@ -59,7 +60,7 @@ hữu dụng khi đi làm:
 
 .., xem thêm tại [đây](https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html).
 
-Các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
+các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
 hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
 hay cả Windows Subsystem for Linux (WSL).
 
