@@ -16,6 +16,32 @@ sẽ thay thế được cho lệnh free.&lt;/p&gt;
 &lt;h3&gt;grep&lt;/h3&gt;
 &lt;p&gt;Vẫn là combo &lt;code&gt;grep -Rin pattern dir&lt;/code&gt; nhưng ngày nay mình đã thay grep bằng &lt;code&gt;ripgrep&lt;/code&gt; nên thường chỉ gõ &lt;code&gt;rg pattern dir&lt;/code&gt;
 ripgrep nhanh hơn grep nhiều lần, &lt;a href="https://www.familug.org/2020/02/grep-silversearcher-ag-ripgrep-va-file.html"&gt;chú ý khi tìm file "ẩn"/ignored&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;curl&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;curl&lt;/code&gt; vốn phổ biến như 1 CLI HTTP client tiện dùng khi dev, nhưng &lt;code&gt;curl&lt;/code&gt; không có sẵn ở nhiều nơi như &lt;code&gt;wget&lt;/code&gt; (ubuntu, busybox mặc định, trong các Alpine based container).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;tương đương với&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ wget -O elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;wget&lt;/code&gt; cũng có thể dùng để thực hiện HTTP GET request:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# wget -qO- https://httpbin.org/get
+{
+  &amp;quot;args&amp;quot;: {},
+  &amp;quot;headers&amp;quot;: {
+    &amp;quot;Host&amp;quot;: &amp;quot;httpbin.org&amp;quot;,
+    &amp;quot;User-Agent&amp;quot;: &amp;quot;Wget&amp;quot;,
+    &amp;quot;X-Amzn-Trace-Id&amp;quot;: &amp;quot;Root=1-604387fc-24ae289768ff475a730532f7&amp;quot;
+  },
+  &amp;quot;origin&amp;quot;: &amp;quot;171.246.107.102&amp;quot;,
+  &amp;quot;url&amp;quot;: &amp;quot;https://httpbin.org/get&amp;quot;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;h3&gt;su&lt;/h3&gt;
 &lt;p&gt;Sau vụ &lt;a href="https://blog.qualys.com/vulnerabilities-research/2021/01/26/cve-2021-3156-heap-based-buffer-overflow-in-sudo-baron-samedit"&gt;lỗ hổng bảo mật của sudo dậy sóng cộng đồng mạng đầu 2021&lt;/a&gt;, thật ra chẳng ảnh hưởng gì do
 mình dùng OpenBSD, nơi mà quyết định thay &lt;code&gt;sudo&lt;/code&gt; bằng 1 phần mềm tên là &lt;code&gt;doas&lt;/code&gt;.&lt;/p&gt;

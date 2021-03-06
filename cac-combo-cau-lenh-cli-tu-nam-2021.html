@@ -90,6 +90,32 @@ sẽ thay thế được cho lệnh free.</p>
 <h3>grep</h3>
 <p>Vẫn là combo <code>grep -Rin pattern dir</code> nhưng ngày nay mình đã thay grep bằng <code>ripgrep</code> nên thường chỉ gõ <code>rg pattern dir</code>
 ripgrep nhanh hơn grep nhiều lần, <a href="https://www.familug.org/2020/02/grep-silversearcher-ag-ripgrep-va-file.html">chú ý khi tìm file "ẩn"/ignored</a>.</p>
+<h3>curl</h3>
+<p><code>curl</code> vốn phổ biến như 1 CLI HTTP client tiện dùng khi dev, nhưng <code>curl</code> không có sẵn ở nhiều nơi như <code>wget</code> (ubuntu, busybox mặc định, trong các Alpine based container).</p>
+<div class="highlight"><pre><span></span>$ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+</pre></div>
+
+
+<p>tương đương với</p>
+<div class="highlight"><pre><span></span>$ wget -O elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+</pre></div>
+
+
+<p><code>wget</code> cũng có thể dùng để thực hiện HTTP GET request:</p>
+<div class="highlight"><pre><span></span># wget -qO- https://httpbin.org/get
+{
+  &quot;args&quot;: {},
+  &quot;headers&quot;: {
+    &quot;Host&quot;: &quot;httpbin.org&quot;,
+    &quot;User-Agent&quot;: &quot;Wget&quot;,
+    &quot;X-Amzn-Trace-Id&quot;: &quot;Root=1-604387fc-24ae289768ff475a730532f7&quot;
+  },
+  &quot;origin&quot;: &quot;171.246.107.102&quot;,
+  &quot;url&quot;: &quot;https://httpbin.org/get&quot;
+}
+</pre></div>
+
+
 <h3>su</h3>
 <p>Sau vụ <a href="https://blog.qualys.com/vulnerabilities-research/2021/01/26/cve-2021-3156-heap-based-buffer-overflow-in-sudo-baron-samedit">lỗ hổng bảo mật của sudo dậy sóng cộng đồng mạng đầu 2021</a>, thật ra chẳng ảnh hưởng gì do
 mình dùng OpenBSD, nơi mà quyết định thay <code>sudo</code> bằng 1 phần mềm tên là <code>doas</code>.</p>
