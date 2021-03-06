@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*- #
 
 AUTHOR = 'hvn'
-SITENAME = 'FAMILUG Vietnam'
+SITENAME = 'New FAMILUG.org Vietnam'
 SITEURL = ''
 
 PATH = 'content'
 
 TIMEZONE = 'Asia/Ho_Chi_Minh'
 
-DEFAULT_LANG = 'en'
+DEFAULT_LANG = 'vi'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
