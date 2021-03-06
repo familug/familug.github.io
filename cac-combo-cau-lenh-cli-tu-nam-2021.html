@@ -15,18 +15,18 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="linux, USB receiver, wireless mouse, bluetooth, solaar, frontpage, " />
+<meta name="keywords" content="CLI, OpenBSD, Linux, bash, ksh, frontpage, " />
 
-<meta property="og:title" content="Cấu hình chuột/phím Logitech với USB receiver/dongle "/>
-<meta property="og:url" content="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html" />
-<meta property="og:description" content="Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless. Chuột, phím bluetooth/không dây(wireless) kết nối bluetooth sử dụng... bluetooth. kết nối wireless sử dụng 1 thiết bị nhỏ cắm vào cổng USB, gọi là wireless USB …" />
+<meta property="og:title" content="Các combo câu lệnh CLI từ năm 2021 "/>
+<meta property="og:url" content="https://familug.github.io/cac-combo-cau-lenh-cli-tu-nam-2021.html" />
+<meta property="og:description" content="Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có nhiều thay đổi, bài này sẽ cập nhật các combo hay dùng nhất: ls ls -la vốn là combo ưa thích, thì ngày nay, tay đã quen với 2 combo khác: ls -Fhtl …" />
 <meta property="og:site_name" content="FAMILUG Vietnam" />
 <meta property="og:article:author" content="hvn" />
-<meta property="og:article:published_time" content="2021-03-01T00:00:00+07:00" />
-<meta name="twitter:title" content="Cấu hình chuột/phím Logitech với USB receiver/dongle ">
-<meta name="twitter:description" content="Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless. Chuột, phím bluetooth/không dây(wireless) kết nối bluetooth sử dụng... bluetooth. kết nối wireless sử dụng 1 thiết bị nhỏ cắm vào cổng USB, gọi là wireless USB …">
+<meta property="og:article:published_time" content="2021-03-06T00:00:00+07:00" />
+<meta name="twitter:title" content="Các combo câu lệnh CLI từ năm 2021 ">
+<meta name="twitter:description" content="Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có nhiều thay đổi, bài này sẽ cập nhật các combo hay dùng nhất: ls ls -la vốn là combo ưa thích, thì ngày nay, tay đã quen với 2 combo khác: ls -Fhtl …">
 
-        <title>Cấu hình chuột/phím Logitech với USB receiver/dongle  · FAMILUG Vietnam
+        <title>Các combo câu lệnh CLI từ năm 2021  · FAMILUG Vietnam
 </title>
         <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG Vietnam - Full Atom Feed" />
 
@@ -67,8 +67,8 @@
 <div class="row-fluid">
     <header class="page-header span10 offset2">
         <h1>
-            <a href="https://familug.github.io/cau-hinh-chuotphim-logitech-voi-usb-receiverdongle.html">
-                Cấu hình chuột/phím Logitech với USB receiver/dongle
+            <a href="https://familug.github.io/cac-combo-cau-lenh-cli-tu-nam-2021.html">
+                Các combo câu lệnh CLI từ năm 2021
             </a>
         </h1>
     </header>
@@ -77,39 +77,75 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
             
-            <p>Ngày nay, những bộ chuột phím không dây dần trở nên phổ biến, với 2 loại kết nối: bluetooth và wireless.</p>
-<h2>Chuột, phím bluetooth/không dây(wireless)</h2>
-<ul>
-<li>kết nối bluetooth sử dụng... bluetooth.</li>
-<li>kết nối wireless sử dụng 1 thiết bị nhỏ cắm vào cổng USB, gọi là wireless USB receiver (đầu thu không dây).</li>
-</ul>
-<p><img alt="USB receiver/dongle" src="https://familug.github.io/images/usb_receiver.webp"></p>
-<p>Khi bán các thiết bị chuột, bàn phím, cục USB receiver này thường đi kèm sẵn, khiến ta có thể lầm tưởng nó chỉ hoạt động được với thiết bị đi kèm, và mất cục nhỏ xíu đó là... tèo.</p>
-<p>Thử tưởng tượng nhà sản xuất Logitech mỗi ngày sản xuất hàng ngàn con chuột máy tính ở 1 nhà máy, hàng ngàn USB receiver tại 1 nhà máy khác xa hàng ngàn cây số, làm sao để đảm bảo chúng khớp 1-1?</p>
-<p>Bởi vì chúng không cần!
- đảm bảo điều nói trên giống như ốc và vít phải sản xuất từng cặp vậy.</p>
-<p>USB receiver có thể cấu hình lại và "pair" với các thiết bị khác nhau.</p>
-<h2>Cấu hình USB receiver</h2>
-<p>Một USB receiver hiện đại (2020), của Logitech sử dụng công nghệ <a href="https://www.logitech.com/en-us/resource-center/what-is-unifying.html">"Unifying"</a> có thể pair 1 lúc 6 thiết bị khác nhau.</p>
-<p>Dấu <code>*</code> trên receiver trong hình là logo của công nghệ Logitech Unifying.</p>
-<div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;print(&quot;{} is the answer to life&quot;.format(ord(&quot;*&quot;)))&#39;</span>
-<span class="mi">42</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">answer</span> <span class="n">to</span> <span class="n">life</span>
+            <p>Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có
+nhiều thay đổi, bài này sẽ cập nhật các combo hay dùng nhất:</p>
+<h3>ls</h3>
+<p><code>ls -la</code> vốn là combo ưa thích, thì ngày nay, tay đã quen với 2 combo khác:</p>
+<p><code>ls -Fhtl</code> hiển thị file và sắp xếp theo file mới nhất ở trên đầu</p>
+<p><code>ls -lFS</code> hiển thị file theo size giảm dần  (dễ nhớ: <a href="http://linuxfromscratch.org/">LinuxFromScratch</a>)</p>
+<h3>free -m</h3>
+<p>free là câu lệnh chỉ có trên Linux như Ubuntu, trên OSX và OpenBSD đều không có, vậy nên dùng <code>top | head</code>
+sẽ thay thế được cho lệnh free.</p>
+<p>Combo sau khi login vào 1 máy sẽ là: <code>w; df -h; top | head</code></p>
+<h3>grep</h3>
+<p>Vẫn là combo <code>grep -Rin pattern dir</code> nhưng ngày nay mình đã thay grep bằng <code>ripgrep</code> nên thường chỉ gõ <code>rg pattern dir</code>
+ripgrep nhanh hơn grep nhiều lần, <a href="https://www.familug.org/2020/02/grep-silversearcher-ag-ripgrep-va-file.html">chú ý khi tìm file "ẩn"/ignored</a>.</p>
+<h3>su</h3>
+<p>Sau vụ <a href="https://blog.qualys.com/vulnerabilities-research/2021/01/26/cve-2021-3156-heap-based-buffer-overflow-in-sudo-baron-samedit">lỗ hổng bảo mật của sudo dậy sóng cộng đồng mạng đầu 2021</a>, thật ra chẳng ảnh hưởng gì do
+mình dùng OpenBSD, nơi mà quyết định thay <code>sudo</code> bằng 1 phần mềm tên là <code>doas</code>.</p>
+<p>Sử dụng <code>su</code> khi cần chuyển sang root, combo là <code>su -l</code> để đổi sang ENV
+của user root (ví dụ chuyển đúng đến $HOME của root chứ không ở thư mục hiện
+tại)</p>
+<h3>ss -nltp</h3>
+<p>Combo này chỉ hoạt động trên Linux với gói <code>iproute</code>.
+Trên MacOS/OpenBSD, sử dụng: <code>netstat -nl</code> nếu cần chọn tcp
+thì thêm <code>netstat -nl -p tcp</code></p>
+<h3>vi</h3>
+<p>Thói quen khi dùng <code>vim</code> (không phải <code>vi</code>) là gõ <code>gg</code> để lên đầu file, <code>vi</code>
+không có phím tắt này.
+Thay vào đó <code>vi</code> dùng <code>1G</code> để go to dòng số 1, và <code>G</code> để tới dòng cuối cùng.</p>
+<h3>bash ^a^b^</h3>
+<p>Trên OpenBSD, shell mặc định là KSH và nó không giống bash ở việc thay 1 phần câu lệnh cũ:</p>
+<p>bash:</p>
+<div class="highlight"><pre><span></span>$ ls /etc
+...
+$ ^/etc^/etc/passwd^
+sẽ chạy lệnh ls /etc/passwd <span class="o">(</span>thay /etc ở câu lệnh cuối cùng bằng /etc/passwd<span class="o">)</span>
 </pre></div>
 
 
-<ul>
-<li>Các receiver tương tự, nếu có logo chữ G là thuộc công nghệ Lightspeed, dành
-  cho dòng chơi game, thường có cả tên model luôn do chỉ hoạt động với model tương ứng.</li>
-<li>Các receiver không có logo gọi là "nano receiver", thấy ở các sản phẩm giá
-  thấp <a href="https://duckduckgo.com/?t=ffab&amp;q=logitech+mk240&amp;iax=images&amp;ia=images">Logitech MK240</a>,</li>
-<li>các receiver to bằng 2 đốt ngón tay (như USB driver) gọi là micro receiver.</li>
-</ul>
-<p>Trên Windows/MacOS có thể tải app <a href="https://www.logitech.com/en-us/product/options">Options của Logitech</a> để cấu hình/pair các thiết bị.</p>
-<p>Trên Linux, dùng <a href="https://pwr-solaar.github.io/Solaar/">Solaar</a> có sẵn trong repo <a href="https://packages.ubuntu.com/search?suite=default&amp;section=all&amp;arch=any&amp;keywords=solaar&amp;searchon=names">Ubuntu từ 16.04</a>.</p>
-<blockquote>
-<p>Solaar is a Linux manager for many Logitech keyboards, mice, and trackpads that connect wirelessly to a USB Unifying, Lightspeed, or Nano receiver, connect directly via a USB cable, or connect via Bluetooth. Solaar does not work with peripherals from other companies.</p>
-</blockquote>
-<p>Sau khi pair xong, USB receiver và chuột/phím sẽ "nhớ" nhau, có thể dùng thoải mái ở các máy tính khác, khi cần thì pair lại, linh hoạt như các thiết bị bluetooth.</p>
+<p>ksh:</p>
+<div class="highlight"><pre><span></span>$ ls /etc
+...
+$ r /etc<span class="o">=</span>/etc/passwd
+ls /etc/passwd
+</pre></div>
+
+
+<p>cho kết quả tương ứng.</p>
+<h3>fg</h3>
+<p>Xưa nay sau khi chuyển job về backgroup (ctrl Z), để bật thành foreground sẽ gõ: fg 1 với job 1</p>
+<p>Combo này không chạy trên ksh, phải gõ <code>fg %1</code> , và sử dụng % đảm bảo hoạt động
+mọi nơi, kể cả bash.</p>
+<div class="highlight"><pre><span></span>$ ping <span class="m">1</span>.1.1.1
+PING <span class="m">1</span>.1.1.1 <span class="o">(</span><span class="m">1</span>.1.1.1<span class="o">)</span>: <span class="m">56</span> data bytes
+<span class="m">64</span> bytes from <span class="m">1</span>.1.1.1: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">59</span> <span class="nv">time</span><span class="o">=</span><span class="m">32</span>.009 ms
+^Z
+<span class="o">[</span><span class="m">1</span><span class="o">]</span>+  Stopped                 ping <span class="m">1</span>.1.1.1
+$ <span class="nb">fg</span> %1
+ping <span class="m">1</span>.1.1.1
+<span class="m">64</span> bytes from <span class="m">1</span>.1.1.1: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">59</span> <span class="nv">time</span><span class="o">=</span><span class="m">4161</span>.095 ms
+</pre></div>
+
+
+<h3>source</h3>
+<p><code>source</code> là 1 câu lệnh built-in của <code>bash</code> để đọc và chạy các câu lệnh
+từ 1 file trong môi trường shell hiện tại. Nhưng <code>source</code> là của riêng bash.
+Dùng <code>.</code> cho tác dụng tương tự, nhưng chạy trên mọi shell khác.</p>
+<h3>tail -F</h3>
+<p>Trên Linux, lệnh <code>tail</code> có 2 option khác nhau là <code>-f</code> và <code>-F</code>,
+<a href="https://www.familug.org/2016/09/tail-f-f-hoa-f.html"><code>-F</code> sẽ theo file mới nếu file cũ bị thay thế (VD: log rotate)</a>,
+nhưng trên OpenBSD, <code>-f</code> hoạt động như <code>-F</code> trên Linux.</p>
 <h2>The end</h2>
 
 
@@ -129,25 +165,25 @@
         </div>
         <section id="article-sidebar" class="span2">
             <h4>Published</h4>
-            <time itemprop="dateCreated" datetime="2021-03-01T00:00:00+07:00">Mon 01 March 2021</time>
+            <time itemprop="dateCreated" datetime="2021-03-06T00:00:00+07:00">Sat 06 March 2021</time>
             <h4>Category</h4>
             <a class="category-link" href="https://familug.github.io/categories.html#frontpage-ref">frontpage</a>
             <h4>Tags</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://familug.github.io/tags.html#bluetooth-ref">bluetooth
+                <li><a href="https://familug.github.io/tags.html#bash-ref">bash
                     <span class="superscript">1</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#linux-ref">linux
+                <li><a href="https://familug.github.io/tags.html#cli-ref">CLI
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#ksh-ref">ksh
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#linux-ref">Linux
                     <span class="superscript">3</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#solaar-ref">solaar
-                    <span class="superscript">1</span>
-</a></li>
-                <li><a href="https://familug.github.io/tags.html#usb-receiver-ref">USB receiver
-                    <span class="superscript">1</span>
-</a></li>
-                <li><a href="https://familug.github.io/tags.html#wireless-mouse-ref">wireless mouse
-                    <span class="superscript">1</span>
+                <li><a href="https://familug.github.io/tags.html#openbsd-ref">OpenBSD
+                    <span class="superscript">4</span>
 </a></li>
             </ul>
 <h4>Contact</h4>

@@ -3,32 +3,32 @@
 Using Unbound, you would not longer depends on other DNS provider, keep
 what domain you access to yourself.&lt;/p&gt;
 &lt;h2&gt;Enable and start unbound&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;# rcctl enable unbound&lt;/span&gt;
-&lt;span class="err"&gt;# rcctl start unbound&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# rcctl enable unbound
+# rcctl start unbound
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;It now listens on port 53, on localhost address - good, sane default:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ netstat …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ netstat …&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
 Using Unbound, you would not longer depends on other DNS provider, keep
 what domain you access to yourself.&lt;/p&gt;
 &lt;h2&gt;Enable and start unbound&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;# rcctl enable unbound&lt;/span&gt;
-&lt;span class="err"&gt;# rcctl start unbound&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# rcctl enable unbound
+# rcctl start unbound
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;It now listens on port 53, on localhost address - good, sane default:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ netstat -nl &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="m"&gt;53&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ netstat -nl &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="m"&gt;53&lt;/span&gt;
 tcp          &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1.53           *.*                    LISTEN
 udp          &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1.53           *.*
 tcp6         &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  ::1.53                 *.*                    LISTEN
 udp6         &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  ::1.53                 *.*
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Now check using &lt;code&gt;dig&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;
 
 &lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="mf"&gt;9.10.8&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;P1&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;
 &lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt; &lt;span class="nl"&gt;options&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;
@@ -49,42 +49,42 @@ udp6         &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&l
 &lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="nl"&gt;SERVER&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;127.0.0.1&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="mi"&gt;53&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;127.0.0.1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="nl"&gt;WHEN&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Sun&lt;/span&gt; &lt;span class="n"&gt;Feb&lt;/span&gt; &lt;span class="mi"&gt;28&lt;/span&gt; &lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;35&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mo"&gt;07&lt;/span&gt; &lt;span class="mi"&gt;2021&lt;/span&gt;
 &lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="n"&gt;MSG&lt;/span&gt; &lt;span class="n"&gt;SIZE&lt;/span&gt;  &lt;span class="nl"&gt;rcvd&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;68&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;The result is same as returned by &lt;code&gt;1.1.1.1&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="kt"&gt;short&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@1.1.1.1&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt; &lt;span class="n"&gt;dig&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="kt"&gt;short&lt;/span&gt; &lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt; &lt;span class="mf"&gt;@1.1.1.1&lt;/span&gt;
 &lt;span class="mf"&gt;172.67.212.45&lt;/span&gt;
 &lt;span class="mf"&gt;104.21.61.168&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h2&gt;Config laptop to use the local DNS resolver&lt;/h2&gt;
 &lt;p&gt;Laptop uses wireless network often uses DHCP to config.&lt;/p&gt;
 &lt;p&gt;Example config:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ cat /etc/hostname.iwm0
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ cat /etc/hostname.iwm0
 nwid &lt;span class="s2"&gt;&amp;quot;The Coffee House&amp;quot;&lt;/span&gt; wpakey thecoffeehouse
 dhcp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;It uses DHCP to get IP and DNS config, this in turns, re-write &lt;code&gt;/etc/resolv.conf&lt;/code&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ cat /etc/resolv.conf
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ cat /etc/resolv.conf
 &lt;span class="c1"&gt;# Generated by iwm0 dhclient&lt;/span&gt;
 nameserver &lt;span class="m"&gt;8&lt;/span&gt;.8.8.8
 lookup file &lt;span class="nb"&gt;bind&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;To override the nameserver, change DHCP client config:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ cat /etc/dhclient.conf
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ cat /etc/dhclient.conf
 supersede domain-name-servers &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1&lt;span class="p"&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;To reconnect wireless network with new DHCP client config, run:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;# sh -x /etc/netstart&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;# sh -x /etc/netstart
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Now DNS would be resolved using &lt;code&gt;unbound&lt;/code&gt;.&lt;/p&gt;
@@ -128,8 +128,8 @@ https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_in
 as metioned in &lt;a href="http://www.openbsd.org/faq/faq16.html#VMMnet"&gt;FAQ, &lt;code&gt;NAT for the VMs&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;After installed, can ssh from OpenBSD host to guest via, change to your IP get from
 output of &lt;code&gt;ip ad&lt;/code&gt; after installed:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@100.64.1.3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;ssh&lt;/span&gt; &lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@100.64.1.3&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Note that password login seems always fail even put correct password
@@ -138,36 +138,36 @@ to &lt;code&gt;/root/.ssh/authorized_keys&lt;/code&gt; then ssh would work.&lt;/
 &lt;h3&gt;Commands&lt;/h3&gt;
 &lt;p&gt;Two major important commands:&lt;/p&gt;
 &lt;h4&gt;Create image&lt;/h4&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;vmctl create -s 10G image.qcow2&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vmctl create -s 10G image.qcow2
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h4&gt;Start VM&lt;/h4&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;vmctl start \&lt;/span&gt;
-&lt;span class="err"&gt;  -i 1 \ # 1 interface&lt;/span&gt;
-&lt;span class="err"&gt;  -L \ # create interface&lt;/span&gt;
-&lt;span class="err"&gt;  -c \ # auto connect console after started&lt;/span&gt;
-&lt;span class="err"&gt;  -m 1G \ # 1G memory&lt;/span&gt;
-&lt;span class="err"&gt;  -r file.iso \ # path to ISO file (CD)&lt;/span&gt;
-&lt;span class="err"&gt;  -d image.qcow2 \ # image created above&lt;/span&gt;
-&lt;span class="err"&gt;  myvm # name of VM&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vmctl start \
+  -i 1 \ # 1 interface
+  -L \ # create interface
+  -c \ # auto connect console after started
+  -m 1G \ # 1G memory
+  -r file.iso \ # path to ISO file (CD)
+  -d image.qcow2 \ # image created above
+  myvm # name of VM
+&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;vmctl status&lt;/span&gt;
-&lt;span class="err"&gt;vmctl stop ID&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vmctl status
+vmctl stop ID
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;The start command would start and give the name temporary, after installed,
 create a file at &lt;code&gt;/etc/vm.conf&lt;/code&gt; with config like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;vm &amp;quot;alpine&amp;quot; {&lt;/span&gt;
-&lt;span class="err"&gt;    disable  # disable auto start when boot&lt;/span&gt;
-&lt;span class="err"&gt;    memory 1G&lt;/span&gt;
-&lt;span class="err"&gt;    disk &amp;quot;/root/linux.qcow2&amp;quot;&lt;/span&gt;
-&lt;span class="err"&gt;    local interface&lt;/span&gt;
-&lt;span class="err"&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;vm &amp;quot;alpine&amp;quot; {
+    disable  # disable auto start when boot
+    memory 1G
+    disk &amp;quot;/root/linux.qcow2&amp;quot;
+    local interface
+}
+&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h3&gt;Result&lt;/h3&gt;

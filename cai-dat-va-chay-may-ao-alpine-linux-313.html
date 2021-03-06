@@ -87,192 +87,192 @@ là chuyện hoàn toàn bình thường.</p>
 <p>Bài viết này giới thiệu cách tạo 1 môi trường dev Python trên máy ảo chạy Alpine Linux:</p>
 <p>Tải file iso tối ưu cho virtual machine từ trang <a href="https://alpinelinux.org/downloads/">AlpineLinux.org</a>
 Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viết bài - 3.13</p>
-<div class="highlight"><pre><span></span><code><span class="c">https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span>https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/x86_64/alpine-virt-3.13.2-x86_64.iso
+</pre></div>
 
 
 <p>File ISO này chỉ nặng có 41 MB:</p>
-<div class="highlight"><pre><span></span><code>$ ls -lh /home/hvn/Downloads/alpine*.iso
+<div class="highlight"><pre><span></span>$ ls -lh /home/hvn/Downloads/alpine*.iso
 -rw-r--r--  <span class="m">1</span> hvn  hvn  <span class="m">41</span>.0M Feb <span class="m">20</span> <span class="m">10</span>:16 /home/hvn/Downloads/alpine-virt-3.13.2-x86_64.iso
-</code></pre></div>
+</pre></div>
 
 
 <p>Tạo máy ảo, chọn đĩa ISO này và bật máy ảo lên, bộ cài đặt bằng dòng lệnh của Alpine rất đơn giản, chỉ cần gõ alpine-setup rồi enter liên tục cho tới khi chọn ổ đĩa ảo (vda) , cho đến khi xong.</p>
-<div class="highlight"><pre><span></span><code><span class="n">Welcome</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Alpine</span><span class="w"> </span><span class="n">Linux</span><span class="w"> </span><span class="mf">3.13</span><span class="w"></span>
-<span class="n">Kernel</span><span class="w"> </span><span class="mf">5.10.16</span><span class="o">-</span><span class="mi">0</span><span class="o">-</span><span class="n">virt</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">x86_64</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">ttyS0</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span>Welcome to Alpine Linux 3.13
+Kernel 5.10.16-0-virt on an x86_64 (/dev/ttyS0)
 
-<span class="n">localhost</span><span class="w"> </span><span class="nl">login</span><span class="p">:</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
-<span class="n">Welcome</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">Alpine</span><span class="err">!</span><span class="w"></span>
+localhost login: root
+Welcome to Alpine!
 
-<span class="n">The</span><span class="w"> </span><span class="n">Alpine</span><span class="w"> </span><span class="n">Wiki</span><span class="w"> </span><span class="k">contains</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">large</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">how</span><span class="o">-</span><span class="k">to</span><span class="w"> </span><span class="n">guides</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="k">general</span><span class="w"></span>
-<span class="n">information</span><span class="w"> </span><span class="n">about</span><span class="w"> </span><span class="n">administrating</span><span class="w"> </span><span class="n">Alpine</span><span class="w"> </span><span class="n">systems</span><span class="p">.</span><span class="w"></span>
-<span class="n">See</span><span class="w"> </span><span class="o">&lt;</span><span class="nl">http</span><span class="p">:</span><span class="o">//</span><span class="n">wiki</span><span class="p">.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="o">/&gt;</span><span class="p">.</span><span class="w"></span>
+The Alpine Wiki contains a large amount of how-to guides and general
+information about administrating Alpine systems.
+See &lt;http://wiki.alpinelinux.org/&gt;.
 
-<span class="n">You</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">setup</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="nl">command</span><span class="p">:</span><span class="w"> </span><span class="n">setup</span><span class="o">-</span><span class="n">alpine</span><span class="w"></span>
+You can setup the system with the command: setup-alpine
 
-<span class="n">You</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">message</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">editing</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">motd</span><span class="p">.</span><span class="w"></span>
+You may change this message by editing /etc/motd.
 
-<span class="nl">localhost</span><span class="p">:</span><span class="o">~</span><span class="err">#</span><span class="w"> </span><span class="n">setup</span><span class="o">-</span><span class="n">alpine</span><span class="w"></span>
-<span class="n">Available</span><span class="w"> </span><span class="n">keyboard</span><span class="w"> </span><span class="nl">layouts</span><span class="p">:</span><span class="w"></span>
-<span class="n">af</span><span class="w">     </span><span class="n">be</span><span class="w">     </span><span class="n">cn</span><span class="w">     </span><span class="n">fi</span><span class="w">     </span><span class="n">hu</span><span class="w">     </span><span class="n">it</span><span class="w">     </span><span class="n">lk</span><span class="w">     </span><span class="n">mm</span><span class="w">     </span><span class="n">pl</span><span class="w">     </span><span class="n">sy</span><span class="w">     </span><span class="n">uz</span><span class="w"></span>
-<span class="n">al</span><span class="w">     </span><span class="n">bg</span><span class="w">     </span><span class="n">cz</span><span class="w">     </span><span class="n">fo</span><span class="w">     </span><span class="n">id</span><span class="w">     </span><span class="n">jp</span><span class="w">     </span><span class="n">lt</span><span class="w">     </span><span class="n">mt</span><span class="w">     </span><span class="n">pt</span><span class="w">     </span><span class="n">th</span><span class="w">     </span><span class="n">vn</span><span class="w"></span>
-<span class="n">am</span><span class="w">     </span><span class="n">br</span><span class="w">     </span><span class="n">de</span><span class="w">     </span><span class="n">fr</span><span class="w">     </span><span class="n">ie</span><span class="w">     </span><span class="n">ke</span><span class="w">     </span><span class="n">lv</span><span class="w">     </span><span class="n">my</span><span class="w">     </span><span class="n">ro</span><span class="w">     </span><span class="n">tj</span><span class="w"></span>
-<span class="n">ara</span><span class="w">    </span><span class="n">brai</span><span class="w">   </span><span class="n">dk</span><span class="w">     </span><span class="n">gb</span><span class="w">     </span><span class="n">il</span><span class="w">     </span><span class="n">kg</span><span class="w">     </span><span class="n">ma</span><span class="w">     </span><span class="n">ng</span><span class="w">     </span><span class="n">rs</span><span class="w">     </span><span class="n">tm</span><span class="w"></span>
-<span class="k">at</span><span class="w">     </span><span class="k">by</span><span class="w">     </span><span class="n">dz</span><span class="w">     </span><span class="n">ge</span><span class="w">     </span><span class="ow">in</span><span class="w">     </span><span class="n">kr</span><span class="w">     </span><span class="n">md</span><span class="w">     </span><span class="n">nl</span><span class="w">     </span><span class="n">ru</span><span class="w">     </span><span class="n">tr</span><span class="w"></span>
-<span class="n">az</span><span class="w">     </span><span class="n">ca</span><span class="w">     </span><span class="n">ee</span><span class="w">     </span><span class="n">gh</span><span class="w">     </span><span class="n">iq</span><span class="w">     </span><span class="n">kz</span><span class="w">     </span><span class="n">me</span><span class="w">     </span><span class="k">no</span><span class="w">     </span><span class="n">se</span><span class="w">     </span><span class="n">tw</span><span class="w"></span>
-<span class="n">ba</span><span class="w">     </span><span class="n">ch</span><span class="w">     </span><span class="n">epo</span><span class="w">    </span><span class="n">gr</span><span class="w">     </span><span class="n">ir</span><span class="w">     </span><span class="n">la</span><span class="w">     </span><span class="n">mk</span><span class="w">     </span><span class="n">ph</span><span class="w">     </span><span class="n">si</span><span class="w">     </span><span class="n">ua</span><span class="w"></span>
-<span class="n">bd</span><span class="w">     </span><span class="n">cm</span><span class="w">     </span><span class="n">es</span><span class="w">     </span><span class="n">hr</span><span class="w">     </span><span class="k">is</span><span class="w">     </span><span class="n">latam</span><span class="w">  </span><span class="n">ml</span><span class="w">     </span><span class="n">pk</span><span class="w">     </span><span class="n">sk</span><span class="w">     </span><span class="n">us</span><span class="w"></span>
-<span class="k">Select</span><span class="w"> </span><span class="n">keyboard</span><span class="w"> </span><span class="nl">layout</span><span class="p">:</span><span class="w"> </span><span class="o">[</span><span class="n">none</span><span class="o">]</span><span class="w"></span>
-<span class="n">Enter</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="n">hostname</span><span class="w"> </span><span class="p">(</span><span class="n">short</span><span class="w"> </span><span class="n">form</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span><span class="w"> </span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">localhost</span><span class="o">]</span><span class="w"></span>
-<span class="n">Available</span><span class="w"> </span><span class="n">interfaces</span><span class="w"> </span><span class="k">are</span><span class="err">:</span><span class="w"> </span><span class="n">eth0</span><span class="p">.</span><span class="w"></span>
-<span class="n">Enter</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">bridges</span><span class="p">,</span><span class="w"> </span><span class="n">bonding</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">vlans</span><span class="p">.</span><span class="w"></span>
-<span class="n">Which</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">want</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">initialize</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;done&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">eth0</span><span class="o">]</span><span class="w"></span>
-<span class="n">Ip</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">eth0</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;dhcp&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">dhcp</span><span class="o">]</span><span class="w"></span>
-<span class="n">Do</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">want</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="ow">any</span><span class="w"> </span><span class="n">manual</span><span class="w"> </span><span class="n">network</span><span class="w"> </span><span class="n">configuration</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">n</span><span class="o">]</span><span class="w"></span>
-<span class="nl">udhcpc</span><span class="p">:</span><span class="w"> </span><span class="n">started</span><span class="p">,</span><span class="w"> </span><span class="n">v1</span><span class="mf">.32.1</span><span class="w"></span>
-<span class="nl">udhcpc</span><span class="p">:</span><span class="w"> </span><span class="n">sending</span><span class="w"> </span><span class="n">discover</span><span class="w"></span>
-<span class="nl">udhcpc</span><span class="p">:</span><span class="w"> </span><span class="n">sending</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="mf">100.64.1.3</span><span class="w"></span>
-<span class="nl">udhcpc</span><span class="p">:</span><span class="w"> </span><span class="n">lease</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="mf">100.64.1.3</span><span class="w"> </span><span class="n">obtained</span><span class="p">,</span><span class="w"> </span><span class="n">lease</span><span class="w"> </span><span class="nc">time</span><span class="w"> </span><span class="mi">4294967295</span><span class="w"></span>
-<span class="n">Changing</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
-<span class="k">New</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"></span>
-<span class="n">Bad</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"> </span><span class="n">too</span><span class="w"> </span><span class="n">many</span><span class="w"> </span><span class="k">similar</span><span class="w"> </span><span class="n">characters</span><span class="w"></span>
-<span class="n">Retype</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"></span>
-<span class="nl">passwd</span><span class="p">:</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="n">changed</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">root</span><span class="w"></span>
-<span class="n">Which</span><span class="w"> </span><span class="n">timezone</span><span class="w"> </span><span class="k">are</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="ow">in</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">list</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">UTC</span><span class="o">]</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Starting</span><span class="w"> </span><span class="n">busybox</span><span class="w"> </span><span class="n">acpid</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
-<span class="w"> </span><span class="o">[</span><span class="n"> ok </span><span class="o">]</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Starting</span><span class="w"> </span><span class="n">busybox</span><span class="w"> </span><span class="n">crond</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
-<span class="w"> </span><span class="o">[</span><span class="n"> ok </span><span class="o">]</span><span class="w"></span>
-<span class="n">HTTP</span><span class="o">/</span><span class="n">FTP</span><span class="w"> </span><span class="n">proxy</span><span class="w"> </span><span class="n">URL</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.</span><span class="w"> </span><span class="s1">&#39;http://proxy:8080&#39;</span><span class="p">,</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">none</span><span class="o">]</span><span class="w"></span>
-<span class="n">Which</span><span class="w"> </span><span class="n">NTP</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">run</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;busybox&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;openntpd&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;chrony&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">chrony</span><span class="o">]</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="n">chronyd</span><span class="w"> </span><span class="n">added</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">runlevel</span><span class="w"> </span><span class="k">default</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Caching</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="n">dependencies</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
-<span class="w"> </span><span class="o">[</span><span class="n"> ok </span><span class="o">]</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Starting</span><span class="w"> </span><span class="n">chronyd</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+localhost:~# setup-alpine
+Available keyboard layouts:
+af     be     cn     fi     hu     it     lk     mm     pl     sy     uz
+al     bg     cz     fo     id     jp     lt     mt     pt     th     vn
+am     br     de     fr     ie     ke     lv     my     ro     tj
+ara    brai   dk     gb     il     kg     ma     ng     rs     tm
+at     by     dz     ge     in     kr     md     nl     ru     tr
+az     ca     ee     gh     iq     kz     me     no     se     tw
+ba     ch     epo    gr     ir     la     mk     ph     si     ua
+bd     cm     es     hr     is     latam  ml     pk     sk     us
+Select keyboard layout: [none]
+Enter system hostname (short form, e.g. &#39;foo&#39;) [localhost]
+Available interfaces are: eth0.
+Enter &#39;?&#39; for help on bridges, bonding and vlans.
+Which one do you want to initialize? (or &#39;?&#39; or &#39;done&#39;) [eth0]
+Ip address for eth0? (or &#39;dhcp&#39;, &#39;none&#39;, &#39;?&#39;) [dhcp]
+Do you want to do any manual network configuration? (y/n) [n]
+udhcpc: started, v1.32.1
+udhcpc: sending discover
+udhcpc: sending select for 100.64.1.3
+udhcpc: lease of 100.64.1.3 obtained, lease time 4294967295
+Changing password for root
+New password:
+Bad password: too many similar characters
+Retype password:
+passwd: password for root changed by root
+Which timezone are you in? (&#39;?&#39; for list) [UTC]
+ * Starting busybox acpid ...
+ [ ok ]
+ * Starting busybox crond ...
+ [ ok ]
+HTTP/FTP proxy URL? (e.g. &#39;http://proxy:8080&#39;, or &#39;none&#39;) [none]
+Which NTP client to run? (&#39;busybox&#39;, &#39;openntpd&#39;, &#39;chrony&#39; or &#39;none&#39;) [chrony]
+ * service chronyd added to runlevel default
+ * Caching service dependencies ...
+ [ ok ]
+ * Starting chronyd ...
 
-<span class="w"> </span><span class="o">[</span><span class="n"> ok </span><span class="o">]</span><span class="w"></span>
+ [ ok ]
 
-<span class="n">Available</span><span class="w"> </span><span class="nl">mirrors</span><span class="p">:</span><span class="w"></span>
-<span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">dl</span><span class="o">-</span><span class="n">cdn</span><span class="p">.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">uk</span><span class="p">.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="n">dl</span><span class="o">-</span><span class="mf">2.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="n">dl</span><span class="o">-</span><span class="mf">4.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="n">dl</span><span class="o">-</span><span class="mf">5.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">yandex</span><span class="p">.</span><span class="n">ru</span><span class="w"></span>
-<span class="mi">7</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">gigenet</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="n">mirror1</span><span class="p">.</span><span class="n">hs</span><span class="o">-</span><span class="n">esslingen</span><span class="p">.</span><span class="n">de</span><span class="w"></span>
-<span class="mi">9</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">leaseweb</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">fit</span><span class="p">.</span><span class="n">cvut</span><span class="p">.</span><span class="n">cz</span><span class="w"></span>
-<span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="p">.</span><span class="n">mirror</span><span class="p">.</span><span class="n">far</span><span class="p">.</span><span class="n">fi</span><span class="w"></span>
-<span class="mi">12</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="p">.</span><span class="n">mirror</span><span class="p">.</span><span class="n">wearetriple</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">13</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">clarkson</span><span class="p">.</span><span class="n">edu</span><span class="w"></span>
-<span class="mi">14</span><span class="p">)</span><span class="w"> </span><span class="n">linorg</span><span class="p">.</span><span class="n">usp</span><span class="p">.</span><span class="n">br</span><span class="w"></span>
-<span class="mi">15</span><span class="p">)</span><span class="w"> </span><span class="n">ftp</span><span class="p">.</span><span class="n">yzu</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">tw</span><span class="w"></span>
-<span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">aarnet</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">au</span><span class="w"></span>
-<span class="mi">17</span><span class="p">)</span><span class="w"> </span><span class="n">speglar</span><span class="p">.</span><span class="n">siminn</span><span class="p">.</span><span class="k">is</span><span class="w"></span>
-<span class="mi">18</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">dotsrc</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">19</span><span class="p">)</span><span class="w"> </span><span class="n">ftp</span><span class="p">.</span><span class="n">halifax</span><span class="p">.</span><span class="n">rwth</span><span class="o">-</span><span class="n">aachen</span><span class="p">.</span><span class="n">de</span><span class="w"></span>
-<span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">tuna</span><span class="p">.</span><span class="n">tsinghua</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">cn</span><span class="w"></span>
-<span class="mi">21</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">ustc</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">cn</span><span class="w"></span>
-<span class="mi">22</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">xjtu</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">cn</span><span class="w"></span>
-<span class="mi">23</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">nju</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">cn</span><span class="w"></span>
-<span class="mi">24</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">lzu</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">cn</span><span class="w"></span>
-<span class="mi">25</span><span class="p">)</span><span class="w"> </span><span class="n">ftp</span><span class="p">.</span><span class="n">acc</span><span class="p">.</span><span class="n">umu</span><span class="p">.</span><span class="n">se</span><span class="w"></span>
-<span class="mi">26</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">xtom</span><span class="p">.</span><span class="n">com</span><span class="p">.</span><span class="n">hk</span><span class="w"></span>
-<span class="mi">27</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">csclub</span><span class="p">.</span><span class="n">uwaterloo</span><span class="p">.</span><span class="n">ca</span><span class="w"></span>
-<span class="mi">28</span><span class="p">)</span><span class="w"> </span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">mirror</span><span class="p">.</span><span class="n">iweb</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">29</span><span class="p">)</span><span class="w"> </span><span class="n">pkg</span><span class="p">.</span><span class="n">adfinis</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">30</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">ps</span><span class="p">.</span><span class="n">kz</span><span class="w"></span>
-<span class="mi">31</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">rise</span><span class="p">.</span><span class="n">ph</span><span class="w"></span>
-<span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">operationtulip</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">33</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">ircam</span><span class="p">.</span><span class="n">fr</span><span class="w"></span>
-<span class="mi">34</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="mf">.42</span><span class="p">.</span><span class="n">fr</span><span class="w"></span>
-<span class="mi">35</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">math</span><span class="p">.</span><span class="n">princeton</span><span class="p">.</span><span class="n">edu</span><span class="w"></span>
-<span class="mi">36</span><span class="p">)</span><span class="w"> </span><span class="n">mirrors</span><span class="p">.</span><span class="n">sjtug</span><span class="p">.</span><span class="n">sjtu</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">cn</span><span class="w"></span>
-<span class="mi">37</span><span class="p">)</span><span class="w"> </span><span class="n">ftp</span><span class="p">.</span><span class="n">icm</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">pl</span><span class="w"></span>
-<span class="mi">38</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">ungleich</span><span class="p">.</span><span class="n">ch</span><span class="w"></span>
-<span class="mi">39</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="p">.</span><span class="n">mirror</span><span class="p">.</span><span class="n">vexxhost</span><span class="p">.</span><span class="n">ca</span><span class="w"></span>
-<span class="mi">40</span><span class="p">)</span><span class="w"> </span><span class="n">sjc</span><span class="p">.</span><span class="n">edge</span><span class="p">.</span><span class="n">kernel</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">41</span><span class="p">)</span><span class="w"> </span><span class="n">ewr</span><span class="p">.</span><span class="n">edge</span><span class="p">.</span><span class="n">kernel</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">42</span><span class="p">)</span><span class="w"> </span><span class="n">ams</span><span class="p">.</span><span class="n">edge</span><span class="p">.</span><span class="n">kernel</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">43</span><span class="p">)</span><span class="w"> </span><span class="n">download</span><span class="p">.</span><span class="n">nus</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">sg</span><span class="w"></span>
-<span class="mi">44</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="p">.</span><span class="n">yourlabs</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="mi">45</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">pit</span><span class="p">.</span><span class="n">teraswitch</span><span class="p">.</span><span class="n">com</span><span class="w"></span>
-<span class="mi">46</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">reenigne</span><span class="p">.</span><span class="n">net</span><span class="w"></span>
-<span class="mi">47</span><span class="p">)</span><span class="w"> </span><span class="n">quantum</span><span class="o">-</span><span class="n">mirror</span><span class="p">.</span><span class="n">hu</span><span class="w"></span>
-<span class="mi">48</span><span class="p">)</span><span class="w"> </span><span class="n">tux</span><span class="p">.</span><span class="n">rainside</span><span class="p">.</span><span class="n">sk</span><span class="w"></span>
-<span class="mi">49</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="p">.</span><span class="n">cs</span><span class="p">.</span><span class="n">nctu</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">tw</span><span class="w"></span>
-<span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">ihost</span><span class="p">.</span><span class="n">md</span><span class="w"></span>
-<span class="mi">51</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">ette</span><span class="p">.</span><span class="n">biz</span><span class="w"></span>
-<span class="mi">52</span><span class="p">)</span><span class="w"> </span><span class="n">mirror</span><span class="p">.</span><span class="n">lagoon</span><span class="p">.</span><span class="n">nc</span><span class="w"></span>
-<span class="mi">53</span><span class="p">)</span><span class="w"> </span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">c3sl</span><span class="p">.</span><span class="n">ufpr</span><span class="p">.</span><span class="n">br</span><span class="w"></span>
-<span class="mi">54</span><span class="p">)</span><span class="w"> </span><span class="n">foobar</span><span class="p">.</span><span class="n">turbo</span><span class="p">.</span><span class="n">net</span><span class="p">.</span><span class="n">id</span><span class="w"></span>
-<span class="mi">55</span><span class="p">)</span><span class="w"> </span><span class="n">alpine</span><span class="p">.</span><span class="n">ccns</span><span class="p">.</span><span class="n">ncku</span><span class="p">.</span><span class="n">edu</span><span class="p">.</span><span class="n">tw</span><span class="w"></span>
+Available mirrors:
+1) dl-cdn.alpinelinux.org
+2) uk.alpinelinux.org
+3) dl-2.alpinelinux.org
+4) dl-4.alpinelinux.org
+5) dl-5.alpinelinux.org
+6) mirror.yandex.ru
+7) mirrors.gigenet.com
+8) mirror1.hs-esslingen.de
+9) mirror.leaseweb.com
+10) mirror.fit.cvut.cz
+11) alpine.mirror.far.fi
+12) alpine.mirror.wearetriple.com
+13) mirror.clarkson.edu
+14) linorg.usp.br
+15) ftp.yzu.edu.tw
+16) mirror.aarnet.edu.au
+17) speglar.siminn.is
+18) mirrors.dotsrc.org
+19) ftp.halifax.rwth-aachen.de
+20) mirrors.tuna.tsinghua.edu.cn
+21) mirrors.ustc.edu.cn
+22) mirrors.xjtu.edu.cn
+23) mirrors.nju.edu.cn
+24) mirror.lzu.edu.cn
+25) ftp.acc.umu.se
+26) mirror.xtom.com.hk
+27) mirror.csclub.uwaterloo.ca
+28) alpinelinux.mirror.iweb.com
+29) pkg.adfinis.com
+30) mirror.ps.kz
+31) mirror.rise.ph
+32) mirror.operationtulip.com
+33) mirrors.ircam.fr
+34) alpine.42.fr
+35) mirror.math.princeton.edu
+36) mirrors.sjtug.sjtu.edu.cn
+37) ftp.icm.edu.pl
+38) mirror.ungleich.ch
+39) alpine.mirror.vexxhost.ca
+40) sjc.edge.kernel.org
+41) ewr.edge.kernel.org
+42) ams.edge.kernel.org
+43) download.nus.edu.sg
+44) alpine.yourlabs.org
+45) mirror.pit.teraswitch.com
+46) mirror.reenigne.net
+47) quantum-mirror.hu
+48) tux.rainside.sk
+49) alpine.cs.nctu.edu.tw
+50) mirror.ihost.md
+51) mirror.ette.biz
+52) mirror.lagoon.nc
+53) alpinelinux.c3sl.ufpr.br
+54) foobar.turbo.net.id
+55) alpine.ccns.ncku.edu.tw
 
-<span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="k">Add</span><span class="w"> </span><span class="n">random</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="n">list</span><span class="w"></span>
-<span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="n">Detect</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">fastest</span><span class="w"> </span><span class="n">mirror</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="n">list</span><span class="w"></span>
-<span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="n">Edit</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apk</span><span class="o">/</span><span class="n">repositories</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="nc">text</span><span class="w"> </span><span class="n">editor</span><span class="w"></span>
+r) Add random from the above list
+f) Detect and add fastest mirror from above list
+e) Edit /etc/apk/repositories with text editor
 
-<span class="n">Enter</span><span class="w"> </span><span class="n">mirror</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">55</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">URL</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="p">(</span><span class="ow">or</span><span class="w"> </span><span class="n">r</span><span class="o">/</span><span class="n">f</span><span class="o">/</span><span class="n">e</span><span class="o">/</span><span class="n">done</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="n">Added</span><span class="w"> </span><span class="n">mirror</span><span class="w"> </span><span class="n">dl</span><span class="o">-</span><span class="n">cdn</span><span class="p">.</span><span class="n">alpinelinux</span><span class="p">.</span><span class="n">org</span><span class="w"></span>
-<span class="n">Updating</span><span class="w"> </span><span class="n">repository</span><span class="w"> </span><span class="n">indexes</span><span class="p">...</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
-<span class="n">Which</span><span class="w"> </span><span class="n">SSH</span><span class="w"> </span><span class="n">server</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;openssh&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;dropbear&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">openssh</span><span class="o">]</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="n">sshd</span><span class="w"> </span><span class="n">added</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">runlevel</span><span class="w"> </span><span class="k">default</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Caching</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="n">dependencies</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
-<span class="w"> </span><span class="o">[</span><span class="n"> ok </span><span class="o">]</span><span class="w"></span>
-<span class="n">ssh</span><span class="o">-</span><span class="nl">keygen</span><span class="p">:</span><span class="w"> </span><span class="n">generating</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="nl">keys</span><span class="p">:</span><span class="w"> </span><span class="n">RSA</span><span class="w"> </span><span class="n">DSA</span><span class="w"> </span><span class="n">ECDSA</span><span class="w"> </span><span class="n">ED25519</span><span class="w"></span>
-<span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Starting</span><span class="w"> </span><span class="n">sshd</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
-<span class="w"> </span><span class="o">[</span><span class="n"> ok </span><span class="o">]</span><span class="w"></span>
-<span class="n">Available</span><span class="w"> </span><span class="n">disks</span><span class="w"> </span><span class="k">are</span><span class="err">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">vda</span><span class="w">   </span><span class="p">(</span><span class="mf">10.7</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="mh">0x0b5d</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="n">Which</span><span class="w"> </span><span class="k">disk</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">would</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="ow">like</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">use</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;none&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">none</span><span class="o">]</span><span class="w"> </span><span class="n">vda</span><span class="w"></span>
-<span class="n">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="k">disk</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nl">selected</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">vda</span><span class="w">   </span><span class="p">(</span><span class="mf">10.7</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="mh">0x0b5d</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="n">How</span><span class="w"> </span><span class="n">would</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="ow">like</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">it</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sys&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;lvm&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">?</span><span class="o">]</span><span class="w"></span>
+Enter mirror number (1-55) or URL to add (or r/f/e/done) [1] Added mirror dl-cdn.alpinelinux.org
+Updating repository indexes... done.
+Which SSH server? (&#39;openssh&#39;, &#39;dropbear&#39; or &#39;none&#39;) [openssh]
+ * service sshd added to runlevel default
+ * Caching service dependencies ...
+ [ ok ]
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
+ * Starting sshd ...
+ [ ok ]
+Available disks are:
+  vda   (10.7 GB 0x0b5d )
+Which disk(s) would you like to use? (or &#39;?&#39; for help or &#39;none&#39;) [none] vda
+The following disk is selected:
+  vda   (10.7 GB 0x0b5d )
+How would you like to use it? (&#39;sys&#39;, &#39;data&#39;, &#39;lvm&#39; or &#39;?&#39; for help) [?]
 
-<span class="n">You</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="ow">between</span><span class="w"> </span><span class="s1">&#39;sys&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;lvm&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;lvmsys&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;lvmdata&#39;</span><span class="p">.</span><span class="w"></span>
+You can select between &#39;sys&#39;, &#39;data&#39;, &#39;lvm&#39;, &#39;lvmsys&#39; or &#39;lvmdata&#39;.
 
-<span class="nl">sys</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">This</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">traditional</span><span class="w"> </span><span class="k">disk</span><span class="w"> </span><span class="n">install</span><span class="p">.</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">partitions</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">be</span><span class="w"></span>
-<span class="w">  </span><span class="n">created</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">disk</span><span class="err">:</span><span class="w"> </span><span class="o">/</span><span class="n">boot</span><span class="p">,</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">filesystem</span><span class="w"> </span><span class="n">root</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">swap</span><span class="p">.</span><span class="w"></span>
+sys:
+  This mode is a traditional disk install. The following partitions will be
+  created on the disk: /boot, / (filesystem root) and swap.
 
-<span class="w">  </span><span class="n">This</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">development</span><span class="w"> </span><span class="n">boxes</span><span class="p">,</span><span class="w"> </span><span class="n">desktops</span><span class="p">,</span><span class="w"> </span><span class="n">virtual</span><span class="w"> </span><span class="n">servers</span><span class="p">,</span><span class="w"> </span><span class="n">etc</span><span class="p">.</span><span class="w"></span>
+  This mode may be used for development boxes, desktops, virtual servers, etc.
 
-<span class="k">data</span><span class="err">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">This</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="n">uses</span><span class="w"> </span><span class="n">your</span><span class="w"> </span><span class="k">disk</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="n">storage</span><span class="p">,</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">operating</span><span class="w"> </span><span class="k">system</span><span class="p">.</span><span class="w"></span>
-<span class="w">  </span><span class="n">The</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="n">itself</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tmpfs</span><span class="w"> </span><span class="p">(</span><span class="n">RAM</span><span class="p">).</span><span class="w"></span>
+data:
+  This mode uses your disk(s) for data storage, not for the operating system.
+  The system itself will run from tmpfs (RAM).
 
-<span class="w">  </span><span class="k">Use</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="n">want</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">disk</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">mailspool</span><span class="p">,</span><span class="w"> </span><span class="n">databases</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="n">logs</span><span class="p">,</span><span class="w"> </span><span class="n">etc</span><span class="p">.</span><span class="w"></span>
+  Use this mode if you only want to use the disk(s) for a mailspool, databases,
+  logs, etc.
 
-<span class="nl">lvm</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">Enable</span><span class="w"> </span><span class="n">logical</span><span class="w"> </span><span class="n">volume</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">ask</span><span class="w"> </span><span class="n">again</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s1">&#39;sys&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;data&#39;</span><span class="p">.</span><span class="w"></span>
+lvm:
+  Enable logical volume manager and ask again for &#39;sys&#39; or &#39;data&#39;.
 
-<span class="nl">lvmsys</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">Same</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s1">&#39;sys&#39;</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">logical</span><span class="w"> </span><span class="n">volume</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">partitioning</span><span class="p">.</span><span class="w"></span>
+lvmsys:
+  Same as &#39;sys&#39; but use logical volume manager for partitioning.
 
-<span class="nl">lvmdata</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">Same</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s1">&#39;data&#39;</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">logical</span><span class="w"> </span><span class="n">volume</span><span class="w"> </span><span class="n">manager</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">partitioning</span><span class="p">.</span><span class="w"></span>
+lvmdata:
+  Same as &#39;data&#39; but use logical volume manager for partitioning.
 
-<span class="n">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="k">disk</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="nl">selected</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">vda</span><span class="w">   </span><span class="p">(</span><span class="mf">10.7</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="mh">0x0b5d</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="n">How</span><span class="w"> </span><span class="n">would</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="ow">like</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="n">it</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;sys&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;data&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;lvm&#39;</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">help</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">?</span><span class="o">]</span><span class="w"> </span><span class="n">sys</span><span class="w"></span>
-<span class="nl">WARNING</span><span class="p">:</span><span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="k">disk</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="nl">erased</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="n">vda</span><span class="w">   </span><span class="p">(</span><span class="mf">10.7</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="mh">0x0b5d</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="nl">WARNING</span><span class="p">:</span><span class="w"> </span><span class="n">Erase</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">above</span><span class="w"> </span><span class="k">disk</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="k">continue</span><span class="vm">?</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">n</span><span class="o">]</span><span class="w"> </span><span class="n">y</span><span class="w"></span>
-<span class="n">Creating</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="n">systems</span><span class="p">...</span><span class="w"></span>
-<span class="n">Installing</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="nl">vda3</span><span class="p">:</span><span class="w"></span>
-<span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">boot</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">vda1</span><span class="w"></span>
-<span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="err">████████████████████████████████████████████</span><span class="o">==&gt;</span><span class="w"> </span><span class="nl">initramfs</span><span class="p">:</span><span class="w"> </span><span class="n">creating</span><span class="w"> </span><span class="o">/</span><span class="n">boot</span><span class="o">/</span><span class="n">initramfs</span><span class="o">-</span><span class="n">virt</span><span class="w"></span>
-<span class="o">/</span><span class="n">boot</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">vda1</span><span class="w"></span>
+The following disk is selected:
+  vda   (10.7 GB 0x0b5d )
+How would you like to use it? (&#39;sys&#39;, &#39;data&#39;, &#39;lvm&#39; or &#39;?&#39; for help) [?] sys
+WARNING: The following disk(s) will be erased:
+  vda   (10.7 GB 0x0b5d )
+WARNING: Erase the above disk(s) and continue? (y/n) [n] y
+Creating file systems...
+Installing system on /dev/vda3:
+/mnt/boot is device /dev/vda1
+100% ████████████████████████████████████████████==&gt; initramfs: creating /boot/initramfs-virt
+/boot is device /dev/vda1
 
-<span class="n">Installation</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">complete</span><span class="p">.</span><span class="w"> </span><span class="n">Please</span><span class="w"> </span><span class="n">reboot</span><span class="p">.</span><span class="w"></span>
+Installation is complete. Please reboot.
 
-<span class="err">#</span><span class="w"> </span><span class="n">halt</span><span class="w"></span>
-</code></pre></div>
+# halt
+</pre></div>
 
 
 <p>Cài xong, reboot lại, dùng lệnh apk để cài các gói cần thiết để code Python</p>
-<div class="highlight"><pre><span></span><code><span class="n">localhost</span><span class="p">:</span><span class="err">~</span><span class="p">#</span> <span class="n">apk</span> <span class="n">add</span> <span class="n">tmux</span> <span class="n">vim</span> <span class="n">git</span> <span class="n">python3</span>
+<div class="highlight"><pre><span></span><span class="n">localhost</span><span class="p">:</span><span class="err">~</span><span class="p">#</span> <span class="n">apk</span> <span class="n">add</span> <span class="n">tmux</span> <span class="n">vim</span> <span class="n">git</span> <span class="n">python3</span>
 <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">libbz2</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">.</span><span class="mi">8</span><span class="o">-</span><span class="n">r1</span><span class="p">)</span>
 <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">libffi</span> <span class="p">(</span><span class="mf">3.3</span><span class="o">-</span><span class="n">r2</span><span class="p">)</span>
 <span class="p">(</span><span class="mi">3</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> <span class="n">Installing</span> <span class="n">gdbm</span> <span class="p">(</span><span class="mf">1.19</span><span class="o">-</span><span class="n">r0</span><span class="p">)</span>
@@ -303,7 +303,7 @@ Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viế
 <span class="k">If</span> <span class="n">the</span> <span class="n">implementation</span> <span class="ow">is</span> <span class="n">hard</span> <span class="k">to</span> <span class="n">explain</span><span class="p">,</span> <span class="n">it</span><span class="c">&#39;s a bad idea.</span>
 <span class="k">If</span> <span class="n">the</span> <span class="n">implementation</span> <span class="ow">is</span> <span class="n">easy</span> <span class="k">to</span> <span class="n">explain</span><span class="p">,</span> <span class="n">it</span> <span class="n">may</span> <span class="n">be</span> <span class="n">a</span> <span class="n">good</span> <span class="n">idea</span><span class="p">.</span>
 <span class="n">Namespaces</span> <span class="n">are</span> <span class="n">one</span> <span class="n">honking</span> <span class="n">great</span> <span class="n">idea</span> <span class="o">--</span> <span class="k">let</span><span class="c">&#39;s do more of those!</span>
-</code></pre></div>
+</pre></div>
 
 
 <h3>Kết luận</h3>
@@ -336,7 +336,7 @@ Ví dụ ở đây tải URL sau - bản mới nhất tại thời điểm viế
                     <span class="superscript">2</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#linux-ref">linux
-                    <span class="superscript">2</span>
+                    <span class="superscript">3</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#virtual-machine-ref">virtual-machine
                     <span class="superscript">1</span>

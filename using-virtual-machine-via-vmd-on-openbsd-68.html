@@ -112,8 +112,8 @@ https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_in
 as metioned in <a href="http://www.openbsd.org/faq/faq16.html#VMMnet">FAQ, <code>NAT for the VMs</code></a></p>
 <p>After installed, can ssh from OpenBSD host to guest via, change to your IP get from
 output of <code>ip ad</code> after installed:</p>
-<div class="highlight"><pre><span></span><code><span class="n">ssh</span> <span class="n">root</span><span class="mf">@100.64.1.3</span> <span class="o">-</span><span class="n">v</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span><span class="n">ssh</span> <span class="n">root</span><span class="mf">@100.64.1.3</span> <span class="o">-</span><span class="n">v</span>
+</pre></div>
 
 
 <p>Note that password login seems always fail even put correct password
@@ -122,36 +122,36 @@ to <code>/root/.ssh/authorized_keys</code> then ssh would work.</p>
 <h3>Commands</h3>
 <p>Two major important commands:</p>
 <h4>Create image</h4>
-<div class="highlight"><pre><span></span><code><span class="err">vmctl create -s 10G image.qcow2</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span>vmctl create -s 10G image.qcow2
+</pre></div>
 
 
 <h4>Start VM</h4>
-<div class="highlight"><pre><span></span><code><span class="err">vmctl start \</span>
-<span class="err">  -i 1 \ # 1 interface</span>
-<span class="err">  -L \ # create interface</span>
-<span class="err">  -c \ # auto connect console after started</span>
-<span class="err">  -m 1G \ # 1G memory</span>
-<span class="err">  -r file.iso \ # path to ISO file (CD)</span>
-<span class="err">  -d image.qcow2 \ # image created above</span>
-<span class="err">  myvm # name of VM</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span>vmctl start \
+  -i 1 \ # 1 interface
+  -L \ # create interface
+  -c \ # auto connect console after started
+  -m 1G \ # 1G memory
+  -r file.iso \ # path to ISO file (CD)
+  -d image.qcow2 \ # image created above
+  myvm # name of VM
+</pre></div>
 
 
-<div class="highlight"><pre><span></span><code><span class="err">vmctl status</span>
-<span class="err">vmctl stop ID</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span>vmctl status
+vmctl stop ID
+</pre></div>
 
 
 <p>The start command would start and give the name temporary, after installed,
 create a file at <code>/etc/vm.conf</code> with config like:</p>
-<div class="highlight"><pre><span></span><code><span class="err">vm &quot;alpine&quot; {</span>
-<span class="err">    disable  # disable auto start when boot</span>
-<span class="err">    memory 1G</span>
-<span class="err">    disk &quot;/root/linux.qcow2&quot;</span>
-<span class="err">    local interface</span>
-<span class="err">}</span>
-</code></pre></div>
+<div class="highlight"><pre><span></span>vm &quot;alpine&quot; {
+    disable  # disable auto start when boot
+    memory 1G
+    disk &quot;/root/linux.qcow2&quot;
+    local interface
+}
+</pre></div>
 
 
 <h3>Result</h3>
@@ -188,7 +188,7 @@ VirtualBox on MacOS).</p>
                     <span class="superscript">1</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#openbsd-ref">openbsd
-                    <span class="superscript">3</span>
+                    <span class="superscript">4</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#vmm-ref">vmm
                     <span class="superscript">1</span>
