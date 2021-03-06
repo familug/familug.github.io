@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 
 AUTHOR = 'hvn'
-SITENAME = 'New FAMILUG.org Vietnam'
+SITENAME = 'FAMILUG.org Vietnam'
 SITEURL = ''
 
 PATH = 'content'
