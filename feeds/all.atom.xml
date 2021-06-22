@@ -21,14 +21,16 @@ học zsh không có gì khó cả.&lt;/p&gt;
 &lt;p&gt;điều này không quan trọng và chưa từng quan trọng.&lt;/p&gt;
 &lt;p&gt;Việc "học" dùng ZSH là chuyện cấu hình và làm quen với 1 số câu lệnh/tính năng
 khác của nó như auto-complete cực xịn, etc...
-nhưng không liên quan gì tới chuyện viết script. Bởi 2 lý do
-- gần như không ai viết zsh script cả, người người vẫn viết bash
-- khi phải viết bash, tôi viết (POSIX) shell code, chạy với /bin/sh chứ không
-phải bash - lý do: chạy khắp mọi nơi
-- từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
-có docker image nào cài bash, nhưng &lt;code&gt;sh&lt;/code&gt; thì ở khắp mọi nơi
-- nếu phải &lt;a href="https://stackoverflow.com/a/35385978/807703"&gt;dùng tới Array&lt;/a&gt;,
-tôi viết Python script ngay lập tức.&lt;/p&gt;
+nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;gần như không ai viết zsh script cả, người người vẫn viết bash&lt;/li&gt;
+&lt;li&gt;khi phải viết bash, tôi viết (POSIX) shell code, chạy với /bin/sh chứ không
+phải bash - lý do: chạy khắp mọi nơi&lt;/li&gt;
+&lt;li&gt;từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
+có docker image nào cài bash, nhưng &lt;code&gt;sh&lt;/code&gt; thì ở khắp mọi nơi&lt;/li&gt;
+&lt;li&gt;nếu phải &lt;a href="https://stackoverflow.com/a/35385978/807703"&gt;dùng tới Array&lt;/a&gt;,
+tôi viết Python script ngay lập tức.&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;Vậy nên cứ thoải mái đổi shell nào tùy thích, chuyện viết script chẳng hề liên
 quan, các tính năng dùng để viết script không phải các tính năng của shell dùng
 tương tác hàng ngày.&lt;/p&gt;
