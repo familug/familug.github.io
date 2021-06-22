@@ -24,7 +24,7 @@ khác của nó như auto-complete cực xịn, etc...
 nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;gần như không ai viết zsh script cả, người người vẫn viết bash&lt;/li&gt;
-&lt;li&gt;khi phải viết bash, tôi viết (POSIX) shell code, chạy với /bin/sh chứ không
+&lt;li&gt;khi phải viết bash, tôi viết &lt;a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html"&gt;(POSIX) shell code&lt;/a&gt;, chạy với /bin/sh chứ không
 phải bash - lý do: chạy khắp mọi nơi&lt;/li&gt;
 &lt;li&gt;từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
 có docker image nào cài bash, nhưng &lt;code&gt;sh&lt;/code&gt; thì ở khắp mọi nơi&lt;/li&gt;
@@ -34,11 +34,21 @@ tôi viết Python script ngay lập tức.&lt;/li&gt;
 &lt;p&gt;Vậy nên cứ thoải mái đổi shell nào tùy thích, chuyện viết script chẳng hề liên
 quan, các tính năng dùng để viết script không phải các tính năng của shell dùng
 tương tác hàng ngày.&lt;/p&gt;
-&lt;p&gt;Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:
-- &lt;a href="https://fishshell.com/"&gt;fish&lt;/a&gt;
-- &lt;a href="https://www.nushell.sh/"&gt;nushell&lt;/a&gt;
-- &lt;a href="https://xon.sh/"&gt;xonsh&lt;/a&gt; - a Python shell
-- &lt;a href="https://janet-shell.org/"&gt;janetsh&lt;/a&gt; - a Janet shell&lt;/p&gt;</content><category term="frontpage"></category><category term="shell"></category><category term="workstation"></category><category term="zsh"></category><category term="bash"></category><category term="opinion"></category></entry><entry><title>Các combo câu lệnh CLI từ năm 2021</title><link href="https://familug.github.io/cac-combo-cau-lenh-cli-tu-nam-2021.html" rel="alternate"></link><published>2021-03-06T00:00:00+07:00</published><updated>2021-03-06T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-06:/cac-combo-cau-lenh-cli-tu-nam-2021.html</id><summary type="html">&lt;p&gt;Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có
+&lt;p&gt;Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://fishshell.com/"&gt;fish&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.nushell.sh/"&gt;nushell&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://xon.sh/"&gt;xonsh&lt;/a&gt; - a Python shell&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://janet-shell.org/"&gt;janetsh&lt;/a&gt; - a Janet shell&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Bonus&lt;/h2&gt;
+&lt;p&gt;Để viết shell code tránh các lỗi nho nhỏ, cài &lt;code&gt;shellcheck&lt;/code&gt; rồi check file code
+như check Python pep8.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo apt-get install -y shellcheck
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Hết&lt;/h2&gt;</content><category term="frontpage"></category><category term="shell"></category><category term="workstation"></category><category term="zsh"></category><category term="bash"></category><category term="opinion"></category></entry><entry><title>Các combo câu lệnh CLI từ năm 2021</title><link href="https://familug.github.io/cac-combo-cau-lenh-cli-tu-nam-2021.html" rel="alternate"></link><published>2021-03-06T00:00:00+07:00</published><updated>2021-03-06T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-06:/cac-combo-cau-lenh-cli-tu-nam-2021.html</id><summary type="html">&lt;p&gt;Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có
 nhiều thay đổi, bài này sẽ cập nhật các combo hay dùng nhất:&lt;/p&gt;
 &lt;h3&gt;ls&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;ls -la&lt;/code&gt; vốn là combo ưa thích, thì ngày nay, tay đã quen với 2 combo khác:&lt;/p&gt;
