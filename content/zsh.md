@@ -25,7 +25,7 @@ khác của nó như auto-complete cực xịn, etc...
 nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:
 
 - gần như không ai viết zsh script cả, người người vẫn viết bash
-- khi phải viết bash, tôi viết (POSIX) shell code, chạy với /bin/sh chứ không
+- khi phải viết bash, tôi viết [(POSIX) shell code](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html), chạy với /bin/sh chứ không
 phải bash - lý do: chạy khắp mọi nơi
 - từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
 có docker image nào cài bash, nhưng `sh` thì ở khắp mọi nơi
@@ -37,7 +37,18 @@ quan, các tính năng dùng để viết script không phải các tính năng 
 tương tác hàng ngày.
 
 Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:
+
 - [fish](https://fishshell.com/)
 - [nushell](https://www.nushell.sh/)
 - [xonsh](https://xon.sh/) - a Python shell
 - [janetsh](https://janet-shell.org/) - a Janet shell
+
+## Bonus
+Để viết shell code tránh các lỗi nho nhỏ, cài `shellcheck` rồi check file code
+như check Python pep8.
+
+```sh
+sudo apt-get install -y shellcheck
+```
+
+## Hết
