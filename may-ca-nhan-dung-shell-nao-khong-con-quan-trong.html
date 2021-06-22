@@ -15,18 +15,18 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="openbsd, vmm, alpine, debian, en,, " />
+<meta name="keywords" content="shell, workstation, zsh, bash, opinion, frontpage, " />
 
-<meta property="og:title" content="Using virtual machine via vmd on OpenBSD 6.8 "/>
-<meta property="og:url" content="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" />
-<meta property="og:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …" />
+<meta property="og:title" content="Máy cá nhân dùng shell nào không còn quan trọng "/>
+<meta property="og:url" content="https://familug.github.io/may-ca-nhan-dung-shell-nao-khong-con-quan-trong.html" />
+<meta property="og:description" content="Cuối năm 2012, mình đã phát hiện ra ZSH lúc nó mới nổi và quyết định... không dùng với lý do ghi rõ trong bài viết: đã, đang và sẽ tiếp tục dùng bash, bởi nó có 1 điều mà zsh không thể vượt qua: bash &#34;ở khắp mọi nơi …" />
 <meta property="og:site_name" content="FAMILUG Vietnam" />
 <meta property="og:article:author" content="hvn" />
-<meta property="og:article:published_time" content="2021-02-20T16:00:00+07:00" />
-<meta name="twitter:title" content="Using virtual machine via vmd on OpenBSD 6.8 ">
-<meta name="twitter:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …">
+<meta property="og:article:published_time" content="2021-06-22T00:00:00+07:00" />
+<meta name="twitter:title" content="Máy cá nhân dùng shell nào không còn quan trọng ">
+<meta name="twitter:description" content="Cuối năm 2012, mình đã phát hiện ra ZSH lúc nó mới nổi và quyết định... không dùng với lý do ghi rõ trong bài viết: đã, đang và sẽ tiếp tục dùng bash, bởi nó có 1 điều mà zsh không thể vượt qua: bash &#34;ở khắp mọi nơi …">
 
-        <title>Using virtual machine via vmd on OpenBSD 6.8  · FAMILUG Vietnam
+        <title>Máy cá nhân dùng shell nào không còn quan trọng  · FAMILUG Vietnam
 </title>
         <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG Vietnam - Full Atom Feed" />
 
@@ -67,8 +67,8 @@
 <div class="row-fluid">
     <header class="page-header span10 offset2">
         <h1>
-            <a href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html">
-                Using virtual machine via vmd on OpenBSD 6.8
+            <a href="https://familug.github.io/may-ca-nhan-dung-shell-nao-khong-con-quan-trong.html">
+                Máy cá nhân dùng shell nào không còn quan trọng
             </a>
         </h1>
     </header>
@@ -77,87 +77,39 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
             
-            <p>OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
-Instead of installing VirtualBox or look for kvm on OpenBSD, everything
-is already there, a built-in virtualization solution.</p>
-<h3>Check wiki FAQ first</h3>
-<p>https://www.openbsd.org/faq/faq16.html</p>
-<p>it lists all features, not ready features, prequisites, basic commands.</p>
-<h2>Distro</h2>
-<p>Sure run OpenBSD guest on OpenBSD host is "should just work", it's fully tested.
-But for Linux based OS, the options are not much:</p>
-<p>It's a real coincidence, someone asked the question two days ago on Reddit:
-https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_install_in_vmd/</p>
-<p>Thanks to the answers there, I tried many but success only some:</p>
-<ul>
-<li>AlpineLinux: use "Virtual" edition https://alpinelinux.org/downloads/
-  "it just works", just boot on and run <code>setup-alpine</code></li>
-<li>Debian: I used <code>debian-10.8.0-amd64-netinst.iso</code>,
-  after start, type Tab, then enter <code>console=ttyS0,115200</code> then enter,
-  the text-based-curse-like UI would work.</li>
-</ul>
-<p>And these failed:</p>
-<ul>
-<li>Ubuntu: <code>ubuntu-20.04.2-live-server-amd64.iso</code>, failed.</li>
-<li>NixOS: failed at phase 2/3 of systemd.</li>
-<li>ArchLinux: failed with error <code>ACPI BIOS Error (bug): A valid RSDP was not found (20200925/tbxfroot-210)</code></li>
-</ul>
-<p>Most of these default to use Video, thus must add boot parameter:</p>
+            <p><a href="https://www.familug.org/2012/12/zsh-va-bash.html">Cuối năm 2012, mình đã phát hiện ra ZSH</a>
+lúc nó mới nổi và quyết định...
+không dùng với lý do ghi rõ trong bài viết:</p>
 <blockquote>
-<p>type Tab, then enter <code>console=ttyS0,115200</code> then enter,</p>
+<p>đã, đang và sẽ tiếp tục dùng bash, bởi nó có 1 điều mà zsh không thể vượt
+qua: bash "ở khắp mọi nơi".</p>
 </blockquote>
-<p>https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html</p>
-<h3>Network</h3>
-<p>Setup <code>pf</code> and <code>sysctl net.inet.ip.forwarding=1</code>
-as metioned in <a href="http://www.openbsd.org/faq/faq16.html#VMMnet">FAQ, <code>NAT for the VMs</code></a></p>
-<p>After installed, can ssh from OpenBSD host to guest via, change to your IP get from
-output of <code>ip ad</code> after installed:</p>
-<div class="highlight"><pre><span></span><code><span class="n">ssh</span> <span class="n">root</span><span class="mf">@100.64.1.3</span> <span class="o">-</span><span class="n">v</span>
-</code></pre></div>
-
-
-<p>Note that password login seems always fail even put correct password
-(or maybe Linux-based OS disabled them by default). Copy your pubkey
-to <code>/root/.ssh/authorized_keys</code> then ssh would work.</p>
-<h3>Commands</h3>
-<p>Two major important commands:</p>
-<h4>Create image</h4>
-<div class="highlight"><pre><span></span><code><span class="err">vmctl create -s 10G image.qcow2</span>
-</code></pre></div>
-
-
-<h4>Start VM</h4>
-<div class="highlight"><pre><span></span><code><span class="err">vmctl start \</span>
-<span class="err">  -i 1 \ # 1 interface</span>
-<span class="err">  -L \ # create interface</span>
-<span class="err">  -c \ # auto connect console after started</span>
-<span class="err">  -m 1G \ # 1G memory</span>
-<span class="err">  -r file.iso \ # path to ISO file (CD)</span>
-<span class="err">  -d image.qcow2 \ # image created above</span>
-<span class="err">  myvm # name of VM</span>
-</code></pre></div>
-
-
-<div class="highlight"><pre><span></span><code><span class="err">vmctl status</span>
-<span class="err">vmctl stop ID</span>
-</code></pre></div>
-
-
-<p>The start command would start and give the name temporary, after installed,
-create a file at <code>/etc/vm.conf</code> with config like:</p>
-<div class="highlight"><pre><span></span><code><span class="err">vm &quot;alpine&quot; {</span>
-<span class="err">    disable  # disable auto start when boot</span>
-<span class="err">    memory 1G</span>
-<span class="err">    disk &quot;/root/linux.qcow2&quot;</span>
-<span class="err">    local interface</span>
-<span class="err">}</span>
-</code></pre></div>
-
-
-<h3>Result</h3>
-<p>VMs installed successfully run smoothly on vmd, low CPU usage (compare to
-VirtualBox on MacOS).</p>
-<p>Have fun.</p>
+<p><img alt="xonsh" src="https://xon.sh/_static/landing2/images/conch_ascii.png"></p>
+<p>Điều này vẫn đúng, ZSH không thể vượt qua tính ubiquitos (ở khắp mọi nơi) của
+bash, nhưng</p>
+<blockquote>
+<p>Cú pháp script của bash và zsh không khác nhau nhiều. Nếu đã biết bash thì
+học zsh không có gì khó cả.</p>
+</blockquote>
+<p>điều này không quan trọng và chưa từng quan trọng.</p>
+<p>Việc "học" dùng ZSH là chuyện cấu hình và làm quen với 1 số câu lệnh/tính năng
+khác của nó như auto-complete cực xịn, etc...
+nhưng không liên quan gì tới chuyện viết script. Bởi 2 lý do
+- gần như không ai viết zsh script cả, người người vẫn viết bash
+- khi phải viết bash, tôi viết (POSIX) shell code, chạy với /bin/sh chứ không
+phải bash - lý do: chạy khắp mọi nơi
+- từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
+có docker image nào cài bash, nhưng <code>sh</code> thì ở khắp mọi nơi
+- nếu phải <a href="https://stackoverflow.com/a/35385978/807703">dùng tới Array</a>,
+tôi viết Python script ngay lập tức.</p>
+<p>Vậy nên cứ thoải mái đổi shell nào tùy thích, chuyện viết script chẳng hề liên
+quan, các tính năng dùng để viết script không phải các tính năng của shell dùng
+tương tác hàng ngày.</p>
+<p>Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:
+- <a href="https://fishshell.com/">fish</a>
+- <a href="https://www.nushell.sh/">nushell</a>
+- <a href="https://xon.sh/">xonsh</a> - a Python shell
+- <a href="https://janet-shell.org/">janetsh</a> - a Janet shell</p>
 
 
              
@@ -176,21 +128,24 @@ VirtualBox on MacOS).</p>
         </div>
         <section id="article-sidebar" class="span2">
             <h4>Published</h4>
-            <time itemprop="dateCreated" datetime="2021-02-20T16:00:00+07:00">Sat 20 February 2021</time>
+            <time itemprop="dateCreated" datetime="2021-06-22T00:00:00+07:00">Tue 22 June 2021</time>
             <h4>Category</h4>
-            <a class="category-link" href="https://familug.github.io/categories.html#en-ref">en,</a>
+            <a class="category-link" href="https://familug.github.io/categories.html#frontpage-ref">frontpage</a>
             <h4>Tags</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://familug.github.io/tags.html#alpine-ref">alpine
-                    <span class="superscript">2</span>
-</a></li>
-                <li><a href="https://familug.github.io/tags.html#debian-ref">debian
+                <li><a href="https://familug.github.io/tags.html#bash-ref">bash
                     <span class="superscript">1</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#openbsd-ref">openbsd
-                    <span class="superscript">3</span>
+                <li><a href="https://familug.github.io/tags.html#opinion-ref">opinion
+                    <span class="superscript">2</span>
 </a></li>
-                <li><a href="https://familug.github.io/tags.html#vmm-ref">vmm
+                <li><a href="https://familug.github.io/tags.html#shell-ref">shell
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#workstation-ref">workstation
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#zsh-ref">zsh
                     <span class="superscript">1</span>
 </a></li>
             </ul>

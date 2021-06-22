@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,15 +20,15 @@
 <meta property="og:title" content="Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop "/>
 <meta property="og:url" content="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html" />
 <meta property="og:description" content="OpenBSD 6.8 comes with default installed Unbound daemon. Using Unbound, you would not longer depends on other DNS provider, keep what domain you access to yourself. Enable and start unbound # rcctl enable unbound # rcctl start unbound It now listens on port 53, on localhost address - good, sane default: $ netstat …" />
-<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:site_name" content="FAMILUG Vietnam" />
 <meta property="og:article:author" content="hvn" />
 <meta property="og:article:published_time" content="2021-02-28T00:00:00+07:00" />
 <meta name="twitter:title" content="Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop ">
 <meta name="twitter:description" content="OpenBSD 6.8 comes with default installed Unbound daemon. Using Unbound, you would not longer depends on other DNS provider, keep what domain you access to yourself. Enable and start unbound # rcctl enable unbound # rcctl start unbound It now listens on port 53, on localhost address - good, sane default: $ netstat …">
 
-        <title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop  · FAMILUG.org Vietnam
+        <title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop  · FAMILUG Vietnam
 </title>
-        <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG.org Vietnam - Full Atom Feed" />
+        <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG Vietnam - Full Atom Feed" />
 
 
     </head>
@@ -42,7 +42,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </a>
-                        <a class="brand" href="https://familug.github.io/"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <a class="brand" href="https://familug.github.io/"><span class=site-name>FAMILUG Vietnam</span></a>
                         <div class="nav-collapse collapse">
                             <ul class="nav pull-right top-menu">
                                 <li >
@@ -81,22 +81,22 @@
 Using Unbound, you would not longer depends on other DNS provider, keep
 what domain you access to yourself.</p>
 <h2>Enable and start unbound</h2>
-<div class="highlight"><pre><span></span># rcctl enable unbound
-# rcctl start unbound
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="err"># rcctl enable unbound</span>
+<span class="err"># rcctl start unbound</span>
+</code></pre></div>
 
 
 <p>It now listens on port 53, on localhost address - good, sane default:</p>
-<div class="highlight"><pre><span></span>$ netstat -nl <span class="p">|</span> grep <span class="m">53</span>
+<div class="highlight"><pre><span></span><code>$ netstat -nl <span class="p">|</span> grep <span class="m">53</span>
 tcp          <span class="m">0</span>      <span class="m">0</span>  <span class="m">127</span>.0.0.1.53           *.*                    LISTEN
 udp          <span class="m">0</span>      <span class="m">0</span>  <span class="m">127</span>.0.0.1.53           *.*
 tcp6         <span class="m">0</span>      <span class="m">0</span>  ::1.53                 *.*                    LISTEN
 udp6         <span class="m">0</span>      <span class="m">0</span>  ::1.53                 *.*
-</pre></div>
+</code></pre></div>
 
 
 <p>Now check using <code>dig</code>:</p>
-<div class="highlight"><pre><span></span><span class="err">$</span> <span class="n">dig</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@127.0.0.1</span>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="n">dig</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@127.0.0.1</span>
 
 <span class="p">;</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">dig</span> <span class="mf">9.10.8</span><span class="o">-</span><span class="n">P1</span> <span class="o">&lt;&lt;&gt;&gt;</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@127.0.0.1</span>
 <span class="p">;;</span> <span class="n">global</span> <span class="nl">options</span><span class="p">:</span> <span class="o">+</span><span class="n">cmd</span>
@@ -117,42 +117,42 @@ udp6         <span class="m">0</span>      <span class="m">0</span>  ::1.53     
 <span class="p">;;</span> <span class="nl">SERVER</span><span class="p">:</span> <span class="mf">127.0.0.1</span><span class="err">#</span><span class="mi">53</span><span class="p">(</span><span class="mf">127.0.0.1</span><span class="p">)</span>
 <span class="p">;;</span> <span class="nl">WHEN</span><span class="p">:</span> <span class="n">Sun</span> <span class="n">Feb</span> <span class="mi">28</span> <span class="mi">22</span><span class="o">:</span><span class="mi">15</span><span class="o">:</span><span class="mi">35</span> <span class="o">+</span><span class="mo">07</span> <span class="mi">2021</span>
 <span class="p">;;</span> <span class="n">MSG</span> <span class="n">SIZE</span>  <span class="nl">rcvd</span><span class="p">:</span> <span class="mi">68</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>The result is same as returned by <code>1.1.1.1</code>:</p>
-<div class="highlight"><pre><span></span><span class="err">$</span> <span class="n">dig</span> <span class="o">+</span><span class="kt">short</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@1.1.1.1</span>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="n">dig</span> <span class="o">+</span><span class="kt">short</span> <span class="n">pymi</span><span class="p">.</span><span class="n">vn</span> <span class="mf">@1.1.1.1</span>
 <span class="mf">172.67.212.45</span>
 <span class="mf">104.21.61.168</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2>Config laptop to use the local DNS resolver</h2>
 <p>Laptop uses wireless network often uses DHCP to config.</p>
 <p>Example config:</p>
-<div class="highlight"><pre><span></span>$ cat /etc/hostname.iwm0
+<div class="highlight"><pre><span></span><code>$ cat /etc/hostname.iwm0
 nwid <span class="s2">&quot;The Coffee House&quot;</span> wpakey thecoffeehouse
 dhcp
-</pre></div>
+</code></pre></div>
 
 
 <p>It uses DHCP to get IP and DNS config, this in turns, re-write <code>/etc/resolv.conf</code></p>
-<div class="highlight"><pre><span></span>$ cat /etc/resolv.conf
+<div class="highlight"><pre><span></span><code>$ cat /etc/resolv.conf
 <span class="c1"># Generated by iwm0 dhclient</span>
 nameserver <span class="m">8</span>.8.8.8
 lookup file <span class="nb">bind</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>To override the nameserver, change DHCP client config:</p>
-<div class="highlight"><pre><span></span>$ cat /etc/dhclient.conf
+<div class="highlight"><pre><span></span><code>$ cat /etc/dhclient.conf
 supersede domain-name-servers <span class="m">127</span>.0.0.1<span class="p">;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>To reconnect wireless network with new DHCP client config, run:</p>
-<div class="highlight"><pre><span></span># sh -x /etc/netstart
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="err"># sh -x /etc/netstart</span>
+</code></pre></div>
 
 
 <p>Now DNS would be resolved using <code>unbound</code>.</p>
@@ -187,7 +187,7 @@ supersede domain-name-servers <span class="m">127</span>.0.0.1<span class="p">;<
                     <span class="superscript">1</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#openbsd-ref">openbsd
-                    <span class="superscript">4</span>
+                    <span class="superscript">3</span>
 </a></li>
                 <li><a href="https://familug.github.io/tags.html#unbound-ref">unbound
                     <span class="superscript">1</span>
