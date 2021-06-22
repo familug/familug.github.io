@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG Vietnam - frontpage</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/frontpage.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-06-22T00:00:00+07:00</updated><entry><title>Máy cá nhân dùng shell nào không còn quan trọng</title><link href="https://familug.github.io/may-ca-nhan-dung-shell-nao-khong-con-quan-trong.html" rel="alternate"></link><published>2021-06-22T00:00:00+07:00</published><updated>2021-06-22T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-06-22:/may-ca-nhan-dung-shell-nao-khong-con-quan-trong.html</id><summary type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2012/12/zsh-va-bash.html"&gt;Cuối năm 2012, mình đã phát hiện ra ZSH&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG.org Vietnam - frontpage</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/frontpage.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2021-06-22T00:00:00+07:00</updated><entry><title>Máy cá nhân dùng shell nào không còn quan trọng</title><link href="https://familug.github.io/may-ca-nhan-dung-shell-nao-khong-con-quan-trong.html" rel="alternate"></link><published>2021-06-22T00:00:00+07:00</published><updated>2021-06-22T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-06-22:/may-ca-nhan-dung-shell-nao-khong-con-quan-trong.html</id><summary type="html">&lt;p&gt;&lt;a href="https://www.familug.org/2012/12/zsh-va-bash.html"&gt;Cuối năm 2012, mình đã phát hiện ra ZSH&lt;/a&gt;
 lúc nó mới nổi và quyết định...
 không dùng với lý do ghi rõ trong bài viết:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -36,7 +36,106 @@ tương tác hàng ngày.&lt;/p&gt;
 - &lt;a href="https://fishshell.com/"&gt;fish&lt;/a&gt;
 - &lt;a href="https://www.nushell.sh/"&gt;nushell&lt;/a&gt;
 - &lt;a href="https://xon.sh/"&gt;xonsh&lt;/a&gt; - a Python shell
-- &lt;a href="https://janet-shell.org/"&gt;janetsh&lt;/a&gt; - a Janet shell&lt;/p&gt;</content><category term="frontpage"></category><category term="shell"></category><category term="workstation"></category><category term="zsh"></category><category term="bash"></category><category term="opinion"></category></entry><entry><title>Máy làm việc có nên cùng hệ điều hành với server?</title><link href="https://familug.github.io/may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html" rel="alternate"></link><published>2021-03-01T01:02:03+07:00</published><updated>2021-03-01T01:02:03+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html</id><summary type="html">&lt;p&gt;Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc "nếu làm
+- &lt;a href="https://janet-shell.org/"&gt;janetsh&lt;/a&gt; - a Janet shell&lt;/p&gt;</content><category term="frontpage"></category><category term="shell"></category><category term="workstation"></category><category term="zsh"></category><category term="bash"></category><category term="opinion"></category></entry><entry><title>Các combo câu lệnh CLI từ năm 2021</title><link href="https://familug.github.io/cac-combo-cau-lenh-cli-tu-nam-2021.html" rel="alternate"></link><published>2021-03-06T00:00:00+07:00</published><updated>2021-03-06T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-06:/cac-combo-cau-lenh-cli-tu-nam-2021.html</id><summary type="html">&lt;p&gt;Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có
+nhiều thay đổi, bài này sẽ cập nhật các combo hay dùng nhất:&lt;/p&gt;
+&lt;h3&gt;ls&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ls -la&lt;/code&gt; vốn là combo ưa thích, thì ngày nay, tay đã quen với 2 combo khác:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ls -Fhtl …&lt;/code&gt;&lt;/p&gt;</summary><content type="html">&lt;p&gt;Sau hơn 10 năm dùng Ubuntu/OSX/OpenBSD, các combo câu lệnh mình sử dụng đã có
+nhiều thay đổi, bài này sẽ cập nhật các combo hay dùng nhất:&lt;/p&gt;
+&lt;h3&gt;ls&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;ls -la&lt;/code&gt; vốn là combo ưa thích, thì ngày nay, tay đã quen với 2 combo khác:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ls -Fhtl&lt;/code&gt; hiển thị file và sắp xếp theo file mới nhất ở trên đầu&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ls -lFS&lt;/code&gt; hiển thị file theo size giảm dần  (dễ nhớ: &lt;a href="http://linuxfromscratch.org/"&gt;LinuxFromScratch&lt;/a&gt;)&lt;/p&gt;
+&lt;h3&gt;free -m&lt;/h3&gt;
+&lt;p&gt;free là câu lệnh chỉ có trên Linux như Ubuntu, trên OSX và OpenBSD đều không có, vậy nên dùng &lt;code&gt;top | head&lt;/code&gt;
+sẽ thay thế được cho lệnh free.&lt;/p&gt;
+&lt;p&gt;Combo sau khi login vào 1 máy sẽ là: &lt;code&gt;w; df -h; top | head&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;grep&lt;/h3&gt;
+&lt;p&gt;Vẫn là combo &lt;code&gt;grep -Rin pattern dir&lt;/code&gt; nhưng ngày nay mình đã thay grep bằng &lt;code&gt;ripgrep&lt;/code&gt; nên thường chỉ gõ &lt;code&gt;rg pattern dir&lt;/code&gt;
+ripgrep nhanh hơn grep nhiều lần, &lt;a href="https://www.familug.org/2020/02/grep-silversearcher-ag-ripgrep-va-file.html"&gt;chú ý khi tìm file "ẩn"/ignored&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;curl&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;curl&lt;/code&gt; vốn phổ biến như 1 CLI HTTP client tiện dùng khi dev, nhưng &lt;code&gt;curl&lt;/code&gt; không có sẵn ở nhiều nơi như &lt;code&gt;wget&lt;/code&gt; (ubuntu, busybox mặc định, trong các Alpine based container).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;tương đương với&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ wget -O elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;wget&lt;/code&gt; cũng có thể dùng để thực hiện HTTP GET request:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;# wget -qO- https://httpbin.org/get&lt;/span&gt;
+&lt;span class="err"&gt;{&lt;/span&gt;
+&lt;span class="err"&gt;  &amp;quot;args&amp;quot;: {},&lt;/span&gt;
+&lt;span class="err"&gt;  &amp;quot;headers&amp;quot;: {&lt;/span&gt;
+&lt;span class="err"&gt;    &amp;quot;Host&amp;quot;: &amp;quot;httpbin.org&amp;quot;,&lt;/span&gt;
+&lt;span class="err"&gt;    &amp;quot;User-Agent&amp;quot;: &amp;quot;Wget&amp;quot;,&lt;/span&gt;
+&lt;span class="err"&gt;    &amp;quot;X-Amzn-Trace-Id&amp;quot;: &amp;quot;Root=1-604387fc-24ae289768ff475a730532f7&amp;quot;&lt;/span&gt;
+&lt;span class="err"&gt;  },&lt;/span&gt;
+&lt;span class="err"&gt;  &amp;quot;origin&amp;quot;: &amp;quot;171.246.107.102&amp;quot;,&lt;/span&gt;
+&lt;span class="err"&gt;  &amp;quot;url&amp;quot;: &amp;quot;https://httpbin.org/get&amp;quot;&lt;/span&gt;
+&lt;span class="err"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;su&lt;/h3&gt;
+&lt;p&gt;Sau vụ &lt;a href="https://blog.qualys.com/vulnerabilities-research/2021/01/26/cve-2021-3156-heap-based-buffer-overflow-in-sudo-baron-samedit"&gt;lỗ hổng bảo mật của sudo dậy sóng cộng đồng mạng đầu 2021&lt;/a&gt;, thật ra chẳng ảnh hưởng gì do
+mình dùng OpenBSD, nơi mà quyết định thay &lt;code&gt;sudo&lt;/code&gt; bằng 1 phần mềm tên là &lt;code&gt;doas&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Sử dụng &lt;code&gt;su&lt;/code&gt; khi cần chuyển sang root, combo là &lt;code&gt;su -l&lt;/code&gt; để đổi sang ENV
+của user root (ví dụ chuyển đúng đến $HOME của root chứ không ở thư mục hiện
+tại)&lt;/p&gt;
+&lt;h3&gt;ss -nltp&lt;/h3&gt;
+&lt;p&gt;Combo này chỉ hoạt động trên Linux với gói &lt;code&gt;iproute&lt;/code&gt;.
+Trên MacOS/OpenBSD, sử dụng: &lt;code&gt;netstat -nl&lt;/code&gt; nếu cần chọn tcp
+thì thêm &lt;code&gt;netstat -nl -p tcp&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;vi&lt;/h3&gt;
+&lt;p&gt;Thói quen khi dùng &lt;code&gt;vim&lt;/code&gt; (không phải &lt;code&gt;vi&lt;/code&gt;) là gõ &lt;code&gt;gg&lt;/code&gt; để lên đầu file, &lt;code&gt;vi&lt;/code&gt;
+không có phím tắt này.
+Thay vào đó &lt;code&gt;vi&lt;/code&gt; dùng &lt;code&gt;1G&lt;/code&gt; để go to dòng số 1, và &lt;code&gt;G&lt;/code&gt; để tới dòng cuối cùng.&lt;/p&gt;
+&lt;h3&gt;bash ^a^b^&lt;/h3&gt;
+&lt;p&gt;Trên OpenBSD, shell mặc định là KSH và nó không giống bash ở việc thay 1 phần câu lệnh cũ:&lt;/p&gt;
+&lt;p&gt;bash:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ ls /etc
+...
+$ ^/etc^/etc/passwd^
+sẽ chạy lệnh ls /etc/passwd &lt;span class="o"&gt;(&lt;/span&gt;thay /etc ở câu lệnh cuối cùng bằng /etc/passwd&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;ksh:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ ls /etc
+...
+$ r /etc&lt;span class="o"&gt;=&lt;/span&gt;/etc/passwd
+ls /etc/passwd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;cho kết quả tương ứng.&lt;/p&gt;
+&lt;h3&gt;fg&lt;/h3&gt;
+&lt;p&gt;Xưa nay sau khi chuyển job về backgroup (ctrl Z), để bật thành foreground sẽ gõ: fg 1 với job 1&lt;/p&gt;
+&lt;p&gt;Combo này không chạy trên ksh, phải gõ &lt;code&gt;fg %1&lt;/code&gt; , và sử dụng % đảm bảo hoạt động
+mọi nơi, kể cả bash.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ ping &lt;span class="m"&gt;1&lt;/span&gt;.1.1.1
+PING &lt;span class="m"&gt;1&lt;/span&gt;.1.1.1 &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;.1.1.1&lt;span class="o"&gt;)&lt;/span&gt;: &lt;span class="m"&gt;56&lt;/span&gt; data bytes
+&lt;span class="m"&gt;64&lt;/span&gt; bytes from &lt;span class="m"&gt;1&lt;/span&gt;.1.1.1: &lt;span class="nv"&gt;icmp_seq&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="nv"&gt;ttl&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;59&lt;/span&gt; &lt;span class="nv"&gt;time&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;32&lt;/span&gt;.009 ms
+^Z
+&lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;+  Stopped                 ping &lt;span class="m"&gt;1&lt;/span&gt;.1.1.1
+$ &lt;span class="nb"&gt;fg&lt;/span&gt; %1
+ping &lt;span class="m"&gt;1&lt;/span&gt;.1.1.1
+&lt;span class="m"&gt;64&lt;/span&gt; bytes from &lt;span class="m"&gt;1&lt;/span&gt;.1.1.1: &lt;span class="nv"&gt;icmp_seq&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="nv"&gt;ttl&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;59&lt;/span&gt; &lt;span class="nv"&gt;time&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;4161&lt;/span&gt;.095 ms
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;source&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;source&lt;/code&gt; là 1 câu lệnh built-in của &lt;code&gt;bash&lt;/code&gt; để đọc và chạy các câu lệnh
+từ 1 file trong môi trường shell hiện tại. Nhưng &lt;code&gt;source&lt;/code&gt; là của riêng bash.
+Dùng &lt;code&gt;.&lt;/code&gt; cho tác dụng tương tự, nhưng chạy trên mọi shell khác.&lt;/p&gt;
+&lt;h3&gt;tail -F&lt;/h3&gt;
+&lt;p&gt;Trên Linux, lệnh &lt;code&gt;tail&lt;/code&gt; có 2 option khác nhau là &lt;code&gt;-f&lt;/code&gt; và &lt;code&gt;-F&lt;/code&gt;,
+&lt;a href="https://www.familug.org/2016/09/tail-f-f-hoa-f.html"&gt;&lt;code&gt;-F&lt;/code&gt; sẽ theo file mới nếu file cũ bị thay thế (VD: log rotate)&lt;/a&gt;,
+nhưng trên OpenBSD, &lt;code&gt;-f&lt;/code&gt; hoạt động như &lt;code&gt;-F&lt;/code&gt; trên Linux.&lt;/p&gt;
+&lt;h2&gt;The end&lt;/h2&gt;</content><category term="frontpage"></category><category term="CLI"></category><category term="OpenBSD"></category><category term="Linux"></category><category term="bash"></category><category term="ksh"></category></entry><entry><title>Máy làm việc có nên cùng hệ điều hành với server?</title><link href="https://familug.github.io/may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html" rel="alternate"></link><published>2021-03-01T01:02:03+07:00</published><updated>2021-03-01T01:02:03+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-03-01:/may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html</id><summary type="html">&lt;p&gt;Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc "nếu làm
 Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu", để có kinh nghiệm
 khi dùng hàng ngày ứng dụng cho công việc.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Photo by &amp;lt;a href=&amp;quot;https://unsplash.com/@xps?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&amp;quot;&amp;gt;XPS&amp;lt;/a&amp;gt; on &amp;lt;a href=&amp;quot;https://unsplash.com/@xps?utm_source=unsplash&amp;amp;utm_medium=referral&amp;amp;utm_content=creditCopyText&amp;quot;&amp;gt;Unsplash&amp;lt;/a&amp;gt;" src="https://familug.github.io/images/xps.jpg"&gt;&lt;/p&gt;
