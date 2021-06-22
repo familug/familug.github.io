@@ -22,7 +22,8 @@ bash, nhưng
 
 Việc "học" dùng ZSH là chuyện cấu hình và làm quen với 1 số câu lệnh/tính năng
 khác của nó như auto-complete cực xịn, etc...
-nhưng không liên quan gì tới chuyện viết script. Bởi 2 lý do
+nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:
+
 - gần như không ai viết zsh script cả, người người vẫn viết bash
 - khi phải viết bash, tôi viết (POSIX) shell code, chạy với /bin/sh chứ không
 phải bash - lý do: chạy khắp mọi nơi
