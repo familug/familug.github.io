@@ -98,8 +98,20 @@ nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:</p>
 <ul>
 <li>gần như không ai viết zsh script cả, người người vẫn viết bash</li>
 <li>khi phải viết bash, tôi viết <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html">(POSIX) shell code</a>, chạy với /bin/sh chứ không
-phải bash - lý do: chạy khắp mọi nơi</li>
-<li>từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
+phải bash - lý do: sh ở khắp mọi nơi</li>
+<li>khi cần chạy bash script, bash vẫn luôn ở đó</li>
+<li>/bin/sh trên Ubuntu còn gọi là <code>dash</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code>$ ls -l /bin/sh
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">4</span> Jan <span class="m">17</span> <span class="m">16</span>:11 /bin/sh -&gt; dash
+$ whatis dash
+dash <span class="o">(</span><span class="m">1</span><span class="o">)</span>             - <span class="nb">command</span> interpreter <span class="o">(</span>shell<span class="o">)</span>
+</code></pre></div>
+
+
+<ul>
+<li>từ khi Docker/<a href="https://www.familug.org/search/label/Kubernetes">K8S</a> trở nên
+phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
 có docker image nào cài bash, nhưng <code>sh</code> thì ở khắp mọi nơi</li>
 <li>nếu phải <a href="https://stackoverflow.com/a/35385978/807703">dùng tới Array</a>,
 tôi viết Python script ngay lập tức.</li>
@@ -109,6 +121,7 @@ quan, các tính năng dùng để viết script không phải các tính năng 
 tương tác hàng ngày.</p>
 <p>Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:</p>
 <ul>
+<li><a href="https://zsh.sourceforge.io/">zsh</a></li>
 <li><a href="https://fishshell.com/">fish</a></li>
 <li><a href="https://www.nushell.sh/">nushell</a></li>
 <li><a href="https://xon.sh/">xonsh</a> - a Python shell</li>

@@ -25,8 +25,20 @@ nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:&lt;/p
 &lt;ul&gt;
 &lt;li&gt;gần như không ai viết zsh script cả, người người vẫn viết bash&lt;/li&gt;
 &lt;li&gt;khi phải viết bash, tôi viết &lt;a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html"&gt;(POSIX) shell code&lt;/a&gt;, chạy với /bin/sh chứ không
-phải bash - lý do: chạy khắp mọi nơi&lt;/li&gt;
-&lt;li&gt;từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
+phải bash - lý do: sh ở khắp mọi nơi&lt;/li&gt;
+&lt;li&gt;khi cần chạy bash script, bash vẫn luôn ở đó&lt;/li&gt;
+&lt;li&gt;/bin/sh trên Ubuntu còn gọi là &lt;code&gt;dash&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ ls -l /bin/sh
+lrwxrwxrwx &lt;span class="m"&gt;1&lt;/span&gt; root root &lt;span class="m"&gt;4&lt;/span&gt; Jan &lt;span class="m"&gt;17&lt;/span&gt; &lt;span class="m"&gt;16&lt;/span&gt;:11 /bin/sh -&amp;gt; dash
+$ whatis dash
+dash &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;             - &lt;span class="nb"&gt;command&lt;/span&gt; interpreter &lt;span class="o"&gt;(&lt;/span&gt;shell&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;từ khi Docker/&lt;a href="https://www.familug.org/search/label/Kubernetes"&gt;K8S&lt;/a&gt; trở nên
+phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
 có docker image nào cài bash, nhưng &lt;code&gt;sh&lt;/code&gt; thì ở khắp mọi nơi&lt;/li&gt;
 &lt;li&gt;nếu phải &lt;a href="https://stackoverflow.com/a/35385978/807703"&gt;dùng tới Array&lt;/a&gt;,
 tôi viết Python script ngay lập tức.&lt;/li&gt;
@@ -36,6 +48,7 @@ quan, các tính năng dùng để viết script không phải các tính năng 
 tương tác hàng ngày.&lt;/p&gt;
 &lt;p&gt;Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:&lt;/p&gt;
 &lt;ul&gt;
+&lt;li&gt;&lt;a href="https://zsh.sourceforge.io/"&gt;zsh&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://fishshell.com/"&gt;fish&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://www.nushell.sh/"&gt;nushell&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://xon.sh/"&gt;xonsh&lt;/a&gt; - a Python shell&lt;/li&gt;
