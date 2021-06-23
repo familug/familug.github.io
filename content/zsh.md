@@ -26,8 +26,17 @@ nhưng không liên quan gì tới chuyện viết script. Bởi N lý do:
 
 - gần như không ai viết zsh script cả, người người vẫn viết bash
 - khi phải viết bash, tôi viết [(POSIX) shell code](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html), chạy với /bin/sh chứ không
-phải bash - lý do: chạy khắp mọi nơi
-- từ khi Docker trở nên phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
+phải bash - lý do: sh ở khắp mọi nơi
+- khi cần chạy bash script, bash vẫn luôn ở đó
+- /bin/sh trên Ubuntu còn gọi là `dash`
+```sh
+$ ls -l /bin/sh
+lrwxrwxrwx 1 root root 4 Jan 17 16:11 /bin/sh -> dash
+$ whatis dash
+dash (1)             - command interpreter (shell)
+```
+- từ khi Docker/[K8S](https://www.familug.org/search/label/Kubernetes) trở nên
+phổ biến, bash không còn "ở khắp mọi nơi nữa", hiếm
 có docker image nào cài bash, nhưng `sh` thì ở khắp mọi nơi
 - nếu phải [dùng tới Array](https://stackoverflow.com/a/35385978/807703),
 tôi viết Python script ngay lập tức.
@@ -38,6 +47,7 @@ tương tác hàng ngày.
 
 Ngày càng có nhiều shell hấp dẫn khác để lựa chọn:
 
+- [zsh](https://zsh.sourceforge.io/)
 - [fish](https://fishshell.com/)
 - [nushell](https://www.nushell.sh/)
 - [xonsh](https://xon.sh/) - a Python shell
