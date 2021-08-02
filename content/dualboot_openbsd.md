@@ -57,12 +57,12 @@ sudo apt-get update && sudo apt-get install -y refind
 
 when installing, a ncurse window would ask you want to "Automatically install rEFInd to the ESP (EFI System Partition)", choose Yes.
 
-Reboot you should see `rEFInd` boot stcreen and an option to choose the OpenBSD.
+Reboot you should see `rEFInd` boot screen and an option to choose the OpenBSD.
 
 ### Bonus: practice install dualboot Ubuntu & OpenBSD on Virtualbox VM
 
 #### BIOS
-Create a VirtualBox VM with ~16GB hardisk, follow above steps install Ubuntu 20.04, then OpenBSD, then config Grub. Result:
+Create a VirtualBox VM with 16GB hardisk, to later have 8GB for each OS, follow above steps install Ubuntu 20.04, then OpenBSD, then config Grub. Result:
 
 ![grub]({static}/images/dualboot.png)
 
@@ -75,7 +75,7 @@ Install Ubuntu20.04 as above guide.
 
 As of OpenBSD6.9, the CD-ROM cannot boot from EFI.
 
-To make this works, download [install69.img](https://cdn.openbsd.org/pub/OpenBSD/6.9/amd64/install69.img), then convert it to VDI:
+To make this work, download [install69.img](https://cdn.openbsd.org/pub/OpenBSD/6.9/amd64/install69.img), then convert it to VDI:
 
 https://superuser.com/a/1404775/103156
 ```sh
@@ -85,6 +85,7 @@ $ VBoxManage convertdd ~/Downloads/install69.img install69.vdi --format VDI
 ```
 
 Choose VM > Settings > Storage > Controller: SATA > Adds hard disk > choose the converted VDI.
-Access the EFI (hit Delete) and choose to boot from the 2nd harddisk, then install OpenBSD, and follow above guide.
+Start the VM,
+access the EFI (hit Delete) and choose to boot from the 2nd harddisk, then install OpenBSD, and follow above guide.
 
 Happy dual-booting.
