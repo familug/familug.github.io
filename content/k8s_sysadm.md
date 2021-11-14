@@ -35,13 +35,11 @@ Sau đó các khái niệm ngoài K8S, các tool dùng với K8S như:
 tất cả các khái niệm này đều không mới, chỉ là các tên mới dành cho hệ thống dùng container, tương đương với các khái niệm/kiến thức khi quản trị một hệ thống server truyền thống (máy ảo/máy vật lý).
 
 ### Pod
-Pod là đơn vị nhỏ nhất được quản lý trong K8S. Pod là một hoặc nhiều các container cùng bật cùng tắt, cùng chung IP, cùng chung ổ cứng. Vì mỗi container thường là một 1 process, nên nếu cần chạy 2 process khác nhau thì cần có 2 container. Trên server Linux truyền thống, nếu cần chạy 1 service (systemd) và muốn chạy 1 script khác mỗi ngày, người ta có thể dễ dàng dùng cron, cron luôn được cài sẵn, luôn có ở đó. Trong thế giới container, muốn chạy 1 process là cần bật 1 container mới. Một pod có thể chứa 1 container chạy chương trình chính, 1 container chạy cron.
+Pod là đơn vị nhỏ nhất được quản lý trong K8S. Pod là một hoặc nhiều container cùng bật cùng tắt, cùng chung IP, cùng chung ổ cứng. Vì mỗi container thường là một 1 process, nên nếu cần chạy 2 process khác nhau thì cần có 2 container. Trên server Linux truyền thống, nếu cần chạy 1 service (systemd) và muốn chạy 1 script mỗi ngày, người ta có thể dễ dàng dùng cron, cron luôn được cài sẵn, luôn có ở đó. Trong thế giới container, muốn chạy 1 process là cần bật 1 container mới. Một pod có thể chứa 1 container chạy chương trình chính, 1 container chạy cron.
 
-Người mới dùng container (như Docker), sẽ thường hỏi: làm thế nào để chạy cron trong container:
+Người mới dùng container (như Docker), sẽ thường hỏi: [làm thế nào để chạy cron trong container](https://stackoverflow.com/questions/37458287/how-to-run-a-cron-job-inside-a-docker-container):
 
-https://stackoverflow.com/questions/37458287/how-to-run-a-cron-job-inside-a-docker-container
-
-Trả lời ngắn gọn: bật thêm 1 container chạy crond.
+> Trả lời ngắn gọn: bật thêm 1 container chạy crond.
 
 Khi K8S đã có khái niệm cronjob thì không cần chạy container trong pod để chạy cron như nói trên nữa, nhưng pod vẫn có thể chứa các container chạy thứ khác.
 
