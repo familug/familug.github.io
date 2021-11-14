@@ -1,0 +1,22 @@
+name: Pelican site CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: git submodule update --init --recursive
+    - run: |
+        ls -R ${{ github.workspace }}
+    - uses: nelsonjchen/gh-pages-pelican-action@0.1.5
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        GH_PAGES_BRANCH: gh-pages
+        PELICAN_CONFIG_FILE: publishconf.py
