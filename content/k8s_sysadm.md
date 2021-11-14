@@ -1,13 +1,16 @@
-Title: Dùng kubernetes không phức tạp hơn công việc thường ngày của sysadmin/devops
+Title: Dùng kubernetes không phức tạp hơn việc thường ngày của sysadmin
 Date: 2021-11-14
 Category: frontpage
 Tags: k8s, kubernetes, container
 
-Bài viết dành cho các sysadmin/DevOps, những người có kiến thức về các hệ thống trước "thời" Kubernetes (k8s), giúp kết nối các khái niệm, hiểu lý do tại sao K8s lại phức tạp đến thế.
+Bài viết dành cho các sysadmin/DevOps:
+
 - Những người nghe nói đến k8s và các lời chê về sự phức tạp của nó
 - Những người định học dùng k8s mà ngại nhiều khái niệm mới.
 
-![k8s](https://kubernetes.io/images/wheel.svg)
+Những người có kiến thức về các hệ thống trước "thời" Kubernetes (k8s), giúp kết nối các khái niệm, hiểu lý do tại sao K8s lại phức tạp đến thế.
+
+<img src="https://kubernetes.io/images/wheel.svg" width=600>
 
 Để **dùng** K8S, người dùng sẽ gặp phải một loạt các khái niệm:
 
