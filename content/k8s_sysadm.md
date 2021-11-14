@@ -61,9 +61,9 @@ Vấn đề này cũng tồn tại trong hệ thống truyền thống, mọi se
 
 ### PersistentVolume
 ### PersistentVolumeClaim
-Mọi server đều có ổ cứng, có server cần nhiều ổ cứng. PersistentVolume + PersistentVolumeClaim thực hiện chuyện cấp phát/quản lý ổ cứng (như làm gì volume khi pod đã tắt).
+Mọi server đều có ổ cứng (trong container gọi là volume), có server cần nhiều ổ cứng. PersistentVolume + PersistentVolumeClaim thực hiện chuyện cấp phát/quản lý ổ cứng (như làm gì volume khi pod đã tắt).
 
-Các doanh nghiệp lớn không lạ gì với Ceph hay GlusterFS cả, đây là khái niệm tương đương.
+Các doanh nghiệp lớn nếu từng dùng Ceph hay GlusterFS thì dùng Volume là khái niệm tương đương.
 
 ### Namespace, resourcequota
 Khi có nhiều phòng ban, doanh nghiệp sẽ cần phân chia tài nguyên cho mỗi phòng ban. Namespace giúp phân tách các resource (pod/deploy/service...) theo các namespace khác nhau, và áp dụng quota (giới hạn) khác nhau. Giúp việc phân chia tài nguyên máy tính cho các phòng ban.
