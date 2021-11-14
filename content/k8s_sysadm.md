@@ -55,9 +55,9 @@ deployment lo chuyện ... deploy. Khi deploy (triển khai) một phiên bản 
 Bài toán này luôn tồn tại khi cần deploy một phần mềm, một hệ thống, chưa bao giờ biến mất. Không dùng K8S, sysadmin sẽ phải dùng tool khác, hoặc tự xây dựng theo một mô hình với các tool dùng khi deploy như Jenkins, ansible, bash...
 
 ### Daemonset
-daemonset liên quan tới "chuyện của kubernetes": khi cần đảm bảo mỗi node của K8S cần có duy nhất 1 pod chạy một chương trình "agent" (thường là các pod xử lý logging/metrics để các pod trên node đó sẽ gửi log/metric qua "agent" này), daemonset đảm bảo tính duy nhất và ở mọi node.
+daemonset liên quan tới "chuyện của kubernetes": khi cần đảm bảo mỗi node của K8S cần có duy nhất 1 pod chạy một chương trình (thường là các "agent" xử lý logging/metrics để các pod trên cùng node gửi log/metric qua "agent" này tới nơi tập trung), daemonset đảm bảo tính duy nhất trên mỗi node và có ở mọi node.
 
-Bài toán này cũng không phải không tồn tại trong hệ thống truyền thống, mọi server đều cần cài logging agent (fluentd/filebeat...) /metric agent (nếu dùng pull model như prometheus, hay push sử dụng statsd).
+Vấn đề này cũng tồn tại trong hệ thống truyền thống, mọi server đều cần cài logging agent (fluentd/filebeat...) /metric agent (nếu dùng pull model như prometheus, hay push sử dụng statsd).
 
 ### PersistentVolume
 ### PersistentVolumeClaim
@@ -69,10 +69,10 @@ Các doanh nghiệp lớn không lạ gì với Ceph hay GlusterFS cả, đây l
 Khi có nhiều phòng ban, doanh nghiệp sẽ cần phân chia tài nguyên cho mỗi phòng ban. Namespace giúp phân tách các resource (pod/deploy/service...) theo các namespace khác nhau, và áp dụng quota (giới hạn) khác nhau. Giúp việc phân chia tài nguyên máy tính cho các phòng ban.
 
 ### configmap
-Sự khác nhau giữa 2 server chạy NGINX truyền thống là config của chúng. Với container, thường chỉ chứa chương trình, người dùng sẽ phải cung cấp config mong muốn, file config sẽ không được build sẵn trong image của container mà cung cấp qua configmap - dù là config file/ENV key, value.
+Sự khác nhau giữa 2 server chạy NGINX là config của chúng. Container thường chỉ chứa chương trình, người dùng sẽ phải cung cấp config mong muốn, file config không được build sẵn trong image của container mà cung cấp qua configmap trước khi chạy - dù là config file hay qua biến  environment.
 
 ### secret
-Trên server truyền thống, các secret như pasword/token thường được ghi vào config file/set trong environment  variable trước khi service chạy. Việc quản lý các secret này thường: "do sysadmin/devops X biết", "trong trí nhớ của anh"... một số công ty có thể dùng phần mềm quản lý password rồi chia sẻ cho team như keepass, 1password, Hashicorp Vault...
+Trên server truyền thống, các secret như pasword/token thường được ghi vào config file/set trong environment  variable trước khi service chạy. Việc quản lý các secret này thường: "do sysadmin/devops X biết", "trong trí nhớ của anh" hay thậm chí ghi vào giấy nhớ dán trong phòng sysadmin... một số công ty có thể dùng phần mềm quản lý password rồi chia sẻ cho team như keepass, 1password, Hashicorp Vault...
 Trên kubernetes chứa chúng trong "secret".
 
 PS: secret này mặc định không mã hóa (encrypt), chỉ encode base64 nên không có tính bảo mật.
@@ -82,7 +82,7 @@ PSS: có thể bật encrypt.
 ### service
 service thực hiện việc cho cả thế giới truy cập vào 1 deployment. Thường sử dụng LoadBalancer trên các hệ thống cloud để chia đều các kết nối cho các pod.
 
-Trên server truyền thống, đó là cài NGINX hay HAProxy, cấu hình IP, VIP, đảm bảo High Availability (HA) cho dịch vụ vẫn hoạt động khi 1 máy chạy NGINX/HAProxy bị tắt.
+Trên server truyền thống, đó là cài NGINX hay HAProxy, cấu hình IP, VIP (Virtual IP), đảm bảo High Availability (HA) cho dịch vụ vẫn hoạt động khi 1 máy chạy NGINX/HAProxy bị tắt.
 
 ### helm/chart
 Linux server truyền thống cài phần mềm bằng apt/yum/dnf, cấu hình bằng copy/sửa tay các file config, thì từ 2010 trở đi, bắt đầu phổ biến việc cài đặt + cấu hình bằng 1 Configuration Management tool như Salt/Ansible/Chef/Puppet.
@@ -104,5 +104,6 @@ Trên kubernetes, Helm là công cụ phổ biến nhất để làm chuyện n�
 Kubernetes có nhiều khái niệm, nhưng không nhiều hơn quản lý server truyền thống, không khó hơn, nhưng tất nhiên việc phải học lại từ đầu những thứ đã biết mà tương đương sẽ không dễ chịu chút nào.
 
 PS: bài này không nói về bên trong K8S, các thành phần để chạy nó hay việc cài đặt vận hành K8S, etcd, kubelet...
+Một số có thể phản biện: không hiểu bên trong kubernetes thế nào sao chạy, mặc dù trong thế giới sysadmin truyền thống, số người hiểu về bên trong Linux Kernel, Systemd, NGINX, SaltStack, Ansible, Jenkins cũng không đủ nhiều.
 
 ## The end
