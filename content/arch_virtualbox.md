@@ -1,4 +1,4 @@
-Title: Cài đặt và chạy máy ảo ArchLinux trên VirtualBox 6
+Title: Cài đặt và chạy máy ảo ArchLinux trên VirtualBox 6 trong 10 phút
 Date: 2022-05-27
 Category: frontpage
 Tags: archlinux, virtualbox, vagrant
@@ -14,6 +14,7 @@ Truy cập https://app.vagrantup.com/archlinux/boxes/archlinux
 tải file dành cho virtualbox
 
 [virtualbox Hosted by Vagrant Cloud (465 MB)](https://app.vagrantup.com/archlinux/boxes/archlinux/versions/20220515.56564/providers/virtualbox.box)
+nhẹ hơn nhiều so với [đĩa cài `ISO Size: 826.3 MB`](https://archlinux.org/download/)
 
 Giải nén với `tar xvf virtualbox.box` sẽ thấy ra file
 box.ovf, packer-virtualbox.vmdk và một vài file ko quan trọng khác.
