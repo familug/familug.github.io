@@ -25,24 +25,27 @@ Lấy vị dụ cuốn [1Q84 của Haruki Murakami bản tiếng Anh dày 1328](
 66.4 giờ
 ```
 
-66 tiếng. Một tháng, 1 người lao động văn phòng đi làm ~168 tiếng.
+66 tiếng (nếu mỗi ngày dành 1 tiếng đọc thì sau 2 tháng sẽ đọc xong, 1 năm đọc được 6 quyển).
+
+Một tháng, 1 người lao động văn phòng đi làm ~168 tiếng.
 
 Với [mức lương trung bình 2021 của 1 lập trình viên Python có ~ 5 năm kinh nghiệm ở VN là ~1000 USD, 23 triệu/tháng](https://topdev.vn/blog/muc-luong-lap-trinh-vien-nam-2021/#muc-luong-lap-trinh-vien-dua-vao-trinh-do). Thì thời gian để đọc hết cuốn sách này trị giá:
 
 ```py
->>> 66/168 * 1000
-392.8
+>>> usd_rate = 24000
+>>> 66/168 * 1000 * usd_rate
+9428571.428571427
 ```
 
-Tức khoảng 9 triệu VND tại thời điểm hiện tại.
+Tức khoảng 9.5 triệu VND tại thời điểm hiện tại.
 
 Như vậy, trừ khi thời gian là miễn phí, việc mua 1 cuốn sách chỉ tốn một phần nhỏ số tiền bỏ ra, nhưng thời gian để đọc nó có thể tốn gấp hơn 20 lần.
 
 Vậy nên hãy chắc chắn đọc được những thứ đáng giá. Đừng nghĩ đọc sách là rẻ (hơn ra rạp ăn bỏng ngô và xem film và...).
 
 ### Vài cuốn sách đắt giá theo độ dày
-- Moby Dick 732 trang <https://nhasachphuongnam.com/vi/moby-dick-ca-voi-trang-vi.html> - vi
-- A Feast for Crows (A Song of Ice and Fire, Book 4) - 864 <https://nhasachphuongnam.com/vi/a-feast-for-crows-a-song-of-ice-and-fire-book-4.html> - en
+- Moby Dick - 732 trang <https://nhasachphuongnam.com/vi/moby-dick-ca-voi-trang-vi.html> - vi
+- Dune - 714 trang <https://nhasachphuongnam.com/vi/dune-xu-cat-tai-ban-nam-2021.html> - vi
 - Harry potter & chiếc cốc lửa - 922 trang <https://nhasachphuongnam.com/vi/harry-potter-va-chiec-coc-lua-tap-4-tai-ban-nam-2022.html> - vi
 - Anh Em Nhà Karamazov - 992 trang <https://nhasachphuongnam.com/vi/anh-em-nha-karamazov-bia-mem.html> - vi
 - Anathem - 1008 <https://www.amazon.com/Anathem-Neal-Stephenson/dp/006147410X> - en
