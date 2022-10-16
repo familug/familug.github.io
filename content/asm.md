@@ -166,11 +166,10 @@ exit(0)
 Chạy với lệnh `strace` để xem các syscall đã được dùng:
 
 ```
-$ strace ./a.out
-execve("./a.out", ["./a.out"], 0x7ffed76c5480 /* 58 vars */) = 0
-strace: [ Process PID=327641 runs in 32 bit mode. ]
-write(1, "Hello, PyMivn!\n", 15Hello, PyMivn!
-)        = 15
+$ strace ./a.out > /dev/null
+execve("./a.out", ["./a.out"], 0x7ffd32dba4c0 /* 58 vars */) = 0
+strace: [ Process PID=327701 runs in 32 bit mode. ]
+write(1, "Hello, PyMivn!\n", 15)        = 15
 exit(0)                                 = ?
 +++ exited with 0 +++
 ```
