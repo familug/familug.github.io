@@ -11,11 +11,9 @@ C/Zig/Rust... được dùng để viết code "low level", nhưng khi cần t�
 ![cpu](https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-1.2.1&dl=olivier-collet-JMwCe3w7qKk-unsplash.jpg&w=640&q=80&fm=jpg&crop=entropy&cs=tinysrgb)
 Photo by <a href="https://unsplash.com/@ocollet?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Olivier Collet</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 
-
-Có chỗ ví C như "portable assembly".
-
-- Code ASM ---compile -> binary
+- Code Rust ---compile -> binary
 - Code C ---compile -> binary
+- Code ASM ---compile -> binary
 
 Loạt bài viết này giới thiệu vài chương trình assembly đơn giản, cách compile, chạy, các tool dùng để tìm hiểu file binary.
 
