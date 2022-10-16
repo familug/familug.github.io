@@ -73,7 +73,7 @@ hello.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
 ```
 
 `gcc -c` compile source code hello.s sẽ sinh ra object file hello.o.
-GCC sẽ gọi GNU Assembler (gas - lệnh là `as`) để thực hiện compile. Ngoài `as`, trên Linux còn phổ biến `nasm`.
+GCC sẽ gọi GNU Assembler (gas - lệnh là `as`) để thực hiện compile. Ngoài `as`, trên Linux còn phổ biến `nasm`. Trên Windows phổ biến [MASM](https://learn.microsoft.com/en-us/cpp/assembler/masm/microsoft-macro-assembler-reference?view=msvc-170)
 
 #### ld - linker
 `man ld`
