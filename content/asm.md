@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-Code asm trong file hello.s
+Code asm trong file hello.s - copy từ wikipedia <https://en.wikipedia.org/wiki/GNU_Assembler#Example_program>
 
 ```asm
 .global	_start
@@ -57,7 +57,7 @@ message:
 	len = 15
 ```
 
-Compile by `gcc` rồi link by `ld`
+Compile dùng `gcc`
 
 ```
 $ gcc -c hello.s
@@ -69,7 +69,7 @@ hello.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), not stripped
 ```
 
 `gcc -c` compile source code hello.s sẽ sinh ra object file hello.o.
-GCC sẽ gọi `gas` (lệnh là as) - GNU Assembler để thực hiện compile. Ngoài `as`, trên Linux còn phổ biến `nasm`.
+GCC sẽ gọi GNU Assembler (gas - lệnh là `as`) để thực hiện compile. Ngoài `as`, trên Linux còn phổ biến `nasm`.
 
 #### ld - linker
 `man ld`
@@ -116,7 +116,7 @@ Code asm trong bài này chứa 3 section. `.global`, `.data` và `.text`, sử 
 .global _start
 ```
 
-`.data` còn gọi là datâ segment chứa các global variable & static variable.
+`.data` còn gọi là data segment chứa các global variable & static variable.
 
 ```asm
 .data
@@ -154,7 +154,7 @@ Về cơ bản đoạn code trên thực hiện gọi 2 syscall số 4-write và
 Code giả:
 ```c
 syscall(4, 1, message, len)
-syscall(0)
+syscall(1, 0)
 ```
 
 hay
