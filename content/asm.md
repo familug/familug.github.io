@@ -3,12 +3,13 @@ Date: 2022-10-16
 Category: frontpage
 Tags: assembly, asm, gcc, gas, as, ld, elf, xxd, hexdump
 
-Assembly (asm) thường được gọi là ["hợp ngữ cũng có thể được gọi là mã máy tượng trưng"](https://vi.wikipedia.org/wiki/H%E1%BB%A3p_ng%E1%BB%AF), một ngôn ngữ lập trình cấp thấp nhất, thường tương ứng 1 lệnh với 1 lệnh của CPU.
+Assembly (asm) ở Việt Nam được gọi là ["hợp ngữ cũng có thể được gọi là mã máy tượng trưng"](https://vi.wikipedia.org/wiki/H%E1%BB%A3p_ng%E1%BB%AF), là một ngôn ngữ lập trình cấp thấp, thường tương ứng 1 lệnh với 1 lệnh của CPU.
 Lập trình assembly ngày nay không còn phổ biến như trước khi có C.
 
 C/Zig/Rust... được dùng để viết code "low level", nhưng khi cần tốc độ tối đa, lập trình nhúng, viết driver, hay thực hiện reverse engineering, binary exploitation, asm là ngôn ngữ được ưa chuộng.
 
 ![cpu](https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-1.2.1&dl=olivier-collet-JMwCe3w7qKk-unsplash.jpg&w=640&q=80&fm=jpg&crop=entropy&cs=tinysrgb)
+
 Photo by <a href="https://unsplash.com/@ocollet?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Olivier Collet</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 
 - Code Rust ---compile -> binary
@@ -22,7 +23,10 @@ Assembly đơn giản (giới hạn không nhiều lệnh, luật lệ rõ ràng
 ### Hello world
 Là một chương trình in ra màn hình dòng chữ "hello world".
 
-Code Python: `print("Hello,world")`
+Code Python:
+```py
+print("Hello,world")
+```
 
 Code C:
 
@@ -110,7 +114,9 @@ Xem chi tiết so sánh tại <https://en.wikipedia.org/wiki/AT%26T_syntax#Synta
 ##### hello.s
 Code asm trong bài này chứa 3 section. `.global`, `.data` và `.text`, sử dụng AT&T syntax.
 
-`.global` sẽ khai báo function nào được chạy, ở đây là `_start`
+> [.global makes the symbol visible to ld](https://sourceware.org/binutils/docs-2.39/as/Global.html)
+
+`.global` sẽ khai báo function nào được chạy, ở đây là `_start` (thực chất là export symbol `_start` cho linker nhìn thấy)
 
 ```asm
 .global _start
