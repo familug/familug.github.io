@@ -149,7 +149,7 @@ mov $4, %eax
 
 tương đương với viết code C `eax = 4`. `int $0x80` thực hiện interrupt tại địa chỉ 0x80, tức thực hiện gọi syscall. Dòng `int $0x80` có thể viết thành `syscall`.
 
-Về cơ bản đoạn code trên thực hiện gọi 2 syscall số 4-write và 128-exit (0x80)
+Về cơ bản đoạn code trên thực hiện gọi 2 syscall số 4-write và 1-exit
 
 Code giả:
 ```c
