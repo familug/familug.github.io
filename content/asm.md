@@ -265,6 +265,16 @@ $ xxd a.out | grep -v '0000 0000 0000 0000 0000 0000 0000 0000'
 
 Bài viết thực hiện trên Ubuntu 20.04.
 
+### Tham khảo
+Free books:
+
+- <https://en.wikibooks.org/wiki/X86_Assembly>
+- <https://pacman128.github.io/static/pcasm-book.pdf>
+- <https://mirror.ossplanet.net/nongnu/pgubook/ProgrammingGroundUp-1-0-booksize.pdf>
+- <http://www.egr.unlv.edu/~ed/assembly64.pdf>
+- [Reverse Engineering for Beginners](https://beginners.re/)
+- More at <https://www.linuxlinks.com/excellent-free-books-learn-assembly/>
+
 ### Kết luận
 Viết helloworld.asm không quá khó.
 
