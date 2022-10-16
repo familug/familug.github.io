@@ -186,9 +186,9 @@ message:
 ```
 
 #### Hex view xxd
-xxd in ra max [hex](https://n.pymi.vn/byt351.html) của từng byte.
+xxd in ra mã [hex](https://n.pymi.vn/byt351.html) của từng byte.
 ```
-$ whatis xxd                                          [148]
+$ whatis xxd
 xxd (1)              - make a hexdump or do the reverse.
 ```
 
