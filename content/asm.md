@@ -275,6 +275,7 @@ Bài viết thực hiện trên Ubuntu 20.04.
 Free books:
 
 - <https://en.wikibooks.org/wiki/X86_Assembly>
+- <https://0xinfection.github.io/reversing/>
 - <https://pacman128.github.io/static/pcasm-book.pdf>
 - <https://mirror.ossplanet.net/nongnu/pgubook/ProgrammingGroundUp-1-0-booksize.pdf>
 - <http://www.egr.unlv.edu/~ed/assembly64.pdf>
