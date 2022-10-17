@@ -13,6 +13,7 @@ Let's go.
 
 SQS là viết tắt của chữ [Simple Queue Service](https://docs.aws.amazon.com/sqs/index.html), một dịch vụ cloud khá tương đương với các
 phần mềm message queue dưới đất như:
+
 - RabbitMQ
 - ActiveMQ
 - IronMQ
@@ -25,6 +26,7 @@ Nếu bạn chưa nghe tên cả 3, thì nó giống như 1 cái ống nước, 
 đầu kia nhận thư, nếu không ai nhận thì nó nằm trong cái ống.
 
 Vì chỉ đơn giản có vậy, nên sau khi tạo 1 cái queue, thì dùng nó chỉ có 3 thao tác:
+
 - gửi message
 - nhận message
 - xóa message
@@ -113,13 +115,13 @@ Hết tutorial, quá dễ, quá đơn giản!!!
 Hãy thử nghĩ các vẫn đề có thể xảy ra liên quan đến SQS ở đoạn code trên
 trước khi đọc tiếp, đây chỉ nói về SQS, không nói về code Python.
 
-#### Trap 1: message.delete() chưa chắc đã delete message
+#### Trap 1: delete() chưa chắc đã delete message
 Ở đây không nói về lỗi network.
-Đó có lẽ là điều cuối cùng bạn nghĩ tới, khi function delete đôi khi sẽ không
-delete.
+Đó có lẽ là điều cuối cùng bạn nghĩ tới, khi [function delete đôi khi sẽ không
+delete](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs.html#SQS.Client.delete_message)
 
 Điều này có ghi rõ 2 trường hợp có thể xảy ra chuyện này, và tất nhiên chỉ
-ai nhìn delete() mà không tin nó sẽ delete mới đọc doc:
+ai nhìn delete() mà không tin nó sẽ delete mới đọc [doc](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sqs.html#SQS.Client.delete_message):
 
 Trường hợp 1 là khi dùng SQS standard queue.
 
@@ -132,6 +134,7 @@ Trường hợp 1 là khi dùng SQS standard queue.
 > not cause issues.
 
 Yep, SQS có 2 loại queue, 1 là standard queue (cũ) 2 là [FIFO queue](https://aws.amazon.com/blogs/aws/new-for-amazon-simple-queue-service-fifo-queues-with-exactly-once-delivery-deduplication/) mới ra đời vào 2016, sau 12 năm tồn tại của SQS với vô số "bí mật".
+Standard queue có thể xảy ra trường hợp delete xong mà vẫn còn message.
 
 Nếu ai từng học về cấu trúc dữ liệu trong lập trình, kiểu queue có nghĩa là phải FIFO (first-in first-out), thì queue của AWS có 2 loại là 1 không FIFO và 1 FIFO.
 
@@ -150,11 +153,7 @@ C1 và C2 có thể nhận cùng 1 message, nếu 1 hệ thống có nhiều wor
 SQS, thì ban đầu chỉ C1 nhận được messageA, nhưng sau `visibility timeout` mặc định 30s, C2 cũng sẽ nhìn thấy messageA.
 Chỉ với 1 message có visibility timeout 30s, và 2 worker xử lý mỗi message sau 50s, bạn đã tạo được 1 vòng lặp gần vô hạn!
 
-```
--------30s---50s--60s----80s--90s---
-C1 ----------Xong--C1---------------
---------C2-------------Xong----C2---
-```
+![img]({static}/images/graph.jpg)
 
 #### Trap2
 `receive_messages` kể cả không nhận được message nào, cũng mất phí. Nhìn chung thì
