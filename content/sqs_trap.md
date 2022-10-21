@@ -3,8 +3,8 @@ Date: 2022-10-17
 Category: frontpage
 Tags: aws, sqs, pitfall, trap, message queue
 
-Trong ban vạn sáu ngàn chín trăm service của AWS cung cấp, mỗi cái một kiểu, có this có that.
-EC2, ALB, RDS, S3, SQS, Lambda có lẽ là những cái tên "cơ bản" nhất, cũng là
+Trong ba vạn sáu ngàn chín trăm service của AWS cung cấp, mỗi cái một kiểu, có this có that.
+EC2, ALB, RDS, S3, SQS, Lambda là những cái tên "cơ bản" nhất, cũng là
 phổ biến nhất.
 
 Đặc điểm chung là dễ dùng, đắt, và cũng dễ dính trap!!!
