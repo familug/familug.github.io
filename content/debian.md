@@ -31,7 +31,7 @@ apt vẫn vậy.
 ## Không phải toàn màu hồng
 - năm 2021, đã từng thử cài debian trên desktop, mà lần bật lên đầu tiên bị lỗi window server (lightdm), nghỉ.
 Nếu còn trẻ, rảnh, thì có lẽ sẽ ngồi tìm hiểu tại sao, rồi fix, nhưng khi chỉ muốn có cái máy chạy được thì lại quay về Ubuntu 20.04.
-- vì một lý do nào đó, [tải file vagrant box về dùng]({filename}/arch_virtualbox.md) không đăng nhập được bằng tài khoản mặc định (vagrant:vagrant)? -> UPDATE: solved -> user root pass vagrant.
+- vì một lý do nào đó, [tải file vagrant box về dùng]({filename}/arch_virtualbox.md) không đăng nhập được bằng tài khoản mặc định (vagrant:vagrant)? -> UPDATE: [solved -> user root pass vagrant](https://salsa.debian.org/cloud-team/debian-vagrant-images/-/blob/1537c105c27e183d7b6e06a925d142cf373c5f6b/config_space/scripts/VAGRANT/10-rootpw).
 
 ## Tài liệu
 Debian Admin handbook <https://www.debian.org/doc/manuals/debian-handbook/>
