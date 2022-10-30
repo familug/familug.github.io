@@ -30,7 +30,7 @@ Config trên `GitLab > CICD Settings` của project, mặc định sau khi cài 
 
 Trên GitLab.com, giá trị này mặc định là không set (blank).
 
-![gitlab]({static}/gitlab.png)
+![gitlab]({static}/images/gitlab.png)
 
 >  The number of changes to fetch from GitLab when cloning a repository. Lower values can speed up pipeline execution. Set to 0 or blank to fetch all branches and tags for each job
 
