@@ -1,4 +1,4 @@
-Title: Cài VPN với Wireguard trên Debian 11 / Ubuntu 22.04
+Title: Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04
 Date: 2022-11-22
 Category: frontpage
 Tags: vpn, wireguard, privacy
@@ -12,10 +12,10 @@ Virtual Private Network (VPN) là tên một công nghệ cho phép mở rộng 
 
 Ví dụ khi vào một quán cafe và kết nối tới pymi.vn:
 
-Máy bạn --> Wifi quán cafe --> nhà cung cấp mạng VD FPT --> pymi.vn. Trên 3 con đường kết nối đó có thể rình rập nhiều nguy hiểm:
+Máy bạn --> Wifi quán cafe --> nhà cung cấp mạng (ví dụ FPT) --> pymi.vn. Trên 3 con đường kết nối đó có thể rình rập nhiều nguy hiểm:
 
 - hacker ngồi quán cafe và nghe trộm kết nối mạng rồi tấn công tạo trang giả mạo để đánh cắp tài khoản của bạn
-- mọi kết nối đi qua nhà mạng FPT **có thể** được ghi lại
+- mọi kết nối đi qua nhà mạng FPT **có thể** được ghi lại, cũng **có thể** bị can thiệp.
 - trang pymi.vn có IP của bạn có thể truy ra vị trí bạn truy cập.
 - rất nhiều nữa.
 
@@ -25,9 +25,15 @@ Máy bạn --> wifi quán cafe --> nhà cung cấp mạng --> VPN --> pymi.vn
 
 - hacker ngồi quán cafe chỉ có thể biết bạn truy cập tới IP của VPN
 - nhà cung cấp mạng chỉ có thể biết bạn truy cập tới IP của VPN
-- trang pymi.vn chỉ có IP của VPN của bạn, không phải nhà bạn.
+- trang pymi.vn chỉ có IP của VPN server nên chỉ biết vị trí của server, không phải vị trí nhà bạn.
 
-Nhược điểm là do thông qua thêm 1 hop (điểm) nên kết nối có thể chậm hơn một chút.
+Vài nhược điểm:
+
+- do thông qua thêm 1 hop (điểm) nên kết nối có thể chậm hơn một chút.
+- do phải dùng thêm 1 phần mềm nên trên máy di động sẽ tốn thêm chút pin
+- vì các website sẽ thấy IP của VPN server nên biết bạn đang dùng VPN và có thể sẽ chặn, ví dụ một vài sàn crypto (không phải tất cả).
+
+Chú ý: VPN không giúp bạn trở nên "ẩn danh như hacker" trên mạng.
 
 Cài đặt VPN vốn không phải chuyện đơn giản, vậy nên các nhà cung cấp VPN luôn ăn nên làm ra, và ngày càng nhiều:
 
@@ -36,7 +42,8 @@ Cài đặt VPN vốn không phải chuyện đơn giản, vậy nên các nhà 
 - ProtonVPN
 - search ra cả đống
 
-Người tự cài VPN server, thường có lựa chọn
+Người tự cài VPN server, thường có 2 lựa chọn:
+
 - IPSec: rất rất phức tạp
 - OpenVPN: đơn giản hơn, rất phổ biến, nhưng vẫn khá phức tạp
 
@@ -47,10 +54,13 @@ Về chất lượng/độ bảo mật thì đủ tin cậy khi:
 - wireguard được merge code vào [Linux kernel 5.6](https://github.com/torvalds/linux/commit/bd2463ac7d7ec51d432f23bf0e893fb371a908cd)
 - wireguard được [merge](https://lists.zx2c4.com/pipermail/wireguard/2020-June/005588.html) code vào [OpenBSD - hệ điều hành nổi tiếng về bảo mật (sản sinh ra OpenSSH)](/tags.html#openbsd-ref).
 
+PS: mọi câu lệnh trong bài này đều chạy với user root.
 ## Cài đặt wireguard
 Server dùng Debian 11 hay Ubuntu 22.04
 
+```
 sudo apt install wireguard unbound
+```
 
 ## Mô hình
 Để setup VPN gồm 2 bước:
@@ -168,9 +178,9 @@ Tạo /etc/rc.local
 #!/bin/sh
 iptables -t nat -A POSTROUTING -s 10.10.0.0/16 -o eth0 -j MASQUERADE
 ```
-Rồi `chmod a+x /etc/rc.local`
+Rồi `chmod a+x /etc/rc.local; /etc/rc.local`
 
-Tới đây mọi thứ đã xong, reboot lại server lên là kết nối ngon lành cành mít.
+Tới đây mọi thứ đã xong có thể truy cập internet qua VPN, reboot lại server để thực hiện bài test khi server mất điện trong tương lai bật lên vẫn chạy ngon lành cành mít.
 
 ### Kiểm tra DNS leak
 Khi kết nối tới VPN, người dùng không mong muốn người khác biết mình truy cập trang nào, nhưng nếu config DNS không đúng sẽ bị lộ thông tin (DNS leak).
