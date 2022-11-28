@@ -162,13 +162,13 @@ a = 5
 _x = 1
 ```
 
-các biến `a` hay `_x` nằm trên stack.
+các biến `a` hay `_x` nằm trên stack. Các biến trên stack sẽ tự động được dọn dẹp sau khi hết scope (ở đây là function).
 
 Giờ đổi sang chế độ "TUI", đồ họa trên dòng lệnh, gõ `layout next`
 
 ![gdb_tui]({static}/images/gdb_tui.png)
 
-`p` là một "smart pointer" trỏ tới địa chỉ bộ nhớ  `0x55555555a3ad0` trên heap.
+`p` là một ["smart pointer"](https://doc.rust-lang.org/book/ch15-00-smart-pointers.html) trỏ tới địa chỉ bộ nhớ  `0x55555555a3ad0` trên heap. Nếu p là một pointer thông thường như trên C, nó sẽ không tự biến mất khi function kết thúc, và dẫn tới "memleak", lập trình viên phải "free" nó trên code, thì với smart pointer, giá trị 9 mà p trỏ tới sẽ được dọn dẹp khi hết scope (ở đây là function).
 
 Gõ `x ten_bien` để "examine" hay hiển thị giá trị của biến.
 `x /d ten_bien` sẽ hiển thị ở dạng số nguyên. Xem thêm tại "help x".
