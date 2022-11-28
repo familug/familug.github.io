@@ -96,7 +96,7 @@ Các câu lệnh cơ bản của gdb trong bài:
 - `info locals`: in ra các biến local
 - `info args`: in ra các argument của function hiện tại.
 
-Gõ `help` để xem các câu lệnh khác.
+Gõ `help all` để xem các câu lệnh khác.
 
 Các câu lệnh gõ vào ở dòng bắt đầu với (gdb)
 
