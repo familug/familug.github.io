@@ -3,7 +3,7 @@ Date: 2022-11-29
 Category: en,
 Tags: rust, lto, cargo
 
-As a Rust developer, it's well known that `cargo build` will build a debug binary at ./target/debug/filename, which is helpful for development/debug but without many binary optimizations, thus, runs slow.
+By default, `cargo build` will build a debug binary at ./target/debug/filename, which is helpful for development/debug but without many binary optimizations, thus, runs slow.
 
 When build with `cargo build --release`, it will build an optimized binary, which is ready for production:
 
