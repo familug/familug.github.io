@@ -44,7 +44,8 @@ rpath = false
 ```
 
 Set lto = true or lto = "fat" will
-`Performs "fat" LTO which attempts to perform optimizations across all crates within the dependency graph.`
+
+> Performs "fat" LTO which attempts to perform optimizations across all crates within the dependency graph.
 
 which makes build much slower, but the binary often faster 10-20% compare to lto = false.
 User may try lto = "thin" for faster build but the output still good comparable to lto = "fat"
