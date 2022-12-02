@@ -25,14 +25,14 @@ Photo by <a href="https://unsplash.com/@linglivestolaugh?utm_source=unsplash&utm
 
 
 ### HISTCONTROL
-Trong các shell như bash, zsh, biến môi trường HISTCONTROL dùng để config shell sẽ lưu cái gì vào "history".
+Trong bash, biến môi trường HISTCONTROL dùng để config shell sẽ lưu cái gì vào "history".
 Mặc định trên Ubuntu từ xưa tới nay có giá trị:
 
 ```
 ignoredups:ignorespace
 ```
 
-Nhưng điều này không đúng trên Debian cũng như nhiều hệ điều hành khác như [MacOS](https://unix.stackexchange.com/questions/115917/why-is-bash-not-storing-commands-that-start-with-spaces?noredirect=1&lq=1), cũng không đúng trên zsh.
+Nhưng điều này không đúng trên Debian cũng như nhiều hệ điều hành khác như [MacOS](https://unix.stackexchange.com/questions/115917/why-is-bash-not-storing-commands-that-start-with-spaces?noredirect=1&lq=1), cũng không đúng trên zsh (HIST_IGNORE_SPACE).
 
 ```
 $ docker run -it debian:bullseye-slim                                                                         [0]
