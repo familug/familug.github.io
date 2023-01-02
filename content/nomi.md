@@ -59,6 +59,6 @@ Người dùng tin tưởng Apple có thể dùng IPhone, dù sao thì cũng kh�
 
 Hết.
 
-HVN at http://pymi.vn and https://www.familug.org.
+HVN at <https://pymi.vn> and <https://www.familug.org>.
 
 [Ủng hộ tác giả 🍺](https://www.familug.org/p/ung-ho.html)
