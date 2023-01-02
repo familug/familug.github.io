@@ -22,7 +22,7 @@ nếu toàn bộ quá trình từ cài đặt/thử sai mất 5 ngày thì tốn
 
 Giải pháp còn lại chỉ có
 
-- lên các ROM tin cậy tải về <https://wiki.lineageos.org/devices/> - nhưng lượng thiết bị được hỗ trợ cũng rất hữu hạn, tới 2023/1/1 chỉ có 1 thiết bị sản xuất năm 2022 được support, hầu hết các điện thoại của SamSung 3 năm trở lại đây đều không được hỗ trợ. <https://johannes.truschnigg.info/tmp/lineageos_device_toplist.txt>. PS: trang https://lineageosroms.com/ không hề liên quan đến LineageOS, ROM ở đây không phải chính thức.
+- lên các trang tin cậy tải về <https://wiki.lineageos.org/devices/> - nhưng lượng thiết bị được hỗ trợ cũng rất hữu hạn, tới 2023/1/1 chỉ có 1 thiết bị sản xuất năm 2022 được support, hầu hết các điện thoại của SamSung 3 năm trở lại đây đều không được hỗ trợ. <https://johannes.truschnigg.info/tmp/lineageos_device_toplist.txt>. PS: trang https://lineageosroms.com/ không hề liên quan đến LineageOS, ROM ở đây không phải chính thức.
 - Lên <https://forum.xda-developers.com/> tải ROM được người dùng khác build sẵn về - việc này về mặt bảo mật khá nhạy cảm/nguy hiểm, bạn không thể biết người dùng đó có nhét sẵn gì trong bản ROM không.
 
 Và cuối cùng, việc build Android ROM chỉ còn là cuộc chơi của những nhà sản xuất điện thoại: SamSung, XiaoMi, ... ở Việt Nam liệu còn nhãn hiệu nào khác???!!!
