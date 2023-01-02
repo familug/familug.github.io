@@ -41,7 +41,7 @@ Nếu mua 1 chiếc điện thoại, bạn muốn có... 1 chiếc điện tho�
 - Xem ảnh cũng hiện quảng cáo
 - Thi thoảng app sẽ gửi notification mời dùng theme/wallpaper mới
 ![mi noti]({static}/images/minoti.jpeg)
-- Xem file của hiện quảng cáo
+- Xem file cũng hiện quảng cáo
 - App cài sẵn hàng loạt app "hữu dụng" của Xiaomi, như "MiCoin", không có nút uninstall.
 ![mi crapware]({static}/images/miapp.jpeg)
 ![mi coin]({static}/images/micoin.jpeg)
