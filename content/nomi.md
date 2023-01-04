@@ -30,15 +30,14 @@ Và cuối cùng, việc build Android ROM chỉ còn là cuộc chơi của nh�
 ### Điện thoại Xiaomi
 Nếu mua 1 chiếc điện thoại, bạn muốn có... 1 chiếc điện thoại để dùng, thì ngày nay, mua điện thoại hay Tivi Android, bạn bị bắt buộc phải dùng các phần mềm để xem quảng cáo. Trên tay máy Redmi 9T, cài sẵn "MIUI 13.0.2", trải nghiệm thực sự khủng khiếp.
 
+- Công bố rõ ràng ngay khi cài đặt máy lần đầu là không xem ads "tối ưu" thì xem ads chung chung.
+![mi dirt]({static}/images/midirt.jpeg)
 - Cài sẵn phần mềm Wallpaper/Theme/Ringtone khi bấm vào hiện quảng cáo. Bạn muốn set 1 bức ảnh làm hình nền? app sẽ được mở ra trước để hiện quảng cáo, bán theme.
 ![mi ads]({static}/images/miads.jpeg)
 - Bạn muốn đổi nhạc chuông? App sẽ mở ra và hiện quảng cáo, phải đóng quảng cáo rồi mới hiện giao diện, để chọn file nhạc sẵn trên máy phải bấm vào nút bé tí.
 ![mi ads again]({static}/images/mitune.jpeg)
-- Khi khóa màn hình, góc phải để bật camera, góc trái là để mở app đa năng "Wallpaper Carousel" nói trên, kèm hiện "tin tức"
+- Khi khóa màn hình, góc phải để bật camera, góc trái là để mở app đa năng "Wallpaper Carousel" nói trên, kèm hiện "tin tức". May mắn thay có thể tắt app WC này đi để có thể đổi Wallpaper mà không hiện quảng cáo, nhưng nó vẫn nằm ở góc màn hình lock và đổi nhạc chuông vẫn vậy.
 ![mi dark pattern]({static}/images/midark.jpeg)
-- May mắn thay có thể tắt app WC này đi để có thể đổi Wallpaper mà không hiện quảng cáo, nhưng nó vẫn nằm ở góc màn hình lock và đổi nhạc chuông vẫn vậy.
-![mi wc]({static}/images/miwc.jpeg)
-- Xem ảnh cũng hiện quảng cáo
 - Thi thoảng app sẽ gửi notification mời dùng theme/wallpaper mới
 ![mi noti]({static}/images/minoti.jpeg)
 - Xem file cũng hiện quảng cáo - đóng góp bởi bạn đọc Phú Khang - người dùng Xiaomi 5 năm không biết có quảng cáo
