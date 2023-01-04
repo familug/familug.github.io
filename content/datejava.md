@@ -1,5 +1,5 @@
 Title: ElasticSearch/Java format thời gian không giống Python
-Date: 2023-01-02
+Date: 2023-01-04
 Category: frontpage
 Tags: java, elasticsearch, ES, ELK, Python, datetime, Go
 
@@ -34,7 +34,7 @@ Có vẻ như bắt nguồn từ function `strftime` trong `time.h` của C <htt
 ```
 
 ### Java format time
-Java (và thế nên [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/8.5/mapping-date-format.html#built-in-date-formats) - 1 chương trình viết bằng Java), sử dụng format khác. Ở đây sẽ dùng `lein repl` để chạy code Clojure, gọi thư viện Java cho tiện (cài lein: sudo apt install lein).
+Java (và thế nên [ElasticSearch](https://www.elastic.co/guide/en/elasticsearch/reference/8.5/mapping-date-format.html#built-in-date-formats) - 1 chương trình viết bằng Java), sử dụng format khác. Ở đây sẽ dùng `lein repl` để chạy code Clojure, gọi thư viện Java cho tiện (cài lein: sudo apt install leiningen).
 
 ```clj
 $ lein repl                                                                                                                                            [0]
