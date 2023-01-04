@@ -7,8 +7,11 @@ Hầu hết các ngôn ngữ lập trình đều có sẵn thư viện để for
 
 Cứ tưởng các ngôn ngữ lập trình format sẽ giống nhau, học 1 lần là dùng được mãi, ai ngờ!
 
+![time](https://images.unsplash.com/photo-1501139083538-0139583c060f?ixlib=rb-4.0.3&dl=aron-visuals-BXOXnQ26B7o-unsplash.jpg&w=640&q=80&fm=jpg&crop=entropy&cs=tinysrgb)
+Photo by <a href="https://unsplash.com/@aronvisuals?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Aron Visuals</a> on <a href="https://unsplash.com/photos/BXOXnQ26B7o?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+
 ### Linux date, C, C++
-Lấy làm mốc chuẩn, chương trình date trên `*NIX` dùng Ymd HMS cho ngày tháng năm giờ phút giây
+Lấy làm mốc chuẩn, chương trình `date` trên UNIX/Linux dùng Ymd HMS cho ngày tháng năm giờ phút giây
 ```
 $ date +"%Y/%m/%d %H:%M:%S"
 2023/01/04 20:16:48
