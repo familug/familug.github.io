@@ -3,7 +3,7 @@ Date: 2023-01-20
 Category: frontpage
 Tags: gdb, gef, pwndbg, peda, debugger, python
 
-GDB là một debugger lâu đời có rất nhiều tính năng. Nó giống `vim` editor/emacs nhiều điểm:
+GDB là một debugger lâu đời có rất nhiều tính năng. Nó giống `vim` /`emacs` nhiều điểm:
 
 - nhiều tính năng nhưng mặc định thì không bật gì, khó dùng
   ![gdb_tui]({static}/images/gdb_tui.png)
@@ -24,12 +24,17 @@ Như vim có
 - [spf13-vim](http://vim.spf13.com/)
 - ...
 
-Tương tự với emacs.
+Tương tự với emacs:
+
+- [spacemacs](https://www.spacemacs.org/)
+- [doomemacs](https://github.com/doomemacs/doomemacs)
 
 PS: tham khảo 2 phần trước:
 
 - p1: <https://n.pymi.vn/hgdb.html>
 - p2: <https://n.pymi.vn/hgdb-arch.html>
+
+PPS: nên đọc trên máy tính.
 
 ### Tạo giao diện giống pwndbg/gef/peda
 ![pwndbg](https://github.com/pwndbg/pwndbg/raw/dev/caps/context.png)
