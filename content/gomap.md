@@ -112,7 +112,7 @@ Trong [Effective Go](https://go.dev/doc/effective_go#maps) có viết
 
 map refers tới cấu trúc dữ liệu bên dưới, thay đổi map sẽ thay đổi cấu trúc dữ liệu đó, còn bản thân map là 1 reference, không thay đổi, đúng như value receiver cam kết.
 
-Bài tập cho bạn đọc: slice cũng là reference, sao map thay đổi còn slice thì không khi dùng value receiver?
+Bài tập cho bạn đọc: slice cũng là reference, sao map thay đổi còn slice thì không khi dùng value receiver? (đáp án xem cuối bài)
 
 Thêm 1 ít tài liệu về 3 kiểu references: slice, map, channel <https://go.dev/doc/effective_go#allocation_make>
 
@@ -125,6 +125,11 @@ Go thật đơn giản, ha!
 
 Hết.
 
-HVN at http://pymi.vn and https://www.familug.org.
+HVN at <http://pymi.vn> and <https://www.familug.org>.
 
 [Ủng hộ tác giả 🍺](https://www.familug.org/p/ung-ho.html)
+
+
+Đáp án: t.names = append(t.names, "python") sẽ gán giá trị mới cho t.names, do dùng value receiver nên không thấy thay đổi gì.
+Nếu thay đổi phần tử của slice, ví dụ t.names[0] = "Python" thì kết quả có thay đổi.
+Tương tự, nếu viết t.ages = map[string]int{} sẽ thấy map ages không thay đổi. Xem code tại <https://go.dev/play/p/yCn-mKVpPSo>
