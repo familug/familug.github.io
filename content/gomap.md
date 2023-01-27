@@ -93,7 +93,7 @@ func main() {
 
 chạy online trên <https://go.dev/play/p/N781b6vT-GF>
 
-Theo tài liệu Go tour, change nhận 1 pointer receiver nên sẽ thay đổi toy t và kết quả không có gì bất ngờ khi map giờ chứa thêm golang 12.
+Theo tài liệu Go tour, change nhận 1 pointer receiver nên sẽ thay đổi toy t và kết quả không có gì bất ngờ khi map giờ chứa thêm python 32.
 
 Nhưng trong mayNotChange, trong khi slice t.names không đổi thì map t.ages vẫn bị thay đổi dù cho đã dùng value receiver.
 
