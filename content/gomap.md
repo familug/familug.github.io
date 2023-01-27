@@ -95,7 +95,7 @@ chạy online trên <https://go.dev/play/p/N781b6vT-GF>
 
 Theo tài liệu Go tour, change nhận 1 pointer receiver nên sẽ thay đổi toy t và kết quả không có gì bất ngờ khi map giờ chứa thêm golang 12.
 
-Nhưng trong mayNotChange, map t.ages vẫn bị thay đổi dù cho đã dùng value receiver.
+Nhưng trong mayNotChange, trong khi slice t.names không đổi thì map t.ages vẫn bị thay đổi dù cho đã dùng value receiver.
 
 ```go
 {[] map[golang:12]}
@@ -111,6 +111,8 @@ Trong [Effective Go](https://go.dev/doc/effective_go#maps) có viết
 > Like slices, maps hold references to an underlying data structure. If you pass a map to a function that changes the contents of the map, the changes will be visible in the caller.
 
 map refers tới cấu trúc dữ liệu bên dưới, thay đổi map sẽ thay đổi cấu trúc dữ liệu đó, còn bản thân map là 1 reference, không thay đổi, đúng như value receiver cam kết.
+
+Bài tập cho bạn đọc: slice cũng là reference, sao map thay đổi còn slice thì không khi dùng value receiver?
 
 Thêm 1 ít tài liệu về 3 kiểu references: slice, map, channel <https://go.dev/doc/effective_go#allocation_make>
 
