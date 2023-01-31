@@ -103,13 +103,8 @@ Các const được tính toán bởi Go compiler - khi build, chứ không tín
 Trong Go spec <https://go.dev/ref/spec#Constants>
 
 > Numeric constants represent exact values of arbitrary precision and do not overflow.
-
-```
 >  Implementation restriction: Although numeric constants have arbitrary precision in the language, a compiler may implement them using an internal representation with limited precision. That said, every implementation must:
-
-    Represent integer constants with at least 256 bits.
-    Represent floating-point constants, including the parts of a complex constant, with a mantissa of at least 256 bits and a signed binary exponent of at least 16 bits.
-    ```
+>   Represent floating-point constants, including the parts of a complex constant, with a mantissa of at least 256 bits and a signed binary exponent of at least 16 bits.
 
 Vậy khi tính toán 0.1+0.1+0.1 với 256 bits (so với float64 chỉ có 64 bit), độ chính xác cao hơn 4 lần, kết quả cho 0.1+0.1+0.1 bằng với giá trị biểu diễn 0.3 (xem ở trên, vẫn không bằng 0.3 về mặt tóan học).
 
