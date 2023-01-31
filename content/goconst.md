@@ -118,9 +118,3 @@ Hết.
 HVN at <http://pymi.vn> and <https://www.familug.org>.
 
 [Ủng hộ tác giả 🍺](https://www.familug.org/p/ung-ho.html)
-
-
-Đáp án: t.names = append(t.names, "python") sẽ gán giá trị mới cho t.names, do dùng value receiver nên không thấy thay đổi gì.
-Nếu thay đổi phần tử của slice, ví dụ t.names[0] = "Python" thì kết quả có thay đổi.
-Tương tự, nếu viết t.ages = map[string]int{} sẽ thấy map ages không thay đổi. Xem code tại <https://go.dev/play/p/yCn-mKVpPSo>
-
