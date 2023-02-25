@@ -45,7 +45,7 @@ Dù ghét frontend đến đâu, yêu dòng lệnh đến nhường nào, thì k
 - SSH vào server, gõ 1 câu lệnh, xong việc
 - Như trên, nhưng viết thêm tài liệu, tạo thành SoP (standard of procedure - hay có chỗ gọi là Runbook) xử lý vấn đề
 - Viết 1 "automation" job, như Jenkins job hay GitHub workflow hay câu lệnh chat Slack để người dùng (thường là đồng nghiệp cùng team) chỉ việc nhập vào 1 vài input, ví dụ gõ 1 lệnh là sẽ tạo tài khoản cho user dev XYZ - đa phần, kể cả senior, dừng lại ở đây, vì Jenkins hay các tech-tool rất thân thuộc với họ.
-- Tạo 1 trang web để người dùng (user dev XYZ) tự vào bấm vài nút hoặc nhập input và tự phục vụ (hay 1 chatbot), không cần tới mình cung cấp, hoặc cùng lắm mình chỉ cần bấm nút "cho phép". Một trang web có giao diện và tính năng do mình quyết định. Jenkins hay GitHub action chỉ có output là text đên trên nền trắng không màu.
+- Tạo 1 trang web để người dùng (user dev XYZ) tự vào bấm vài nút hoặc nhập input và tự phục vụ (hay 1 chatbot), không cần tới mình cung cấp, hoặc cùng lắm mình chỉ cần bấm nút "cho phép". Một trang web có giao diện và tính năng do mình quyết định. Jenkins hay GitHub action chỉ có output là text đen trên nền trắng không màu.
 - Viết báo cáo, lập bảng excel, vẽ đồ thị, tự động gửi mail báo cáo hàng tuần... tất nhiên không phải công việc nào cũng áp dụng, nhưng 1 devops biết Excel (hay pandas), vẽ đồ thị tổng hợp kết quả (hay metric Grafana) sẽ khác hẳn với 1 sysadmin chỉ copy paste output toàn text.
 
 ### Hạn chế chuyển việc nội bộ
