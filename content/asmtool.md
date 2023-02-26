@@ -44,6 +44,33 @@ cd pwndbg
 ./setup.sh
 ```
 
+```asm
+global _start
+
+section .text
+_start:
+    mov rbp, rsp; for correct debugging
+    mov ebp, esp; for correct debugging
+    ;write your code here
+    mov rax, 2
+    add rax, 1
+
+    xor rdx, rdx
+    mov rax, 14
+    mov r8, 3
+    div r8
+
+    mov rcx, 5
+    add rcx, 4
+
+    xor rdx, rdx
+    mul rcx
+    sub rcx, 7
+
+    xor eax, eax
+    ret
+```
+
 build file asm rồi chạy:
 
 ```asm
