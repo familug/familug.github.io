@@ -3,7 +3,7 @@ Date: 2023-02-26
 Category: frontpage
 Tags: assembly, asm, sasm, ide, gdb, pwndbg
 
-Bài trước viết [Hello world dùng x64 assembly]({static}/asm.md) dù không phải quá khó, nhưng cũng dài 16 dòng, hơn cả Java, lại còn toàn magic value aex, ebx, ... nếu bảo không nhìn tài liệu, cũng khó lòng mà tự viết được từ 1 file trắng.
+Bài trước viết [Hello world dùng x64 assembly]({filename}/asm.md) dù không phải quá khó, nhưng cũng dài 16 dòng, hơn cả Java, lại còn toàn magic value aex, ebx, ... nếu bảo không nhìn tài liệu, cũng khó lòng mà tự viết được từ 1 file trắng.
 
 Chuyện này nghĩa là, để print cũng khó khăn, mà print khó, thì học lập trình kiểu gì? làm sao biết 1+1 ra kết quả bao nhiêu?
 
@@ -33,10 +33,10 @@ Bấm F5 để bắt đầu debug, bấm F11 để tới câu lệnh tiếp theo
 
 ![sasm]({static}/images/sasm.png)
 
-Windows có rất nhiều tool xịn như x64dbg hay windbg.
+PS: Windows có rất nhiều tool xịn như x64dbg hay windbg.
 
 ### GDB - pwndbg
-Như đã giới thiệu trong <https://familug.github.io/hoc-rust-voi-gdb.html>, gdb là debugger phổ biến bậc nhất trên môi trường Unix/Linux. [Cài thêm extension vào để có màu mè](https://familug.github.io/tao-giao-dien-gdb-nhu-pedagefpwndbg.html) , ở đây chọn [pwndbg](https://github.com/pwndbg/pwndbg):
+Như đã giới thiệu trong [Học Rust với gdb]({filename}/gdb.md), gdb là debugger phổ biến bậc nhất trên môi trường Unix/Linux. [Cài thêm extension vào để có màu mè]({filename}/hgdb.md) , ở đây chọn [pwndbg](https://github.com/pwndbg/pwndbg):
 
 ```
 git clone https://github.com/pwndbg/pwndbg
