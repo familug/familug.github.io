@@ -58,4 +58,10 @@ $ gdb ./a.out
 ### Kết luận
 Không print được thì dùng debugger. Dùng debugger thì không còn phải print nữa.
 
-Happy hacking!
+Happy debugging!
+
+Hết.
+
+HVN at <http://pymi.vn> and <https://www.familug.org>.
+
+[Ủng hộ tác giả 🍺](https://www.familug.org/p/ung-ho.html)
