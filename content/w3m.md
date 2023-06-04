@@ -9,7 +9,7 @@ Năm 2023, khi chiếc điện thoại 5 triệu cũng có 4-8GB RAM, laptop 8-1
 
 Hóa ra vẫn có. Chuyện rằng máy có 16GB RAM (onboard VGA), mỗi lần vào combat Dota2 trên steam phải tắt hết các chương trình khác đi để đảm bảo không giật lag, có lần để Firefox rồi chơi, lúc combat 5 đánh 5, giật văng tắt luôn game (OOM, kernel kill).
 
-w3m? mở 1 trang web mất 14MB RAM, so với ít nhất 200-500MB trên Firefox hay Chrome.
+w3m? mở 1 trang web mất 14MB RAM, so với ít nhất 200-500MB trên Firefox hay Chrome, nên chơi game cũng khỏi cần tắt.
 
 ### Cài đặt
 
