@@ -32,7 +32,7 @@ w3m /usr/share/doc
 
 Mở nhiều trang cùng lúc? cài thêm `tmux` rồi mở nhiều cửa sổ tmux.
 
-Bạn có biết app `Firefox focus` trên di động? Tính năng siêt việt của nó là: chỉ mở được 1 tab duy nhất.
+Bạn có biết app [Firefox focus](https://www.mozilla.org/en-US/firefox/browsers/mobile/focus/) trên di động? Tính năng siêu việt của nó là: chỉ mở được 1 tab duy nhất.
 
 #### Vài phím tắt hữu dụng
 - H hiện help
