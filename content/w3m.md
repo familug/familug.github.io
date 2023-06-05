@@ -37,6 +37,7 @@ Bạn có biết app [Firefox focus](https://www.mozilla.org/en-US/firefox/brows
 #### Vài phím tắt hữu dụng
 - H hiện help
 - q tắt
+- Tab để di chuyển
 - U thanh URL, đổi địa chỉ 
 - Esc a thêm bookmark
 - Esc b hiện bookmark
@@ -47,6 +48,8 @@ w3m không xem được ảnh hay video, không chạy JS, nhưng đủ để đ
 - nhẹ
 - không quảng cáo
 - không JS, không hack
+
+PS: xem được ảnh nếu cài thêm `w3m-img`
 
 Hết.
 
