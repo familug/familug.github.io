@@ -3,7 +3,7 @@ Date: 2023-06-09
 Category: frontpage
 Tags: yaml, pyyaml, python
 
-PyYAML, thư viện parse YAML phổ biến bậc nhất của Python, được dùng trong các phần mềm dùng yaml như Ansible, SaltStack, ...
+PyYAML, thư viện parse YAML phổ biến bậc nhất của Python, được dùng trong các phần mềm dùng YAML như Ansible, SaltStack, ...
 
 ```
 > YAML: YAML Ain't Markup Language™
