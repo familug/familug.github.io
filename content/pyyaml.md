@@ -9,6 +9,16 @@ PyYAML, thư viện parse YAML phổ biến bậc nhất của Python, được 
 > YAML: YAML Ain't Markup Language™
 ```
 
+Ví dụ [Salt](https://docs.saltproject.io) state:
+```yaml
+install_network_packages:
+  pkg.installed:
+    - pkgs:
+      - rsync
+      - lftp
+      - curl
+```
+
 ### Mặc định nguy hiểm
 YAML không phải một ngôn ngữ/format đơn giản như JSON, nó có hàng tá tính năng mà có thể bạn không biết tới. Dùng YAML giống như dùng `pickle` hơn là `json` (có thể chứa object tùy ý).
 
@@ -78,7 +88,7 @@ bản 6 bắt buộc argument Loader phải được set. Tới tháng 6 2023, t
 
 Issue GitHub: <https://github.com/yaml/pyyaml/issues/576>
 
-May thay nếu dùng `yaml.safe_load` thì không đổi, nó sẽ gọi `Loader=yaml.SafeLoad)`
+May thay nếu dùng `yaml.safe_load` thì không đổi, nó sẽ gọi `Loader=yaml.SafeLoader)`
 
 ```py
 def safe_load(stream):
