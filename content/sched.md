@@ -7,12 +7,12 @@ Hay những câu hỏi liên quan:
 
 - Thread và process khác gì nhau?
 - 1 process chạy multithreading trên mấy CPU?
-- vì sao Rust không nhắc tới multiprocessing?
+- Vì sao Java, Rust không nhắc tới multiprocessing?
 - Khi chạy CPU bound, dùng multi-process hay multi-threaded?
 
 bài này sẽ làm cho ra nhẽ.
 
-Phần khó khăn nhất để trả lời câu hỏi này là tìm được các tài liệu có tính "chuẩn mực"/căn cứ, không phải mấy trang tutorial, wikipedia hay hỏi đáp trên mạng.
+Việc khó khăn nhất khi trả lời các câu hỏi này là tìm được các tài liệu có tính "chuẩn mực"/căn cứ, không phải mấy trang tutorial, wikipedia hay hỏi đáp trên mạng.
 
 ## Process là gì, thread là gì
 
@@ -98,15 +98,15 @@ Trong tài liệu viết:
 ```
 Scheduling policies
    The scheduler is the kernel component that decides which runnable thread
-   will be exe‐ cuted by the CPU next.  Each thread has an associated
+   will be executed by the CPU next.  Each thread has an associated
    scheduling policy and a  static scheduling  priority, sched_priority.  The
    scheduler makes  its  decisions  based  on knowledge  of  the  scheduling
    policy and static priority of all threads on the sys‐ tem.
 ...
 API summary
    Linux provides the following system  calls for  controlling the CPU
-   scheduling behav‐ ior, policy,  and  priority  of  processes (or, more
-           precisely, threads).
+   scheduling behavior, policy,  and  priority  of  processes (or, more
+   precisely, threads).
 ```
 ## CPU chạy thread hay process?
 
@@ -120,12 +120,12 @@ Trong `man 1 taskset` viết:
 
 Đọc thêm về Linux CPU scheduler tại <https://opensource.com/article/19/2/fair-scheduling-linux>.
 
-Dễ hiểu rằng 10 process, mỗi process chỉ có 1 thread, sẽ là 10 thread cần chạy, kernel sẽ sched việc chạy 10 task này cho N CPU.
+Với 10 process, mỗi process chỉ có 1 thread, sẽ là 10 thread cần chạy, kernel sẽ sched (xếp lịch) việc chạy 10 task này cho N CPU.
 Tương tự 1 process, chạy 10 thread, kernel cũng sẽ sched việc chạy 10 task này cho N CPU (N > 0).
 
 What?!
 ### Python multi-threaded vs multi-process
-Dòng thứ 2 trong tài liệu thư viện `threading` của Python viết
+Dòng thứ 2 trong tài liệu thư viện [`threading` của Python](https://docs.python.org/3/library/threading.html#module-threading) viết
 
 > CPython implementation detail: In CPython, due to the Global Interpreter
 > Lock, only one thread can execute Python code at once (even though certain
@@ -135,9 +135,9 @@ Dòng thứ 2 trong tài liệu thư viện `threading` của Python viết
 > concurrent.futures.ProcessPoolExecutor. However, threading is still an
 > appropriate model if you want to run multiple I/O-bound tasks simultaneously.
 
-Python là một trong số ít ngôn ngữ mà multithreading không chạy được trên nhiều CPU do giới hạn của [Global Interpreter Lock - GIL](https://docs.python.org/3/glossary.html#term-global-interpreter-lock) trên CPython/PyPy.
+Python là một trong số ít ngôn ngữ mà nhiều thread không chạy được trên nhiều CPU core cùng lúc do giới hạn của [Global Interpreter Lock - GIL](https://docs.python.org/3/glossary.html#term-global-interpreter-lock) trong CPython/PyPy.
 Giới hạn này **KHÔNG** tồn tại trong các bản Python khác như Jython (trên JVM) và IronPython (trên .NET).
-Vì GIL, CPython chỉ có thể **chạy** 1 thread 1 lúc, nên muốn chạy nhiều thread cùng lúc, Python có thư viện [multiprocessing](https://docs.python.org/3/library/multiprocessing.html).
+Vì GIL, CPython chỉ có thể **chạy trên CPU** 1 thread 1 lúc, nên muốn chạy nhiều thread/process trên nhiều CPU core cùng lúc, Python có thư viện [multiprocessing](https://docs.python.org/3/library/multiprocessing.html).
 
 > multiprocessing is a package that supports spawning processes using an API
 > similar to the threading module. The multiprocessing package offers both
@@ -146,15 +146,15 @@ Vì GIL, CPython chỉ có thể **chạy** 1 thread 1 lúc, nên muốn chạy 
 > multiprocessing module allows the programmer to fully leverage multiple
 > processors on a given machine.
 
-Tránh nhầm lẫn rằng python multithreading thực sự chạy các thread cùng lúc trên nhiều CPU, việc các thread có vẻ chạy cùng lúc trong Python chỉ là multitasking, chạy chuyển đổi giữa các thread.
+Tránh nhầm lẫn rằng python `threading` thực sự chạy các thread cùng lúc trên nhiều CPU core, việc các thread có vẻ chạy cùng lúc trong Python chỉ là multitasking, chạy chuyển đổi giữa các thread.
 
 ### Java multithreading
 Java hỗ trợ multithreading với các thread chạy cùng lúc như mong đợi, và nhiều thread này hoàn toàn có thể được chạy trên nhiều CPU core.
 
 Vì multithreading chạy rất ngon lành, nên ít có lý do gì để sinh ra khái niệm "multiprocessing" như Python.
-Ngoài ra, bật 1 Java process là chạy 1 máy ảo JVM nặng nề, nên việc này rất ít thấy trong thực tế.
+Ngoài ra, bật 1 Java process là chạy 1 máy ảo JVM nặng nề, khởi động chậm (so với bật 1 process CPython interpreter 0.1s 8MB RAM) nên việc này rất ít thấy trong thực tế.
 
-PS: Python multithread API [dựa trên API của Java](https://docs.python.org/2/library/threading.html)
+PS: Python `threading` API [dựa trên API của Java](https://docs.python.org/2/library/threading.html)
 
 ### Rust multithreading
 Tương tự Java, không tồn tại thư viện "multiprocessing" trong Rust.
@@ -171,7 +171,7 @@ Tương tự Java, không tồn tại thư viện "multiprocessing" trong Rust.
 ### Go multithreading, multiprocessing
 Go không dùng khái niệm process hay thread của hệ điều hành mà dùng khái niệm Goroutine, tương tự thread, nhưng do Go runtime quản lý thay vì OS kernel.
 
->  A goroutine is a lightweight thread managed by the Go runtime.
+> A goroutine is a lightweight thread managed by the Go runtime.
 > Goroutines run in the same address space, so access to shared memory must be synchronized.
 
 <https://go.dev/tour/concurrency/1>
@@ -188,7 +188,7 @@ Câu hỏi này có thể là trap, cần hỏi lại dùng ngôn ngữ gì, tr�
 Trong các ngôn ngữ khác như Rust/Java, multithreading là câu trả lời, vì không có thư viện multi-process mà chạy.
 Hay Go chỉ có goroutine chứ không có lựa chọn khác.
 
-Khi hỏi chung chung, multi-process có ưu điểm là sự tách biệt giữa các process, một process bị crash sẽ không ảnh hưởng tới process khác, nhược điểm là việc giao tiếp giữa các process để chia sẻ bộ nhớ sẽ phức tạp.
+Khi nói chung chung, multi-process có ưu điểm là sự tách biệt giữa các process, một process bị crash sẽ không ảnh hưởng tới process khác, nhược điểm là việc giao tiếp giữa các process để chia sẻ data sẽ phức tạp.
 Nhiều chương trình dùng mô hình này như:
 
 - postgresql
@@ -196,7 +196,7 @@ Nhiều chương trình dùng mô hình này như:
 
 Multi-threaded giúp dễ dàng truy cập bộ nhớ chung, nhưng có thể gặp trường hợp 1 thread crash khiến cả chương trình tắt ngóm, nhược điểm là dễ xảy ra race-condition: N thread tranh nhau truy cập cùng 1 tài nguyên.
 
-Không có câu trả lời dễ dàng, vì đây là trường hợp của PostgreSQL, sau vài chục năm chạy multi-process, nay đang khám phá option multi-thread.
+Không có câu trả lời dễ dàng, vì đây là trường hợp của PostgreSQL, sau vài chục năm chạy multi-process, nay đang khám phá option multi-threaded.
 
 [Let's make PostgreSQL multi-threaded](https://www.postgresql.org/message-id/flat/31cc6df9-53fe-3cd9-af5b-ac0d801163f4%40iki.fi)
 
@@ -217,7 +217,7 @@ Không có câu trả lời dễ dàng, vì đây là trường hợp của Post
 - <https://doc.rust-lang.org/book/ch16-01-threads.html>
 
 ### Kết luận
-Thread là đơn vị task được sched chạy trên nhiều CPU, process là 1 chương trình đang chạy.
+Thread là đơn vị task được kernel sched chạy trên nhiều CPU, process là 1 chương trình đang chạy.
 
 Hết.
 
