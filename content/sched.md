@@ -82,11 +82,12 @@ $ ps -ef | wc -l
 ```
 
 PS: bạn đọc sau khi đọc xong bài và tham khảo [xem thread bằng top]({filename}/thread.md) sẽ chạy `ps -eLf`
-## Một process chạy multithreading trên mấy CPU core?
 
 ### CPU Scheduler
 Việc sắp xếp các chương trình chạy thế nào (dùng CPU thế nào) do một bộ phận của kernel có tên "scheduler" thực hiện.
+Đọc thêm về Linux CPU scheduler tại <https://opensource.com/article/19/2/fair-scheduling-linux>.
 
+## CPU chạy thread hay process?
 Tham khảo tại `man 7 sched`
 ```
 $ whatis sched
@@ -108,17 +109,15 @@ API summary
    scheduling behavior, policy,  and  priority  of  processes (or, more
    precisely, threads).
 ```
-## CPU chạy thread hay process?
 
-Linux kernel scheduler sắp xếp lịch chạy cho các thread (hay gọi là task).
+Linux kernel scheduler sắp xếp lịch chạy trên CPU cho các thread (hay gọi là task).
 Trong `man 1 taskset` viết:
 
 ```
 -a, --all-tasks
   Set or retrieve the CPU affinity of all the tasks (threads) for a given PID.
 ```
-
-Đọc thêm về Linux CPU scheduler tại <https://opensource.com/article/19/2/fair-scheduling-linux>.
+## Một process chạy multithreading trên mấy CPU core?
 
 Với 10 process, mỗi process chỉ có 1 thread, sẽ là 10 thread cần chạy, kernel sẽ sched (xếp lịch) việc chạy 10 task này cho N CPU.
 Tương tự 1 process, chạy 10 thread, kernel cũng sẽ sched việc chạy 10 task này cho N CPU (N > 0).
