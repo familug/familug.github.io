@@ -21,6 +21,11 @@ Non-Volatile Memory Express (NVMe) (~2011) driver được thiết kế cho SSD,
 
 Các ổ cứng NVMe dài thon như 2 ngón tay.
 
+```sh
+$ mount | grep ' on / '
+/dev/nvme0n1p1 on / type ext4 (rw,relatime,errors=remount-ro)
+```
+
 ## DisplayPort (DP) vs HDMI
 Các cổng/dây cắm truyền hình ảnh từ máy tính qua màn hình:
 
