@@ -3,6 +3,10 @@ Date: 2023-06-26
 Category: frontpage
 Tags: SSD, NVMe, SATA, DP, HDMI, USB, hardward
 
+<center>
+![USB Downstream - DisplayPort]({static}/images/dp_usbdownstream.jpg)
+<---- USB Downstream | DisplayPort ---->
+</center>
 ## SSD NVMe khác gì SSD SATA
 Solid-state Drive (SSD) là thế hệ ổ cứng mới, không sử dụng đĩa quay như Hard Disk Drive (HDD),
 SSD tốc độ nhanh gấp 5 tới vài chục lần so với HDD.
