@@ -1,5 +1,5 @@
 Title: SSD NVMe vs SATA, DisplayPort vs HDMI, USB downstream port
-Date: 2023-06-26
+Date: 2023-07-12
 Category: frontpage
 Tags: SSD, NVMe, SATA, DP, HDMI, USB, hardward
 
