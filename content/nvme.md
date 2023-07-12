@@ -5,6 +5,7 @@ Tags: SSD, NVMe, SATA, DP, HDMI, USB, hardward
 
 <center>
 ![USB Downstream - DisplayPort]({static}/images/dp_usbdownstream.jpg)
+
 ^---- USB Downstream | DisplayPort ----^
 </center>
 ## SSD NVMe khác gì SSD SATA
