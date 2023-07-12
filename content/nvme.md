@@ -9,7 +9,7 @@ Tags: SSD, NVMe, SATA, DP, HDMI, USB, hardward
 </center>
 ## SSD NVMe khác gì SSD SATA
 Solid-state Drive (SSD) là thế hệ ổ cứng mới, không sử dụng đĩa quay như Hard Disk Drive (HDD),
-SSD tốc độ nhanh gấp 5 tới vài chục lần so với HDD.
+SSD tốc độ nhanh gấp 5 tới vài trăm lần so với HDD.
 ### SATA là gì
 Serial ATA (SATA) (~2004) là công nghệ sử dụng AHCI driver giao tiếp với ổ cứng HDD, công nghệ này cũng được
 dùng với SSD giúp cắm được vào các máy tính đời cũ, nhưng cản trở SSD bung mình bứt phá.
