@@ -34,7 +34,7 @@ NVMe và SATA là các chuẩn giao tiếp, không phải hình dáng của ổ 
 - M.2 2280: (đọc là m dot two) 22 80: rộng 22mm dài 80mm, là kiểu dáng phổ biến của SDD sử dụng NVMe.
 
 Giao thức có ảnh hưởng tới hình dáng, nhưng không quyết định. Vẫn có SSD có dáng M.2 dùng SATA mặc dù ngày càng ít.
-M.2 SATA sẽ có 2 "khe" thay vì M.2 NVMe chỉ có 1 "khe", xem hình tại [kingston](https://www.kingston.com/en/blog/pc-performance/two-types-m2-vs-ssd).
+M.2 SATA sẽ có 2 "khe" thay vì M.2 NVMe chỉ có 1 "khe", xem hình tại [kingston](https://www.kingston.com/en/blog/pc-performance/two-types-m2-vs-ssd) hay các trang web bán phần cứng máy tính.
 
 ## PCIe 3x4
 PCI Express (Peripheral Component Interconnect Express) PCIe, là giao diện phần cứng để lắp các thiết bị máy tính (VGA, SSD, ...) ngày nay.
