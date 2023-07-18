@@ -127,12 +127,13 @@ Helm <https://helm.sh/docs/chart_template_guide/yaml_techniques/>
 K8S kustomize <https://github.com/kubernetes-sigs/kustomize/issues/3675>
 
 ## Tham khảo
+- [Thảm họa PyYAML]({filename}/pyyaml.md)
 - <http://yaml.org/spec/1.2.0/>
 - <https://www.json.org/json-en.html>
 - <https://yaml.readthedocs.io/en/latest/basicuse.html>
 
 ## Kết luận
-Khi phần mềm thay đổi mỗi 2 năm thì phần cứng cũng không thua kém gì, không update, sẽ bị dated.
+YAML, không phải MarkUp Language, càng không phải là JSON.
 
 Hết.
 
