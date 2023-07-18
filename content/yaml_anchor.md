@@ -89,41 +89,42 @@ Kết quả
 đáng chú ý rằng khác với Python dict update, value sau sẽ đè lên value trước nếu cùng key, thì YAML ngược lại, giá trị xuất hiện trước sẽ được dùng: name được lấy ở phần tử d1 FAMILUG chứ không phải từ d2.
 
 ### Dùng trong thực tế
-- [dockercompose file](https://docs.docker.com/compose/compose-file/10-fragments/):
+[dockercompose file](https://docs.docker.com/compose/compose-file/10-fragments/):
+```docker
+volumes:
+db-data: &default-volume
+driver: default
+metrics: *default-volume
 
-  ```docker
-  volumes:
-  db-data: &default-volume
-    driver: default
-  metrics: *default-volume
+services:
+first:
+  image: my-image:latest
+  environment: &env
+    FOO: BAR
+    ZOT: QUIX
+second:
+  image: another-image:latest
+  environment:
+    <<: *env
+    YET_ANOTHER: VARIABLE
+```
 
-  services:
-    first:
-      image: my-image:latest
-      environment: &env
-        FOO: BAR
-        ZOT: QUIX
-    second:
-      image: another-image:latest
-      environment:
-        <<: *env
-        YET_ANOTHER: VARIABLE
-  ```
+[GitLabCI](https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html#anchors):
 
-- [GitLabCI](https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html#anchors):
-  ```yaml
-  .default_scripts: &default_scripts
-    - ./default-script1.sh
-    - ./default-script2.sh
+```yaml
+.default_scripts: &default_scripts
+- ./default-script1.sh
+- ./default-script2.sh
 
-  job1:
-    script:
-      - *default_scripts
-      - ./job-script.sh
-  ```
+job1:
+script:
+  - *default_scripts
+  - ./job-script.sh
+```
 
-- Helm <https://helm.sh/docs/chart_template_guide/yaml_techniques/>
-- K8S kustomize <https://github.com/kubernetes-sigs/kustomize/issues/3675>
+Helm <https://helm.sh/docs/chart_template_guide/yaml_techniques/>
+
+K8S kustomize <https://github.com/kubernetes-sigs/kustomize/issues/3675>
 
 ## Tham khảo
 - <http://yaml.org/spec/1.2.0/>
