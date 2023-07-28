@@ -161,7 +161,7 @@ instruction (câu lệnh) như:
 - ret
 
 #### Các register trong assembly x86-64
-asm x86-64 có các 16 register (thanh ghi) thường dùng sau
+asm x86-64 có 16 register (thanh ghi) thường dùng sau
 
 - rbp: stack-frame base pointer
 - rsp: (top of) stack pointer
@@ -172,7 +172,8 @@ asm x86-64 có các 16 register (thanh ghi) thường dùng sau
 - rdi
 - rsi
 
-các register này chỉ có trong x86-64 (64 bits), không có trong x86 (32 bits)
+và các register chỉ có trong x86-64 (64 bits), không có trong x86 (32 bits):
+
 - r8d
 - r9d
 - ...
@@ -182,7 +183,7 @@ chúng như các "biến" với tên cố định trên CPU để chứa các gi
 
 - rip: instruction pointer là register đặc biệt, trỏ tới instruction tiếp theo được chạy.
 
-Các register này đều có kích thước 64 bits, ở dạng 32 bits, tên của chúng thay chữ `r` bằng chữ `e`: eip, esp, ebp, eax, ebx, ecx, edx, edi, esi.
+Các register đều có kích thước 64 bits, ở dạng 32 bits, tên của chúng thay chữ `r` bằng chữ `e`: eip, esp, ebp, eax, ebx, ecx, edx, edi, esi.
 
 ### rbp - base pointer register và stack
 ```
