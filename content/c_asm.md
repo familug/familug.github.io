@@ -28,7 +28,7 @@ Hơn "hello world" 1 chút, sẽ viết 1 function nhận vào 8 đầu vào và
 #include <stdio.h>
 
 int sum(int a, int b, int c, int d, int e, int f, int g, int h) {
-    float s = a + b + c + d + e + f + g + h;
+    int s = a + b + c + d + e + f + g + h;
     return s;
 }
 
@@ -43,7 +43,7 @@ Dòng include như import trong Python để C có thể gọi function `puts`. 
 
 ```py
 def sum(a: int, b: int, c: int, d: int, e: int, f: int, g: int, h: int) -> int:
-    s = a + b + c + d + e + f + g + h
+    s: int = a + b + c + d + e + f + g + h
     return s
 
 def main() -> int:
@@ -298,7 +298,7 @@ hello.c:
 gán lần lượt trái qua phải (1-6) các register cho các địa chỉ dưới (nhỏ hơn) rbp. Chú ý chỉ là 6, 2 phần tử 7 8 trong stack chưa được xử lý.
 
 ```asm
-4	    float s = a + b + c + d + e + f + g + h;
+4	    int s = a + b + c + d + e + f + g + h;
    0x0000000000001151 <+24>:	mov    edx,DWORD PTR [rbp-0x14]
    0x0000000000001154 <+27>:	mov    eax,DWORD PTR [rbp-0x18]
    0x0000000000001157 <+30>:	add    edx,eax
@@ -310,26 +310,20 @@ gán lần lượt trái qua phải (1-6) các register cho các địa chỉ d�
    0x0000000000001166 <+45>:	add    edx,eax
    0x0000000000001168 <+47>:	mov    eax,DWORD PTR [rbp-0x28]
    0x000000000000116b <+50>:	add    edx,eax
-### 7
    0x000000000000116d <+52>:	mov    eax,DWORD PTR [rbp+0x10]
    0x0000000000001170 <+55>:	add    edx,eax
-### 8
    0x0000000000001172 <+57>:	mov    eax,DWORD PTR [rbp+0x18]
    0x0000000000001175 <+60>:	add    eax,edx
-   0x0000000000001177 <+62>:	pxor   xmm0,xmm0
-   0x000000000000117b <+66>:	cvtsi2ss xmm0,eax
-   0x000000000000117f <+70>:	movss  DWORD PTR [rbp-0x4],xmm0
+   0x0000000000001177 <+62>:	mov    DWORD PTR [rbp-0x4],eax
 
 5	    return s;
-   0x0000000000001184 <+75>:	movss  xmm0,DWORD PTR [rbp-0x4]
-   0x0000000000001189 <+80>:	cvttss2si eax,xmm0
+   0x000000000000117a <+65>:	mov    eax,DWORD PTR [rbp-0x4]
 
 6	}
-   0x000000000000118d <+84>:	pop    rbp
-   0x000000000000118e <+85>:	ret
+   0x000000000000117d <+68>:	pop    rbp
+   0x000000000000117e <+69>:	ret
 ```
 Thực hiện cộng rồi trả về kết quả. Truy cập argument 7 8 qua địa chỉ trên (lớn hơn) rbp: rbp+0x10 và rbp+0x18.
-Những câu lệnh movss (move scalar single precision floating-point) hay cvttss2si `Convert_Integer_To_Single_Precision_Floating_Point` thực hiện trên register xmm0, register chuyên dụng để tính toán float được sử dụng ở đây dù không có số float nào.
 
 Thực hiện trên
 
