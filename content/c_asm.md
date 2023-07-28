@@ -19,7 +19,7 @@ Trên Ubuntu
 sudo apt update && sudo apt install -y gcc gdb
 ```
 
-## Viết Hello World bằng C
+### Viết Hello World bằng C
 Hơn "hello world" 1 chút, sẽ viết 1 function nhận vào 8 đầu vào và tính tổng.
 
 ```c
@@ -50,7 +50,7 @@ def main() -> int:
     return s*2
 ```
 
-### Compile & link code thành binary bằng gcc
+### Dùng gcc Compile & link code thành file binary
 ```
 $ gcc --help
 Usage: gcc [options] file...
@@ -185,7 +185,7 @@ chúng như các "biến" với tên cố định trên CPU để chứa các gi
 
 Các register đều có kích thước 64 bits, ở dạng 32 bits, tên của chúng thay chữ `r` bằng chữ `e`: eip, esp, ebp, eax, ebx, ecx, edx, edi, esi.
 
-### rbp - base pointer register và stack
+#### rbp - base pointer register và stack
 ```
 8	int main() {
    0x000000000000118f <+0>:	push   rbp
@@ -222,8 +222,7 @@ Hai dòng tiếp theo khi bắt đầu main
    0x0000000000001193 <+4>:	sub    rsp,0x10
 ```
 
-`mov` thực hiện lấy giá trị của `rsp` ghi vào `rbp`, hay dễ hiểu hơn, như viết `rbp = rsp` trong C, Python.
-#TODO why sub?
+`mov` thực hiện lấy giá trị của `rsp` ghi vào `rbp`, hay dễ hiểu hơn, như viết `rbp = rsp` trong C, Python. sub trừ địa chỉ rsp đi 0x10 hay 16 đơn vị.
 
 #### Hiển thị hello world!
 ```asm
@@ -264,7 +263,6 @@ Gồm 3 bước:
 ```
 - kết quả của function sum tự được chứa trong register eax. `mov` gán giá trị return của sum vào địa chỉ rbp-0x4.
 
-
 ```asm
 11	    return s*2;
    0x00000000000011d6 <+71>:	mov    eax,DWORD PTR [rbp-0x4]
@@ -272,7 +270,7 @@ Gồm 3 bước:
 ```
 giá trị được gán vào eax rồi thực hiện `*2` bằng cách cộng eax với eax qua `add eax,eax`. Kết quả của phép tính này tự được chứa trong eax, là giá trị main trả về.
 
-#### Các kiểu dữ liệu trong asm - data type
+#### Các kiểu dữ liệu trong assembly - data type
 Chapter 4.1 vol 1 Intel SDM viết:
 
 > A byte is eight bits, a word is 2 bytes (16 bits), a doubleword is 4 bytes (32 bits), a quadword is 8 bytes (64 bits), and a double quadword is 16 bytes (128 bits).
