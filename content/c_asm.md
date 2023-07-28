@@ -12,6 +12,8 @@ Tags: assembly, asm, gcc, gdb, x86-64
 đọc xong là biết.
 
 Bài viết liên quan hơi ngược lại với bài [viết hello word bằng x86-64 assembly]({filename}/asm.md), viết thì khó hơn đọc, bởi viết cần nghĩ đủ thứ, lên kế hoạch viết gì tiếp, đặt tên ra sao, còn đọc thì chỉ cần đi theo.
+
+PS: nên đọc trên máy tính hay tablet để có format chuẩn.
 ### Cài đặt gcc gdb
 Trên Ubuntu
 
