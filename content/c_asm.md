@@ -244,7 +244,7 @@ Gồm 3 bước:
 
 - Lần lượt, rsi, rdi, rdx, rcx, r8, r9 chứa các argument 1-6
 - argument thứ 7 trở đi được push vào stack. Đây là lý do các function C thường không dùng hơn 6 argument để tối ưu tốc độ, các register luôn nhanh hơn push vào stack.
-- thứ tự các câu lệnh gán argument thực hiện từ phải qua trái (từ 8 đến 1): push 8, push 7, r9d=6, r8d=5, ecx=4, edx=3, rsi=2, rdi=1.
+- thứ tự các câu lệnh gán argument thực hiện từ phải qua trái (từ 8 đến 1): push 8, push 7, r9d=6, r8d=5, ecx=4, edx=3, esi=2, edi=1. GCC đã thực hiện tối ưu, nó phát hiện giá trị đủ nhỏ để chứa trong 32bits nên dùng ecx chứ không dùng rcx.
 - gọi call 0x1139, 0x1139 là địa chỉ của function sum.
 
 ```asm
@@ -268,7 +268,7 @@ Gồm 3 bước:
    0x00000000000011d6 <+71>:	mov    eax,DWORD PTR [rbp-0x4]
    0x00000000000011d9 <+74>:	add    eax,eax
 ```
-giá trị được gán vào eax rồi thực hiện `*2` bằng cách cộng eax với eax qua `add eax,eax`. Kết quả của phép tính này tự được chứa trong eax, là giá trị main trả về.
+giá trị được gán vào eax rồi thực hiện `*2` bằng cách cộng eax với eax qua `add eax,eax`. Kết quả của phép tính này tự được chứa trong eax, là giá trị main trả về. Chú ý, ở đây do GCC thực hiện tối ưu, nên thay phép nhân bằng phép cộng 2 số.
 
 #### Các kiểu dữ liệu trong assembly - data type
 Chapter 4.1 vol 1 Intel SDM viết:
