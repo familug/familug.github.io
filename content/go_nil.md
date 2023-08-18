@@ -1,4 +1,4 @@
-Title: [Go] nil không là duy nhất
+Title: [Go] nil không là duy nhất, cap(map) = ?
 Date: 2023-08-18
 Category: frontpage
 Tags: go, golang, nil
