@@ -103,7 +103,7 @@ cap(m) bằng mấy?
 
 Không dùng được `cap` với map. Tại sao?  vì nó như thế và sẽ không thay đổi.
 
-Sau 12+ năm dùng Go, tác giả Russ Cox đã đề xuất thêm cap(map), nhưng đã bị từ chối <https://github.com/golang/go/issues/52157>.
+Sau 12+ năm dùng Go, tác giả bradfitz (golang team (2010-2020)) đã đề xuất thêm cap(map), nhưng đã bị từ chối <https://github.com/golang/go/issues/52157>.
 
 ## Tham khảo
 - <https://go.dev/blog/maps>
