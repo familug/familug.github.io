@@ -1,4 +1,4 @@
-Title: tại sao CA ok trên Chrome còn Firefox báo không hợp lệ
+Title: Tại sao CA ok trên Chrome còn Firefox báo không hợp lệ
 Date: 2023-11-12
 Category: frontpage
 Tags: Firefox, Chrome, Certificate
