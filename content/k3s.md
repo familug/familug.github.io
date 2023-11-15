@@ -80,23 +80,24 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: nginx
-  name: nginx
+    app: cache
+  name: cache
+  namespace: webdev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: cache
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: nginx
+        app: cache
     spec:
       containers:
-      - image: nginx
-        name: nginx
+      - image: redis
+        name: redis
         resources: {}
 status: {}
 ```
