@@ -13,8 +13,8 @@ Tham khảo <https://pp.pymi.vn/article/aoc2021/>
 
 Bài viết sử dụng [Rust 2021](https://doc.rust-lang.org/edition-guide/rust-2021/index.html).
 
-## String, &str, char
-Rust có 2 kiểu string thường dùng là String và str.
+## String, &str
+Rust có 2 kiểu string thường dùng là str và String.
 
 ### str - string slice
 `str` còn được gọi là **string slice**, thường được dùng ở dạng "borrowed" `&str`.
@@ -52,15 +52,17 @@ res.push_str("How are you?");
 Sự khác biệt chủ yếu ở mục đích sử dụng:
 
 - Dùng `String` khi tạo string mới hay nội dung string thay đổi.
-- Dùng `&str` khi nội dung cố định.
+- Dùng `&str` khi nội dung string cố định, không mới.
 
 Method `replace` cho thấy sự khác biệt này:
 
-> pub fn replace<'a, P>(&'a self, from: P, to: &str) -> String
-> where
->     P: Pattern<'a>,
+```rs
+pub fn replace<'a, P>(&'a self, from: P, to: &str) -> String
+where
+    P: Pattern<'a>,
+```
 
-`"a b c a".replace("a", "d")` trả về 1 `String` chứ không phải `&str`. Có thể hiểu rằng do Rust cần cấp phát bộ nhớ để tạo ra 1 String có nội dung mới, nên đây là kiểu `String` thay vì `&str`.
+`"a b c a".replace("a", "d")` trả về 1 `String`. Có thể hiểu rằng do Rust cần cấp phát bộ nhớ để tạo ra 1 String có nội dung mới, nên đây là kiểu `String` thay vì `&str`.
 
 Đọc nội dùng 1 file cũng trả về String:
 
@@ -68,27 +70,13 @@ Method `replace` cho thấy sự khác biệt này:
 let contents = std::fs::read_to_string("/etc/passwd").unwrap();
 ```
 
-> pub fn read_to_string<P>(path: P) -> io::Result<String>
-> where
->     P: AsRef<Path>,
+```rs
+pub fn read_to_string<P>(path: P) -> io::Result<String>
+where
+    P: AsRef<Path>,
+```
 
 Dùng `"abc".to_string()` để biến `&str` thành `String`, ngược lại `String::from("abc").as_str()` để biến `String` thành `&str`.
-
-### char - character
-
-char là một ký tự, hay chính xác hơn là 1 Unicode scalar value, dùng single quote `'` để bao quanh 2 bên char.
-
-```rust
-let c: char = '\u{1b0}'; // ư
-let c2 = 'a';
-```
-
-Biến vector char thành String với `collect`:
-
-```rust
-let v = vec!['a', 'b', 'c'];
-let s: String = v.iter().collect();
-```
 
 ### Split
 `"a-b-c".split("-")` trả về một `Split` struct, hay full name `std::str::Split` chứ không phải 1 vector `Vec<&str>`.
@@ -139,6 +127,21 @@ dbg!(parts);
 //     "c",
 //     "d",
 // ]
+```
+## char - character
+
+char là một ký tự, hay chính xác hơn là 1 Unicode scalar value, dùng single quote `'` để bao quanh 2 bên char.
+
+```rust
+let c: char = '\u{1b0}'; // ư
+let c2 = 'a';
+```
+
+Biến vector char thành String với `collect`:
+
+```rust
+let v = vec!['a', 'b', 'c'];
+let s: String = v.iter().collect();
 ```
 
 ## Kết luận
