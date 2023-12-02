@@ -81,10 +81,11 @@ Dùng `"abc".to_string()` để biến `&str` thành `String`, ngược lại `S
 ### Split
 `"a-b-c".split("-")` trả về một `Split` struct, hay full name `std::str::Split` chứ không phải 1 vector `Vec<&str>`.
 
-> pub fn split<'a, P>(&'a self, pat: P) -> Split<'a, P>
-> where
->     P: Pattern<'a>,
-
+```rs
+pub fn split<'a, P>(&'a self, pat: P) -> Split<'a, P>
+where
+    P: Pattern<'a>,
+```
 `Split` implement `Iterator` trait (hay nói như Python: list là 1 iterable, có method `__iter__`)
 
 nên có thể duyệt qua từng phần tử của kết quả, mỗi phần tử là 1 `&str` cho dù `s` là `&str` hay `String`:
