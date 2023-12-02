@@ -91,13 +91,13 @@ let s: String = v.iter().collect();
 ```
 
 ### Split
-&str.split("-") trả về ??? một `Split`, hay full name `std::str::Split` chứ không phải 1 vector `Vec<&str>`.
+`"a-b-c".split("-")` trả về một `Split` struct, hay full name `std::str::Split` chứ không phải 1 vector `Vec<&str>`.
 
 > pub fn split<'a, P>(&'a self, pat: P) -> Split<'a, P>
 > where
 >     P: Pattern<'a>,
 
-`Split` implement `Iterator` trait (hay nói như Python: list là 1 iterable)
+`Split` implement `Iterator` trait (hay nói như Python: list là 1 iterable, có method `__iter__`)
 
 nên có thể duyệt qua từng phần tử của kết quả, mỗi phần tử là 1 `&str` cho dù `s` là `&str` hay `String`:
 ```rust
