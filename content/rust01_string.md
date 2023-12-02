@@ -17,7 +17,7 @@ Bài viết sử dụng [Rust 2021](https://doc.rust-lang.org/edition-guide/rust
 Rust có 2 kiểu string thường dùng là String và str.
 
 ### str - string slice
-`str` còn được gọi là `string slice`, thường được dùng ở dạng "borrowed" `&str`.
+`str` còn được gọi là **string slice**, thường được dùng ở dạng "borrowed" `&str`.
 Kiểu của các string khi viết trực tiếp vào code (literal string) là `&str`.
 `str` dùng double quote `"` để bao quanh nội dung:
 
@@ -33,7 +33,7 @@ let s: &str = "Hello, world!";
 `String` làm chủ sở hữu giá trị của nó nên còn gọi là **owned string** - trái với `&str` là **borrowed** (đi mượn).
 
 ```rust
- let s: String = String::from("Hello, world!");
+let s: String = String::from("Hello, world!");
 dbg!(s);
 // [src/main.rs:6] s = "Hello, world!"
 ```
@@ -78,7 +78,7 @@ Dùng `"abc".to_string()` để biến `&str` thành `String`, ngược lại `S
 char là một ký tự, hay chính xác hơn là 1 Unicode scalar value, dùng single quote `'` để bao quanh 2 bên char.
 
 ```rust
-let c: char = '\u{1b0}';
+let c: char = '\u{1b0}'; // ư
 let c2 = 'a';
 ```
 
