@@ -146,6 +146,6 @@ let s: String = v.iter().collect();
 ```
 
 ## Kết luận
-Khi nội dung string được tạo mới, hoặc thay đổi, sử dung String, khi nội dung cố định, không mới, dùng `&str`.
+Khi nội dung string được tạo mới, hoặc thay đổi, dùng `String`, khi nội dung cố định, không mới, dùng `&str`.
 
 [Ủng hộ tác giả 🍺](https://www.familug.org/p/ung-ho.html)
