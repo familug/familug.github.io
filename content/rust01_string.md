@@ -50,7 +50,8 @@ res.push_str("How are you?");
 `String` và `&str` có nhiều method giống nhau: `starts_with`, `ends_with`, `split`, `replace`, `is_digit`...
 
 Sự khác biệt chủ yếu ở mục đích sử dụng:
-- Dùng `String` khi nội dung string sẽ thay đổi.
+
+- Dùng `String` khi tạo string mới hay nội dung string thay đổi.
 - Dùng `&str` khi nội dung cố định.
 
 Method `replace` cho thấy sự khác biệt này:
