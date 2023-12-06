@@ -26,7 +26,7 @@ pub fn main() {
 //}
 ```
 
-Kiểu set không có thứ tự của các phần tử, kết của print của bạn có thể khác ví dụ trên và khác ở mỗi lần chạy code.
+Kiểu set không có thứ tự của các phần tử, kết quả print có thể khác ví dụ trên và khác ở mỗi lần chạy code.
 
 ## Tạo set từ vector, iterator
 
