@@ -69,12 +69,19 @@ Nhưng truyện để chỗ cho đầu óc được tưởng tượng, và đi v
 
 Đọc sách học chắc là chuyện khác.
 
+### Sách được đánh giá cao mà đọc không thấy thú vị?
+Hầu hết các truyện dài đều không hấp dẫn ngay từ đầu, đa phần dành thời gian để xây dựng thế giới, không gian, nên thường 
+mất 30% đầu để làm việc này. Đa số sẽ rất hay từ 70% trở đi khi mọi thứ đi dần đến kết truyện.
+Hoặc cũng có những truyện, tác giả cố tình làm cho nó "chán", để biểu diễn sự dài và "chán" ở trong truyện (như chuyến hành trình dài ngày trong The Lord Of The Rings).
+
 ### Vài cuốn sách thú vị
 - Project Hail Mary by Andy Weir
 - The three-body problem by Cixin Liu (sách tàu dịch sang Eng)
 - The dark forest by Cixin Liu
 - Stranger in a Strange Land by Robert A. Heinlein
 - Dune by Frank Herbert (Author)
+
+Review tại <http://hvnsweeting.github.io/pages/books/>
 
 ### Kết luận
 Đọc truyện là để cho zui,
