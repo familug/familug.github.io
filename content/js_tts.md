@@ -16,8 +16,8 @@ text = ` In my younger and more vulnerable years my father gave me some advice t
 
 “Whenever you feel like criticizing anyone,” he told me, “just remember that all the people in this world haven’t had the advantages that you’ve `
 utter = new SpeechSynthesisUtterance(text)
-utter.voice = synth.getVoices()[-1] // change to any number to change voice
-utter.rate = 0.9
+utter.voice = synth.getVoices()[-1] // change to any number to change voice - giọng đọc, thay -1 bằng số khác để đổi giọng
+utter.rate = 0.9 // speed - tốc độ
 synth.speak(utter)
 
 ```
