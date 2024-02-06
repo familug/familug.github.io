@@ -5,10 +5,10 @@ Tags: javascript, JS, browser api, TTS, text-to-speech
 
 Nếu bạn từng có nhu cầu nghe thay vì đọc (tiếng Anh), 5 dòng code JavaScript ngay trên trình duyệt có thể làm điều đó!
 
-## Bật Web developer console 
+## Bật Web developer console
 Bấm Ctrl-Shift-K <https://firefox-source-docs.mozilla.org/devtools-user/web_console/index.html>
 
-Gõ
+![web console]({static}/images/tts.png)
 
 ```js
 synth = window.speechSynthesis
