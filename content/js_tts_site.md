@@ -5,20 +5,20 @@ Tags: javascript, JS, browser api, TTS, text-to-speech
 
 Sau khi có thể [đọc text bằng 5 dòng code]({filename}/js_tts.md), làm luôn trang web.
 
-## Tạo site HTML 
+## Tạo site HTML
 Tạo 1 ô nhập text (textarea) và 1 nút bấm (button)
 
 ```html
 <html>
-	<body>
-		<textarea id="text" rows="24" cols="100">
-		 In my younger and more vulnerable years my father gave me some advice that I’ve been turning over in my mind ever since.
+  <body>
+    <textarea id="text" rows="24" cols="100">
+     In my younger and more vulnerable years my father gave me some advice that I’ve been turning over in my mind ever since.
 
-		“Whenever you feel like criticizing anyone,” he told me, “just remember that all the people in this world haven’t had the advantages that you’ve
-		</textarea>
-		<br>
-		<button id="speak">Speak</button>
-	<body>
+    “Whenever you feel like criticizing anyone,” he told me, “just remember that all the people in this world haven’t had the advantages that you’ve
+    </textarea>
+    <br>
+    <button id="speak">Speak</button>
+  <body>
 </html>
 ```
 
@@ -27,12 +27,12 @@ Tạo 1 ô nhập text (textarea) và 1 nút bấm (button)
 button = document.getElementById("speak");
 
 function speak() {
-    synth = window.speechSynthesis
-    text = document.getElementById("text").value;
-    utter = new SpeechSynthesisUtterance(text)
-    voices = synth.getVoices()
-    utter.rate = 0.9 // speed - tốc độ
-    synth.speak(utter)
+  synth = window.speechSynthesis;
+  text = document.getElementById("text").value;
+  utter = new SpeechSynthesisUtterance(text);
+  voices = synth.getVoices();
+  utter.rate = 0.9; // speed - tốc độ
+  synth.speak(utter);
 }
 
 button.addEventListener('click', speak);
