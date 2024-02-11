@@ -19,7 +19,7 @@ Bài này khám phá thẻ canvas trong HTML5 và vẽ bánh chưng mừng tuổ
 
 Xem kết quả tại <https://hvnsweeting.github.io/js-toys/draw-basic.html>
 ## Canvas - vẽ hình
-Thẻ [canvas](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas) chỉ có 2 thuộc tính width (300) và height (150), việc vẽ hình được thực hiện bằng JavaScript.
+Thẻ [canvas](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas) chỉ có 2 thuộc tính width (default: 300px) và height (150px), việc vẽ hình được thực hiện bằng JavaScript.
 
 Tạo cặp thẻ HTML canvas rồi lấy object "context" 2D để vẽ hình 2D.
 
@@ -53,7 +53,7 @@ ctx.fillText("Chung cake", 240, 20)
 ```
 
 ## Vẽ hình tùy ý
-Vẽ hình tự do bằng cách bắt đầu với `beginPath()`, di chuyển "bút", khi xong thì `fill()` để tô màu hình kính tạo bởi đường vẽ.
+Vẽ hình tự do bằng cách bắt đầu với `beginPath()`, di chuyển "bút", khi xong thì `fill()` để tô màu hình kín tạo bởi đường vẽ.
 
 Dùng `arc` để vẽ hình tròn
 
