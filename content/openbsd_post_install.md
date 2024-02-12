@@ -3,10 +3,10 @@ Date: 2024-02-12
 Category: en,
 Tags: openbsd, wifi, ifconfig, fw_update
 
-After installing OpenBSD 7.4, here are my necessary customizations to make it usable.
+After installing OpenBSD 7.4, here are customizations to make it more usable.
 
 ```
-obsd$ uname -a
+$ uname -a
 OpenBSD obsd.dev.obsd 7.4 GENERIC.MP#2 amd
 ```
 
@@ -14,15 +14,15 @@ OpenBSD obsd.dev.obsd 7.4 GENERIC.MP#2 amd
 Run `ifconfig` and see interface names.
 
 ```
-$ ifconfig | grep flags
-lo0: flags=2008049<UP,LOOPBACK,RUNNING,MULTICAST,LRO> mtu 32768
-re0: flags=8802<BROADCAST,SIMPLEX,MULTICAST> mtu 1500
-iwx0: flags=808843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST,AUTOCONF4> mtu 1500
-enc0: flags=0<>
-pflog0: flags=141<UP,RUNNING,PROMISC> mtu 33136
+$ ifconfig | grep flags | grep -o .*:
+lo0:
+re0:
+iwx0:
+enc0:
+pflog0:
 ```
 
-In this case, the interface named `iwx0`. Find in dmesg:
+In this case, the interface named `iwx0`. Find details about it in `dmesg`:
 
 ```
 $ dmesg | grep iwx0 
@@ -36,7 +36,12 @@ copy the file to an USB formatted as vfat filesystem so all OSes can read from i
 ### Mount USB
 Find the partition to mount: run as root
 
-If the device is `sd1`, use `sd1c`
+If the device is `sd1`, use `sd1c` as `man disklabel` explained:
+
+> disklabel supports 15 configurable partitions, a through p
+> excluding c.  The c partition describes the entire physical
+> disk, is automatically created by the kernel, and cannot be
+> modified or deleted by disklabel.
 
 ```
 # disklabel -h /dev/sd1c
@@ -72,13 +77,14 @@ iwx-firmware-20230629.tgz
 
 Run as root: `fw_update /mnt/iwx-firmware-20230629.tgz` to install the driver.
 
+
 ### Turn on wifi
 Run as root:
 
 ```
-ifconfig iwx0 nwid WIFI_NAME wpakey PASSWORD
-ifconfig iwx0 up
-dhclient iwx0
+# ifconfig iwx0 nwid WIFI_NAME wpakey PASSWORD
+# ifconfig iwx0 up
+# dhclient iwx0
 ```
 
 To auto-connect to the wifi on startup, add a file named: `/etc/hostname.iwx0` with content:
@@ -93,22 +99,20 @@ Note: change `iwx0` in filename to your real interface name.
 ### Install packages
 
 ```
-pkg_add firefox git tmux redshift
+# pkg_add firefox git tmux redshift
 ```
 
 ### Update firmware
 
 ```
-fw_update
+# fw_update
 ```
 
 ### Change window manager
 
 Default window manager is fwwm, right click choose cwm.
 
-To set it permanently, write a file at 
-
-`$HOME/.xsession`
+To set it permanently, write a file at `$HOME/.xsession`
 
 ```
 # use UTF-8 everywhere
@@ -127,7 +131,7 @@ Read `man cwm` for default key bindings.
 
 ### Enable power management to suspend
 ```
-sysctl start apmd
+rcctl start apmd
 ```
 
 Then type `zzz` to suspend.
