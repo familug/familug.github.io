@@ -285,16 +285,15 @@ Python3.10 hiển thị giá trị RLIMIT_NOFILE của Python process:
 % python3 -c 'import resource; print(resource.getrlimit(resource.RLIMIT_NOFILE))' 
 (1024, 1048576)
 ```
-Tạo 1 systemd service tên `pymi` lần lượt set LimitNOFILE=524288 và 5242880 
+Tạo 1 systemd service tên `pymi` lần lượt set LimitNOFILE=5242880 và 5000 
 ```
+# systemctl  cat pymi.service 
 # /lib/systemd/system/pymi.service
 [Unit]
-Description=Regular background program processing daemon
-Documentation=man:cron(8)
+Description=FAMILUG.org rlimit test
 After=remote-fs.target nss-user-lookup.target
 
 [Service]
-EnvironmentFile=-/etc/default/cron
 ExecStart=python3 -c 'import resource; print(resource.getrlimit(resource.RLIMIT_NOFILE))'
 LimitNOFILE=5242880
 IgnoreSIGPIPE=false
@@ -302,28 +301,31 @@ KillMode=process
 
 [Install]
 WantedBy=multi-user.target
-```
 
+```
 
 ```
 # systemctl daemon-reload
 # systemctl start pymi
 # systemctl status pymi
-○ pymi.service - Regular background program processing daemon
+root@mini:~# systemctl status pymi
+○ pymi.service - FAMILUG.org rlimit test
      Loaded: loaded (/lib/systemd/system/pymi.service; disabled; vendor preset: enabled)
      Active: inactive (dead)
-       Docs: man:cron(8)
 
-Thg 3 15 00:15:40 mini systemd[1]: Started Regular background program processing daemon.
-Thg 3 15 00:15:40 mini python3[82047]: (524288, 524288)
-Thg 3 15 00:15:40 mini systemd[1]: pymi.service: Deactivated successfully.
-Thg 3 15 00:16:21 mini systemd[1]: Started Regular background program processing daemon.
-Thg 3 15 00:16:21 mini python3[84751]: (1048576, 1048576)
-Thg 3 15 00:16:21 mini systemd[1]: pymi.service: Deactivated successfully.
+Thg 3 15 00:49:13 mini systemd[1]: Started FAMILUG.org rlimit test.
+Thg 3 15 00:49:13 mini python3[215501]: (1048576, 1048576)
+Thg 3 15 00:49:13 mini systemd[1]: pymi.service: Deactivated successfully.
+Thg 3 15 00:49:33 mini systemd[1]: Started FAMILUG.org rlimit test.
+Thg 3 15 00:49:34 mini python3[216937]: (5000, 5000)
+Thg 3 15 00:49:34 mini systemd[1]: pymi.service: Deactivated successfully.
 ```
 
-Kết quả, khi set 524288, chương trình Python thấy cả 2 soft và hard limit đều = 524288.
-Khi set 5242880 (5 triệu), giá trị này bị set về giá trị tối đa của kernel set 1048576.
+Kết quả: 
+
+- Khi set 5242880 (5 triệu), giá trị này bị set về giá trị tối đa của kernel set 1048576.
+- khi set 5000, chương trình Python thấy cả 2 soft và hard limit đều = 5000.
+
 
 ## Kết luận
 Tại systemd v249, Không thể set LimitNOFILE lớn hơn giá trị trong `/proc/sys/fs/nr_open`.
