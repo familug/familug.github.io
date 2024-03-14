@@ -278,13 +278,14 @@ int setrlimit_closest(int resource, const struct rlimit *rlim) {
 
 Giá trị được set là `MIN(rlim->rlim_cur, highest.rlim_max)`, nên người dùng không thể set cao hơn giá trị `highest.rlim_max`, tức giá trị max hard limit kế thừa từ systemd, hay kết quả của function read_nr_open, ở ví dụ này là 1024*1024.
 
-PS: chạy Python3.10 hiển thị giá trị RLIMIT_NOFILE của Python process:
+### Tạo service chạy Python thử set hard limit lớn hơn 1024*1024
+Python3.10 hiển thị giá trị RLIMIT_NOFILE của Python process:
 
 ```py
 % python3 -c 'import resource; print(resource.getrlimit(resource.RLIMIT_NOFILE))' 
 (1024, 1048576)
 ```
-Thử tạo 1 systemd service tên `pymi` lần lượt set LimitNOFILE=524288 và 5242880 
+Tạo 1 systemd service tên `pymi` lần lượt set LimitNOFILE=524288 và 5242880 
 ```
 # /lib/systemd/system/pymi.service
 [Unit]
