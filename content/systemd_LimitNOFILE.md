@@ -18,7 +18,7 @@ $ ulimit -n
 9999
 ```
 ### Set process max open files trên Systemd 
-Khi bằng systemd, các service sẽ kết thừa giá trị limit của systemd hoặc tự set bằng LimitNOFILE
+Khi chạy bằng systemd, các service sẽ kết thừa giá trị limit của systemd hoặc tự set bằng LimitNOFILE
 ```
 $ systemd --version
 systemd 249 (249.11-0ubuntu3.12)
