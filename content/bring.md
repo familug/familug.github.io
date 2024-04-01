@@ -10,6 +10,8 @@ Lý do thì không bàn tới, bởi bài viết này muốn hỏi xem "nếu ch
 
 Hãy thử dành 5 phút để tự trả lời, trước khi đọc tiếp.
 
+![bring memory]({static}/images/bring.jpeg)
+
 ### Mang theo "kinh nghiệm"
 Kinh nghiệm là thứ mơ hồ nhất mà bạn có thể mang theo, vậy thử hỏi, kinh nghiệm đó **CỤ THỂ** là những gì?
 
