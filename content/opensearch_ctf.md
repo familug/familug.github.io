@@ -10,7 +10,7 @@ OpenSearch ngày càng khác biệt với ElasticSearch, mang theo những ưu /
 
 Một nhược điểm là nó fork từ bản cũ của ElasticSearch, nên nhiều lỗi còn rất khó đọc. Bài này nhờ kỹ năng chơi [CTF](https://pp.pymi.vn/article/pymictf/) với team PyMi mà giải quyết một vấn đề đau đầu.
 
-Một ưu điểm là OpenSearch hỗ trợ login bằng SSO: SAML, OIDC, LDAP... còn ElasticSearch phải trả phí.
+Một ưu điểm là OpenSearch hỗ trợ giải pháp login doanh nghiệp bằng SSO: SAML, OIDC, LDAP... còn ElasticSearch phải trả phí mua license.
 
 ### Chạy 1 node trên máy bằng podman (docker)
 podman là 1 phần mềm phát triển bởi RedHat thay thế cho docker, sau khi docker đổi qua tính phí trên Desktop (DockerDesktop), podman dần trở nên phổ biến.
@@ -23,10 +23,10 @@ Chạy 1 container opensearch theo hướng dẫn tại [trang dockerhub](https:
 $ podman run -it -p 9200:9200 -p 9600:9600 -e OPENSEARCH_INITIAL_ADMIN_PASSWORD=daemonH4gx@4 -e "discovery.type=single-node" --name opensearch-node docker.io/opensearchproject/opensearch:2.15.0
 
 Enabling OpenSearch Security Plugin
-Enabling execution of install_demo_configuration.sh for OpenSearch Security Plugin 
-OpenSearch 2.12.0 onwards, the OpenSearch Security Plugin a change that requires an initial password for 'admin' user. 
-Please define an environment variable 'OPENSEARCH_INITIAL_ADMIN_PASSWORD' with a strong password string. 
-If a password is not provided, the setup will quit. 
+Enabling execution of install_demo_configuration.sh for OpenSearch Security Plugin
+OpenSearch 2.12.0 onwards, the OpenSearch Security Plugin a change that requires an initial password for 'admin' user.
+Please define an environment variable 'OPENSEARCH_INITIAL_ADMIN_PASSWORD' with a strong password string.
+If a password is not provided, the setup will quit.
  For more details, please visit: https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/
 ### OpenSearch Security Demo Installer
 ### ** Warning: Do not use on production or public reachable systems **
@@ -46,7 +46,7 @@ Admin password set successfully.
 
 server đã mặc định setup sẵn SSL/TLS port 9200.
 
-Sau khi cài lên trên k8s cluster, bỗng dưng xuất hiện hàng đống log error như sau, dễ dàng tìm trên mạng
+Sau khi cài lên trên K8S cluster, bỗng dưng xuất hiện hàng đống log error như sau
 
 ```
 [2024-07-12T13:16:36,456][ERROR][o.o.h.n.s.SecureNetty4HttpServerTransport] [00a159b488ac] Exception during establishing a SSL connection: io.netty.handler.ssl.NotSslRecordException: not an SSL/TLS record: 474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a
@@ -72,6 +72,7 @@ io.netty.handler.ssl.NotSslRecordException: not an SSL/TLS record: 474554202f204
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) [netty-common-4.1.110.Final.jar:4.1.110.Final]
 	at java.base/java.lang.Thread.run(Thread.java:1583) [?:?]
 ```
+dễ dàng tìm thấy lỗi này trên [mạng](https://www.google.com/search?client=firefox-b-d&q=Exception+during+establishing+a+SSL+connection%3A+io.netty.handler.ssl.NotSslRecordException%3A+not+an+SSL%2FTLS+record%3A)
 
 nhưng ai gửi request http đến địa chỉ này?
 ### Tìm ai gửi request
@@ -81,11 +82,12 @@ Các phương án:
 - cài tcpdump, ngrep để dump traffic pod 9200 xem nội dung traffic, không dễ cài được package nếu image đã remove các package manager (như dùng distroless images)
 - đọc log?! ai đọc stacktrace Java???
 
-Giải pháp là đọc log, phần nội dung bí hiểm trong log message: 
+Giải pháp là đọc log, phần nội dung bí hiểm trong log message:
 
-> 474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a
+``` 474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a
+```
 
-chứa chuỗi 45 47 55 ... các ký tự từ a-e từ 0-9... với kinh nghiệm chơi các bài dễ trong các giải CTF, đoán ngay dùng hex <https://n.pymi.vn/base16.html> để xem là gì. Bật Python:
+chứa dãy 45 47 55 ... các ký tự từ a-e từ 0-9... với kinh nghiệm chơi các bài dễ trong các giải CTF, đoán ngay dùng hex <https://n.pymi.vn/base16.html> để xem là gì. Bật Python:
 
 ```py
 >>> s = "474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a"
@@ -95,13 +97,24 @@ b'GET / HTTP/1.1\r\nHost: localhost:9200\r\nUser-Agent: curl/7.81.0\r\nAccept: *
 
 đọc được nội dung của request đã gửi tới server.
 
-Trên thực tế, đống log spam có User-Agent là 1 chương trình monitoring, từ đó tìm ra và tắt nó đi.
+Trên thực tế, đống log có User-Agent là 1 chương trình monitoring, từ đó tìm ra và tắt nó đi.
 
 PS: có thể dùng <https://gchq.github.io/CyberChef/> để decode hex.
 
 ## Kết luận
 Chơi CTF không bổ ngang thì bổ dọc,
 không bổ dọc thì lại bổ ngang.
+
+Thực hiện trên:
+
+```
+$ lsb_release -d
+Description:	Ubuntu 22.04.4 LTS
+
+$ podman --version
+podman version 3.4.4
+```
+
 Hết.
 
 HVN at <http://pymi.vn> and <https://www.familug.org>.
