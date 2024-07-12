@@ -13,7 +13,7 @@ Một nhược điểm là nó fork từ bản cũ của ElasticSearch, nên nhi
 Một ưu điểm là OpenSearch hỗ trợ login bằng SSO: SAML, OIDC, LDAP... còn ElasticSearch phải trả phí.
 
 ### Chạy 1 node trên máy bằng podman (docker)
-podman là 1 phần mềm phát triển bởi RedHat thay thế cho docker, sau khi docker đổi qua tính phí trên Desktop, podman dàn trở nên phổ biến. 
+podman là 1 phần mềm phát triển bởi RedHat thay thế cho docker, sau khi docker đổi qua tính phí trên Desktop (DockerDesktop), podman dần trở nên phổ biến.
 Câu lệnh podman tương thích với docker nên chỉ cần thay chữ `podman` trong bài thành `docker` là được. Bài này chạy bằng podman trên máy để bạn đọc có thể làm theo, thực tế chạy trên 1 K8S cluster
 
 Chạy 1 container opensearch theo hướng dẫn tại [trang dockerhub](https://hub.docker.com/r/opensearchproject/opensearch), thấy rất nhiều log:
