@@ -5,10 +5,10 @@ Tags: elasticsearch, CTF, opensearch, podman
 
 
 ## OpenSearch vs ElasticSearch
-OpenSearch là 1 bản fork của Amazon từ ElasticSearch, sau [vụ đổi license đình đám từ công ty Elastic](https://www.elastic.co/blog/why-license-change-aws) đứng sau ElasticSearch không muốn Amazon thu lời từ sản phẩm open-source của họ.
+[OpenSearch](https://opensearch.org/) là 1 bản fork của Amazon từ ElasticSearch, sau [vụ đổi license đình đám từ công ty Elastic](https://www.elastic.co/blog/why-license-change-aws) đứng sau ElasticSearch không muốn Amazon thu lời từ sản phẩm open-source của họ.
 OpenSearch ngày càng khác biệt với ElasticSearch, mang theo những ưu / nhược điểm riêng.
 
-Một nhược điểm là nó fork từ bản của của ElasticSearch, nên nhiều lỗi còn rất khó đọc. Bài này nhờ kỹ năng chơi [CTF](https://pp.pymi.vn/article/pymictf/) với team PyMi mà giải quyết một vấn đề đau đầu.
+Một nhược điểm là nó fork từ bản cũ của ElasticSearch, nên nhiều lỗi còn rất khó đọc. Bài này nhờ kỹ năng chơi [CTF](https://pp.pymi.vn/article/pymictf/) với team PyMi mà giải quyết một vấn đề đau đầu.
 
 Một ưu điểm là OpenSearch hỗ trợ login bằng SSO: SAML, OIDC, LDAP... còn ElasticSearch phải trả phí.
 
