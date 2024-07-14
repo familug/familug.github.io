@@ -22,8 +22,17 @@ Description-en: cross-platform, general-purpose programming languagehttps://kotl
  Library, but type inference allows its syntax to be more concise.
 ```
 
-Kotlin <https://kotlinlang.org/> là một ngôn ngữ lập trình hiện đại (2011) phát triển bởi JetBrain (IDE: PyCharm, IntelliJ IDEA), chạy trên máy ảo JVM (của Java), tương thích với Java (dùng được thư viện Java), cú pháp ngắn gọn, hỗ trợ functional programming, được Google hỗ trợ là ngôn ngữ chính thức để viết app Android.
+Kotlin <https://kotlinlang.org/> là một ngôn ngữ lập trình static-typing hiện đại (2011) phát triển bởi JetBrain (IDE: PyCharm, IntelliJ IDEA), chạy trên máy ảo JVM (của Java), tương thích với Java (dùng được thư viện Java), cú pháp ngắn gọn, hỗ trợ functional programming, được Google hỗ trợ là ngôn ngữ chính thức để viết app Android.
+## Tại sao dùng Kotlin?
+Để hiểu 1 hệ thống đầy đủ, lập trình viên cần hiểu từ frontend (FE) tới backend (BE). Lập tức nghĩ rằng JavaScript FE + NodeJS BE là câu trả lời?
+Câu trả lời này đúng, nhưng không phải duy nhất. Ngày nay, đa phần các sản phẩm đều có frontend là mobile app, nên app Android hay iOS cũng là các lựa chọn cho frontend, nhiều ứng dụng thậm chí không có hoặc có mà ít dùng web frontend (Grab/Uber/Tiktok/Momo). Ngoài ra các hệ thống doanh nghiệp đa số sử dụng Java hay .NET cho BE chứ không phải NodeJS. Khiến cho các option là:
 
+- Java/Kotlin BE, Java/Kotlin mobile FE
+- BE nào đó, Object-C/Swift iOS mobile FE
+- BE nào đó, JavaScript web FE
+- BE nào đó, ReactNative/Flutter mobile FE
+
+Java/Kotlin là option ngon lành nhất ở đây để làm cả FE lẫn BE.
 ### Cài đặt
 
 ```
@@ -70,41 +79,41 @@ Chạy file MainKt
 ```
 $ /usr/bin/time -v kotlin MainKt
 Hello FAMILUG 2024!
-	Command being timed: "kotlin MainKt"
-	User time (seconds): 0.08
-	System time (seconds): 0.02
-	Percent of CPU this job got: 116%
-	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.10
-	Average shared text size (kbytes): 0https://github.com/JetBrains/kotlin/releases/tag/v1.3.31
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
-	Maximum resident set size (kbytes): 37888
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 0
-	Minor (reclaiming a frame) page faults: 5296
-	Voluntary context switches: 282
-	Involuntary context switches: 13
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 64
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
+    Command being timed: "kotlin MainKt"
+    User time (seconds): 0.08
+    System time (seconds): 0.02
+    Percent of CPU this job got: 116%
+    Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.10
+    Average shared text size (kbytes): 0https://github.com/JetBrains/kotlin/releases/tag/v1.3.31
+    Average unshared data size (kbytes): 0
+    Average stack size (kbytes): 0
+    Average total size (kbytes): 0
+    Maximum resident set size (kbytes): 37888
+    Average resident set size (kbytes): 0
+    Major (requiring I/O) page faults: 0
+    Minor (reclaiming a frame) page faults: 5296
+    Voluntary context switches: 282
+    Involuntary context switches: 13
+    Swaps: 0
+    File system inputs: 0
+    File system outputs: 64
+    Socket messages sent: 0
+    Socket messages received: 0
+    Signals delivered: 0
+    Page size (bytes): 4096
+    Exit status: 0
 ```
 
 Dùng tới ~37 MiB, gấp 4 lần RAM so với Python, nhưng không sao, năm 2024 thì 40MB RAM không là gì so với Google Chrome hay các IDE cả.
 
 ```
 $ /usr/bin/time -v /usr/bin/python3.11 -c 'print("Hello FAMILUG!")' |& grep Maximum
-	Maximum resident set size (kbytes): 8960
+    Maximum resident set size (kbytes): 8960
 ```
 
 ## Viết vài chương trình đơn giản
 
-### Viết function tinh tổng 3 số
+### Viết function tính tổng 3 số
 
 ```kt
 fun sum3(a: Int, b: Int, c: Int): Int {
@@ -138,7 +147,7 @@ def main():
 main()
 ```
 
-### Giải bài ProjectEuler 1 - tổng các số nhỏ hơn 1000 chia hết cho 3 hoặc 5
+### Giải bài [ProjectEuler 1](https://projecteuler.net/problem=1) - tổng các số nhỏ hơn 1000 chia hết cho 3 hoặc 5
 
 
 ```kt
@@ -175,7 +184,7 @@ hvn@mini:kotlinplay $ kotlin MainKt
 true
 ```
 
-### Giải bài ProjectEuler 16 - tổng các chữ số của 2 mũ 1000
+### Giải bài [ProjectEuler 16](https://projecteuler.net/problem=16) - tổng các chữ số của 2 mũ 1000
 
 ```kt
 # main.kt
@@ -190,7 +199,7 @@ fun pe16(): Int {
 }
 
 fun main() {
-    println("tong cac chu so cua 2**1000 la ${pe16()}".toUpperCase()) // 1366
+    println("tong cac chu so cua 2**1000 la ${pe16()}".toUpperCase())
 }
 ```
 Kết quả
@@ -205,6 +214,16 @@ String functions: <https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/>
 Char functions: <https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-char/>
 
 ### Đọc file /etc/passwd và tìm max uid trong các user
+
+Dùng `sort` command để so sánh kết quả:
+```
+$ sort -nk 3 /etc/passwd | head -n3
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+avahi-autoipd:x:110:119:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+avahi:x:114:121:Avahi mDNS daemon,,,:/run/avahi-daemon:/usr/sbin/nologin
+```
+
+Code Kotlin
 
 ```kt
 import java.io.File
@@ -232,7 +251,7 @@ $ kotlin MainKt
 Kotlin tour: <https://kotlinlang.org/docs/kotlin-tour-hello-world.html>
 
 ## Tổng kết
-Bài này giới thiệu Kotlin và viết các chương trình đơn giản, sử dụng các thư viện standard/thư viện có sẵn của Java, đồng thời dùng bản Kotlin có sẵn trên Ubuntu 22.04 đã khá cũ (1.3.31 từ [2019](https://github.com/JetBrains/kotlin/releases/tag/v1.3.31)) bản hiện tại đã là Kotlin 2.0, build và chạy code trực tiếp với kotlinc trên câu lệnh CLI mà không dùng IDE hay build tool.
+Bài này giới thiệu Kotlin và viết các chương trình đơn giản, sử dụng các thư viện standard/thư viện có sẵn của Java, đồng thời dùng bản Kotlin có sẵn trên Ubuntu 22.04 đã khá cũ (1.3.31 từ [2019](https://github.com/JetBrains/kotlin/releases/tag/v1.3.31)) bản hiện tại là Kotlin 2.0, build và chạy code trực tiếp với kotlinc trên câu lệnh CLI mà không dùng IDE hay build tool.
 
 Bài viết sau sẽ giới thiệu build tool, sử dụng kotlin bản mới nhất và các thư viện tải từ trên mạng.
 
