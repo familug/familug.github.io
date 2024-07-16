@@ -84,7 +84,8 @@ Các phương án:
 
 Giải pháp là đọc log, phần nội dung bí hiểm trong log message:
 
-``` 474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a
+```py
+474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a
 ```
 
 chứa dãy 45 47 55 ... các ký tự từ a-e từ 0-9... với kinh nghiệm chơi các bài dễ trong các giải CTF, đoán ngay dùng hex <https://n.pymi.vn/base16.html> để xem là gì. Bật Python:
