@@ -5,6 +5,8 @@ Tags: alpine, curl, docker, container,
 
 Nếu cần chạy 1 câu lệnh curl (hay http client khác để truy cập web API) trên container, dùng image nào nhẹ nhất?
 
+NOTE: thay `podman` bằng `docker` nếu dùng docker.
+
 ## alpine rồi cài curl
 
 [`alpine`]({filename}/alpine.md) vốn phổ biến trong giới container vì nhẹ, nhưng không có sẵn curl, phải cài:
@@ -45,7 +47,7 @@ busybox rất nhỏ, và có sẵn wget, wget khác curl <https://daniel.haxx.se
 Option `-O FILE		Save to FILE ('-' for stdout)`  và `-q		Quiet`
 
 ```
-$ podman run -it busybox wget -qO- https://www.openbsd.org/robots.txt                 [0]
+$ podman run -it busybox wget -qO- https://www.openbsd.org/robots.txt
 wget: note: TLS certificate validation not implemented
 User-agent: *
 Disallow: /cgi-bin/
