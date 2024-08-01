@@ -25,14 +25,6 @@ fn main() {
 }
 ```
 
-### Rust crate, module
-
-`std::fs::create_dir_all` là **full path** tới function `create_dir_all`.
-
-`std` là 1 crate /kreɪt/ - đơn vị 1 "library" trong Rust. Xem các crates tại <https://crates.io/>
-
-`fs` là 1 module - thường tương ứng với 1 file hay 1 thư mục, xem các module trong crate `std` tại <https://doc.rust-lang.org/std/index.html>
-
 Code tạo thư mục a chứa thư mục b chứa thư mục c chứa thư mục d, tương tự lệnh `mkdir -p a/b/c/d` trên Linux.
 Sau đó ghi ra 1 file text tên "file" trong thư mục "a" dòng chữ "Hello". Liệt kê các file trong thư mục "a" và in ra màn hình đâu là thư mục đâu là file.
 
@@ -42,6 +34,14 @@ Output:
 File file
 Directory b
 ```
+
+### Rust crate, module
+
+`std::fs::create_dir_all` là **full path** tới function `create_dir_all`.
+
+`std` là 1 crate /kreɪt/ - đơn vị 1 "library" trong Rust. Xem các crates tại <https://crates.io/>
+
+`fs` là 1 module - thường tương ứng với 1 file hay 1 thư mục, xem các module trong crate `std` tại <https://doc.rust-lang.org/std/index.html>
 
 Rust có thể gọi function `create_dir_all` trong `fs` trong `std` mà không cần import.
 
