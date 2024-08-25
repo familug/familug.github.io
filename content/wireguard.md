@@ -75,12 +75,14 @@ Wireguard có 2 câu lệnh, hoạt động khác nhau:
 
 ở đây sẽ dùng wg-quick để bật tắt VPN vì đơn giản hơn.
 
+### server
 Sinh private & public key:
 
 ```
-# wg genkey > /etc/wireguard/private
+# touch /etc/wireguard/private
 # chmod 400 /etc/wireguard/private
-# wg pubkey < /etc/wireguard/private > /etc/wireguard/private
+# wg genkey > /etc/wireguard/private
+# wg pubkey < /etc/wireguard/private > /etc/wireguard/public
 ```
 
 Viết file config /etc/wireguard/wg0.conf , tên file wg0.conf sẽ dùng cho network interface tên là wg0.
@@ -89,27 +91,22 @@ Gõ man wg-quick rồi copy config mẫu.
 ```
 [Interface]
 Address = 10.10.0.1/16
-PrivateKey = THAY_PRIVATE_KEY_VAO_DAY
+PrivateKey = THAY_NOIDUNG_PRIVATE_KEY_VAO_DAY
 ListenPort = 51820
 
 [Peer]
-PublicKey = THAY_PUBKEY_PEER1_VAO_DAY
+PublicKey = THAY_NOIDUNG_PUBKEY_PEER1_VAO_DAY
 AllowedIPs = 10.10.0.2/32
 
 # [Peer]
-# PublicKey = THAY_PUBKEY_PEER1_VAO_DAY
+# PublicKey = THAY_NOIDUNG_PUBKEY_PEER2_VAO_DAY
 # AllowedIPs = 10.10.0.3/32
 ```
-
-Sau đó bật wireguard: `sudo wg-quick up wg0`
-
 Address là địa chỉ IP gán cho interface của server, ví dụ này chọn private network : 10.10.0.1/16, các peer khác sẽ có IP tùy ý trong 10.10.0.2 -> 10.10.xx.yy
-
-
-Gõ wg để xem public key và trạng thái kết nối của các peer.
 
 Gõ `ip ad | grep inet` để lấy public IP của server, dùng để config peer.
 
+### Peer
 Trên máy peer, làm tương tự các bước sinh private/public key rồi gõ config vào /etc/wireguard/wg0.conf
 
 ```
@@ -127,6 +124,13 @@ rồi bật:
 ```
 sudo wg-quick up wg0
 ```
+
+### server
+Copy public key của peer điền vào phần `[peer]` `THAY_NOIDUNG_PUBKEY_PEER1_VAO_DAY` trên server /etc/wireguard/wg0.conf.
+
+Sau đó bật wireguard: `sudo wg-quick up wg0`
+
+Gõ wg để xem public key và trạng thái kết nối của các peer.
 
 Tới đây nếu kết nối thành công, khi gõ wg ở server sẽ thấy:
 
