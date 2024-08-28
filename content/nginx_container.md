@@ -161,19 +161,39 @@ Trong container
 
 ```
 $ podman run --cpus=1 -it docker.io/nginx bash
-root@1f334076d74f:/# nproc
+
+#root@1f334076d74f:/ nginx &
+[1] 2
+2024/08/28 13:19:04 [notice] 2#2: using the "epoll" event method
+2024/08/28 13:19:04 [notice] 2#2: nginx/1.27.1
+2024/08/28 13:19:04 [notice] 2#2: built by gcc 12.2.0 (Debian 12.2.0-14)
+2024/08/28 13:19:04 [notice] 2#2: OS: Linux 6.8.0-40-generic
+2024/08/28 13:19:04 [notice] 2#2: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2024/08/28 13:19:04 [notice] 3#3: start worker processes
+2024/08/28 13:19:04 [notice] 3#3: start worker process 4
+2024/08/28 13:19:04 [notice] 3#3: start worker process 5
+2024/08/28 13:19:04 [notice] 3#3: start worker process 6
+2024/08/28 13:19:04 [notice] 3#3: start worker process 7
+
+[1]+  Done                    nginx
+# apt update && apt install -y procps python
+...
+# ps xau | grep nginx
+root           3  0.0  0.0  11404  1892 ?        Ss   13:19   0:00 nginx: master process nginx
+nginx          4  0.0  0.0  11872  3044 ?        S    13:19   0:00 nginx: worker process
+nginx          5  0.0  0.0  11872  3044 ?        S    13:19   0:00 nginx: worker process
+nginx          6  0.0  0.0  11872  3044 ?        S    13:19   0:00 nginx: worker process
+nginx          7  0.0  0.0  11872  3044 ?        S    13:19   0:00 nginx: worker process
+# nproc
 4
-root@1f334076d74f:/# cat /sys/devices/system/cpu/online
+# cat /sys/devices/system/cpu/online
 0-3
 ```
 
 Nội dung file này được mang từ máy host vào, vì vậy dù container được set bao nhiêu CPU thì NGINX (hay các ngôn ngữ lập trình ví dụ Python) vẫn đọc giá trị là số CPU của máy host.
 
 ```
-# apt update && apt install -y python3
-root@1f334076d74f:/# apt update && apt install -y python3
-...
-root@1f334076d74f:/# python3
+# python3
 Python 3.11.2 (main, Aug 26 2024, 07:20:54) [GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import os
