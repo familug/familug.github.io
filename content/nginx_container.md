@@ -100,7 +100,7 @@ ngx_set_worker_processes(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 }
 ```
 
-thấy nếu đọc từ config được giá trị là `"auto"`, NGINX sẽ gán `ccf->worker_processes = ngx_ncpu`.
+nếu đọc từ config được giá trị là `"auto"`, NGINX sẽ gán `ccf->worker_processes = ngx_ncpu`.
 
 Tìm `ngx_ncpu`:
 
@@ -121,7 +121,7 @@ src/os/unix/ngx_darwin_init.c:164:    ngx_ncpu = ngx_darwin_hw_ncpu;
 ...
 ```
 
-thấy trên các hệ điều hành, NGINX sẽ lấy giá trị theo cách khác nhau. Trên "posix" như các Linux OS, NGINX lấy gọi C function `sysconf(_SC_NPROCESSORS_ONLN)`.
+thấy trên các hệ điều hành, NGINX sẽ lấy giá trị theo cách khác nhau. Trên "posix" như các Linux-based OS, NGINX gọi C function `sysconf(_SC_NPROCESSORS_ONLN)`.
 
 Gõ `man sysconf`
 
@@ -136,7 +136,7 @@ SYNOPSIS
       The number of processors currently online (available).  See also get_nprocs_conf(3).
 ```
 
-Viết 1 chương trình C 3 dòng để in ra giá trị này:
+Viết 1 chương trình C 5 dòng để in ra giá trị này:
 
 ```C
 // main.c
