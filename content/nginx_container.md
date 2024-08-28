@@ -26,6 +26,22 @@ The optimal value depends on many factors including (but not limited to) the num
 ```
 <https://nginx.org/en/docs/ngx_core_module.html#worker_processes>
 
+khi set `auto`, NGINX sẽ `try to autodetect` - cố tìm số "available CPU cores", dễ dàng xem số CPU trên máy với câu lệnh
+
+```
+$ nproc
+4
+```
+hay file `/proc/cpuinfo`
+
+```
+$ grep processor /proc/cpuinfo
+processor	: 0
+processor	: 1
+processor	: 2
+processor	: 3
+```
+
 ### auto là bao nhiêu?
 "auto" là bao nhiêu? lấy giá trị từ đâu? có đọc từ `/proc` ra không? thử đọc code C xem viết gì:
 
