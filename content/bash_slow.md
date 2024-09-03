@@ -45,7 +45,7 @@ echo "$x"
 
 Trong 4 cách trên,
 
-- cách 1 với {1..1000000} tạo 1 triệu phần tử trong RAM, dùng hết 284MB RAM. (như Python dùng `list(range(1_000_001))`)
+- cách 1 với {1..1000000} tạo 1 triệu phần tử trong RAM (như Python dùng `list(range(1_000_001))`), dùng hết 284MB RAM.
 - cách 2 với seq 1 1000000 chỉ dùng 3.7MB RAM, nhưng phụ thuộc vào chương trình seq bên ngoài
 - cách 3 và 4 tương tự nhau nhưng cách 4 chạy trên tất cả cách loại (POSIX) shell.
 
