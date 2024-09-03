@@ -71,6 +71,24 @@ For more information:
   https://www.shellcheck.net/wiki/SC3018 -- In POSIX sh, ++ is undefined.
 ```
 
+Chạy cách 1 với `{1..1000000}`:
+
+```sh
+$ /usr/bin/time -v bash slow.sh
+500000500000
+	Command being timed: "bash slow.sh"
+	User time (seconds): 2.14
+	System time (seconds): 0.09
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.24
+...
+	Maximum resident set size (kbytes): 284852
+...
+	Minor (reclaiming a frame) page faults: 72418
+	Voluntary context switches: 1
+	Involuntary context switches: 10
+...
+```
 Chạy cách 4 với while:
 
 ```sh
@@ -80,24 +98,13 @@ $ /usr/bin/time -v bash slow.sh
 	System time (seconds): 0.00
 	Percent of CPU this job got: 99%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.05
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
+...
 	Maximum resident set size (kbytes): 3712
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 0
+...
 	Minor (reclaiming a frame) page faults: 155
 	Voluntary context switches: 1
 	Involuntary context switches: 27
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 0
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
+...
 ```
 
 Mất 5 giây để tính, trong khi với Python - 1 trong những ngôn ngữ lập trình chậm nhất, chỉ mất 0.08 giây tính cả thời gian bật Python, dùng 9MB RAM. Với Python 1s có thể tính tổng tới 15 triệu, tức bash chậm hơn Python `15*5 = 75` lần.
@@ -110,24 +117,12 @@ $ /usr/bin/time -v python3 sum.py
 	System time (seconds): 0.00
 	Percent of CPU this job got: 100%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.08
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
+...
 	Maximum resident set size (kbytes): 9088
-	Average resident set size (kbytes): 0
-	Major (requiring I/O) page faults: 0
+...
 	Minor (reclaiming a frame) page faults: 943
 	Voluntary context switches: 1
-	Involuntary context switches: 0
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 0
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
+...
 ```
 
 1 điều đáng chú ý là dùng `dash` - 1 POSIX shell có sẵn trên Ubuntu chạy nhanh hơn và tốn ít RAM hơn bash:
@@ -176,24 +171,13 @@ Running scope as unit: run-u139.scope
 	System time (seconds): 0.00
 	Percent of CPU this job got: 25%
 	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:49.25
-	Average shared text size (kbytes): 0
-	Average unshared data size (kbytes): 0
-	Average stack size (kbytes): 0
-	Average total size (kbytes): 0
+...
 	Maximum resident set size (kbytes): 3712
 	Average resident set size (kbytes): 0
 	Major (requiring I/O) page faults: 0
 	Minor (reclaiming a frame) page faults: 152
 	Voluntary context switches: 1
 	Involuntary context switches: 623
-	Swaps: 0
-	File system inputs: 0
-	File system outputs: 0
-	Socket messages sent: 0
-	Socket messages received: 0
-	Signals delivered: 0
-	Page size (bytes): 4096
-	Exit status: 0
 ```
 
 ## Kết luận
