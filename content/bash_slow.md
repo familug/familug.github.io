@@ -107,7 +107,7 @@ $ /usr/bin/time -v bash slow.sh
 ...
 ```
 
-Mất 5 giây để tính, trong khi với Python - 1 trong những ngôn ngữ lập trình chậm nhất, chỉ mất 0.08 giây tính cả thời gian bật Python, dùng 9MB RAM. Với Python 1s có thể tính tổng tới 15 triệu, tức bash chậm hơn Python `15*5 = 75` lần.
+Mất 5 giây để tính, trong khi với Python - 1 trong những ngôn ngữ lập trình chậm nhất, chỉ mất 0.08 giây tính cả thời gian bật Python, dùng 9MB RAM. Với Python 1 giây có thể tính tổng tới 15 triệu, tức bash chậm hơn Python `15*5 = 75` lần.
 
 ```
 $ /usr/bin/time -v python3 sum.py
@@ -155,7 +155,7 @@ $ /usr/bin/time -v dash slow.sh
 ```
 
 ### Chậm thì sao?
-Khi dùng để chạy các chương trình trong container, nếu không hoành thành quá trình trong thời gian giới hạn, container sẽ bị restart để chạy lại từ đầu, và khi chạy lại thì vẫn chậm, vẫn không kịp, lại restart, ... tạo thành 1 vòng lặp vô hạn. Mặc dù ví dụ trên bash chạy 5 giây, nhưng khi dùng trong các container với 250m CPU (1/4 CPU), bash sẽ mất ~20s để chạy, trên thực tế, mất gần 50 giây:
+Khi dùng để chạy các chương trình trong container, nếu không hoàn thành quá trình trong thời gian giới hạn, container sẽ bị restart để chạy lại từ đầu, và khi chạy lại thì vẫn chậm, vẫn không kịp, lại restart, ... tạo thành 1 vòng lặp vô hạn. Mặc dù ví dụ trên bash chạy 5 giây, nhưng khi dùng trong các container với 250m CPU (1/4 CPU), bash sẽ mất ~20 giây để chạy, trên thực tế, mất gần 50 giây:
 
 
 ```
