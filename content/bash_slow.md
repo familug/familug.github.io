@@ -53,7 +53,7 @@ Dùng `shellcheck` để biết cách 3 không chạy trên `sh`:
 
 ```
 $ sudo apt install -y shellcheck
-$ shellcheck -s sh slow.sh                                                                                                                                                                        [0]
+$ shellcheck -s sh slow.sh
 
 In slow.sh line 2:
 for i in {1..1000000} ; do
