@@ -155,7 +155,7 @@ $ /usr/bin/time -v dash slow.sh
 ```
 
 ### Chậm thì sao?
-Khi dùng để chạy các chương trình trong container, nếu không hoành thành quá trình trong thời gian giới hạn, container sẽ bị restart để chạy lại từ đầu, và khi chạy lại thì vẫn chậm, vẫn không kịp, tạo thành 1 vòng lặp vô hạn. Mặc dù ví dụ trên bash chạy 5 giây, nhưng khi dùng trong các container với 250m CPU (1/4 CPU), bash sẽ mất ~20s để chạy, trên thực tế, mất gần 50 giây:
+Khi dùng để chạy các chương trình trong container, nếu không hoành thành quá trình trong thời gian giới hạn, container sẽ bị restart để chạy lại từ đầu, và khi chạy lại thì vẫn chậm, vẫn không kịp, lại restart, ... tạo thành 1 vòng lặp vô hạn. Mặc dù ví dụ trên bash chạy 5 giây, nhưng khi dùng trong các container với 250m CPU (1/4 CPU), bash sẽ mất ~20s để chạy, trên thực tế, mất gần 50 giây:
 
 
 ```
