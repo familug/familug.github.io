@@ -12,19 +12,35 @@ bash không dùng để viết chương trình cần hiệu năng cao, nhưng li
 ### Tính tổng từ 1 đến 1 triệu
 
 ```bash
+#1
 x=0
-#1 # for i in {1..1000000} ; do
-#2 # for i in `seq 1 1000000` ; do
-#3 for ((i=1;i<=1000000;i++)); do
-#3     x=$((x+i))
-#3 done
-#4 is bellow
+for i in {1..1000000} ; do
+     x=$((x+i))
+done
+echo "$x"
+
+#2
+x=0
+for i in $(seq 1 1000000) ; do
+     x=$((x+i))
+done
+echo "$x"
+
+#3
+x=0
+for ((i=1;i<=1000000;i++)); do
+     x=$((x+i))
+done
+echo "$x"
+
+#4
+x=0
 i=1
 while [ $i -le 1000000 ]; do
     x=$((x+i))
     i=$((i+1))
 done
-printf "$x"
+echo "$x"
 ```
 
 Trong 4 cách trên,
@@ -32,6 +48,28 @@ Trong 4 cách trên,
 - cách 1 với {1..1000000} tạo 1 triệu phần tử trong RAM, dùng hết 284MB RAM. (như Python dùng `list(range(1_000_001))`)
 - cách 2 với seq 1 1000000 chỉ dùng 3.7MB RAM, nhưng phụ thuộc vào chương trình seq bên ngoài
 - cách 3 và 4 tương tự nhau nhưng cách 4 chạy trên tất cả cách loại (POSIX) shell.
+
+Dùng `shellcheck` để biết cách 3 không chạy trên `sh`:
+
+```
+$ sudo apt install -y shellcheck
+$ shellcheck -s sh slow.sh                                                                                                                                                                        [0]
+
+In slow.sh line 2:
+for i in {1..1000000} ; do
+         ^----------^ SC3009 (warning): In POSIX sh, brace expansion is undefined.
+
+
+In slow.sh line 16:
+for ((i=1;i<=1000000;i++)); do
+^-^ SC3005 (warning): In POSIX sh, arithmetic for loops are undefined.
+                      ^-- SC3018 (warning): In POSIX sh, ++ is undefined.
+
+For more information:
+  https://www.shellcheck.net/wiki/SC3005 -- In POSIX sh, arithmetic for loops...
+  https://www.shellcheck.net/wiki/SC3009 -- In POSIX sh, brace expansion is u...
+  https://www.shellcheck.net/wiki/SC3018 -- In POSIX sh, ++ is undefined.
+```
 
 Chạy cách 4 với while:
 
