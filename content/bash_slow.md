@@ -183,6 +183,11 @@ Running scope as unit: run-u139.scope
 ## Kết luận
 bash chậm.
 
+Written using
+```
+$ bash --version
+GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
+```
 Hết.
 
 HVN at <http://pymi.vn> and <https://www.familug.org>.
