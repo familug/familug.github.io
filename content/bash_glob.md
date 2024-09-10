@@ -1,4 +1,4 @@
-Title: Đọc code xem vì sao bash echo * không hiện tên file ẩn
+Title: Đọc code bash xem vì sao echo * không hiện tên file ẩn
 Date: 2024-09-10
 Category: frontpage
 Tags: bash, C, shell, POSIX, readcode, glob, clang, lldb
