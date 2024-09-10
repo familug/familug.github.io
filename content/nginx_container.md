@@ -1,7 +1,7 @@
 Title: Đọc code xem NGINX auto dùng bao nhiêu worker_processes trong container
 Date: 2024-08-28
 Category: frontpage
-Tags: linux, C, NGINX, container, docker, podman
+Tags: linux, C, NGINX, container, docker, podman, readcode
 
 NGINX là HTTP server phổ biến nhất trên thế giới.
 NGINX có kiến trúc "master" - "worker", với master process làm nhiệm vụ quản lý, và các worker process sẽ nhận các HTTP request và xử lý.
