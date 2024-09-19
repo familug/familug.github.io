@@ -5,11 +5,11 @@ Tags: readcode, go, prometheus, metric, timeseries
 slug: prometheus_rate
 
 ## Prometheus là gì
->  The Prometheus monitoring system and time series database.
+> The Prometheus monitoring system and time series /ˈsɪr.iːz/ database.
 > Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are observed.
 
 Prometheus là tên phần mềm metric monitoring tiêu chuẩn ngày nay. 10 năm trước là graphite, giờ đây là prometheus.
-Prometheus lưu trữ metric, hiển thị biểu đồ dùng grafana, gửi cảnh bảo alert dùng alertmanager.
+Prometheus lưu trữ metric, hiển thị biểu đồ dùng grafana, gửi cảnh báo alert dùng alertmanager.
 
 Prometheus viết bằng Go, bắt nguồn từ SoundCloud, code xem tại <https://github.com/prometheus/prometheus>
 
@@ -108,13 +108,13 @@ prometheus_http_requests_total{handler="/api/v1/query"}
 ```
 
 Các metric này của chính chương trình Prometheus để tự monitor chính mình.
-Cụ thể, timeseries trên đếm số lượt truy cập tới đường dẫn `/api/v1/query`, mỗi lần người dùng query metric qua giao diện trên sẽ tăng giá trị thêm 1.
+Cụ thể, time series trên đếm số lượt truy cập tới đường dẫn `/api/v1/query`, mỗi lần người dùng query metric qua giao diện trên sẽ tăng giá trị thêm 1.
 
 #### Instant vector selector
 
 > Instant vector selectors allow the selection of a set of time series and a single sample value for each at a given timestamp (point in time). In the simplest form, only a metric name is specified, which results in an instant vector containing elements for all time series that have this metric name.
 
-Instant vector selector trả về các time series và 1 giá trị cho mỗi timeseries tại thời điểm hiện tại.
+Instant vector selector trả về các time series và 1 giá trị cho mỗi time series tại thời điểm hiện tại.
 
 Ví dụ:
 `prometheus_http_requests_total{handler="/api/v1/query"}` trả về cả giá trị cho các label `code` khác nhau:
@@ -161,7 +161,7 @@ Do trong file config cấu hình `scrape_interval=15s`, trong 1m (1 phút) sẽ 
 - `rate`: giá trị tăng trung bình mỗi giây
 - `delta`: hiệu của giá trị đầu và cuối
 
-Có thể thấy các function này hoạt động trên mỗi timeseries trong cùng 1 metrics, đa phần chỉ có ý nghĩa khi dùng với range selector (lấy trung bình của số lượt truy cập mỗi giây trong vòng 1 phút vừa rồi).
+Có thể thấy các function này hoạt động trên mỗi time series trong cùng 1 metrics, đa phần chỉ có ý nghĩa khi dùng với range selector (lấy trung bình của số lượt truy cập mỗi giây trong vòng 1 phút vừa rồi).
 
 Viết `rate(prometheus_http_requests_total{handler="/api/v1/query"}[1m])` trả về lần lượt giá trị cho từng series của cùng metric `prometheus_http_requests_total`:
 
