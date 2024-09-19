@@ -8,8 +8,8 @@ slug: prometheus_rate
 > The Prometheus monitoring system and time series /ˈsɪr.iːz/ database.
 > Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are observed.
 
-Prometheus là tên phần mềm metric monitoring tiêu chuẩn ngày nay. 10 năm trước là graphite, giờ đây là prometheus.
-Prometheus lưu trữ metric, hiển thị biểu đồ dùng grafana, gửi cảnh báo alert dùng alertmanager.
+Prometheus là tên phần mềm metric monitoring tiêu chuẩn ngày nay. 10 năm trước là graphite.
+Stack phổ biến thời cloud: Prometheus lưu trữ time series, hiển thị biểu đồ dùng grafana, gửi cảnh báo alert dùng alertmanager.
 
 Prometheus viết bằng Go, bắt nguồn từ SoundCloud, code xem tại <https://github.com/prometheus/prometheus>
 
@@ -117,7 +117,7 @@ Cụ thể, time series trên đếm số lượt truy cập tới đường d�
 Instant vector selector trả về các time series và 1 giá trị cho mỗi time series tại thời điểm hiện tại.
 
 Ví dụ:
-`prometheus_http_requests_total{handler="/api/v1/query"}` trả về cả giá trị cho các label `code` khác nhau:
+`prometheus_http_requests_total{handler="/api/v1/query"}` trả về giá trị cho các label `code` khác nhau:
 
 ```
 prometheus_http_requests_total{code="200", handler="/api/v1/query", instance="localhost:9090", job="prometheus"} 88
@@ -169,10 +169,9 @@ Viết `rate(prometheus_http_requests_total{handler="/api/v1/query"}[1m])` trả
 {code="200", handler="/api/v1/query", instance="localhost:9090", job="prometheus"} 0.02222222222222222
 {code="400", handler="/api/v1/query", instance="localhost:9090", job="prometheus"} 0
 ```
-
 Để tập trung, ta sẽ chỉ query code="200".
 
-#### delta() tính sai
+#### delta() tính sai?
 Dùng range vector selector:
 `prometheus_http_requests_total{code="200", handler="/api/v1/query"}[1m]`
 
@@ -190,6 +189,8 @@ prometheus_http_requests_total{code="200", handler="/api/v1/query", instance="lo
 
 > delta(v range-vector) calculates the difference between the first and last value of each time series element in a range vector v, returning an instant vector with the given deltas and equivalent labels.
 
+<https://github.com/prometheus/prometheus/blob/v2.54.1/docs/querying/functions.md#delta>
+
 Vậy nếu tính nhẩm có delta có giá trị là 149 - 120 = 29, nhưng kết quả lại là `38.666666666666`. Vậy delta tính sai?
 
 Khoan đã, tài liệu còn viết:
@@ -202,13 +203,13 @@ extrapolate dịch ra tiếng Việt là "ngoại suy", ở đây kết quả đ
 vì lấy giá trị thời gian cuối trừ giá trị đầu 1726745704 - 1726745659  = 45 giây,
 mà range cần lấy là 1m = 60 giây, nên **tính năng** của `delta` sẽ suy ra (149-120)/45 * 60 = 38.666666666666.
 
-Vậy range không tính sai, range chỉ tính đúng như tài liệu của nó mô tả.
-#### rate() tính đúng
-rate
-
+Vậy delta không tính sai, delta chỉ tính đúng như tài liệu của nó mô tả.
+#### rate() tính đúng?
 > rate(v range-vector) calculates the per-second average rate of increase of the time series in the range vector. Breaks in monotonicity (such as counter resets due to target restarts) are automatically adjusted for. Also, the calculation extrapolates to the ends of the time range, allowing for missed scrapes or imperfect alignment of scrape cycles with the range's time period.
 
-rate bằng (149-120)/45 = 0.64444444444 như mong đợi.
+<https://github.com/prometheus/prometheus/blob/v2.54.1/docs/querying/functions.md#rate>
+
+rate bằng (149-120)/45 = 0.64444444444 như mong đợi trong trường hợp này, nhưng tài liệu có nhắc tới "extrapolates" trong trường hợp khác.
 
 ### Đọc code Prometheus
 
@@ -332,7 +333,7 @@ hay
 (149-120) * 60 / 45 / 60 = 0.6444444444444444
 
 ```
-đọc code trên thấy extrapolateToInterval thường cũng bằng với interval của range. Giá trị của rate có thể được extrapolated nếu series bị reset (đang đếm tới 100 thì service restart đếm lại từ 0).
+đọc code trên thấy extrapolateToInterval thường cũng bằng với interval của range. Giá trị của rate có thể được extrapolated nếu series bị reset (Ví dụ: đang đếm tới 123 thì service được monitor bị restart đếm lại từ 0).
 
 ## Kết luận
 Prometheus function không tính sai, nó chỉ tính đúng như trong tài liệu mô tả. Hãy đọc tài liệu.
