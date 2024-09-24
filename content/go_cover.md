@@ -112,6 +112,21 @@ FAIL	github.com/prometheus/prometheus/promql	0.023s
 $ go tool cover -html=coverage.delta
 ```
 
+File này chỉ là 1 file text với nội dung
+
+```
+mode: set
+github.com/prometheus/prometheus/promql/engine.go:86.41,88.2 1 0
+github.com/prometheus/prometheus/promql/engine.go:102.41,104.2 1 0
+github.com/prometheus/prometheus/promql/engine.go:106.42,108.2 1 0
+github.com/prometheus/prometheus/promql/engine.go:110.43,112.2 1 0
+...
+github.com/prometheus/prometheus/promql/functions.go:61.116,65.2 1 0
+github.com/prometheus/prometheus/promql/functions.go:71.148,89.60 5 1
+github.com/prometheus/prometheus/promql/functions.go:89.60,91.3 1 0
+...
+```
+
 mở trình duyệt với hình:
 ![delta]({static}/images/delta_cover.webp)
 
