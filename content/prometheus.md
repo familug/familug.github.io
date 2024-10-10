@@ -175,7 +175,10 @@ cũng cho kết quả như bên trên.
 
 Range vector selector hoạt động giống instant vector selector, ngoại trừ việc nó chọn 1 khoảng các sample từ thời điểm hiện tại về trước. Khoảng thời gian được viết sau metric name và label, đặt trong dấu `[]`, có đơn vị s h m d w y. Ví dụ:
 
-`prometheus_http_requests_total{handler="/api/v1/query"}[1m]` trả về:
+```
+prometheus_http_requests_total{handler="/api/v1/query"}[1m]
+```
+trả về:
 
 
 ```
@@ -192,12 +195,20 @@ prometheus_http_requests_total{code="400", handler="/api/v1/query", instance="lo
 3 @1726745314.174
 ```
 
-Có thể đổi time offset 1 tuần trước `prometheus_http_requests_total{handler="/api/v1/query"} offset 1w`
-Có thể chọn thời gian tính toán kết quả `prometheus_http_requests_total{handler="/api/v1/query"} @1726148884.174`.
+Có thể đổi time offset 1 tuần trước
+```
+prometheus_http_requests_total{handler="/api/v1/query"} offset 1w
+```
+
+Có thể chọn thời gian tính toán kết quả
+```
+prometheus_http_requests_total{handler="/api/v1/query"} @1726148884.174
+```
+
 
 Xem chi tiết tại <https://prometheus.io/docs/prometheus/2.53/querying/basics/#offset-modifier>
 
-### instant query và range query
+### Instant query và range query
 Instant query và range query là 2 API của Prometheus.
 
 #### Instant query
@@ -215,14 +226,12 @@ API này trả về kết quả của PromQL query tại 1 thời điểm (mặc
 ![instant query]({static}/images/prom_instant_query.webp)
 
 
-The data section of the query result has the following format:
-```
-
-{
-  "resultType": "matrix" | "vector" | "scalar" | "string",
-  "result": <value>
-}
-```
+> The data section of the query result has the following format:
+>
+> {
+>   "resultType": "matrix" | "vector" | "scalar" | "string",
+>   "result": <value>
+> }
 
 Query dùng instant vector selector `up` trả về vector
 ```
