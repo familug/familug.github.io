@@ -9,6 +9,14 @@ Bài hướng dẫn siêu tốc để cài đặt và code Clojure với VS Code
 #### Clojure
 Theo hướng dẫn trên trang chủ <https://clojure.org/guides/install_clojure#_posix_instructions>
 
+Test trên debian 12 bookworm:
+
+Cài java
+```
+sudo apt update
+sudo apt install -y rlwrap curl openjdk-17-jre
+```
+Cài clojure
 ```sh
 curl -L -O https://github.com/clojure/brew-install/releases/latest/download/posix-install.sh
 chmod +x posix-install.sh
