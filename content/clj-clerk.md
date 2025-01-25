@@ -103,6 +103,12 @@ Mở file hello.clj, sửa nội dung:
 (def jobs (json/parse-string resp true))
 (def table (map #(select-keys % [:created_at :title :html_url]) jobs))
 (pp/print-table table)
+; output
+; |          :created_at |                                                                                                                       :title |                                           :html_url |
+; |----------------------+------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------|
+; | 2025-01-24T12:01:58Z | Hanoi FT - Hybrid/Remote - (Senior/Technical Lead/Manager) Fullstack Developer Python/Node.js/PHP - Up to $4000 (Negotiable) | https://github.com/awesome-jobs/vietnam/issues/4593 |
+; | 2025-01-22T10:38:28Z |                                                                                Remote Fulltime - Up to $4000 Gross - C# Lead | https://github.com/awesome-jobs/vietnam/issues/4592 |
+
 (require '[nextjournal.clerk :as clerk])
 (comment
   (clerk/serve! {:browse true :watch-paths ["src"]})
