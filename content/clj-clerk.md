@@ -123,7 +123,9 @@ Mở file hello.clj, sửa nội dung:
 Chọn "Start your project with a REPL and connect (a.k.a Jack-in)" rồi chọn "deps.edn".
 Calva plugin trong VS Code sẽ mở 1 cửa sổ dọc bên cạnh và hiển thị "REPL".
 
-REPL giống như "python interactive mode" có thể gõ code trực tiếp, nhưng thú vị hơn là nó "kết nối" với cửa sổ chỉnh sửa code, khiến dễ dàng chỉnh sửa code mà không cần copy qua lại.
+#### REPL
+REPL giống như "python interactive mode" có thể gõ code trực tiếp, nhưng thú vị hơn là nó "kết nối" với cửa sổ chỉnh sửa code, khiến dễ dàng chỉnh sửa và chạy code mà không cần copy qua lại giữa 2 cửa sổ.
+REPL là một ưu điểm rất lớn của các LISP language như Clojure, trang chủ có hẳn 1 mục riêng chi tiết về cách viết code với RÊPL <https://clojure.org/guides/repl/introduction>.
 
 Lần lượt gõ enter cuối mỗi khối code để chạy nó (như trong Jupyter gõ từng cell), nếu code print, kết quả sẽ hiện bên cửa sổ chạy REPL. Nếu return, kết quả hiển thị ngay tại chỗ đặt cursor (nhưng không ghi vào file - để ghi vào file thành comment phải gõ phím khác).
 
@@ -131,8 +133,12 @@ Lần lượt gõ enter cuối mỗi khối code để chạy nó (như trong Ju
 
 Để chạy cả file, bấm Ctrl a chọn tất cả code rồi Ctrl Enter.
 
+#### Clerk notebook
+
 `(clerk/serve! ...` mở 1 tab trình duyệt tới địa chỉ 127.0.0.1:7777, tại đây chọn file hello.clj sẽ hiện ra "notebook". Mỗi lần lưu file, code sẽ được chạy lại và hiển thị kết quả lên trình duyệt.
 Đặt cursor xuống cuối dòng này rồi ctrl Enter để chạy nó. Code này nằm trong `(comment ...)` nên không được chạy lúc bấm Ctrl a. Phải comment code này để khi Clerk eval cả file sẽ không mở thêm 1 server clerk khác nữa.
+
+Xem top 10 phím tắt hay dùng của Calva tại đây <https://calva.io/commands-top10/>.
 
 **Chú ý** mọi kết quả đều được cache lại, nên nếu dòng code không thay đổi, giá trị cũng sẽ không thay đổi kế cả restart lại chương trình.
 Thêm vào trước khối code `^::clerk/no-cache` để không dùng cache cho khối code đó,
