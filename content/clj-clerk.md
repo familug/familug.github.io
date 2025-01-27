@@ -73,15 +73,15 @@ Hello, world!
 - Load file code thành 1 "notebook" với Clerk và vẽ đồ thị
 
 #### deps.edn
-deps.edn chứa các thông tin về project, tương tự package.json trong nodejs, go.mod trong Golang hay pyproject.toml trong Python.
+deps.edn chứa các thông tin về project, tương tự package.json trong nodejs, go.mod trong Golang, cargo.toml trong Rust, hay pyproject.toml trong Python.
 
-Cú pháp EDN gần giống JSON, thêm đoạn sau để thêm 2 dependencies vào project này:
+Cú pháp EDN gần giống JSON, sửa file `deps.edn` để thêm 2 dependencies vào project này:
 
 ```clj
 {:deps {cheshire {:mvn/version "5.13.0"}
         io.github.nextjournal/clerk {:mvn/version "0.17.1102"}}}
 ```
-đây là 1 "dictionary"/map chứa key ":deps" có value là 1 dictionary/map chứa 2 cặp key value là tên package - phiên bản của nó. Version tìm trên [clojar cheshire](https://clojars.org/cheshire) và [clerk](https://clojars.org/io.github.nextjournal/clerk).
+đây là 1 dictionary/map chứa key ":deps" có value là 1 dictionary/map chứa 2 cặp key value là tên package - phiên bản của nó. Version tìm trên [clojar cheshire](https://clojars.org/cheshire) và [clerk](https://clojars.org/io.github.nextjournal/clerk).
 
 Khi bật `clj`, nó tự động đọc `deps.edn` và tải các dependencies + load vào.
 
@@ -139,23 +139,21 @@ Lần lượt gõ enter cuối mỗi khối code để chạy nó (như trong Ju
 
 Để chạy cả file, bấm Ctrl a chọn tất cả code rồi Ctrl Enter.
 
+Xem top 10 phím tắt hay dùng của Calva tại đây <https://calva.io/commands-top10/>.
+
 #### Clerk notebook
 
 `(clerk/serve! ...` mở 1 tab trình duyệt tới địa chỉ 127.0.0.1:7777, tại đây chọn file hello.clj sẽ hiện ra "notebook". Mỗi lần lưu file, code sẽ được chạy lại và hiển thị kết quả lên trình duyệt.
 Đặt cursor xuống cuối dòng này rồi ctrl Enter để chạy nó. Code này nằm trong `(comment ...)` nên không được chạy lúc bấm Ctrl a. Phải comment code này để khi Clerk eval cả file sẽ không mở thêm 1 server clerk khác nữa.
 
-Xem top 10 phím tắt hay dùng của Calva tại đây <https://calva.io/commands-top10/>.
 
 **Chú ý** mọi kết quả đều được cache lại, nên nếu dòng code không thay đổi, giá trị cũng sẽ không thay đổi kế cả restart lại chương trình.
 Thêm vào trước khối code `^::clerk/no-cache` để không dùng cache cho khối code đó,
-hay xóa thư mục `.clerk` trong thư mục `hello-world` đi để xóa cache.
+hay xóa thư mục `.clerk` trong thư mục `hello-world` đi để xóa cache. Xem thêm tại <https://book.clerk.vision/#cached-evaluation>
 
 ![clerk]({static}/images/clj_clerk.png)
 
 PS: nếu muốn dùng Jupyter với Clojure có thể cài <https://github.com/clojupyter/clojupyter>.
-
-### Tham khảo
-<https://book.clerk.vision/#cached-evaluation>
 
 ### Kết luận
 Có thể code Clojure dùng VS Code, với REPL tích hợp cùng editor, không bao giờ phải gõ từng dòng hay copy/paste code, hiển thị như notebook qua Clerk,
