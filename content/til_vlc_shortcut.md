@@ -9,7 +9,7 @@ slug: til-vlc-keybinding
 - `n`: next
 - `m`: mute
 
-![vlc keybinding]({static}/images/images/vlc_kb.webp)
+![vlc keybinding]({static}/images/vlc_kb.webp)
 
 
 Hết.
