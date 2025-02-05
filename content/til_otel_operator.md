@@ -15,10 +15,9 @@ Các kubernetes operator có đủ loại và đủ tính năng, nhưng tự th�
 // Go requires the agent to be a different container in the pod, so the agentIndex should represent this new sidecar
 // and appIndex should represent the application being instrumented.
 func (i *sdkInjector) injectCommonSDKConfig
-```
-...
+    ...
 	configureExporter(otelinst.Spec.Exporter, &pod, container)
-...
+    ...
 ```
 
 ```go
@@ -32,7 +31,7 @@ func configureExporter(exporter v1alpha1.Exporter, pod *corev1.Pod, container *c
 			})
 		}
 	}
-...
+    ...
 ```
 
 
