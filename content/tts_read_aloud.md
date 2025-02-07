@@ -16,7 +16,7 @@ Không hiểu sao:
 Các trình duyệt hiện đại ngày nay đều hỗ trợ sẵn tính năng đọc (text to speech - TTS) sử dụng engine của hệ điều hành.
 
 ## Firefox reader view
-Reader view là tính năng có sẵn của Firefox, bấm vào icon hình tờ giấy ở đuôi thanh địa chỉ để bật chết độ này (xem hình tại [hướng dẫn trên trang chủ](https://support.mozilla.org/en-US/kb/firefox-reader-view-clutter-free-web-pages)) . Sau khi chuyển sang reader mode, có thể chọn cho trình duyệt đọc nội dung, sử dụng TTS engine của hệ điều hành.
+Reader view là tính năng có sẵn của Firefox, bấm vào icon hình tờ giấy ở đuôi thanh địa chỉ để bật chế độ này (xem hình tại [hướng dẫn trên trang chủ](https://support.mozilla.org/en-US/kb/firefox-reader-view-clutter-free-web-pages)) . Sau khi chuyển sang reader mode, có thể chọn cho trình duyệt đọc nội dung, sử dụng TTS engine của hệ điều hành.
 
 ![firefox reader view]({static}/images/firefox_reader_view.webp)
 
