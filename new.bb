@@ -18,16 +18,14 @@ HVN at <https://pymi.vn> and <https://www.familug.org>.
 ")
 
 (defn get-date-today []
-(def f (java.text.SimpleDateFormat/new "YYYY-MM-dd"))
-(.format f (java.util.Date/new))
-)
+  (def n (java.time.LocalDate/now))
+  (.format n (java.time.format.DateTimeFormatter/ofPattern "YYYY/MM/dd")))
 
 (let [slug (first *command-line-args*)
-	rendered (format template (get-date-today) slug)
-	filename (str "content/" slug ".md")
-	]
+      rendered (format template (get-date-today) slug)
+      filename (str "content/" slug ".md")
+      ]
 
-(println rendered)
-(spit filename rendered)
-(println "wrote to" filename)
-)
+  (println rendered)
+  (spit filename rendered)
+  (println "wrote to" filename))
