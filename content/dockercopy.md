@@ -9,7 +9,7 @@ Trong Dockerfile có lệnh (instruction) COPY dùng để copy file, thư mục
 ```
 cp file destdir
 ```
-sẽ copy `file` tới `destdir/file`.
+khi destdir là 1 thư mục đã tồn tại, cp sẽ copy file `file` tới `destdir/file`.
 
 Còn COPY thì khác <https://docs.docker.com/reference/dockerfile/#copy>. Tất nhiên không ai đọc doc của syntax Dockerfile cả!
 
