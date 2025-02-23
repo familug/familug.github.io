@@ -11,16 +11,16 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 nhưng... `curl | sh` thường bị xem là nguy hiểm, do người dùng thường không kiểm tra nội dung sript.
-Vậy hãy tải nó về và đọc: 
+Vậy hãy tải nó về và đọc:
 
 ```
-$ curl -Lo rustup.sh https://sh.rustup.rs 
+$ curl -Lo rustup.sh https://sh.rustup.rs
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100 26495  100 26495    0     0   149k      0 --:--:-- --:--:-- --:--:--  149k
 ```
 
-## Đọc code 
+## Đọc code
 
 
 ```sh
@@ -57,7 +57,7 @@ get_architecture() {
     _cputype="$(uname -m)"
 ...
 ```
-Chạy thử: 
+Chạy thử:
 ```sh
 $ uname -s
 Linux
@@ -99,7 +99,11 @@ $ head -c 20 /proc/self/exe | xxd
 xxd hiển thị mỗi byte bằng 2 ký tự dạng hex, 2 bytes 1 cặp, 7f45 là 2 byte đầu, 4c46 là 2 byte tiếp...
 ở máy này byte thứ 5 là 02, vậy đây là 64-bit.
 
-Tương tự, để tìm "endian" là big-endian hay little-endian (Least Significant Bit - LSB), dùng byte thứ 6:
+ELF là định dạng file binary trên Linux, theo `man elf`:
+
+> elf - format of Executable and Linking Format (ELF) files
+
+Tương tự, để tìm "endian" là big-endian (Most significant bit - MSB) hay little-endian (Least Significant Bit - LSB), dùng byte thứ 6:
 ```sh
 get_endianness() {
     local cputype=$1
@@ -123,7 +127,7 @@ get_endianness() {
 ```
 nếu là 01 là little endian, nếu là 02 là bit endian. Ở máy này là 01, tức little endian.
 
-`printf '\002'` in ra giá trị 2 trong hệ octal (8).
+`printf '\002'` in ra giá trị 2 trong hệ octal (8). Chú ý ở đây nói về giá trị (byte) chứ không nói tới dạng string biểu diễn của số 2 - ASCII 50.
 
 ```sh
 is_host_amd64_elf() {
@@ -131,8 +135,7 @@ is_host_amd64_elf() {
     need_cmd tail
     # ELF e_machine detection without dependencies beyond coreutils.
     # Two-byte field at offset 0x12 indicates the CPU,
-    # but we're interested in it being 0x3E to indicate amd64, or not that.
-    local _current_exe_machine
+    # but we're interested in it being 0x3E to indicate amd64, or not that.  local _current_exe_machine
     _current_exe_machine=$(head -c 19 /proc/self/exe | tail -c 1)
     [ "$_current_exe_machine" = "$(printf '\076')" ]
 }
@@ -185,6 +188,8 @@ test: ELF 64-bit LSB shared object, (SYSV)
 test: ELF 64-bit LSB shared object, x86-64, (SYSV)
 ```
 
+Xem thêm source code chương trình file: <https://github.com/file/file/blob/dadc01f2a875c21a10ae69c5d74e868423790e31/magic/Magdir/elf#L349-L403>
+
 Bonus, 4 function `say`, `err`, `check_cmd` và `need_cmd` rất ngắn gọn và hữu ích:
 
 ```sh
@@ -198,12 +203,9 @@ err() {
 }
 
 need_cmd() {
-    set -x
     if ! check_cmd "$1"; then
         err "need '$1' (command not found)"
     fi
-    set +x
-
 }
 check_cmd() {
     command -v "$1" > /dev/null 2>&1
