@@ -96,8 +96,10 @@ $ head -c 20 /proc/self/exe | xxd
 00000000: 7f45 4c46 0201 0100 0000 0000 0000 0000  .ELF............
 00000010: 0300 3e00                                ..>.
 ```
-ở máy này là 02, vậy đây là 64-bit.
-Tương tự, để tìm "endian" là big-endian hay little-endian, dùng byte thứ 6:
+xxd hiển thị mỗi byte bằng 2 ký tự, 2 bytes 1 cặp, 7f45 là 2 byte đầu, 4c46 là 2 byte tiếp...
+ở máy này byte thứ 5 là 02, vậy đây là 64-bit.
+
+Tương tự, để tìm "endian" là big-endian hay little-endian (Least Significant Bit - LSB), dùng byte thứ 6:
 ```sh
 get_endianness() {
     local cputype=$1
