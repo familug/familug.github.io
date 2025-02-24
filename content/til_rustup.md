@@ -211,6 +211,21 @@ check_cmd() {
     command -v "$1" > /dev/null 2>&1
 }
 ```
+
+Script này sẽ tải binary dạng từ địa chỉ như <http://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init> rồi chmod u+x rồi chạy file, sau khi xong, xóa file đã tải.
+
+```sh
+ensure downloader "$_url" "$_file" "$_arch"
+ensure chmod u+x "$_file"
+...
+ignore "$_file" "$@"
+...
+ignore rm "$_file"
+ignore rmdir "$_dir"
+```
+
+Xem repo script & rustup binary tại <https://github.com/rust-lang/rustup/blob/1.27.1/rustup-init.sh>
+
 ### Kết luận
 sh script ở mọi nơi, và cũng có thể sạch đẹp + magic.
 
