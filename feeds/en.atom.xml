@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>FAMILUG.org Vietnam - en,</title><link href="https://familug.github.io/" rel="alternate"></link><link href="https://familug.github.io/feeds/en.atom.xml" rel="self"></link><id>https://familug.github.io/</id><updated>2024-03-10T00:00:00+07:00</updated><entry><title>View Japanese on OpenBSD 7.4 Firefox with unifont</title><link href="https://familug.github.io/view-japanese-on-openbsd-74-firefox-with-unifont.html" rel="alternate"></link><published>2024-03-10T00:00:00+07:00</published><updated>2024-03-10T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2024-03-10:/view-japanese-on-openbsd-74-firefox-with-unifont.html</id><summary type="html">&lt;p&gt;By default, you cannot view Chinese/Japanese/Korean (CJK) on OpenBSD, it shows only square box.&lt;/p&gt;
+&lt;p&gt;It needs CJK fonts to be installed. &lt;code&gt;unifont&lt;/code&gt; is one supports many languages by GNU.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ pkg_info unifont
+Information &lt;span class="k"&gt;for&lt;/span&gt; inst:unifont-15.0.06
+
+Comment:
+free Unicode font from the GNU project
+
+Description:
+GNU Unifont …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;By default, you cannot view Chinese/Japanese/Korean (CJK) on OpenBSD, it shows only square box.&lt;/p&gt;
+&lt;p&gt;It needs CJK fonts to be installed. &lt;code&gt;unifont&lt;/code&gt; is one supports many languages by GNU.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ pkg_info unifont
+Information &lt;span class="k"&gt;for&lt;/span&gt; inst:unifont-15.0.06
+
+Comment:
+free Unicode font from the GNU project
+
+Description:
+GNU Unifont is a font that contains glyphs &lt;span class="k"&gt;for&lt;/span&gt; every printable code
+point &lt;span class="k"&gt;in&lt;/span&gt; the Unicode Basic Multilingual Plane &lt;span class="o"&gt;(&lt;/span&gt;BMP&lt;span class="o"&gt;)&lt;/span&gt;.
+
+There is also growing coverage of the Supplementary Multilingual Plane
+&lt;span class="o"&gt;(&lt;/span&gt;SMP&lt;span class="o"&gt;)&lt;/span&gt;, and of Michael Everson&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;s ConScript Unicode Registry &lt;span class="o"&gt;(&lt;/span&gt;CSUR&lt;span class="o"&gt;)&lt;/span&gt;.
+
+Maintainer: Brian Callahan &amp;lt;bcallah@openbsd.org&amp;gt;
+
+WWW: https://unifoundry.com/unifont/
+
+$ pkg_info -L unifont
+Information &lt;span class="k"&gt;for&lt;/span&gt; inst:unifont-15.0.06
+
+Files:
+/usr/local/share/fonts/unifont/unifont.otf
+/usr/local/share/fonts/unifont/unifont.ttf
+/usr/local/share/fonts/unifont/unifont_csur.otf
+/usr/local/share/fonts/unifont/unifont_csur.ttf
+/usr/local/share/fonts/unifont/unifont_jp.otf
+/usr/local/share/fonts/unifont/unifont_jp.ttf
+/usr/local/share/fonts/unifont/unifont_upper.otf
+/usr/local/share/fonts/unifont/unifont_upper.ttf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Install:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# pkg_add unifont
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then restart Firefox and it will display CJK. Welcome to 2024!&lt;/p&gt;
+&lt;p&gt;Written on&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ uname -a
+OpenBSD obsd.dev.obsd &lt;span class="m"&gt;7&lt;/span&gt;.4 GENERIC.MP#2 amd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="font"></category><category term="japanese"></category></entry><entry><title>Post-install setup on OpenBSD 7.4</title><link href="https://familug.github.io/post-install-setup-on-openbsd-74.html" rel="alternate"></link><published>2024-02-12T00:00:00+07:00</published><updated>2024-02-12T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2024-02-12:/post-install-setup-on-openbsd-74.html</id><summary type="html">&lt;p&gt;After installing OpenBSD 7.4, here are customizations to make it more usable.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ uname -a
+OpenBSD obsd.dev.obsd &lt;span class="m"&gt;7&lt;/span&gt;.4 GENERIC.MP#2 amd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Install wireless driver&lt;/h3&gt;
+&lt;p&gt;Run &lt;code&gt;ifconfig&lt;/code&gt; and see interface names.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ ifconfig &lt;span class="p"&gt;|&lt;/span&gt; grep flags &lt;span class="p"&gt;|&lt;/span&gt; grep -o .*:
+lo0:
+re0:
+iwx0:
+enc0:
+pflog0:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In this case, the interface named …&lt;/p&gt;</summary><content type="html">&lt;p&gt;After installing OpenBSD 7.4, here are customizations to make it more usable.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ uname -a
+OpenBSD obsd.dev.obsd &lt;span class="m"&gt;7&lt;/span&gt;.4 GENERIC.MP#2 amd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Install wireless driver&lt;/h3&gt;
+&lt;p&gt;Run &lt;code&gt;ifconfig&lt;/code&gt; and see interface names.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ ifconfig &lt;span class="p"&gt;|&lt;/span&gt; grep flags &lt;span class="p"&gt;|&lt;/span&gt; grep -o .*:
+lo0:
+re0:
+iwx0:
+enc0:
+pflog0:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In this case, the interface named &lt;code&gt;iwx0&lt;/code&gt;. Find details about it in &lt;code&gt;dmesg&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ dmesg &lt;span class="p"&gt;|&lt;/span&gt; grep iwx0 
+iwx0: could not &lt;span class="nb"&gt;read&lt;/span&gt; firmware iwx-cc-a0-77 &lt;span class="o"&gt;(&lt;/span&gt;error &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Download the driver from &lt;a href="http://firmware.openbsd.org/firmware/"&gt;http://firmware.openbsd.org/firmware/&lt;/a&gt;, choose the version you using, in this case is 7.4: &lt;a href="http://firmware.openbsd.org/firmware/7.4/iwx-firmware-20230629.tgz"&gt;http://firmware.openbsd.org/firmware/7.4/iwx-firmware-20230629.tgz&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;copy the file to an USB formatted as vfat filesystem so all OSes can read from it.&lt;/p&gt;
+&lt;h3&gt;Mount USB&lt;/h3&gt;
+&lt;p&gt;Find the partition to mount: run as root&lt;/p&gt;
+&lt;p&gt;If the device is &lt;code&gt;sd1&lt;/code&gt;, use &lt;code&gt;sd1c&lt;/code&gt; as &lt;code&gt;man disklabel&lt;/code&gt; explained:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;disklabel supports 15 configurable partitions, a through p
+excluding c.  The c partition describes the entire physical
+disk, is automatically created by the kernel, and cannot be
+modified or deleted by disklabel.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# disklabel -h /dev/sd1c
+# /dev/sd1c:                                                            
+type: SCSI                                                              
+disk: SCSI disk                                                         
+label: DataTraveler 3.0                                                 
+duid: 0000000000000000
+flags:
+bytes/sector: 512
+sectors/track: 63
+tracks/cylinder: 255
+sectors/cylinder: 16065
+cylinders: 1884
+total sectors: 30277632 # total bytes: 15138816.0K
+boundstart: 0
+boundend: 30277632 
+
+16 partitions:
+#                size           offset  fstype [fsize bsize   cpg]
+  c:      15138816.0K                0  unused                    
+  i:           480.0K               64   MSDOS                    
+  j:        679424.0K             1024   MSDOS    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here the partition we want to mount is &lt;code&gt;j&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;obsd# mount /dev/sd1j /mnt/                                            
+obsd# ls /mnt
+iwx-firmware-20230629.tgz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Run as root: &lt;code&gt;fw_update /mnt/iwx-firmware-20230629.tgz&lt;/code&gt; to install the driver.&lt;/p&gt;
+&lt;h3&gt;Turn on wifi&lt;/h3&gt;
+&lt;p&gt;Run as root:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# ifconfig iwx0 nwid WIFI_NAME wpakey PASSWORD
+# ifconfig iwx0 up
+# dhclient iwx0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To auto-connect to the wifi on startup, add a file named: &lt;code&gt;/etc/hostname.iwx0&lt;/code&gt; with content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;nwid WIFI_NAME wpakey PASSWORD
+inet autoconf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note: change &lt;code&gt;iwx0&lt;/code&gt; in filename to your real interface name.&lt;/p&gt;
+&lt;h3&gt;Install packages&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# pkg_add firefox git tmux redshift
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Update firmware&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# fw_update
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Change window manager&lt;/h3&gt;
+&lt;p&gt;Default window manager is fwwm, right click choose cwm.&lt;/p&gt;
+&lt;p&gt;To set it permanently, write a file at &lt;code&gt;$HOME/.xsession&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# use UTF-8 everywhere&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="k"&gt;export&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;LANG&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;en_US&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;UTF&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# load Xresources file&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;xrdb&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;merge&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;$&lt;/span&gt;&lt;span class="n"&gt;HOME&lt;/span&gt;&lt;span class="o"&gt;/.&lt;/span&gt;&lt;span class="n"&gt;Xresources&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="n"&gt;xsetroot&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;solid&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;slategrey&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;xterm&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;redshift&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;exec&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;cwm&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Read &lt;code&gt;man cwm&lt;/code&gt; for default key bindings.&lt;/p&gt;
+&lt;h3&gt;Enable power management to suspend&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;rcctl start apmd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then type &lt;code&gt;zzz&lt;/code&gt; to suspend.&lt;/p&gt;
+&lt;p&gt;Append a line to /etc/rc.conf.local&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apmd_flags=
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To start apmd with system.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Hello OpenBSD once again in 2024!&lt;/p&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="wifi"></category><category term="ifconfig"></category><category term="fw_update"></category></entry><entry><title>Rust Cargo release build is not the fastest</title><link href="https://familug.github.io/rust-cargo-release-build-is-not-the-fastest.html" rel="alternate"></link><published>2022-11-29T00:00:00+07:00</published><updated>2022-11-29T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2022-11-29:/rust-cargo-release-build-is-not-the-fastest.html</id><summary type="html">&lt;p&gt;By default, &lt;code&gt;cargo build&lt;/code&gt; will build a debug binary at ./target/debug/filename, which is helpful for development/debug but without many binary optimizations, thus, runs slow.&lt;/p&gt;
+&lt;p&gt;When build with &lt;code&gt;cargo build --release&lt;/code&gt;, it will build an optimized binary, which is ready for production:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;--release                    Build artifacts in release mode …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;By default, &lt;code&gt;cargo build&lt;/code&gt; will build a debug binary at ./target/debug/filename, which is helpful for development/debug but without many binary optimizations, thus, runs slow.&lt;/p&gt;
+&lt;p&gt;When build with &lt;code&gt;cargo build --release&lt;/code&gt;, it will build an optimized binary, which is ready for production:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;--release                    Build artifacts in release mode, with optimizations
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;But it still not the fastest it can be.&lt;/p&gt;
+&lt;h2&gt;Cargo profiles&lt;/h2&gt;
+&lt;p&gt;Cargo has 4 builtin profiles: &lt;code&gt;dev, release, test, and bench&lt;/code&gt; &lt;a href="https://doc.rust-lang.org/cargo/reference/profiles.html"&gt;https://doc.rust-lang.org/cargo/reference/profiles.html&lt;/a&gt; which pre-defined build options.
+User can customize them in Cargo.toml, e.g:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;[profile.dev]&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;opt-level&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;1&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;debug&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;true&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;LTO - Link time optimizations&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://doc.rust-lang.org/cargo/reference/profiles.html#lto"&gt;https://doc.rust-lang.org/cargo/reference/profiles.html#lto&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Default profile.release sets lto = false.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;[profile.release]&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;opt-level&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;3&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;debug&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;split-debuginfo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;...&amp;#39;  # Platform-specific.&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;debug-assertions&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;overflow-checks&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;lto&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;panic&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;unwind&amp;#39;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;incremental&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;codegen-units&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;16&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="na"&gt;rpath&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;false&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Set lto = true or lto = "fat" will&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Performs "fat" LTO which attempts to perform optimizations across all crates within the dependency graph.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;which makes build much slower, but the binary often faster 10-20% compare to lto = false.
+User may try lto = "thin" for faster build but the output still good comparable to lto = "fat"&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;"thin": Performs "thin" LTO. This is similar to "fat", but takes substantially less time to run while still achieving performance gains similar to "fat".&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://doc.rust-lang.org/cargo/reference/profiles.html#lto"&gt;https://doc.rust-lang.org/cargo/reference/profiles.html#lto&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Happy building!&lt;/p&gt;</content><category term="en,"></category><category term="rust"></category><category term="lto"></category><category term="cargo"></category></entry><entry><title>Dualboot Ubuntu 20.04 and OpenBSD 6.9</title><link href="https://familug.github.io/dualboot-ubuntu-2004-and-openbsd-69.html" rel="alternate"></link><published>2021-08-02T00:00:00+07:00</published><updated>2021-08-02T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-08-02:/dualboot-ubuntu-2004-and-openbsd-69.html</id><summary type="html">&lt;p&gt;I dualboot OpenBSD with Ubuntu on both my laptop and desktop. They both work even I did two different ways to config multi-boot.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="openbsd69" src="https://www.openbsd.org/images/puffy69.jpg"&gt;&lt;/p&gt;
+&lt;h3&gt;Install Ubuntu&lt;/h3&gt;
+&lt;p&gt;Need to install Ubuntu first, use its disk tool to pre-create a partition for OpenBSD, just an empty partition.&lt;/p&gt;
+&lt;p&gt;As new machine nowaday using UEFI …&lt;/p&gt;</summary><content type="html">&lt;p&gt;I dualboot OpenBSD with Ubuntu on both my laptop and desktop. They both work even I did two different ways to config multi-boot.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="openbsd69" src="https://www.openbsd.org/images/puffy69.jpg"&gt;&lt;/p&gt;
+&lt;h3&gt;Install Ubuntu&lt;/h3&gt;
+&lt;p&gt;Need to install Ubuntu first, use its disk tool to pre-create a partition for OpenBSD, just an empty partition.&lt;/p&gt;
+&lt;p&gt;As new machine nowaday using UEFI instead of BIOS, when installing
+Ubuntu, it is going to create a partition for EFI, mounted as /boot/efi. This mounted as type vfat on my machine.&lt;/p&gt;
+&lt;p&gt;Install Ubuntu as normal.  When done, install OpenBSD.&lt;/p&gt;
+&lt;h3&gt;Install OpenBSD&lt;/h3&gt;
+&lt;p&gt;When see fdisk to do fdisk partition, choose manual, leave out the partition installed Ubuntu.&lt;/p&gt;
+&lt;p&gt;Create 1 MBR partition for OpenBSD, set as type a6 (OpenBSD).&lt;/p&gt;
+&lt;p&gt;Then quit fdisk, it moves to disklabel parition, use what disk layout you want or just let it Auto.
+Then do the rest til done.&lt;/p&gt;
+&lt;h3&gt;Config to boot OpenBSD&lt;/h3&gt;
+&lt;p&gt;After installed OpenBSD, reboot, you would still see Ubuntu Grub, boot into Ubuntu, then follow one of these two ways:&lt;/p&gt;
+&lt;h4&gt;Using Grub&lt;/h4&gt;
+&lt;p&gt;NOTE: this works for both BIOS and UEFI.&lt;/p&gt;
+&lt;p&gt;Add to &lt;code&gt;/etc/grub.d/40_custom&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;menuentry&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;OpenBSD&amp;quot;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;set&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;hd0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;chainloader&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Change &lt;code&gt;hd0,2&lt;/code&gt; (disk 0, partition 2) to your values.&lt;/p&gt;
+&lt;p&gt;Then run &lt;code&gt;sudo update-grub&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;When machine boot, if you don't see Grub menu to choose, hit right Shift many times or hold it.&lt;/p&gt;
+&lt;h4&gt;Using rEFInd&lt;/h4&gt;
+&lt;p&gt;This works only for UEFI.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.openbsd.org/faq/faq4.html#Multibooting"&gt;https://www.openbsd.org/faq/faq4.html#Multibooting&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Install &lt;code&gt;refind&lt;/code&gt; via apt-get:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo apt-get update &amp;amp;&amp;amp; sudo apt-get install -y refind
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;when installing, a ncurse window would ask you want to "Automatically install rEFInd to the ESP (EFI System Partition)", choose Yes.&lt;/p&gt;
+&lt;p&gt;Reboot you should see &lt;code&gt;rEFInd&lt;/code&gt; boot screen and an option to choose the OpenBSD.&lt;/p&gt;
+&lt;h3&gt;Bonus: practice install dualboot Ubuntu &amp;amp; OpenBSD on Virtualbox VM&lt;/h3&gt;
+&lt;h4&gt;BIOS&lt;/h4&gt;
+&lt;p&gt;Create a VirtualBox VM with 16GB hardisk, to later have 8GB for each OS, follow above steps install Ubuntu 20.04, then OpenBSD, then config Grub. Result:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="grub" src="https://familug.github.io/images/dualboot.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="openbsd fdisk" src="https://familug.github.io/images/dualboot_fdisk.png"&gt;&lt;/p&gt;
+&lt;h4&gt;UEFI&lt;/h4&gt;
+&lt;p&gt;Choose VM &amp;gt; Settings &amp;gt; System &amp;gt; Motherboard &amp;gt; Tick "Enable EFI"&lt;/p&gt;
+&lt;p&gt;Install Ubuntu20.04 as above guide.&lt;/p&gt;
+&lt;p&gt;As of OpenBSD6.9, the CD-ROM cannot boot from EFI.&lt;/p&gt;
+&lt;p&gt;To make this work, download &lt;a href="https://cdn.openbsd.org/pub/OpenBSD/6.9/amd64/install69.img"&gt;install69.img&lt;/a&gt;, then convert it to VDI:&lt;/p&gt;
+&lt;p&gt;https://superuser.com/a/1404775/103156&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ VBoxManage convertdd ~/Downloads/install69.img install69.vdi --format VDI
+  Converting from raw image &lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/hvn/Downloads/install69.img&amp;quot;&lt;/span&gt; to &lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;install69.vdi&amp;quot;&lt;/span&gt;...
+  Creating dynamic image with size &lt;span class="m"&gt;696745984&lt;/span&gt; bytes &lt;span class="o"&gt;(&lt;/span&gt;665MB&lt;span class="o"&gt;)&lt;/span&gt;...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Choose VM &amp;gt; Settings &amp;gt; Storage &amp;gt; Controller: SATA &amp;gt; Adds hard disk &amp;gt; choose the converted VDI.
+Start the VM,
+access the EFI (hit Delete) and choose to boot from the 2nd harddisk, then install OpenBSD, and follow above guide.&lt;/p&gt;
+&lt;p&gt;Happy dual-booting.&lt;/p&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="ubuntu"></category><category term="dualboot"></category></entry><entry><title>Run Unbound DNS resolver on OpenBSD 6.8 on a Laptop</title><link href="https://familug.github.io/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html" rel="alternate"></link><published>2021-02-28T00:00:00+07:00</published><updated>2021-02-28T00:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-28:/run-unbound-dns-resolver-on-openbsd-68-on-a-laptop.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
+Using Unbound, you would not longer depends on other DNS provider, keep
+what domain you access to yourself.&lt;/p&gt;
+&lt;h2&gt;Enable and start unbound&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# rcctl enable unbound
+# rcctl start unbound
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It now listens on port 53, on localhost address - good, sane default:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ netstat …&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</summary><content type="html">&lt;p&gt;OpenBSD 6.8 comes with default installed Unbound daemon.
+Using Unbound, you would not longer depends on other DNS provider, keep
+what domain you access to yourself.&lt;/p&gt;
+&lt;h2&gt;Enable and start unbound&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# rcctl enable unbound
+# rcctl start unbound
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It now listens on port 53, on localhost address - good, sane default:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ netstat -nl &lt;span class="p"&gt;|&lt;/span&gt; grep &lt;span class="m"&gt;53&lt;/span&gt;
+tcp          &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1.53           *.*                    LISTEN
+udp          &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1.53           *.*
+tcp6         &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  ::1.53                 *.*                    LISTEN
+udp6         &lt;span class="m"&gt;0&lt;/span&gt;      &lt;span class="m"&gt;0&lt;/span&gt;  ::1.53                 *.*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now check using &lt;code&gt;dig&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;$&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dig&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dig&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mf"&gt;9.10.8&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;P1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;lt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mf"&gt;@127.0.0.1&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;global&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="n"&gt;cmd&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Got&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;answer&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;HEADER&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;lt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;opcode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;QUERY&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;NOERROR&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;7832&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;flags&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;qr&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;rd&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ra&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;QUERY&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ANSWER&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;AUTHORITY&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ADDITIONAL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;OPT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;PSEUDOSECTION&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;EDNS&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;version&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;flags&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;udp&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;4096&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;QUESTION&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SECTION&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="w"&gt;                       &lt;/span&gt;&lt;span class="n"&gt;IN&lt;/span&gt;&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ANSWER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SECTION&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="w"&gt;                &lt;/span&gt;&lt;span class="mi"&gt;231&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="n"&gt;IN&lt;/span&gt;&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="w"&gt;       &lt;/span&gt;&lt;span class="mf"&gt;104.21.61.168&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="w"&gt;                &lt;/span&gt;&lt;span class="mi"&gt;231&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="n"&gt;IN&lt;/span&gt;&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="w"&gt;       &lt;/span&gt;&lt;span class="mf"&gt;172.67.212.45&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Query&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;msec&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SERVER&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mf"&gt;127.0.0.1&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt;&lt;span class="mi"&gt;53&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mf"&gt;127.0.0.1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;WHEN&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Sun&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Feb&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;28&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;22&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;35&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mo"&gt;07&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2021&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;MSG&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;SIZE&lt;/span&gt;&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="n"&gt;rcvd&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;68&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The result is same as returned by &lt;code&gt;1.1.1.1&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;$&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dig&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="kt"&gt;short&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pymi&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vn&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mf"&gt;@1.1.1.1&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="mf"&gt;172.67.212.45&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="mf"&gt;104.21.61.168&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Config laptop to use the local DNS resolver&lt;/h2&gt;
+&lt;p&gt;Laptop uses wireless network often uses DHCP to config.&lt;/p&gt;
+&lt;p&gt;Example config:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ cat /etc/hostname.iwm0
+nwid &lt;span class="s2"&gt;&amp;quot;The Coffee House&amp;quot;&lt;/span&gt; wpakey thecoffeehouse
+dhcp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It uses DHCP to get IP and DNS config, this in turns, re-write &lt;code&gt;/etc/resolv.conf&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ cat /etc/resolv.conf
+&lt;span class="c1"&gt;# Generated by iwm0 dhclient&lt;/span&gt;
+nameserver &lt;span class="m"&gt;8&lt;/span&gt;.8.8.8
+lookup file &lt;span class="nb"&gt;bind&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To override the nameserver, change DHCP client config:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ cat /etc/dhclient.conf
+supersede domain-name-servers &lt;span class="m"&gt;127&lt;/span&gt;.0.0.1&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To reconnect wireless network with new DHCP client config, run:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;# sh -x /etc/netstart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now DNS would be resolved using &lt;code&gt;unbound&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Happy OpenBSD using.&lt;/p&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="unbound"></category><category term="DNS"></category><category term="dhcp"></category></entry><entry><title>Using virtual machine via vmd on OpenBSD 6.8</title><link href="https://familug.github.io/using-virtual-machine-via-vmd-on-openbsd-68.html" rel="alternate"></link><published>2021-02-20T16:00:00+07:00</published><updated>2021-02-20T16:00:00+07:00</updated><author><name>hvn</name></author><id>tag:familug.github.io,2021-02-20:/using-virtual-machine-via-vmd-on-openbsd-68.html</id><summary type="html">&lt;p&gt;OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
+Instead of installing VirtualBox or look for kvm on OpenBSD, everything
+is already there, a built-in virtualization solution.&lt;/p&gt;
+&lt;h3&gt;Check wiki FAQ first&lt;/h3&gt;
+&lt;p&gt;https://www.openbsd.org/faq/faq16.html&lt;/p&gt;
+&lt;p&gt;it lists all features, not ready features, prequisites …&lt;/p&gt;</summary><content type="html">&lt;p&gt;OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
+Instead of installing VirtualBox or look for kvm on OpenBSD, everything
+is already there, a built-in virtualization solution.&lt;/p&gt;
+&lt;h3&gt;Check wiki FAQ first&lt;/h3&gt;
+&lt;p&gt;https://www.openbsd.org/faq/faq16.html&lt;/p&gt;
+&lt;p&gt;it lists all features, not ready features, prequisites, basic commands.&lt;/p&gt;
+&lt;h2&gt;Distro&lt;/h2&gt;
+&lt;p&gt;Sure run OpenBSD guest on OpenBSD host is "should just work", it's fully tested.
+But for Linux based OS, the options are not much:&lt;/p&gt;
+&lt;p&gt;It's a real coincidence, someone asked the question two days ago on Reddit:
+https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_install_in_vmd/&lt;/p&gt;
+&lt;p&gt;Thanks to the answers there, I tried many but success only some:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;AlpineLinux: use "Virtual" edition https://alpinelinux.org/downloads/
+  "it just works", just boot on and run &lt;code&gt;setup-alpine&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Debian: I used &lt;code&gt;debian-10.8.0-amd64-netinst.iso&lt;/code&gt;,
+  after start, type Tab, then enter &lt;code&gt;console=ttyS0,115200&lt;/code&gt; then enter,
+  the text-based-curse-like UI would work.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And these failed:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ubuntu: &lt;code&gt;ubuntu-20.04.2-live-server-amd64.iso&lt;/code&gt;, failed.&lt;/li&gt;
+&lt;li&gt;NixOS: failed at phase 2/3 of systemd.&lt;/li&gt;
+&lt;li&gt;ArchLinux: failed with error &lt;code&gt;ACPI BIOS Error (bug): A valid RSDP was not found (20200925/tbxfroot-210)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most of these default to use Video, thus must add boot parameter:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;type Tab, then enter &lt;code&gt;console=ttyS0,115200&lt;/code&gt; then enter,&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html&lt;/p&gt;
+&lt;h3&gt;Network&lt;/h3&gt;
+&lt;p&gt;Setup &lt;code&gt;pf&lt;/code&gt; and &lt;code&gt;sysctl net.inet.ip.forwarding=1&lt;/code&gt;
+as metioned in &lt;a href="http://www.openbsd.org/faq/faq16.html#VMMnet"&gt;FAQ, &lt;code&gt;NAT for the VMs&lt;/code&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;After installed, can ssh from OpenBSD host to guest via, change to your IP get from
+output of &lt;code&gt;ip ad&lt;/code&gt; after installed:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;ssh&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="mf"&gt;@100.64.1.3&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that password login seems always fail even put correct password
+(or maybe Linux-based OS disabled them by default). Copy your pubkey
+to &lt;code&gt;/root/.ssh/authorized_keys&lt;/code&gt; then ssh would work.&lt;/p&gt;
+&lt;h3&gt;Commands&lt;/h3&gt;
+&lt;p&gt;Two major important commands:&lt;/p&gt;
+&lt;h4&gt;Create image&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vmctl create -s 10G image.qcow2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h4&gt;Start VM&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;vmctl&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;start&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;i&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;L&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;create&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;interface&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;c&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;connect&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;console&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;after&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;started&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;m&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="nv"&gt;G&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="nv"&gt;G&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;memory&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;r&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;file&lt;/span&gt;.&lt;span class="nv"&gt;iso&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;path&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;to&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;ISO&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;file&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="ss"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;CD&lt;/span&gt;&lt;span class="ss"&gt;)&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;d&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;image&lt;/span&gt;.&lt;span class="nv"&gt;qcow2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;\&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;image&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;created&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;above&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nv"&gt;myvm&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;#&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;name&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;of&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;VM&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vmctl status
+vmctl stop ID
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The start command would start and give the name temporary, after installed,
+create a file at &lt;code&gt;/etc/vm.conf&lt;/code&gt; with config like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;vm &amp;quot;alpine&amp;quot; {
+    disable  # disable auto start when boot
+    memory 1G
+    disk &amp;quot;/root/linux.qcow2&amp;quot;
+    local interface
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Result&lt;/h3&gt;
+&lt;p&gt;VMs installed successfully run smoothly on vmd, low CPU usage (compare to
+VirtualBox on MacOS).&lt;/p&gt;
+&lt;p&gt;Have fun.&lt;/p&gt;</content><category term="en,"></category><category term="openbsd"></category><category term="vmm"></category><category term="alpine"></category><category term="debian"></category></entry></feed>
