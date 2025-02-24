@@ -212,7 +212,7 @@ check_cmd() {
 }
 ```
 
-Script này sẽ tải binary dạng từ địa chỉ như <http://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init> rồi chmod u+x rồi chạy file, sau khi xong, xóa file đã tải.
+Script này sẽ tải binary từ địa chỉ như <http://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init> rồi chmod u+x rồi chạy file, sau khi xong, xóa file đã tải.
 
 ```sh
 ensure downloader "$_url" "$_file" "$_arch"
