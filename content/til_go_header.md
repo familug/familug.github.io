@@ -35,7 +35,7 @@ Output khi truy cập `/bar`:
 
 ```
   2025/03/04 06:57:11 http: superfluous response.WriteHeader call from main.main.func1 (main.go:15)
-````
+```
 
 Do dòng trên đã viết "Hello" vào response, nó đã tự set HTTP status code 200.
 Dòng http.Error set status code 400 nhưng không có tác dụng gì.
