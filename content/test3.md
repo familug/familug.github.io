@@ -35,6 +35,15 @@ Trong tiếng Anh, 1 bottle không có `s`, nhiều bottles thì có `s`. Khi te
 - `checker file1` : trường hợp 1 input, chạy ok
 - `checker 'file1 file2'`: lẽ ra là 2 argument thì đây lại là 1 string. Cần sửa thành `checker file1 file2`.
 
+#### 99 bottles of beer on the wall
+Bài toán phổ biến trong lập trình: 99 chai bia trong két cũng cần test đủ với các trường hợp:
+
+- nhiều chai
+- chỉ còn 1 chai
+- hết bia 
+
+Xem đề và 1500 loại code ở <http://www.99-bottles-of-beer.net/lyrics.html>
+
 ### Kết luận
 Dù viết code hay viết tool, luôn test tối thiểu 3 case mà nhiều hơn thì là 4:
 
