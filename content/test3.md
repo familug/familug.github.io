@@ -7,6 +7,8 @@ Slug: test3
 Khi viết 1 tool hay viết code, một câu hỏi có thể nảy sinh là: test bao nhiêu trường hợp cho đủ?
 Câu trả lời luôn nhận được là: càng nhiều càng tốt!
 
+![a peace can](https://cdn.masto.host/floss/accounts/avatars/114/100/789/895/330/330/original/28e74d5532a550c1.jpg)
+
 Nhưng test ít nhất là bao nhiêu? 1 2 3 4? bài viết này xin đưa ra 1 con số kèm theo lý do: 3.
 
 Giả sử đang viết 1 tool cli kiểm tra syntax của file yaml/json. Tạm gọi là `checker`. `checker` nhận vào argument là các file cần check.
