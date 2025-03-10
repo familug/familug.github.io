@@ -21,7 +21,7 @@ Khi cần restart các pod trong 1 rollout, các cách làm:
 
 - xóa từng pod đi để replicaset sẽ tạo lại pod mới (không khả thi với số lượng pod lớn, bấm mỏi tay)
 - xóa replicaset đi để rollout tạo lại replicaset mới 
-- restart rollout: đây là 1 tính năng của Argo Rollouts, nó thậm chí có cả 1 nút bấm trong của rollout object trên giao diện Argo UI. <https://argoproj.github.io/argo-rollouts/features/restart/#how-it-works>
+- restart rollout: đây là 1 tính năng của Argo Rollouts, nó thậm chí có cả 1 nút bấm trong menu của rollout object trên giao diện Argo UI. <https://argoproj.github.io/argo-rollouts/features/restart/#how-it-works>
 
 ### Kết luận
 Tính năng nhiều khi có ở đó, nhưng không dễ phát hiện ra, người dùng thường làm theo "bản năng" thay vì đọc doc.
