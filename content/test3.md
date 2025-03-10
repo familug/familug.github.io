@@ -35,7 +35,8 @@ Ngoài ra, có thể thêm test case thứ 4 khi bài toán có số N là max t
 Trong tiếng Anh, 1 bottle không có `s`, nhiều bottles thì có `s`. Khi test các file cần thử 2 file trở lên để tránh việc:
 
 - `checker file1` : trường hợp 1 input, chạy ok
-- `checker 'file1 file2'`: lẽ ra là 2 argument thì đây lại là 1 string. Cần sửa thành `checker file1 file2`.
+- `checker file1 file2`: chương trình có thể chi đọc vào file1 và bỏ qua file2, hoặc chỉ xử lý file2 bỏ qua file 1.
+- `checker 'file1 file2'`: script gọi chương trình lẽ ra gọi với 2 argument thì lại đưa vào 1 string. Cần sửa thành `checker file1 file2`.
 
 #### 99 bottles of beer on the wall
 Bài toán phổ biến trong lập trình: 99 chai bia trong két cũng cần test đủ với các trường hợp:
