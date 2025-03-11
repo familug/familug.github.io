@@ -22,18 +22,15 @@ Jisho <https://jisho.org/> có thể tra cứu bằng tiếng Anh lẫn tiếng 
 
 ### Các mẫu câu hội thoại kèm nghe đọc
 
-48 bài hội thoại == 48 mẫu câu 
-
-- Free|Vie: NHK WORLD-JAPAN Cùng nhau học tiếng Nhật <https://www.nhk.or.jp/lesson/vi/lessons/>
-- Free|Eng: NHK WORLD-JAPAN Easy Japanese <https://www.nhk.or.jp/lesson/en/>
-- NonFree|Eng: 4 khóa học (~30 video x 10 phút mỗi khóa, mỗi video 1 mẫu câu, ~$10/course) của Sendagaya Japanese Institute <https://www.udemy.com/user/qian-tuo-kegu-ri-ben-yu-jiao-yu-yan-jiu-suo/>
+- Free|Vie: NHK WORLD-JAPAN Cùng nhau học tiếng Nhật <https://www.nhk.or.jp/lesson/vi/lessons/> 48 bài hội thoại == 48 mẫu câu 
+- Free|Eng: NHK WORLD-JAPAN Easy Japanese <https://www.nhk.or.jp/lesson/en/> bản tiếng Anh nếu muốn vừa học tiếng Anh vừa học tiếng Nhật
+- NonFree|Eng: 4 khóa học (~30 video x 10 phút mỗi khóa, mỗi video 1 mẫu câu, ~$10/course) của Sendagaya Japanese Institute <https://www.udemy.com/user/qian-tuo-kegu-ri-ben-yu-jiao-yu-yan-jiu-suo/> đáng đồng tiền bát gạo
 
 ### App
 #### Anki - Free for android, $$ for iOS, free on Desktop
-<https://apps.ankiweb.net/>
-Các "Deck" 
+Homepage <https://apps.ankiweb.net/>. Sau khi tải app vào tìm trong "Shared Deck". Các "Deck" 
 
-- ]Japanese course based on Tae Kim's grammar guide & anime](https://www.japanese-like-a-breeze.com/): <https://ankiweb.net/shared/info/911122782> với các câu nói cắt từ các Anime ra.
+- [Japanese course based on Tae Kim's grammar guide & anime](https://www.japanese-like-a-breeze.com/): <https://ankiweb.net/shared/info/911122782> với các câu nói cắt từ các Anime ra.
 - [Wanikani](https://www.wanikani.com/): phương pháp học Kanji và các bộ thủ (radicals) hay có thể tìm deck tren <https://ankiweb.net/shared/decks>
 
 #### Renshuu - free on Android & iOS
