@@ -24,16 +24,17 @@ Jisho <https://jisho.org/> có thể tra cứu bằng tiếng Anh lẫn tiếng 
 
 48 bài hội thoại == 48 mẫu câu 
 
-- Free|Vie: NHK WORLD-JAPAN Cùng nhau học tiếng Nhật<https://www.nhk.or.jp/lesson/vi/lessons/>
+- Free|Vie: NHK WORLD-JAPAN Cùng nhau học tiếng Nhật <https://www.nhk.or.jp/lesson/vi/lessons/>
 - Free|Eng: NHK WORLD-JAPAN Easy Japanese <https://www.nhk.or.jp/lesson/en/>
 - NonFree|Eng: 4 khóa học (~30 video x 10 phút mỗi khóa, mỗi video 1 mẫu câu, ~$10/course) của Sendagaya Japanese Institute <https://www.udemy.com/user/qian-tuo-kegu-ri-ben-yu-jiao-yu-yan-jiu-suo/>
 
 ### App
 #### Anki - Free for android, $$ for iOS, free on Desktop
+<https://apps.ankiweb.net/>
 Các "Deck" 
 
-- Japanese course based on Tae Kim's grammar guide & anime: <https://ankiweb.net/shared/info/911122782> với các câu nói cắt từ các Anime ra.
-- Wanikani: phương pháp học Kanji và các bộ <https://www.wanikani.com/> hay có thể tìm deck tren <https://ankiweb.net/shared/decks>
+- ]Japanese course based on Tae Kim's grammar guide & anime](https://www.japanese-like-a-breeze.com/): <https://ankiweb.net/shared/info/911122782> với các câu nói cắt từ các Anime ra.
+- [Wanikani](https://www.wanikani.com/): phương pháp học Kanji và các bộ thủ (radicals) hay có thể tìm deck tren <https://ankiweb.net/shared/decks>
 
 #### Renshuu - free on Android & iOS
 Free app học từ vựng, Kanji và ngữ pháp căn bản <https://www.renshuu.org/>
@@ -43,10 +44,10 @@ Free app học từ vựng, Kanji và ngữ pháp căn bản <https://www.renshu
 - Free|Eng: Yomuyomu - Android/iOS/Web app đọc truyện đơn giản <https://yomuyomu.app/> 
 
 ### Ngữ pháp
-Website <https://www.tofugu.com/japanese-grammar/> có các bài viết chi tiết về ngữ pháp. Nhưng các tài liệu trên đều có xen 1 phần ngữ pháp vào rồi
+Eng: Website <https://www.tofugu.com/japanese-grammar/> có các bài viết chi tiết về ngữ pháp. Nhưng các tài liệu trên đều có xen 1 phần ngữ pháp vào rồi
 
 ### Sách 
-Quyển sách học tiếng Nhật bán chạy số 1 **HÀN QUỐC** lại bán ở Việt Nam ???!! <https://megabook.vn/tu-hoc-tieng-nhat> dễ xem, có màu, có tiếng, vui vui.
+Vie: Quyển sách học tiếng Nhật bán chạy số 1 **HÀN QUỐC** lại bán ở Việt Nam ???!! <https://megabook.vn/tu-hoc-tieng-nhat> dễ xem, có màu, có tiếng, vui vui.
 
 ### Film & Anime
 và không thế thiếu việc "học tập" qua các bộ film/anime của Nhật bản.
@@ -57,7 +58,7 @@ Tự học là một cách tốt để tiết kiệm tiền, nhưng tốn thời
 
 Nhưng vẫn hơn là không.
 
-Happy watching JaNime without sub after... 2 years maybe? :haha:
+Happy watching JaNime without sub after... 2 years++ maybe? :haha:
 
 Hết.
 
