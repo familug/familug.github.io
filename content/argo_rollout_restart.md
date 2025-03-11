@@ -23,6 +23,10 @@ Khi cần restart các pod trong 1 rollout, các cách làm:
 - xóa replicaset đi để rollout tạo lại replicaset mới 
 - restart rollout: đây là 1 tính năng của Argo Rollouts, nó thậm chí có cả 1 nút bấm trong menu của rollout object trên giao diện Argo UI. <https://argoproj.github.io/argo-rollouts/features/restart/#how-it-works>
 
+
+## How it works
+> During a restart, the controller iterates through each ReplicaSet to see if all the Pods have a creation timestamp which is newer than the restartAt time. For every pod older than the restartAt timestamp, the Pod will be evicted, allowing the ReplicaSet to replace the pod with a recreated one.
+
 ### Kết luận
 Tính năng nhiều khi có ở đó, nhưng không dễ phát hiện ra, người dùng thường làm theo "bản năng" thay vì đọc doc.
 
