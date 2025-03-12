@@ -75,6 +75,32 @@ Khi option được gọi sẽ thay đổi theo điều kiện, ví dụ gọi A
             (some? next-page-token) (assoc :next-page-token next-page-token)))
 ```
 
+### Source
+Trong REPL
+
+```clj
+user=>
+(source cond->)
+(defmacro cond->
+  "Takes an expression and a set of test/form pairs. Threads expr (via ->)
+  through each form for which the corresponding test
+  expression is true. Note that, unlike cond branching, cond-> threading does
+  not short circuit after the first true test expression."
+  {:added "1.5"}
+  [expr & clauses]
+  (assert (even? (count clauses)))
+  (let [g (gensym)
+        steps (map (fn [[test step]] `(if ~test (-> ~g ~step) ~g))
+                   (partition 2 clauses))]
+    `(let [~g ~expr
+           ~@(interleave (repeat g) (butlast steps))]
+       ~(if (empty? steps)
+          g
+          (last steps)))))
+nil
+
+```
+
 ### Kết luận
 `cond->` macro giúp viết code update kiểu dữ liệu theo các điều kiện một cách sạch đẹp hơn.
 
