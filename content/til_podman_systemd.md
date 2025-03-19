@@ -1,10 +1,10 @@
-Title: [TIL] podman có thể tạo ra file config systemd
+Title: [TIL] podman có thể tạo ra systemd unit config file
 Date: 2025/03/19
 Category: frontpage
 Tags: podman, systemd
 Slug: podman-systemd
 
-podman - chương trình phổ biến ngày nay để thay thế docker, có tính năng sinh file systemd giúp deploy container 1 cách thuận tiện.
+podman - chương trình phổ biến ngày nay để thay thế docker, có tính năng sinh systemd  unit configuration file giúp deploy container 1 cách thuận tiện.
 
 ```sh
 $ podman run -p 8000:80 docker.io/nginx
