@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://familug.github.io/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://familug.github.io/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="alpine, curl, docker, podman, container, frontpage, " />
+
+<meta property="og:title" content="Docker image alpine/curl không phải alpine "/>
+<meta property="og:url" content="https://familug.github.io/docker-image-alpinecurl-khong-phai-alpine.html" />
+<meta property="og:description" content="Nếu cần chạy 1 câu lệnh curl (hay http client khác để truy cập web API) trên container, dùng image nào nhẹ nhất? NOTE: thay podman bằng docker nếu dùng docker. alpine rồi cài curl alpine vốn phổ biến trong giới container vì nhẹ, nhưng không có sẵn curl, phải …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-08-02T00:00:00+07:00" />
+<meta name="twitter:title" content="Docker image alpine/curl không phải alpine ">
+<meta name="twitter:description" content="Nếu cần chạy 1 câu lệnh curl (hay http client khác để truy cập web API) trên container, dùng image nào nhẹ nhất? NOTE: thay podman bằng docker nếu dùng docker. alpine rồi cài curl alpine vốn phổ biến trong giới container vì nhẹ, nhưng không có sẵn curl, phải …">
+
+        <title>Docker image alpine/curl không phải alpine  · FAMILUG.org Vietnam
+</title>
+        <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG.org Vietnam - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://familug.github.io/"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://familug.github.io
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://familug.github.io/categories.html">Categories</a></li>
+                                <li ><a href="https://familug.github.io/tags.html">Tags</a></li>
+                                <li ><a href="https://familug.github.io/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://familug.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://familug.github.io/docker-image-alpinecurl-khong-phai-alpine.html">
+                Docker image alpine/curl không phải alpine
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Nếu cần chạy 1 câu lệnh curl (hay http client khác để truy cập web API) trên container, dùng image nào nhẹ nhất?</p>
+<p>NOTE: thay <code>podman</code> bằng <code>docker</code> nếu dùng docker.</p>
+<h2>alpine rồi cài curl</h2>
+<p><a href="https://familug.github.io/cai-dat-va-chay-may-ao-alpine-linux-313.html"><code>alpine</code></a> vốn phổ biến trong giới container vì nhẹ, nhưng không có sẵn curl, phải cài:</p>
+<div class="highlight"><pre><span></span><code>$ podman run -it alpine sh -c <span class="s1">&#39;apk add curl&gt;/dev/null; curl https://www.openbsd.org/robots.txt&#39;</span>
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /donations.html
+</code></pre></div>
+
+<h2>alpine/curl KHÔNG PHẢI alpine</h2>
+<p>Google alpine curl xem image alpine nào cài sẵn curl? thấy ngay kết quả top <code>alpine/curl</code>, và dùng có vẻ thành công:</p>
+<div class="highlight"><pre><span></span><code>$ podman run -it docker.io/alpine/curl sh -c <span class="s1">&#39;curl https://www.openbsd.org/robots.txt&#39;</span>
+Trying to pull docker.io/alpine/curl:latest...
+Getting image <span class="nb">source</span> signatures
+Copying blob 9f444ea7cf45 <span class="k">done</span>
+Copying blob 299588fda28b <span class="k">done</span>
+Copying blob c6a83fedfae6 <span class="k">done</span>
+Copying config d4f2de61cf <span class="k">done</span>
+Writing manifest to image destination
+Storing signatures
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /donations.html
+</code></pre></div>
+
+<p><strong>NHƯNG</strong> <code>alpine</code> này là tên của 1 người dùng, không phải của hệ điều hành <code>alpine</code>. Nhờ cách đặt tên thông minh này mà tác giả đã khiến hàng trăm triệu lượt tải <code>alpine/git</code></p>
+<ul>
+<li>alpine user Bill Wang: <a href="https://hub.docker.com/u/alpine">https://hub.docker.com/u/alpine</a></li>
+<li>alpine linux OS (Docker official image): <a href="https://hub.docker.com/_/alpine">https://hub.docker.com/_/alpine</a></li>
+</ul>
+<h2>Không có ubuntu/curl</h2>
+<p>user ubuntu thuộc về tổ chức Canonical - công ty đứng sau Ubuntu chứ không phải 1 người dùng thông minh nào cả <a href="https://hub.docker.com/u/ubuntu">https://hub.docker.com/u/ubuntu</a></p>
+<h2>image chính thức của curl</h2>
+<p><a href="https://hub.docker.com/r/curlimages/curl">https://hub.docker.com/r/curlimages/curl</a> với hơn 1 tỷ lượt tải, based alpine</p>
+<div class="highlight"><pre><span></span><code>$ podman run -it docker.io/curlimages/curl cat /etc/os-release
+<span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;Alpine Linux&quot;</span>
+<span class="nv">ID</span><span class="o">=</span>alpine
+<span class="nv">VERSION_ID</span><span class="o">=</span><span class="m">3</span>.20.2
+<span class="nv">PRETTY_NAME</span><span class="o">=</span><span class="s2">&quot;Alpine Linux v3.20&quot;</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>$ podman run -it docker.io/curlimages/curl https://www.openbsd.org/robots.txt
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /donations.html
+</code></pre></div>
+
+<h2>busybox wget</h2>
+<p>busybox rất nhỏ, và có sẵn wget, wget khác curl <a href="https://daniel.haxx.se/docs/curl-vs-wget.html">https://daniel.haxx.se/docs/curl-vs-wget.html</a> nhưng đủ tính năng để truy cập 1 HTTP API:</p>
+<p>Option <code>-O FILE     Save to FILE ('-' for stdout)</code>  và <code>-q      Quiet</code></p>
+<div class="highlight"><pre><span></span><code>$ podman run -it busybox wget -qO- https://www.openbsd.org/robots.txt
+wget: note: TLS certificate validation not implemented
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /donations.html
+</code></pre></div>
+
+<h2>So sánh kích thước image</h2>
+<div class="highlight"><pre><span></span><code>$ podman images
+REPOSITORY                              TAG         IMAGE ID      CREATED        SIZE
+docker.io/alpine/curl                   latest      d4f2de61cfdf  <span class="m">5</span> days ago     <span class="m">13</span>.7 MB
+docker.io/library/alpine                latest      a606584aa9aa  <span class="m">5</span> weeks ago    <span class="m">8</span>.09 MB
+docker.io/library/busybox               latest      65ad0d468eb1  <span class="m">14</span> months ago  <span class="m">4</span>.5 MB
+docker.io/curlimages/curl               latest      65019fbb78d5  <span class="m">2</span> days ago     <span class="m">21</span>.9 MB
+</code></pre></div>
+
+<p>busybox nhỏ nhất. Nếu cần đủ tính năng curl, hãy dùng <code>curlimages/curl</code>.</p>
+<h2>Kết luận</h2>
+<p>Tránh bị "bất ngờ" vì <code>alpine/curl</code> hay <code>alpine/git</code> không đến từ <code>alpine</code>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+                <hr />
+    <div class="author-blurb">
+        <a href="" target="_blank" rel="nofollow noopener noreferrer">
+            <span class="author-name">hvn</span>
+        </a>
+        
+    </div>
+
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-08-02T00:00:00+07:00">Fri 02 August 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://familug.github.io/categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://familug.github.io/tags.html#alpine-ref">alpine
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#container-ref">container
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#curl-ref">curl
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#docker-ref">docker
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#podman-ref">podman
+                    <span class="superscript">4</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://familug.github.io/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
