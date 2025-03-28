@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://familug.github.io/theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://familug.github.io/theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="elasticsearch, CTF, opensearch, podman, frontpage, " />
+
+<meta property="og:title" content="Chơi CTF giúp gì cài OpenSearch? "/>
+<meta property="og:url" content="https://familug.github.io/choi-ctf-giup-gi-cai-opensearch.html" />
+<meta property="og:description" content="OpenSearch vs ElasticSearch OpenSearch là 1 bản fork của Amazon từ ElasticSearch, sau vụ đổi license đình đám từ công ty Elastic đứng sau ElasticSearch không muốn Amazon thu lời từ sản phẩm open-source của họ. OpenSearch ngày càng khác biệt với ElasticSearch, mang theo những ưu / nhược điểm riêng …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-07-12T00:00:00+07:00" />
+<meta name="twitter:title" content="Chơi CTF giúp gì cài OpenSearch? ">
+<meta name="twitter:description" content="OpenSearch vs ElasticSearch OpenSearch là 1 bản fork của Amazon từ ElasticSearch, sau vụ đổi license đình đám từ công ty Elastic đứng sau ElasticSearch không muốn Amazon thu lời từ sản phẩm open-source của họ. OpenSearch ngày càng khác biệt với ElasticSearch, mang theo những ưu / nhược điểm riêng …">
+
+        <title>Chơi CTF giúp gì cài OpenSearch?  · FAMILUG.org Vietnam
+</title>
+        <link href="https://familug.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="FAMILUG.org Vietnam - Full Atom Feed" />
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="https://familug.github.io/"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       https://familug.github.io
+                                    >Home</a>
+                                </li>
+                                <li ><a href="https://familug.github.io/categories.html">Categories</a></li>
+                                <li ><a href="https://familug.github.io/tags.html">Tags</a></li>
+                                <li ><a href="https://familug.github.io/archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="https://familug.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="https://familug.github.io/choi-ctf-giup-gi-cai-opensearch.html">
+                Chơi CTF giúp gì cài OpenSearch?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>OpenSearch vs ElasticSearch</h2>
+<p><a href="https://opensearch.org/">OpenSearch</a> là 1 bản fork của Amazon từ ElasticSearch, sau <a href="https://www.elastic.co/blog/why-license-change-aws">vụ đổi license đình đám từ công ty Elastic</a> đứng sau ElasticSearch không muốn Amazon thu lời từ sản phẩm open-source của họ.
+OpenSearch ngày càng khác biệt với ElasticSearch, mang theo những ưu / nhược điểm riêng.</p>
+<p>Một nhược điểm là nó fork từ bản cũ của ElasticSearch, nên nhiều lỗi còn rất khó đọc. Bài này nhờ kỹ năng chơi <a href="https://pp.pymi.vn/article/pymictf/">CTF</a> với team PyMi mà giải quyết một vấn đề đau đầu.</p>
+<p>Một ưu điểm là OpenSearch hỗ trợ giải pháp login doanh nghiệp bằng SSO: SAML, OIDC, LDAP... còn ElasticSearch phải trả phí mua license.</p>
+<h3>Chạy 1 node trên máy bằng podman (docker)</h3>
+<p>podman là 1 phần mềm phát triển bởi RedHat thay thế cho docker, sau khi docker đổi qua tính phí trên Desktop (DockerDesktop), podman dần trở nên phổ biến.
+Câu lệnh podman tương thích với docker nên chỉ cần thay chữ <code>podman</code> trong bài thành <code>docker</code> là được. Bài này chạy bằng podman trên máy để bạn đọc có thể làm theo, thực tế chạy trên 1 K8S cluster</p>
+<p>Chạy 1 container opensearch theo hướng dẫn tại <a href="https://hub.docker.com/r/opensearchproject/opensearch">trang dockerhub</a>, thấy rất nhiều log:</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">podman</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="o">-</span><span class="n">it</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="mi">9200</span><span class="o">:</span><span class="mi">9200</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="mi">9600</span><span class="o">:</span><span class="mi">9600</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="n">OPENSEARCH_INITIAL_ADMIN_PASSWORD</span><span class="o">=</span><span class="n">daemonH4gx</span><span class="mi">@4</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="s">&quot;discovery.type=single-node&quot;</span><span class="w"> </span><span class="o">--</span><span class="n">name</span><span class="w"> </span><span class="n">opensearch</span><span class="o">-</span><span class="n">node</span><span class="w"> </span><span class="n">docker</span><span class="p">.</span><span class="n">io</span><span class="o">/</span><span class="n">opensearchproject</span><span class="o">/</span><span class="n">opensearch</span><span class="o">:</span><span class="mf">2.15.0</span><span class="w"></span>
+
+<span class="n">Enabling</span><span class="w"> </span><span class="n">OpenSearch</span><span class="w"> </span><span class="n">Security</span><span class="w"> </span><span class="n">Plugin</span><span class="w"></span>
+<span class="n">Enabling</span><span class="w"> </span><span class="n">execution</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">install_demo_configuration</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">OpenSearch</span><span class="w"> </span><span class="n">Security</span><span class="w"> </span><span class="n">Plugin</span><span class="w"></span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="mf">2.12.0</span><span class="w"> </span><span class="n">onwards</span><span class="p">,</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">OpenSearch</span><span class="w"> </span><span class="n">Security</span><span class="w"> </span><span class="n">Plugin</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">change</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">requires</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">initial</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="err">&#39;</span><span class="n">admin</span><span class="err">&#39;</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="w"></span>
+<span class="n">Please</span><span class="w"> </span><span class="n">define</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="err">&#39;</span><span class="n">OPENSEARCH_INITIAL_ADMIN_PASSWORD</span><span class="err">&#39;</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">strong</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">string</span><span class="p">.</span><span class="w"></span>
+<span class="n">If</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">provided</span><span class="p">,</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">setup</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">quit</span><span class="p">.</span><span class="w"></span>
+<span class="w"> </span><span class="n">For</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">details</span><span class="p">,</span><span class="w"> </span><span class="n">please</span><span class="w"> </span><span class="n">visit</span><span class="o">:</span><span class="w"> </span><span class="n">https</span><span class="o">:</span><span class="c1">//opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/</span>
+<span class="cp">### OpenSearch Security Demo Installer</span>
+<span class="cp">### ** Warning: Do not use on production or public reachable systems **</span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="n">rpm</span><span class="o">/</span><span class="n">deb</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">Linux</span><span class="w"> </span><span class="mf">6.5.0</span><span class="mi">-41</span><span class="o">-</span><span class="n">generic</span><span class="w"> </span><span class="n">amd64</span><span class="w"></span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="n">dir</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">opensearch</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="w"></span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="n">file</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">opensearch</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">opensearch</span><span class="p">.</span><span class="n">yml</span><span class="w"></span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="n">bin</span><span class="w"> </span><span class="n">dir</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">opensearch</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="w"></span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="n">plugins</span><span class="w"> </span><span class="n">dir</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">opensearch</span><span class="o">/</span><span class="n">plugins</span><span class="o">/</span><span class="w"></span>
+<span class="n">OpenSearch</span><span class="w"> </span><span class="n">lib</span><span class="w"> </span><span class="n">dir</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">opensearch</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="w"></span>
+<span class="n">Detected</span><span class="w"> </span><span class="n">OpenSearch</span><span class="w"> </span><span class="n">Version</span><span class="o">:</span><span class="w"> </span><span class="mf">2.15.0</span><span class="w"></span>
+<span class="n">Detected</span><span class="w"> </span><span class="n">OpenSearch</span><span class="w"> </span><span class="n">Security</span><span class="w"> </span><span class="n">Version</span><span class="o">:</span><span class="w"> </span><span class="mf">2.15.0.0</span><span class="w"></span>
+<span class="n">Admin</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">successfully</span><span class="p">.</span><span class="w"></span>
+<span class="cp">### Success</span>
+<span class="p">...</span><span class="w"></span>
+<span class="p">[</span><span class="mi">2024</span><span class="mo">-07</span><span class="mi">-12</span><span class="n">T13</span><span class="o">:</span><span class="mi">16</span><span class="o">:</span><span class="mi">30</span><span class="p">,</span><span class="mi">697</span><span class="p">][</span><span class="n">INFO</span><span class="w"> </span><span class="p">][</span><span class="n">o</span><span class="p">.</span><span class="n">o</span><span class="p">.</span><span class="n">s</span><span class="p">.</span><span class="n">c</span><span class="p">.</span><span class="n">ConfigurationRepository</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mo">00</span><span class="n">a159b488ac</span><span class="p">]</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="err">&#39;</span><span class="mo">00</span><span class="n">a159b488ac</span><span class="err">&#39;</span><span class="w"> </span><span class="n">initialized</span><span class="w"></span>
+</code></pre></div>
+
+<p>server đã mặc định setup sẵn SSL/TLS port 9200.</p>
+<p>Sau khi cài lên trên K8S cluster, bỗng dưng xuất hiện hàng đống log error như sau</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span><span class="n">2024-07-12T13:16:36,456</span><span class="o">][</span><span class="n">ERROR</span><span class="o">][</span><span class="n">o.o.h.n.s.SecureNetty4HttpServerTransport</span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="n">00a159b488ac</span><span class="o">]</span><span class="w"> </span><span class="k">Exception</span><span class="w"> </span><span class="n">during</span><span class="w"> </span><span class="n">establishing</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">SSL</span><span class="w"> </span><span class="k">connection</span><span class="err">:</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">ssl</span><span class="p">.</span><span class="nl">NotSslRecordException</span><span class="p">:</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">SSL</span><span class="o">/</span><span class="n">TLS</span><span class="w"> </span><span class="nl">record</span><span class="p">:</span><span class="w"> </span><span class="mi">474554202</span><span class="n">f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a</span><span class="w"></span>
+<span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">ssl</span><span class="p">.</span><span class="nl">NotSslRecordException</span><span class="p">:</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">SSL</span><span class="o">/</span><span class="n">TLS</span><span class="w"> </span><span class="nl">record</span><span class="p">:</span><span class="w"> </span><span class="mi">474554202</span><span class="n">f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">ssl</span><span class="p">.</span><span class="n">SslHandler</span><span class="p">.</span><span class="n">decodeJdkCompatible</span><span class="p">(</span><span class="n">SslHandler</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">1314</span><span class="p">)</span><span class="w"> </span><span class="o">~[</span><span class="n">netty-handler-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">ssl</span><span class="p">.</span><span class="n">SslHandler</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">SslHandler</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">1387</span><span class="p">)</span><span class="w"> </span><span class="o">~[</span><span class="n">netty-handler-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">codec</span><span class="p">.</span><span class="n">ByteToMessageDecoder</span><span class="p">.</span><span class="n">decodeRemovalReentryProtection</span><span class="p">(</span><span class="n">ByteToMessageDecoder</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">530</span><span class="p">)</span><span class="w"> </span><span class="o">~[</span><span class="n">netty-codec-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">codec</span><span class="p">.</span><span class="n">ByteToMessageDecoder</span><span class="p">.</span><span class="n">callDecode</span><span class="p">(</span><span class="n">ByteToMessageDecoder</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">469</span><span class="p">)</span><span class="w"> </span><span class="o">~[</span><span class="n">netty-codec-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">handler</span><span class="p">.</span><span class="n">codec</span><span class="p">.</span><span class="n">ByteToMessageDecoder</span><span class="p">.</span><span class="n">channelRead</span><span class="p">(</span><span class="n">ByteToMessageDecoder</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">290</span><span class="p">)</span><span class="w"> </span><span class="o">~[</span><span class="n">netty-codec-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="n">invokeChannelRead</span><span class="p">(</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">444</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="n">invokeChannelRead</span><span class="p">(</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">420</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="n">fireChannelRead</span><span class="p">(</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">412</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">DefaultChannelPipeline</span><span class="err">$</span><span class="n">HeadContext</span><span class="p">.</span><span class="n">channelRead</span><span class="p">(</span><span class="n">DefaultChannelPipeline</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">1407</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="n">invokeChannelRead</span><span class="p">(</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">440</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="n">invokeChannelRead</span><span class="p">(</span><span class="n">AbstractChannelHandlerContext</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">420</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">DefaultChannelPipeline</span><span class="p">.</span><span class="n">fireChannelRead</span><span class="p">(</span><span class="n">DefaultChannelPipeline</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">918</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">nio</span><span class="p">.</span><span class="n">AbstractNioByteChannel</span><span class="err">$</span><span class="n">NioByteUnsafe</span><span class="p">.</span><span class="k">read</span><span class="p">(</span><span class="n">AbstractNioByteChannel</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">166</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">nio</span><span class="p">.</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="n">processSelectedKey</span><span class="p">(</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">788</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">nio</span><span class="p">.</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="n">processSelectedKeysPlain</span><span class="p">(</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">689</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">nio</span><span class="p">.</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="n">processSelectedKeys</span><span class="p">(</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">652</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">channel</span><span class="p">.</span><span class="n">nio</span><span class="p">.</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">NioEventLoop</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">562</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-transport-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">concurrent</span><span class="p">.</span><span class="n">SingleThreadEventExecutor</span><span class="err">$</span><span class="mf">4.</span><span class="n">run</span><span class="p">(</span><span class="n">SingleThreadEventExecutor</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">994</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-common-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">io</span><span class="p">.</span><span class="n">netty</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">internal</span><span class="p">.</span><span class="n">ThreadExecutorMap</span><span class="err">$</span><span class="mf">2.</span><span class="n">run</span><span class="p">(</span><span class="n">ThreadExecutorMap</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">74</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">netty-common-4.1.110.Final.jar:4.1.110.Final</span><span class="o">]</span><span class="w"></span>
+<span class="w">    </span><span class="k">at</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="n">base</span><span class="o">/</span><span class="n">java</span><span class="p">.</span><span class="n">lang</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="nl">java</span><span class="p">:</span><span class="mi">1583</span><span class="p">)</span><span class="w"> </span><span class="o">[</span><span class="n">?:?</span><span class="o">]</span><span class="w"></span>
+</code></pre></div>
+
+<p>dễ dàng tìm thấy lỗi này trên <a href="https://www.google.com/search?client=firefox-b-d&amp;q=Exception+during+establishing+a+SSL+connection%3A+io.netty.handler.ssl.NotSslRecordException%3A+not+an+SSL%2FTLS+record%3A">mạng</a></p>
+<p>nhưng ai gửi request http đến địa chỉ này?</p>
+<h3>Tìm ai gửi request</h3>
+<p>Các phương án:</p>
+<ul>
+<li>cài tcpdump, ngrep để dump traffic pod 9200 xem nội dung traffic, không dễ cài được package nếu image đã remove các package manager (như dùng distroless images)</li>
+<li>đọc log?! ai đọc stacktrace Java???</li>
+</ul>
+<p>Giải pháp là đọc log, phần nội dung bí hiểm trong log message:</p>
+<div class="highlight"><pre><span></span><code><span class="mi">474554202</span><span class="n">f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a</span>
+</code></pre></div>
+
+<p>chứa dãy 45 47 55 ... các ký tự từ a-e từ 0-9... với kinh nghiệm chơi các bài dễ trong các giải CTF, đoán ngay dùng hex <a href="https://n.pymi.vn/base16.html">https://n.pymi.vn/base16.html</a> để xem là gì. Bật Python:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;474554202f20485454502f312e310d0a486f73743a206c6f63616c686f73743a393230300d0a557365722d4167656e743a206375726c2f372e38312e300d0a4163636570743a202a2f2a0d0a0d0a&quot;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="sa">b</span><span class="s1">&#39;GET / HTTP/1.1</span><span class="se">\r\n</span><span class="s1">Host: localhost:9200</span><span class="se">\r\n</span><span class="s1">User-Agent: curl/7.81.0</span><span class="se">\r\n</span><span class="s1">Accept: */*</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
+</code></pre></div>
+
+<p>đọc được nội dung của request đã gửi tới server.</p>
+<p>Trên thực tế, đống log có User-Agent là 1 chương trình monitoring, từ đó tìm ra và tắt nó đi.</p>
+<p>PS: có thể dùng <a href="https://gchq.github.io/CyberChef/">https://gchq.github.io/CyberChef/</a> để decode hex.</p>
+<h2>Kết luận</h2>
+<p>Chơi CTF không bổ ngang thì bổ dọc,
+không bổ dọc thì lại bổ ngang.</p>
+<p>Thực hiện trên:</p>
+<div class="highlight"><pre><span></span><code>$ lsb_release -d
+Description:    Ubuntu <span class="m">22</span>.04.4 LTS
+
+$ podman --version
+podman version <span class="m">3</span>.4.4
+</code></pre></div>
+
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+                <hr />
+    <div class="author-blurb">
+        <a href="" target="_blank" rel="nofollow noopener noreferrer">
+            <span class="author-name">hvn</span>
+        </a>
+        
+    </div>
+
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-07-12T00:00:00+07:00">Fri 12 July 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="https://familug.github.io/categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="https://familug.github.io/tags.html#ctf-ref">CTF
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#elasticsearch-ref">elasticsearch
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#opensearch-ref">opensearch
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="https://familug.github.io/tags.html#podman-ref">podman
+                    <span class="superscript">4</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://familug.github.io/theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
