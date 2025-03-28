@@ -1,7 +1,7 @@
 Title: Rust tuple, array, slice và compile time size 
 Date: 2025/03/27
 Category: frontpage
-Tags: a,b,c
+Tags: rust, array, tuple, slice, oob, stackoverflow
 Slug: rust_array
 
 Hay làm thế nào để "stack overflow" trong Rust.
@@ -140,6 +140,8 @@ Cú pháp: `&a1[2..4]`, kiểu `&[i32]`
 
 ### Tham khảo 
 <https://github.com/rust-lang/book/blob/async-2024/src/ch03-02-data-types.md>
+
+Xem bài giới thiệu tổng quan về Rust tại <https://pp.pymi.vn/article/aoc2021/>.
 
 Hết.
 
