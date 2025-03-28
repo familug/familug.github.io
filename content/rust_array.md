@@ -6,7 +6,7 @@ Slug: rust_array
 
 Hay làm thế nào để "stack overflow" trong Rust.
 
-Tuple và array là 2 kiểu dữ liệu [*primitive* **compound**](https://github.com/rust-lang/book/blob/45f05367360f033f89235eacbbb54e8d73ce6b70/src/ch03-02-data-types.md?plain=1#L202) trong Rust.
+Tuple và array là 2 kiểu dữ liệu [*primitive*](https://doc.rust-lang.org/std/#primitives) [**compound**](https://github.com/rust-lang/book/blob/45f05367360f033f89235eacbbb54e8d73ce6b70/src/ch03-02-data-types.md?plain=1#L202) trong Rust.
 
 > Compound types can group multiple values into one type.
 Compound type có thể gộp nhiều giá trị vào 1 kiểu.
@@ -16,7 +16,7 @@ Xem code online và làm theo tại [playground](https://play.rust-lang.org/?ver
 ### Tuple 
 Tuple là 1 cách để gộp nhiều giá trị có kiểu khác nhau vào 1 kiểu compound (kiểu gộp?).
 Các phần tử của tuple nằm trong cặp `()`, phân cách nhau bằng dấu phẩy `,`.
-Tuple hỗ trợ phép *destructuring*, để phá vớ 1 tuple thành nhiều phần (tương tự Python unpacking). 
+Tuple hỗ trợ phép *destructuring*, để tách 1 tuple thành nhiều phần (tương tự Python unpacking). 
 Truy cập từng phần tử theo thứ tự bằng cú pháp `T.0 T.1 T.2`...
 
 ```rs
@@ -86,7 +86,7 @@ stack backtrace:
    |     ^^^^^^^^ the size of `[i32]` cannot be statically determined
 ```
 Thấy có `[i32]` *gần giống*  như kiểu của array, nhưng không có số lượng phần tử. Vì vậy kích thước của a1[2..4] không thể biết được khi compile, nên không compile được.
-Có thể cho rằng Rust có thể tính toán được số phần tử là 4-2 = 2, nhưng việc tính toán này không khả thi nếu các số này không cố định, sử dụng các phép toán phức tạp, vậy nên tốt nhất là không compile.
+Có thể cho rằng Rust dễ dàng tính toán được số phần tử là 4-2 = 2, nhưng việc tính toán này không khả thi nếu các số này là `a..b` với giá trị được tính toán sử dụng các phép toán phức tạp, vậy nên tốt nhất là không compile.
 
 ### Stack
 tuple và array là 2 kiểu **primitive** và chúng được chứa trong stack của chương trình nên cần có kích thước (size) cố định, không đổi, biết lúc compile (statically determined).
@@ -114,10 +114,10 @@ fatal runtime error: stack overflow
 ### Slice
 > Slices let you reference a contiguous sequence of elements in a collection rather than the whole collection. A slice is a kind of reference, so it does not have ownership.
 
-Slice refer (trỏ - tương tự pointer - con trỏ) tới 1 chuỗi các phần tử trong 1 tập hợp hay vì cả tập hợp. Nó chỉ chứa:
+Slice refer (trỏ - tương tự pointer/con trỏ) tới 1 chuỗi các phần tử trong 1 tập hợp hay vì cả tập hợp. Nó chứa:
 
-- địa chỉ của phần tử đầu tiên (trên máy amd64 có kích thước là 64bits == 8bytes)
-- kích thước của slice (kiểu usize)
+- địa chỉ của phần tử đầu tiên (trên máy 64bit có kích thước là 64bits == 8bytes)
+- kích thước của slice (kiểu usize, trên máy 64bit có kích thước là 64bits == 8bytes)
 
 nên kiểu slice có kích thước biết khi compile.
 
