@@ -4,6 +4,8 @@ Category: frontpage
 Tags: a,b,c
 Slug: rust_array
 
+Hay làm thế nào để "stack overflow" trong Rust.
+
 Tuple và array là 2 kiểu dữ liệu [*primitive* **compound**](https://github.com/rust-lang/book/blob/45f05367360f033f89235eacbbb54e8d73ce6b70/src/ch03-02-data-types.md?plain=1#L202) trong Rust.
 
 > Compound types can group multiple values into one type.
