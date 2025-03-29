@@ -4,18 +4,25 @@ on:
   push:
     branches:
       - main
-
+      - testci
+    strategy:
+      matrix:
+        python-version: ["3.12"]
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - run: git submodule update --init --recursive
+    - uses: actions/checkout@v4
+    - run: ls -R ${{ github.workspace }}
+    - name: setup python
+      uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
     - run: |
-        ls -R ${{ github.workspace }}
-    - uses: nelsonjchen/gh-pages-pelican-action@master
+        pip install -r requirements.txt ghp-import
+        pelican content -o output -s pelicanconf.py
+        ghp-import output -b gh-pages
+        git push origin gh-pages
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GH_PAGES_BRANCH: gh-pages
