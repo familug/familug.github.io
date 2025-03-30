@@ -13,16 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        submodules: true
     - run: ls -R ${{ github.workspace }}
     - name: setup python
       uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+      with:
+        python-version: ${{ matrix.python-version }}
+
     - run: |
         pip install -r requirements.txt ghp-import
         pelican content -o output -s pelicanconf.py
         ghp-import output -b gh-pages
-        git push origin gh-pages
+        git push origin gh-pages --force
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         GH_PAGES_BRANCH: gh-pages
