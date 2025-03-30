@@ -16,8 +16,8 @@ jobs:
     - run: ls -R ${{ github.workspace }}
     - name: setup python
       uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
+      with:
+        python-version: ${{ matrix.python-version }}
     - run: |
         pip install -r requirements.txt ghp-import
         pelican content -o output -s pelicanconf.py
