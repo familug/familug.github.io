@@ -180,8 +180,17 @@ Rồi gõ `sysctl -p`
 Tạo /etc/rc.local
 ```
 #!/bin/sh
-iptables -t nat -A POSTROUTING -s 10.10.0.0/16 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.10.0.0/16 -o $THAY_DEFAULT_INTERFACE -j MASQUERADE
 ```
+
+với `$THAY_DEFAULT_INTERFACE` là interface mặc định xuất hiện ở output:
+
+```
+ip route | grep default
+```
+
+VD: `default via 4.3.2.1 dev eth1 proto dhcp src 4.3.2.1 metric 100` -> eth1
+
 Rồi `chmod a+x /etc/rc.local; /etc/rc.local`
 
 Tới đây mọi thứ đã xong có thể truy cập internet qua VPN, reboot lại server để thực hiện bài test khi server mất điện trong tương lai bật lên vẫn chạy ngon lành cành mít.
