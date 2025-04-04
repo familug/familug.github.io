@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="kotlin, JVM, java, CLI, programming, frontpage, " />
+
+<meta property="og:title" content="Hello Kotlin 2024 "/>
+<meta property="og:url" content="./hello-kotlin-2024.html" />
+<meta property="og:description" content="Kotlin là gì $ apt-cache show kotlin Package: kotlin Architecture: all Version: 1.3.31+~1.0.1+~0.11.12-2 ... Installed-Size: 286240 ... Homepage: https://kotlinlang.org Description-en: cross-platform, general-purpose programming languagehttps://kotlinlang.org/ Kotlin is a cross-platform, statically typed, general-purpose programming language with type inference. Kotlin is designed to interoperate …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-07-13T00:00:00+07:00" />
+<meta name="twitter:title" content="Hello Kotlin 2024 ">
+<meta name="twitter:description" content="Kotlin là gì $ apt-cache show kotlin Package: kotlin Architecture: all Version: 1.3.31+~1.0.1+~0.11.12-2 ... Installed-Size: 286240 ... Homepage: https://kotlinlang.org Description-en: cross-platform, general-purpose programming languagehttps://kotlinlang.org/ Kotlin is a cross-platform, statically typed, general-purpose programming language with type inference. Kotlin is designed to interoperate …">
+
+        <title>Hello Kotlin 2024  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./hello-kotlin-2024.html">
+                Hello Kotlin 2024
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>Kotlin là gì</h2>
+<p><img alt="kotlin" src="https://kotlinlang.org/docs/images/kotlin-logo.png"></p>
+<div class="highlight"><pre><span></span><code>$ apt-cache show kotlin
+Package: kotlin
+Architecture: all
+Version: <span class="m">1</span>.3.31+~1.0.1+~0.11.12-2
+...
+Installed-Size: <span class="m">286240</span>
+...
+Homepage: https://kotlinlang.org
+Description-en: cross-platform, general-purpose programming languagehttps://kotlinlang.org/
+ Kotlin is a cross-platform, statically typed, general-purpose programming
+ language with <span class="nb">type</span> inference. Kotlin is designed to interoperate fully with
+ Java, and the JVM version of its standard library  depends on the Java Class
+ Library, but <span class="nb">type</span> inference allows its syntax to be more concise.
+</code></pre></div>
+
+<p>Kotlin <a href="https://kotlinlang.org/">https://kotlinlang.org/</a> là một ngôn ngữ lập trình static-typing hiện đại (2011) phát triển bởi JetBrain (IDE: PyCharm, IntelliJ IDEA), chạy trên máy ảo JVM (của Java), tương thích với Java (dùng được thư viện Java), cú pháp ngắn gọn, hỗ trợ functional programming, được Google hỗ trợ là ngôn ngữ chính thức để viết app Android.</p>
+<h2>Tại sao dùng Kotlin?</h2>
+<p>Để hiểu 1 hệ thống đầy đủ, lập trình viên cần hiểu từ frontend (FE) tới backend (BE). Lập tức nghĩ rằng JavaScript FE + NodeJS BE là câu trả lời?
+Câu trả lời này đúng, nhưng không phải duy nhất. Ngày nay, đa phần các sản phẩm đều có frontend là mobile app, nên app Android hay iOS cũng là các lựa chọn cho frontend, nhiều ứng dụng thậm chí không có hoặc có mà ít dùng web frontend (Grab/Uber/Tiktok/Momo). Ngoài ra các hệ thống doanh nghiệp đa số sử dụng Java hay .NET cho BE chứ không phải NodeJS. Khiến cho các option là:</p>
+<ul>
+<li>Java/Kotlin BE, Java/Kotlin mobile FE</li>
+<li>BE nào đó, Object-C/Swift iOS mobile FE</li>
+<li>BE nào đó, JavaScript web FE</li>
+<li>BE nào đó, ReactNative/Flutter mobile FE</li>
+</ul>
+<p>Java/Kotlin là option ngon lành nhất ở đây để làm cả FE lẫn BE.</p>
+<h3>Cài đặt</h3>
+<div class="highlight"><pre><span></span><code>$ sudo apt install -y kotlin
+...
+Setting up kotlin <span class="o">(</span><span class="m">1</span>.3.31+~1.0.1+~0.11.12-2<span class="o">)</span> ...
+</code></pre></div>
+
+<h3>Viết hello world</h3>
+<p>Viết code vào file main.kt:</p>
+<div class="highlight"><pre><span></span><code>fun main() {
+    println(&quot;Hello FAMILUG 2024!&quot;)
+}
+</code></pre></div>
+
+<p>Build source code thành file MainKt.class</p>
+<div class="highlight"><pre><span></span><code>$ kotlinc main.kt
+$ kotlin MainKt
+Hello FAMILUG <span class="m">2024</span>!
+$ find .
+.
+./META-INF
+./META-INF/main.kotlin_module
+./MainKt.class
+./main.kt
+
+$ file MainKt.class
+MainKt.class: compiled Java class data, version <span class="m">50</span>.0 <span class="o">(</span>Java <span class="m">1</span>.6<span class="o">)</span>
+
+$ xxd MainKt.class<span class="p">|</span> head -n3
+<span class="m">00000000</span>: cafe babe <span class="m">0000</span> <span class="m">0032</span> 002b <span class="m">0100</span> 064d <span class="m">6169</span>  .......2.+...Mai
+<span class="m">00000010</span>: 6e4b <span class="m">7407</span> <span class="m">0001</span> <span class="m">0100</span> 106a <span class="m">6176</span> 612f 6c61  nKt......java/la
+<span class="m">00000020</span>: 6e67 2f4f 626a <span class="m">6563</span> <span class="m">7407</span> <span class="m">0003</span> <span class="m">0100</span> 046d  ng/Object......m
+</code></pre></div>
+
+<p>8 bytes đầu đáng yêu của file .class: "cafe babe".</p>
+<p>Chạy file MainKt</p>
+<div class="highlight"><pre><span></span><code>$ /usr/bin/time -v kotlin MainKt
+Hello FAMILUG <span class="m">2024</span>!
+    Command being timed: <span class="s2">&quot;kotlin MainKt&quot;</span>
+    User <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.08
+    System <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.02
+    Percent of CPU this job got: <span class="m">116</span>%
+    Elapsed <span class="o">(</span>wall clock<span class="o">)</span> <span class="nb">time</span> <span class="o">(</span>h:mm:ss or m:ss<span class="o">)</span>: <span class="m">0</span>:00.10
+    Average shared text size <span class="o">(</span>kbytes<span class="o">)</span>: 0https://github.com/JetBrains/kotlin/releases/tag/v1.3.31
+    Average unshared data size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Average stack size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Average total size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">37888</span>
+    Average resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Major <span class="o">(</span>requiring I/O<span class="o">)</span> page faults: <span class="m">0</span>
+    Minor <span class="o">(</span>reclaiming a frame<span class="o">)</span> page faults: <span class="m">5296</span>
+    Voluntary context switches: <span class="m">282</span>
+    Involuntary context switches: <span class="m">13</span>
+    Swaps: <span class="m">0</span>
+    File system inputs: <span class="m">0</span>
+    File system outputs: <span class="m">64</span>
+    Socket messages sent: <span class="m">0</span>
+    Socket messages received: <span class="m">0</span>
+    Signals delivered: <span class="m">0</span>
+    Page size <span class="o">(</span>bytes<span class="o">)</span>: <span class="m">4096</span>
+    Exit status: <span class="m">0</span>
+</code></pre></div>
+
+<p>Dùng tới ~37 MiB, gấp 4 lần RAM so với Python, nhưng không sao, năm 2024 thì 40MB RAM không là gì so với Google Chrome hay các IDE cả.</p>
+<div class="highlight"><pre><span></span><code>$ /usr/bin/time -v /usr/bin/python3.11 -c <span class="s1">&#39;print(&quot;Hello FAMILUG!&quot;)&#39;</span> <span class="p">|&amp;</span> grep Maximum
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">8960</span>
+</code></pre></div>
+
+<h2>Viết vài chương trình đơn giản</h2>
+<h3>Viết function tính tổng 3 số</h3>
+<div class="highlight"><pre><span></span><code>fun sum3(a: Int, b: Int, c: Int): Int {
+    return a + b + c
+}
+
+fun main() {
+    println(&quot;Hello FAMILUG 2024!&quot;)
+    val sum = sum3(1,2,3)
+    println(&quot;Tong cua 1+2+3 la <span class="cp">${</span><span class="nb">sum</span><span class="cp">}</span>&quot;)
+}
+</code></pre></div>
+
+<p>Kết quả:</p>
+<div class="highlight"><pre><span></span><code>$ kotlinc main.kt
+$ kotlin MainKt
+Hello FAMILUG <span class="m">2024</span>!
+Tong cua <span class="m">1</span>+2+3 la <span class="m">6</span>
+</code></pre></div>
+
+<p>Không khác mấy code Python3</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sum3</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span><span class="n">c</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello FAMILUG 2024!&quot;</span><span class="p">)</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="n">sum3</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tong cua 1+2+3 la </span><span class="si">{</span><span class="nb">sum</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<h3>Giải bài <a href="https://projecteuler.net/problem=1">ProjectEuler 1</a> - tổng các số nhỏ hơn 1000 chia hết cho 3 hoặc 5</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># main.kt</span><span class="w"></span>
+<span class="n">fun</span><span class="w"> </span><span class="n">pe01</span><span class="p">():</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">var</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mf">1.</span><span class="o">.</span><span class="mi">999</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">fun</span><span class="w"> </span><span class="n">pe01_functional</span><span class="p">():</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="mf">1.</span><span class="o">.</span><span class="mi">999</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="o">.</span><span class="n">filter</span><span class="p">({</span><span class="n">it</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">})</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">hoặc</span><span class="w"> </span><span class="n">ngắn</span><span class="w"> </span><span class="n">hơn</span><span class="p">:</span><span class="w"> </span><span class="o">.</span><span class="n">filter</span><span class="p">({</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">})</span><span class="w"></span>
+<span class="w">        </span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+
+<span class="n">fun</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="n">pe01</span><span class="p">())</span><span class="w"></span>
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="n">pe01</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">pe01_functional</span><span class="p">())</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết quả</p>
+<div class="highlight"><pre><span></span><code>$ kotlinc main.kt
+hvn@mini:kotlinplay $ kotlin MainKt
+<span class="m">233168</span>
+<span class="nb">true</span>
+</code></pre></div>
+
+<h3>Giải bài <a href="https://projecteuler.net/problem=16">ProjectEuler 16</a> - tổng các chữ số của 2 mũ 1000</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># main.kt</span>
+<span class="kn">import</span> <span class="nn">java.math.BigInteger</span>
+
+<span class="n">fun</span> <span class="n">pe16</span><span class="p">():</span> <span class="n">Int</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">p</span><span class="p">:</span> <span class="n">BigInteger</span> <span class="o">=</span> <span class="mf">2.</span><span class="n">toBigInteger</span><span class="p">()</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">chars</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">map</span><span class="p">({</span> <span class="n">it</span> <span class="o">-</span> <span class="s1">&#39;0&#39;</span><span class="o">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">})</span>
+            <span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="n">fun</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">&quot;tong cac chu so cua 2**1000 la ${pe16()}&quot;</span><span class="o">.</span><span class="n">toUpperCase</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Kết quả</p>
+<div class="highlight"><pre><span></span><code>$ kotlinc main.kt
+$ kotlin MainKt
+TONG CAC CHU SO CUA <span class="m">2</span>**1000 LA <span class="m">1366</span>
+</code></pre></div>
+
+<p>String functions: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/">https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/</a>
+Char functions: <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-char/">https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-char/</a></p>
+<h3>Đọc file /etc/passwd và tìm max uid trong các user</h3>
+<p>Dùng <code>sort</code> command để so sánh kết quả:</p>
+<div class="highlight"><pre><span></span><code>$ sort -nk <span class="m">3</span> /etc/passwd <span class="p">|</span> head -n3
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+avahi-autoipd:x:110:119:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+avahi:x:114:121:Avahi mDNS daemon,,,:/run/avahi-daemon:/usr/sbin/nologin
+</code></pre></div>
+
+<p>Code Kotlin</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">java.io.File</span>
+<span class="kn">import</span> <span class="nn">java.io.InputStream</span>
+
+<span class="n">fun</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">val</span> <span class="n">inputStream</span><span class="p">:</span> <span class="n">InputStream</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="s2">&quot;/etc/passwd&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inputStream</span><span class="p">()</span>
+    <span class="n">val</span> <span class="n">lineList</span> <span class="o">=</span> <span class="n">mutableListOf</span><span class="o">&lt;</span><span class="n">Int</span><span class="o">&gt;</span><span class="p">()</span>
+
+    <span class="n">inputStream</span><span class="o">.</span><span class="n">bufferedReader</span><span class="p">()</span><span class="o">.</span><span class="n">forEachLine</span><span class="p">(</span>
+        <span class="p">{</span> <span class="n">it</span> <span class="o">-&gt;</span> <span class="n">lineList</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">it</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">toInt</span><span class="p">())</span> <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">lineList</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Kết quả</p>
+<div class="highlight"><pre><span></span><code>$ kotlinc main.kt
+$ kotlin MainKt
+<span class="m">65534</span>
+</code></pre></div>
+
+<h2>Tham khảo</h2>
+<p>Kotlin tour: <a href="https://kotlinlang.org/docs/kotlin-tour-hello-world.html">https://kotlinlang.org/docs/kotlin-tour-hello-world.html</a></p>
+<h2>Tổng kết</h2>
+<p>Bài này giới thiệu Kotlin và viết các chương trình đơn giản, sử dụng các thư viện standard/thư viện có sẵn của Java, đồng thời dùng bản Kotlin có sẵn trên Ubuntu 22.04 đã khá cũ (1.3.31 từ <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.3.31">2019</a>) bản hiện tại là Kotlin 2.0, build và chạy code trực tiếp với kotlinc trên câu lệnh CLI mà không dùng IDE hay build tool.</p>
+<p>Bài viết sau sẽ giới thiệu build tool, sử dụng kotlin bản mới nhất và các thư viện tải từ trên mạng.</p>
+<h2>Kết luận</h2>
+<p>Kotlin ngắn gọn, hiện đại, viết được app di động lẫn code backend/frontend.
+Ngon không thể bỏ phi.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-07-13T00:00:00+07:00">Sat 13 July 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#cli-ref">CLI
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="./tags.html#java-ref">java
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#jvm-ref">JVM
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#kotlin-ref">kotlin
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#programming-ref">programming
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
