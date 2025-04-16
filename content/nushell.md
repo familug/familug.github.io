@@ -86,7 +86,7 @@ nên có vẻ như nếu đã dùng `jq` thì không có lý do gì để không
 
 > A new type of shell.
 
-Nushell là 1 shell mới hiện đại, tương tự các shell truyền thống `bash`, `zsh`,... nhưng output/input của mỗi câu lệnh là data có kiểu dữ liệu thay vì text.
+Nushell là 1 shell mới hiện đại, tương tự các shell truyền thống `bash`, `zsh`,... nhưng output/input của mỗi câu lệnh là data có cấu trúc (structured data) thay vì string.
 
 Đừng để bị đánh lừa bởi chữ `shell` vì Nushell vừa là shell, vừa là 1 ngôn ngữ lập trình functional. Cũng không cần phải dùng Nushell thay zsh/bash nếu không muốn, hãy coi nó như 1 công cụ REPL để xử lý data trực tiếp lúc cần.
 
@@ -94,7 +94,7 @@ Nushell là 1 shell mới hiện đại, tương tự các shell truyền thốn
 ![nushell]({static}/images/nushell.png)
 </center>
 
-Các command trong Nushell được viết lại hoàn toàn (bằng Rust) để hỗ trợ input/output ra các data thay vì text.
+Các command trong Nushell được viết lại hoàn toàn (bằng Rust) để hỗ trợ input/output ra các structured data thay vì string.
 
 Bật trên container `podman run -it --rm ghcr.io/nushell/nushell`
 
@@ -112,12 +112,13 @@ Bật trên container `podman run -it --rm ghcr.io/nushell/nushell`
 │  6 │ /etc/group           │ file    │   526 B │ a day ago    │
 ```
 
-output của Nushell thường là 1 bảng, dễ dàng truy cập từng cột (như pandas).
-
+Mỗi dòng ở dây là 1 `record` (như struct/named tuple/data class).
+Output của Nushell thường là 1 bảng, dễ dàng truy cập từng cột (như pandas).
 Nushell thậm chí có sẵn http client, không cần tới curl, builtin hỗ trợ JSON, YAML, CSV ...
 
 Tài liệu: <https://www.nushell.sh/book/>
 
+#### Gửi HTTP GET request, xử lý JSON
 ```
 http get https://api.github.com/repos/awesome-jobs/vietnam/issues | select created_at title html_url | where created_at > '2025-04-10' and ( $it.title |  str downcase  ) has 'remote'
 ╭───┬──────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────╮
@@ -142,6 +143,8 @@ issues.json | select created_at title html_url | where created_at > '2025-04-10'
 ```
 > =~ or like	regex match / string contains another
 
+
+#### Tính toán, biến đổi map, filter, reduce
 Làm bài ProjectEuler 1, ghi ra file pe1:
 
 ```nu
@@ -149,14 +152,7 @@ Làm bài ProjectEuler 1, ghi ra file pe1:
 ~> open pe1.txt
 233168
 ```
-chú ý có dấu cách giữa `$acc + $x`.
-
-Nushell rất khác, nên mọi kiến thức về các shell khác không dùng được ở đây, ví dụ `save` để ghi ra file chứ không phải `>`. Cách set biến environment cũng khác.
-<https://www.nushell.sh/book/coming_from_bash.html>
-
-Ở đây chỉ bàn tới việc dùng nushell để khám phá, biến đổi JSON/YAML.
-
-Nushell còn có tính năng hỗ trợ viết tool CLI rất đơn giản và mạnh mẽ sẽ khám phá vào bài sau.
+chú ý có dấu space `$acc + $x`.
 
 #### update YAML file
 
@@ -188,9 +184,16 @@ spec:
 
 ```
 
+Nushell rất khác, nên mọi kiến thức về các shell khác không dùng được ở đây, ví dụ `save` để ghi ra file chứ không phải `>`. Cách set biến environment cũng khác.
+<https://www.nushell.sh/book/coming_from_bash.html>
+
+Ở đây chỉ bàn tới việc dùng nushell để khám phá, biến đổi JSON/YAML.
+
+Nushell còn có tính năng hỗ trợ viết tool CLI rất đơn giản và mạnh mẽ sẽ khám phá vào bài sau.
+
 ### Kết luận
 
-Thời đại mới cần những công cụ mới. Nushell đã mở lối đi riêng trở thành một công cụ bí mật rất mạnh mẽ cho thời đại AI 4.0.
+Thời đại mới cần những công cụ mới. Nushell đã mở lối đi riêng trở thành một công cụ (ít người biết) rất mạnh mẽ cho thời đại AI 4.0.
 
 Hết.
 
