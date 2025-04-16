@@ -136,13 +136,13 @@ http get https://api.github.com/repos/awesome-jobs/vietnam/issues | select creat
 │   │                      │                                                                                          │ 1                                                  │
 ╰───┴──────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────╯
 ```
-hay đơn giản hơn:
+
+hay dùng regex:
 
 ```
-issues.json | select created_at title html_url | where created_at > '2025-04-10' and ( $it.title | str downcase )  =~ 'remote'
+issues.json | select created_at title html_url | where created_at > '2025-04-10' and title  =~ '(?i)remote'
 ```
 > =~ or like	regex match / string contains another
-
 
 #### Tính toán, biến đổi map, filter, reduce
 Làm bài ProjectEuler 1, ghi ra file pe1:
