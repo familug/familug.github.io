@@ -9,6 +9,7 @@ Ngành IT ngày nay ngập tràn JSON và YAML, 2 định dạng này ở khắp
 ### JMESPath
 JMESPath không phổ biến khi xử lý JSON tùy ý, nhưng là cú pháp có sẵn khi dùng `aws cli --query`.
 JMESPath cũng có câu lệnh cli là `jp` <https://github.com/jmespath/jp> nhưng không phổ biến.
+Cú pháp JMESPath <https://jmespath.org/> trông hơi giống `jq` nhưng không phải, và tính năng cũng kém hơn nhiều.
 
 ```
  aws --region ap-southeast-1 lambda  list-functions --query 'Functions[?LastModified > `2023-01-02`].[FunctionName,LastModified]' --output table
@@ -20,8 +21,7 @@ JMESPath cũng có câu lệnh cli là `jp` <https://github.com/jmespath/jp> nh�
 |  hntop       |  2024-01-08T14:10:58.000+0000  |
 +--------------+--------------------------------+
 ```
-
-Cú pháp JMESPath <https://jmespath.org/> trông hơi giống `jq` nhưng không phải, và tính năng cũng kém hơn nhiều.
+khá kỳ lạ khi phải sử dụng backtick "`" để quote JSON value, nếu dùng `"2023-01-02"` sẽ không nhận được gì!
 
 aws cli có [2 kiểu filter: server side và client side](https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-filter.html#cli-usage-filter-server-side). `--query` filter từ kết quả đã nhận được từ AWS, trong khi `--filter` sẽ filter từ phía API của AWS.
 
@@ -29,8 +29,6 @@ Có vấn đề với cả 2 kiểu filter này:
 
 - server filter: chỉ một số service hỗ trợ option này như ec2, rds, và syntax của mỗi cái cũng khác nhau
 - client filter: mỗi lần chỉnh sửa nội dung query là 1 lần gọi tới AWS API. Sau 10 lần chỉnh sửa để viết được query đúng thì mất rất nhiều thời gian.
-
-Chú ý cú pháp của JMESPath cũng khá kỳ lạ khi phải sử dụng backtick "`" để quote JSON value.
 
 Kết luận: rất khó dùng hàng ngày, trừ khi viết script cần filter trực tiếp lấy ra 1 vài giá trị. Thay vì dùng aws cli --query, có thể output ra JSON rồi dùng các công cụ sau để xử lý.
 
@@ -52,11 +50,11 @@ Nhược điểm: không hỗ trợ YAML.
 
 Hiển nhiên là phải học cú pháp của `jq`, điều này là tất yếu vì tất cả các phương án trong bài này đều cần học 1 ngôn ngữ query/lập trình.
 
-Ví dụ sau lấy ra các title có chữ "remote" từ ngày 2025-04-10 trên GitHub API repo `awesome-jobs/vietnam`:
+Ví dụ sau lấy ra các title có chữ "remote" từ ngày 2025-04-13 trên GitHub API repo `awesome-jobs/vietnam`:
 
 ```
 curl -o issues.json  https://api.github.com/repos/awesome-jobs/vietnam/issues
-cat issues.json | jq '.[] | {created_at,title,html_url} | select(.created_at > "2025-04-10" and (.title | ascii_downcase | test("remote")))'
+cat issues.json | jq '.[] | {created_at,title,html_url} | select(.created_at > "2025-04-13" and (.title | ascii_downcase | test("remote")))'
 ```
 
 Output:
@@ -88,7 +86,7 @@ nên có vẻ như nếu đã dùng `jq` thì không có lý do gì để không
 
 Nushell là 1 shell mới hiện đại, tương tự các shell truyền thống `bash`, `zsh`,... nhưng output/input của mỗi câu lệnh là data có cấu trúc (structured data) thay vì string.
 
-Đừng để bị đánh lừa bởi chữ `shell` vì Nushell vừa là shell, vừa là 1 ngôn ngữ lập trình functional. Cũng không cần phải dùng Nushell thay zsh/bash nếu không muốn, hãy coi nó như 1 công cụ REPL để xử lý data trực tiếp lúc cần.
+Đừng để bị đánh lừa bởi chữ `shell` vì Nushell vừa là shell, vừa là 1 ngôn ngữ lập trình functional. Cũng không cần phải dùng Nushell thay zsh/bash nếu không muốn, hãy coi nó như 1 công cụ xử lý dữ liệu trực tiếp.
 
 <center>
 ![nushell]({static}/images/nushell.png)
@@ -99,7 +97,7 @@ Các command trong Nushell được viết lại hoàn toàn (bằng Rust) để
 Bật trên container `podman run -it --rm ghcr.io/nushell/nushell`
 
 ```nu
-/etc> ls /etc/ | sort-by modified -r |head
+~> ls /etc/ | sort-by modified -r |head
 ╭────┬──────────────────────┬─────────┬─────────┬──────────────╮
 │  # │         name         │  type   │  size   │   modified   │
 ├────┼──────────────────────┼─────────┼─────────┼──────────────┤
@@ -122,7 +120,7 @@ Tài liệu: <https://www.nushell.sh/book/>
 ```
 http get https://api.github.com/repos/awesome-jobs/vietnam/issues |
 select created_at title html_url |
-where created_at > '2025-04-10' and ( $it.title |  str downcase  ) has 'remote' |
+where created_at > '2025-04-13' and ( $it.title |  str downcase  ) has 'remote' |
 upsert created_at { |it| $it.created_at | str substring 0..9} |
 to yaml
 # output
@@ -132,23 +130,12 @@ to yaml
 - created_at: '2025-04-14'
   title: '[Remote Fulltime] Mobile Tech Lead - $4000 Gross'
   html_url: https://github.com/awesome-jobs/vietnam/issues/4674
-- created_at: '2025-04-10'
-  title: Hybrid, D4, HCM (3days remote + 2days office) - Java/Kotlin Backend Lead
-  html_url: https://github.com/awesome-jobs/vietnam/issues/4673
-- created_at: '2025-04-10'
-  title: Hybrid, D4, HCM (3days remote + 2days office) - QA/QC ENGINEER - AI AGENT PROJECT
-  html_url: https://github.com/awesome-jobs/vietnam/issues/4672
-- created_at: '2025-04-10'
-  title: Hybrid, D4, HCM (3days remote + 2days office) - Lead Test Automation Engineer
-  html_url: https://github.com/awesome-jobs/vietnam/issues/4671
-
 ```
-
 
 hay dùng regex:
 
 ```
-issues.json | select created_at title html_url | where created_at > '2025-04-10' and title  =~ '(?i)remote'
+where created_at > '2025-04-13' and title  =~ '(?i)remote'
 ```
 > =~ or like	regex match / string contains another
 
