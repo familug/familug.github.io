@@ -1,4 +1,4 @@
-Title: Tìm kiếm công cụ xử lý JSON, YAML, CSV xịn nhất: jq, yq, jmes... nushell
+Title: Tìm kiếm công cụ xử lý JSON, YAML xịn nhất: jq, yq, jmes... nushell
 Date: 2025/04/16
 Category: frontpage
 Tags: nushell, jq, yq, jmespath, json, yaml, csv, cli
@@ -97,22 +97,21 @@ Các command trong Nushell được viết lại hoàn toàn (bằng Rust) để
 Bật trên container `podman run -it --rm ghcr.io/nushell/nushell`
 
 ```nu
-~> ls /etc/ | sort-by modified -r |head
-╭────┬──────────────────────┬─────────┬─────────┬──────────────╮
-│  # │         name         │  type   │  size   │   modified   │
-├────┼──────────────────────┼─────────┼─────────┼──────────────┤
-│  0 │ /etc/resolv.conf     │ file    │    43 B │ an hour ago  │
-│  1 │ /etc/hosts           │ file    │   312 B │ an hour ago  │
-│  2 │ /etc/hostname        │ file    │    12 B │ an hour ago  │
-│  3 │ /etc/shells          │ file    │    50 B │ a day ago    │
-│  4 │ /etc/shadow          │ file    │   289 B │ a day ago    │
-│  5 │ /etc/passwd          │ file    │   749 B │ a day ago    │
-│  6 │ /etc/group           │ file    │   526 B │ a day ago    │
+~> ls /etc/ | sort-by modified | take 5
+╭───┬──────────────┬──────┬───────┬──────────────╮
+│ # │     name     │ type │ size  │   modified   │
+├───┼──────────────┼──────┼───────┼──────────────┤
+│ 0 │ /etc/fstab   │ file │  89 B │ 3 months ago │
+│ 1 │ /etc/group-  │ file │ 510 B │ 3 months ago │
+│ 2 │ /etc/inittab │ file │ 570 B │ 3 months ago │
+│ 3 │ /etc/modules │ file │  15 B │ 3 months ago │
+│ 4 │ /etc/motd    │ file │ 284 B │ 3 months ago │
+╰───┴──────────────┴──────┴───────┴──────────────╯
 ```
 
 Mỗi dòng ở dây là 1 `record` (như struct/named tuple/data class).
 Output của Nushell thường là 1 bảng, dễ dàng truy cập từng cột (như pandas).
-Nushell thậm chí có sẵn http client, không cần tới curl, builtin hỗ trợ JSON, YAML, CSV ...
+Nushell thậm chí có sẵn http client, không cần tới curl, builtin hỗ trợ [JSON, YAML, CSV, sqlite, ...](https://www.nushell.sh/book/loading_data.html#sqlite) ...
 
 Tài liệu: <https://www.nushell.sh/book/>
 
