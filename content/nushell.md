@@ -21,7 +21,7 @@ Cú pháp JMESPath <https://jmespath.org/> trông hơi giống `jq` nhưng khôn
 |  hntop       |  2024-01-08T14:10:58.000+0000  |
 +--------------+--------------------------------+
 ```
-khá kỳ lạ khi phải sử dụng backtick "`" để quote JSON value, nếu dùng `"2023-01-02"` sẽ không nhận được gì!
+khá kỳ lạ khi phải sử dụng backtick `` `2023-01-02` `` để quote JSON value, nếu dùng `"2023-01-02"` sẽ không nhận được gì!
 
 aws cli có [2 kiểu filter: server side và client side](https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-filter.html#cli-usage-filter-server-side). `--query` filter từ kết quả đã nhận được từ AWS, trong khi `--filter` sẽ filter từ phía API của AWS.
 
