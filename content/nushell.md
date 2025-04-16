@@ -120,21 +120,17 @@ Tài liệu: <https://www.nushell.sh/book/>
 
 #### Gửi HTTP GET request, xử lý JSON
 ```
-http get https://api.github.com/repos/awesome-jobs/vietnam/issues | select created_at title html_url | where created_at > '2025-04-10' and ( $it.title |  str downcase  ) has 'remote'
-╭───┬──────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────┬────────────────────────────────────────────────────╮
-│ # │      created_at      │                                          title                                           │                      html_url                      │
-├───┼──────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────┤
-│ 0 │ 2025-04-16T08:48:11Z │ [Remote Fulltime] Frontend Software Engineer - $3000 Gross - Basic English communication │ https://github.com/awesome-jobs/vietnam/issues/467 │
-│   │                      │                                                                                          │ 6                                                  │
-│ 1 │ 2025-04-14T11:39:43Z │ [Remote Fulltime] Mobile Tech Lead - $4000 Gross                                         │ https://github.com/awesome-jobs/vietnam/issues/467 │
-│   │                      │                                                                                          │ 4                                                  │
-│ 2 │ 2025-04-10T16:13:21Z │ Hybrid, D4, HCM (3days remote + 2days office) - Java/Kotlin Backend Lead                 │ https://github.com/awesome-jobs/vietnam/issues/467 │
-│   │                      │                                                                                          │ 3                                                  │
-│ 3 │ 2025-04-10T16:11:19Z │ Hybrid, D4, HCM (3days remote + 2days office) - QA/QC ENGINEER - AI AGENT PROJECT        │ https://github.com/awesome-jobs/vietnam/issues/467 │
-│   │                      │                                                                                          │ 2                                                  │
-│ 4 │ 2025-04-10T16:04:54Z │ Hybrid, D4, HCM (3days remote + 2days office) - Lead Test Automation Engineer            │ https://github.com/awesome-jobs/vietnam/issues/467 │
-│   │                      │                                                                                          │ 1                                                  │
-╰───┴──────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────╯
+open issues.json | select created_at title html_url | where created_at > '2025-04-10' and title  =~ '(?i)remote' | upsert created_at { |it| $it.created_at | str substring 0..9}
+╭──────┬──────────────┬────────────────────────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────╮
+│    # │  created_at  │                                           title                                            │                       html_url                        │
+├──────┼──────────────┼────────────────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────┤
+│    0 │ 2025-04-16   │ [Remote Fulltime] Frontend Software Engineer - $3000 Gross - Basic English communication   │ https://github.com/awesome-jobs/vietnam/issues/4676   │
+│    1 │ 2025-04-14   │ [Remote Fulltime] Mobile Tech Lead - $4000 Gross                                           │ https://github.com/awesome-jobs/vietnam/issues/4674   │
+│    2 │ 2025-04-10   │ Hybrid, D4, HCM (3days remote + 2days office) - Java/Kotlin Backend Lead                   │ https://github.com/awesome-jobs/vietnam/issues/4673   │
+│    3 │ 2025-04-10   │ Hybrid, D4, HCM (3days remote + 2days office) - QA/QC ENGINEER - AI AGENT PROJECT          │ https://github.com/awesome-jobs/vietnam/issues/4672   │
+│    4 │ 2025-04-10   │ Hybrid, D4, HCM (3days remote + 2days office) - Lead Test Automation Engineer              │ https://github.com/awesome-jobs/vietnam/issues/4671   │
+╰──────┴──────────────┴────────────────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────────╯
+
 ```
 
 hay dùng regex:
