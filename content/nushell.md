@@ -4,12 +4,12 @@ Category: frontpage
 Tags: nushell, jq, yq, jmespath, json, yaml, csv, cli
 Slug: nushell
 
-Ngành IT ngày nay ngập tràn JSON và YAML, 2 định dạng này ở khắp mọi nơi. Việc sử dụng các CLI tool truyền thống vốn không thiết kế để xử lý các định dạng này (ví dụ: grep) khiến người dùng phải tìm kiếm những công cụ mới. Hàng trăm công cụ được sinh ra để truy cập/xử lý dữ liệu từ 1 JSON object, và cộng đồng khá ưa chuộng `jq`. Nhưng đây đã phải là lựa chọn tốt nhất để "xem và xử lý" JSON, YAML...? Thử các công cụ này để tìm ra giải pháp xịn nhất.
+Ngành IT ngày nay ngập tràn JSON và YAML, 2 định dạng này ở khắp mọi nơi. Việc sử dụng các CLI tool truyền thống (ví dụ: grep) không hiệu quả khiến người dùng phải tìm kiếm những công cụ mới. Hàng trăm công cụ được sinh ra để truy cập/xử lý dữ liệu từ 1 JSON object, và cộng đồng khá ưa chuộng `jq`. Nhưng đây đã phải là lựa chọn tốt nhất để "xem và xử lý" JSON, YAML...? Thử các công cụ này để tìm ra giải pháp xịn nhất.
 
 ### JMESPath
 JMESPath không phổ biến khi xử lý JSON tùy ý, nhưng là cú pháp có sẵn khi dùng `aws cli --query`.
-JMESPath cũng có câu lệnh cli là `jp` <https://github.com/jmespath/jp> nhưng không phổ biến.
-Cú pháp JMESPath <https://jmespath.org/> trông hơi giống `jq` nhưng không phải, và tính năng cũng kém hơn nhiều.
+JMESPath cũng có câu lệnh cli là `jp` <https://github.com/jmespath/jp> nhưng ít người biết.
+Cú pháp JMESPath <https://jmespath.org/> trông hơi giống `jq` nhưng không phải, và tính năng cũng kém hơn:
 
 ```
  aws --region ap-southeast-1 lambda  list-functions --query 'Functions[?LastModified > `2023-01-02`].[FunctionName,LastModified]' --output table
