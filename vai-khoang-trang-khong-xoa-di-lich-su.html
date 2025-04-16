@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="bash, ubuntu, histcontrol, security, frontpage, " />
+
+<meta property="og:title" content="Vài khoảng trắng không xóa đi lịch sử "/>
+<meta property="og:url" content="./vai-khoang-trang-khong-xoa-di-lich-su.html" />
+<meta property="og:description" content="Người dùng Ubuntu có một bí kíp để khiến cho câu lệnh vừa gõ trong bash không hiện trong lệnh &#34;history&#34;: thêm dấu space trước khi gõ lệnh: $ docker run -it ubuntu:22.04 [0] root@19b65c7de3f6:/# echo you see me you see me root@19b65c7de3f6:/# echo you …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2022-12-02T00:00:00+07:00" />
+<meta name="twitter:title" content="Vài khoảng trắng không xóa đi lịch sử ">
+<meta name="twitter:description" content="Người dùng Ubuntu có một bí kíp để khiến cho câu lệnh vừa gõ trong bash không hiện trong lệnh &#34;history&#34;: thêm dấu space trước khi gõ lệnh: $ docker run -it ubuntu:22.04 [0] root@19b65c7de3f6:/# echo you see me you see me root@19b65c7de3f6:/# echo you …">
+
+        <title>Vài khoảng trắng không xóa đi lịch sử  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./vai-khoang-trang-khong-xoa-di-lich-su.html">
+                Vài khoảng trắng không xóa đi lịch sử
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Người dùng Ubuntu có một bí kíp để khiến cho câu lệnh vừa gõ trong bash không hiện trong lệnh "history": thêm dấu space trước khi gõ lệnh:</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">docker</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="o">-</span><span class="n">it</span><span class="w"> </span><span class="n">ubuntu</span><span class="o">:</span><span class="mf">22.04</span><span class="w">                                                                                 </span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"></span>
+<span class="n">root</span><span class="mi">@19</span><span class="n">b65c7de3f6</span><span class="o">:/</span><span class="err">#</span><span class="w"> </span><span class="n">echo</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">me</span><span class="w"></span>
+<span class="n">you</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">me</span><span class="w"></span>
+<span class="n">root</span><span class="mi">@19</span><span class="n">b65c7de3f6</span><span class="o">:/</span><span class="err">#</span><span class="w">  </span><span class="n">echo</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">my</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">hunter42</span><span class="w"></span>
+<span class="n">you</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">my</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">hunter42</span><span class="w"></span>
+<span class="n">root</span><span class="mi">@19</span><span class="n">b65c7de3f6</span><span class="o">:/</span><span class="err">#</span><span class="w"> </span><span class="n">history</span><span class="w"></span>
+<span class="w">    </span><span class="mi">1</span><span class="w">  </span><span class="n">echo</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">me</span><span class="w"></span>
+<span class="w">    </span><span class="mi">2</span><span class="w">  </span><span class="n">history</span><span class="w"></span>
+<span class="n">root</span><span class="mi">@19</span><span class="n">b65c7de3f6</span><span class="o">:/</span><span class="err">#</span><span class="w"> </span><span class="n">echo</span><span class="w"> </span><span class="n">$HISTCONTROL</span><span class="w"></span>
+<span class="nl">ignoredups</span><span class="p">:</span><span class="n">ignorespace</span><span class="w"></span>
+</code></pre></div>
+
+<p>Bí kíp này ... chỉ có ở trên Ubuntu bash.</p>
+<p><img alt="golden bridge" src="https://images.unsplash.com/photo-1588411393236-d2524cca1196?ixlib=rb-4.0.3&amp;dl=ling-tang-rsD_jv_A8Yo-unsplash.jpg&amp;w=640&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb"></p>
+<p>Photo by <a href="https://unsplash.com/@linglivestolaugh?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ling Tang</a> on <a href="https://unsplash.com/s/photos/vietnam?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></p>
+<h3>HISTCONTROL</h3>
+<p>Trong bash, biến môi trường HISTCONTROL dùng để config shell sẽ lưu cái gì vào "history".
+Mặc định trên Ubuntu từ xưa tới nay có giá trị:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ignoredups</span><span class="o">:</span><span class="n">ignorespace</span><span class="w"></span>
+</code></pre></div>
+
+<p>Nhưng điều này không đúng trên Debian cũng như nhiều hệ điều hành khác như <a href="https://unix.stackexchange.com/questions/115917/why-is-bash-not-storing-commands-that-start-with-spaces?noredirect=1&amp;lq=1">MacOS</a>, cũng không đúng trên zsh (HIST_IGNORE_SPACE).</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">docker</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="o">-</span><span class="n">it</span><span class="w"> </span><span class="n">debian</span><span class="o">:</span><span class="n">bullseye</span><span class="o">-</span><span class="n">slim</span><span class="w">                                                                         </span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"></span>
+<span class="n">root</span><span class="mi">@5</span><span class="n">a7ecd7dd69e</span><span class="o">:/</span><span class="err">#</span><span class="w">  </span><span class="n">echo</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">mypassword</span><span class="w"></span>
+<span class="n">you</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">mypassword</span><span class="w"></span>
+<span class="n">root</span><span class="mi">@5</span><span class="n">a7ecd7dd69e</span><span class="o">:/</span><span class="err">#</span><span class="w"> </span><span class="n">history</span><span class="w"></span>
+<span class="w">    </span><span class="mi">1</span><span class="w">   </span><span class="n">echo</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">mypassword</span><span class="w"></span>
+<span class="w">    </span><span class="mi">2</span><span class="w">  </span><span class="n">history</span><span class="w"></span>
+</code></pre></div>
+
+<p>Vậy nên nếu đang dùng server khác Ubuntu mà hồn nhiên gõ mật khẩu vào câu lệnh, bắt đầu bằng dấu space, thì vẫn lưu trong history như thường. Pwned!</p>
+<p>HISTCONTROL</p>
+<blockquote>
+<p>A colon-separated list of values controlling how commands are saved on the history list. If the list of values includes ‘ignorespace’, lines which begin with a space character are not saved in the history list. A value of ‘ignoredups’ causes lines which match the previous history entry to not be saved. A value of ‘ignoreboth’ is shorthand for ‘ignorespace’ and ‘ignoredups’. A value of ‘erasedups’ causes all previous lines matching the current line to be removed from the history list before that line is saved. Any value not in the above list is ignored. If HISTCONTROL is unset, or does not include a valid value, all lines read by the shell parser are saved on the history list, subject to the value of HISTIGNORE. The second and subsequent lines of a multi-line compound command are not tested, and are added to the history regardless of the value of HISTCONTROL.</p>
+</blockquote>
+<p><a href="https://www.gnu.org/software/bash/manual/bash.html">https://www.gnu.org/software/bash/manual/bash.html</a></p>
+<h3>Kết luận</h3>
+<p>Không gõ password trong câu lệnh dưới mọi hình thức!</p>
+<h2>Tham khảo</h2>
+<p>Happy ~enter~ leak password in commandline.</p>
+<p>Hết.</p>
+<p>HVN at http://pymi.vn and https://www.familug.org.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2022-12-02T00:00:00+07:00">Fri 02 December 2022</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#bash-ref">bash
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#histcontrol-ref">histcontrol
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#security-ref">security
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#ubuntu-ref">ubuntu
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
