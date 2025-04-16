@@ -88,7 +88,7 @@ nên có vẻ như nếu đã dùng `jq` thì không có lý do gì để không
 
 Nushell là 1 shell mới hiện đại, tương tự các shell truyền thống `bash`, `zsh`,... nhưng output/input của mỗi câu lệnh là data có kiểu dữ liệu thay vì text.
 
-Đừng để bị đánh lừa bởi chữ `shell` vì Nushell vừa là shell, vừa là 1 ngôn ngữ lập trình functional.
+Đừng để bị đánh lừa bởi chữ `shell` vì Nushell vừa là shell, vừa là 1 ngôn ngữ lập trình functional. Cũng không cần phải dùng Nushell thay zsh/bash nếu không muốn, hãy coi nó như 1 công cụ REPL để xử lý data trực tiếp lúc cần.
 
 <center>
 ![nushell]({static}/images/nushell.png)
