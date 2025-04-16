@@ -52,7 +52,7 @@ Nhược điểm: không hỗ trợ YAML.
 
 Hiển nhiên là phải học cú pháp của `jq`, điều này là tất yếu vì tất cả các phương án trong bài này đều cần học 1 ngôn ngữ query/lập trình.
 
-Ví dụ sau lấy ra các title có chữ "remote" sau ngày 2025-04-01 trên GitHub API repo `awesome-jobs/vietnam`:
+Ví dụ sau lấy ra các title có chữ "remote" từ ngày 2025-04-10 trên GitHub API repo `awesome-jobs/vietnam`:
 
 ```
 curl -o issues.json  https://api.github.com/repos/awesome-jobs/vietnam/issues
