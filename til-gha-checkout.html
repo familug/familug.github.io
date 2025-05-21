@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="github action, gha, checkout, frontpage, " />
+
+<meta property="og:title" content="[TIL] GitHub Action actions/checkout mặc định checkout merge commit với pull_request "/>
+<meta property="og:url" content="./til-gha-checkout.html" />
+<meta property="og:description" content="GitHub Action @actions/checkout xuất hiện ở gần như mọi GitHub Action workflow. Khi người dùng tạo Repository, GitHub sẽ gợi ý bằng 1 nút bấm trên giao diện để add GitHub action phù hợp với ngôn ngữ lập trình dùng chính trong repo. Ví dụ Python https://docs.github …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-05-21T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] GitHub Action actions/checkout mặc định checkout merge commit với pull_request ">
+<meta name="twitter:description" content="GitHub Action @actions/checkout xuất hiện ở gần như mọi GitHub Action workflow. Khi người dùng tạo Repository, GitHub sẽ gợi ý bằng 1 nút bấm trên giao diện để add GitHub action phù hợp với ngôn ngữ lập trình dùng chính trong repo. Ví dụ Python https://docs.github …">
+
+        <title>[TIL] GitHub Action actions/checkout mặc định checkout merge commit với pull_request  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./til-gha-checkout.html">
+                [TIL] GitHub Action actions/checkout mặc định checkout merge commit với pull_request
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>GitHub Action <a href="https://github.com/actions/checkout">@actions/checkout</a>
+xuất hiện ở gần như mọi GitHub Action workflow.</p>
+<p>Khi người dùng tạo Repository, GitHub sẽ gợi ý bằng 1 nút bấm trên giao diện để add GitHub action phù hợp với ngôn ngữ lập trình dùng chính trong repo.
+Ví dụ Python <a href="https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python">https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python</a></p>
+<div class="highlight"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">This</span><span class="w"> </span><span class="n">workflow</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="n">dependencies</span><span class="p">,</span><span class="w"> </span><span class="n">run</span><span class="w"> </span><span class="n">tests</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">lint</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">single</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">Python</span><span class="w"></span>
+<span class="err">#</span><span class="w"> </span><span class="k">For</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="nl">see</span><span class="p">:</span><span class="w"> </span><span class="nl">https</span><span class="p">:</span><span class="o">//</span><span class="n">docs</span><span class="p">.</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">en</span><span class="o">/</span><span class="n">actions</span><span class="o">/</span><span class="n">automating</span><span class="o">-</span><span class="n">builds</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">tests</span><span class="o">/</span><span class="n">building</span><span class="o">-</span><span class="ow">and</span><span class="o">-</span><span class="n">testing</span><span class="o">-</span><span class="n">python</span><span class="w"></span>
+
+<span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="n">application</span><span class="w"></span>
+
+<span class="k">on</span><span class="err">:</span><span class="w"></span>
+<span class="w">  </span><span class="nl">push</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nl">branches</span><span class="p">:</span><span class="w"> </span><span class="o">[</span><span class="n"> &quot;main&quot; </span><span class="o">]</span><span class="w"></span>
+<span class="w">  </span><span class="nl">pull_request</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nl">branches</span><span class="p">:</span><span class="w"> </span><span class="o">[</span><span class="n"> &quot;main&quot; </span><span class="o">]</span><span class="w"></span>
+
+<span class="nl">jobs</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nl">build</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">runs</span><span class="o">-</span><span class="k">on</span><span class="err">:</span><span class="w"> </span><span class="n">ubuntu</span><span class="o">-</span><span class="n">latest</span><span class="w"></span>
+<span class="w">    </span><span class="nl">steps</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="o">-</span><span class="w"> </span><span class="nl">uses</span><span class="p">:</span><span class="w"> </span><span class="n">actions</span><span class="o">/</span><span class="n">checkout</span><span class="nv">@v4</span><span class="w"></span>
+<span class="err">#</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+</code></pre></div>
+
+<p>Nó có vẻ làm những gì người dùng mong đợi: chứa các file code ở branch đã push lên, vì vậy, không mấy ai thực sự xem doc/code hay biết nó thực sự làm gì.</p>
+<p>Thậm chí bấm vào GitHub repo  <a href="https://github.com/actions/checkout">https://github.com/actions/checkout</a> dòng đầu viết:</p>
+<blockquote>
+<p>This action checks-out your repository under $GITHUB_WORKSPACE, so your workflow can access it.
+Only a single commit is fetched by default, for the ref/SHA that triggered the workflow. Set fetch-depth: 0 to fetch all history for all branches and tags. Refer <a href="https://docs.github.com/actions/using-workflows/events-that-trigger-workflows">here</a> to learn which commit $GITHUB_SHA points to for different events.</p>
+</blockquote>
+<p>và nếu người dùng chịu bấm vào link "here" sẽ thấy 1 bảng tương đối khó hiểu.</p>
+<ul>
+<li>Action này khi được trigger bằng event <code>push</code> - tức người dùng push lên, trong  ví dụ trên, sẽ chỉ trigger nếu người dùng push lên <code>main</code>, action sẽ  checkout branch <code>main</code> tại 1 commit mới nhất được push lên - HEAD).</li>
+<li>Còn khi được trigger bằng event <code>pull_request</code> - tức người dùng tạo/thay đổi pull request (push lên branch cũng tính là 1 <code>synchronize</code> event của pull_request) thì action sẽ checkout merge commit.</li>
+</ul>
+<p>Theo tài liệu <a href="https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request">here</a> nói trên: </p>
+<blockquote>
+<p>Last merge commit on the GITHUB_REF branch    PR merge branch refs/pull/PULL_REQUEST_NUMBER/merge</p>
+</blockquote>
+<p>Đọc HẾT tài liệu <a href="https://github.com/actions/checkout/blob/85e6279cec87321a52edac9c87bce653a07cf6c2/README.md">README checkout v4</a> có viết</p>
+<blockquote>
+<p>Checkout pull request HEAD commit instead of merge commit</p>
+</blockquote>
+<p>sẽ thấy có viết mặc định action checkout merge commit, ví dụ như sau:</p>
+<div class="highlight"><pre><span></span><code>  commit ab735464a83c5cd8efbd09888fce2168c8f5e49b
+Merge: 3c771ec 80992e0
+Author: GitHub user
+Date:   Wed May 21 09:45:29 2025 +0000
+
+    Merge 80992e095099699f3191c038070742a3ef78e435 into 3c771ec7abd340d7382bd4129a0c62a1be3e7c66
+</code></pre></div>
+
+<p>Đây là commit sau khi merge branch tạo Pull Request (còn gọi là pull request head) vào merge target (còn gọi là pull request base, thường là <code>main</code> hay <code>master</code> branch).</p>
+<p>Merge commit này chứa thông tin về quá trình merge, tức có thể biết các file nào đã thay đổi (nhưng không biết nội dung thay đổi), nên có thể dùng để tìm các file đã thay đổi chỉ cần fetch-depth 2 commit mới nhất:</p>
+<div class="highlight"><pre><span></span><code><span class="o">-</span><span class="w"> </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">Checkout</span><span class="w"></span>
+<span class="w">  </span><span class="nl">uses</span><span class="p">:</span><span class="w"> </span><span class="n">actions</span><span class="o">/</span><span class="n">checkout</span><span class="nv">@v3</span><span class="w"></span>
+<span class="w">  </span><span class="k">with</span><span class="err">:</span><span class="w"></span>
+<span class="w">     </span><span class="k">fetch</span><span class="o">-</span><span class="k">depth</span><span class="err">:</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="o">-</span><span class="w"> </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="k">Get</span><span class="w"> </span><span class="n">changes</span><span class="w"></span>
+<span class="w">  </span><span class="nl">run</span><span class="p">:</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="c1">--name-only HEAD^1 HEAD</span>
+</code></pre></div>
+
+<h3>Kết luận</h3>
+<p>Nhiều lúc không cần dùng tới <a href="https://github.com/tj-actions/changed-files">https://github.com/tj-actions/changed-files</a></p>
+<h3>Tham khảo</h3>
+<p><a href="https://stackoverflow.com/a/74268200/807703">https://stackoverflow.com/a/74268200/807703</a></p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-05-21T00:00:00+07:00">Wed 21 May 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#checkout-ref">checkout
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#gha-ref">gha
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#github-action-ref">github action
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
