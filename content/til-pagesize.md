@@ -130,6 +130,10 @@ Page size is 4096 bytes
 Hầu hết các Linux OS đều dùng page size 4096 bytes hay **4k**, thì MacOS M1, M2, M4 lại có page size là 16384 == **16k**.
 Sự khác biệt này dẫn tới nhiều vấn đề **thú vị** như [16k kernel page builds to support Apple Silicon (ARM64)](https://github.com/k3s-io/k3s/issues/7335).
 
+> 4K pages made sense back when the Intel 386 came out. They are thoroughly obsolete, and the only reason they are the default on typical ARM64 distros is because 4K is the lowest common denominator supported everywhere and the Linux kernel's poor design does not allow deciding the page size at boot time. 16K is unarguably beneficial for all but the smallest embedded systems, and 64K is the logical choice for large servers. 4K pages increase overhead and do not provide a measurable memory savings. There's a reason Apple went with 16K for their entire 64-bit ARM ecosystem (because it's better, and because they control it all so they can make that decision).
+
+Quote [marcan](https://github.com/k3s-io/k3s/issues/7335#issuecomment-1518600436)
+
 Bài viết thực hiện trên:
 
 ```
