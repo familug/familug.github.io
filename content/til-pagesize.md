@@ -1,4 +1,4 @@
-Title: [TIL] Lấy memory page size với CIL, Python, Rust, C
+Title: [TIL] Lấy memory page size với CLI, Python, Rust, C
 Date: 2025/07/19
 Category: frontpage
 Tags: pagesize, python, rust, c, cli
