@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="rust, array, tuple, slice, oob, stackoverflow, frontpage, " />
+
+<meta property="og:title" content="Rust tuple, array, slice và compile time size "/>
+<meta property="og:url" content="./rust_array.html" />
+<meta property="og:description" content="Hay làm thế nào để &#34;stack overflow&#34; trong Rust. Tuple và array là 2 kiểu dữ liệu primitive compound trong Rust. Compound types can group multiple values into one type. Compound type có thể gộp nhiều giá trị vào 1 kiểu. Xem code online và làm theo tại playground. Tuple …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-03-27T00:00:00+07:00" />
+<meta name="twitter:title" content="Rust tuple, array, slice và compile time size ">
+<meta name="twitter:description" content="Hay làm thế nào để &#34;stack overflow&#34; trong Rust. Tuple và array là 2 kiểu dữ liệu primitive compound trong Rust. Compound types can group multiple values into one type. Compound type có thể gộp nhiều giá trị vào 1 kiểu. Xem code online và làm theo tại playground. Tuple …">
+
+        <title>Rust tuple, array, slice và compile time size  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./rust_array.html">
+                Rust tuple, array, slice và compile time size
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Hay làm thế nào để "stack overflow" trong Rust.</p>
+<p>Tuple và array là 2 kiểu dữ liệu <a href="https://doc.rust-lang.org/std/#primitives"><em>primitive</em></a> <a href="https://github.com/rust-lang/book/blob/45f05367360f033f89235eacbbb54e8d73ce6b70/src/ch03-02-data-types.md?plain=1#L202"><strong>compound</strong></a> trong Rust.</p>
+<blockquote>
+<p>Compound types can group multiple values into one type.
+Compound type có thể gộp nhiều giá trị vào 1 kiểu.</p>
+</blockquote>
+<p>Xem code online và làm theo tại <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2024&amp;gist=1bcfb8548e81190f625e424dfd999e06">playground</a>.</p>
+<h3>Tuple</h3>
+<p>Tuple là 1 cách để gộp nhiều giá trị có kiểu khác nhau vào 1 kiểu compound (kiểu gộp?).
+Các phần tử của tuple nằm trong cặp <code>()</code>, phân cách nhau bằng dấu phẩy <code>,</code>.
+Tuple hỗ trợ phép <em>destructuring</em>, để tách 1 tuple thành nhiều phần (tương tự Python unpacking). 
+Truy cập từng phần tử theo thứ tự bằng cú pháp <code>T.0 T.1 T.2</code>...</p>
+<div class="highlight"><pre><span></span><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">tup</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Pika&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// type (&amp;str, i32)</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tup</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Name: {name}: number {number}&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Name: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tup</span><span class="p">.</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">// Name: Pika: number 42</span>
+<span class="c1">// Name: Pika</span>
+</code></pre></div>
+
+<p>Tuple không chứa phần tử nào gọi là 1 unit <code>()</code>. Các biểu thức không trả về gì sẽ tự động return unit <code>()</code>.</p>
+<h3>Array</h3>
+<blockquote>
+<p>An array is a fixed-size sequence of N elements of type T. The array type is written as [T; N].
+Array là một cách khác đểu gộp nhiều giá trị <strong>cùng kiểu</strong> thành 1 kiểu. Kiểu của array ký hiệu <code>[T; N]</code> với T là kiểu của phần tử, và N là số phần tử.
+Cú pháp sử dụng dấu <code>;</code> ở đây rất lạ mắt, vì dấu <code>;</code> vốn thưởng chỉ dùng để kết thúc 1 biểu thức (thường thấy cuối mỗi dòng).
+Đồng thời, dấu <code>;</code> cũng dùng trong cú pháp để tạo array chứa N lần 1 giá trị (ở ví dụ sau là 6 lần số 3)</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">a1</span>: <span class="p">[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">13</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">a2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">;</span><span class="mi">6</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;a1: {a1:?}&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;a2: {a2:?}&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;a2 first: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w">      </span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">// a1: [2, 3, 5, 8, 13]</span>
+<span class="c1">// a2: [3, 3, 3, 3, 3, 3]</span>
+<span class="c1">// a2 first: 3</span>
+</code></pre></div>
+
+<p>Rust compiler có thể phát hiện các trường hợp out of bounds (OOB) đơn giản khi sử dụng index là các số / phép toán đơn giản + - * /
+Compile output</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="n">error</span>: <span class="nc">this</span><span class="w"> </span><span class="n">operation</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">panic</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">runtime</span><span class="w"></span>
+<span class="w">  </span><span class="o">-</span>-&gt; <span class="nc">main</span><span class="p">.</span><span class="n">rs</span>:<span class="mi">12</span>:<span class="mi">29</span><span class="w"></span>
+<span class="w">   </span><span class="o">|</span><span class="w"></span>
+<span class="mi">12</span><span class="w"> </span><span class="o">|</span><span class="w">     </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;a1 some: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">[</span><span class="mi">4</span><span class="o">+</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span><span class="w"></span>
+<span class="w">   </span><span class="o">|</span><span class="w">                             </span><span class="o">^^^^^^^^^</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">bounds</span>: <span class="nc">the</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="mi">5</span><span class="w"></span>
+</code></pre></div>
+
+<p>nhưng không thể phát hiện khi index là các phép tính phức tạp như lũy thừa, hay gọi function, chương trình sẽ panic (runtime error) và tắt.</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="c1">// như trên </span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;a2 some: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a2</span><span class="p">[</span><span class="mi">4</span><span class="k">usize</span><span class="p">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)]);</span><span class="w">                                                               </span>
+</code></pre></div>
+
+<p>Run output</p>
+<div class="highlight"><pre><span></span><code><span class="cp">$</span><span class="w"> </span><span class="n">RUST_BACKTRACE</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">main</span><span class="w"></span>
+<span class="o">..</span><span class="p">.</span><span class="w"></span>
+<span class="n">thread</span><span class="w"> </span><span class="o">&#39;</span><span class="na">main</span><span class="o">&#39;</span><span class="w"> </span><span class="n">panicked</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">rs</span>:<span class="mi">13</span>:<span class="mi">29</span>:
+<span class="nc">index</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">bounds</span>: <span class="nc">the</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="mi">16</span><span class="w"></span>
+<span class="n">stack</span><span class="w"> </span><span class="n">backtrace</span>:
+   <span class="mi">0</span>: <span class="nc">rust_begin_unwind</span><span class="w"></span>
+<span class="w">             </span><span class="n">at</span><span class="w"> </span><span class="o">/</span><span class="n">rustc</span><span class="o">/</span><span class="n">eeb90cda1969383f56a2637cbd3037bdf598841c</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">std</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">panicking</span><span class="p">.</span><span class="n">rs</span>:<span class="mi">665</span>:<span class="mi">5</span><span class="w"></span>
+<span class="w">   </span><span class="mi">1</span>: <span class="nc">core</span>::<span class="n">panicking</span>::<span class="n">panic_fmt</span><span class="w"></span>
+<span class="w">             </span><span class="n">at</span><span class="w"> </span><span class="o">/</span><span class="n">rustc</span><span class="o">/</span><span class="n">eeb90cda1969383f56a2637cbd3037bdf598841c</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">panicking</span><span class="p">.</span><span class="n">rs</span>:<span class="mi">74</span>:<span class="mi">14</span><span class="w"></span>
+<span class="w">   </span><span class="mi">2</span>: <span class="nc">core</span>::<span class="n">panicking</span>::<span class="n">panic_bounds_check</span><span class="w"></span>
+<span class="w">             </span><span class="n">at</span><span class="w"> </span><span class="o">/</span><span class="n">rustc</span><span class="o">/</span><span class="n">eeb90cda1969383f56a2637cbd3037bdf598841c</span><span class="o">/</span><span class="n">library</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">panicking</span><span class="p">.</span><span class="n">rs</span>:<span class="mi">276</span>:<span class="mi">5</span><span class="w"></span>
+<span class="w">   </span><span class="mi">3</span>: <span class="nc">main</span>::<span class="n">main</span><span class="w"></span>
+</code></pre></div>
+
+<p>Để lấy 1 tập con của array, thử dùng cú pháp :</p>
+<div class="highlight"><pre><span></span><code><span class="mi">14</span><span class="w"> </span><span class="o">|</span><span class="w">     </span><span class="n">a1</span><span class="p">[</span><span class="mi">2</span><span class="o">..</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+<span class="w">   </span><span class="o">|</span><span class="w">     </span><span class="o">^^^^^^^^</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="err">`</span><span class="p">[</span><span class="kt">i32</span><span class="p">]</span><span class="err">`</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">statically</span><span class="w"> </span><span class="n">determined</span><span class="w"></span>
+</code></pre></div>
+
+<p>Thấy có <code>[i32]</code> <em>gần giống</em>  như kiểu của array, nhưng không có số lượng phần tử. Vì vậy kích thước của a1[2..4] không thể biết được khi compile, nên không compile được.
+Có thể cho rằng Rust dễ dàng tính toán được số phần tử là 4-2 = 2, nhưng việc tính toán này không khả thi nếu các số này là <code>a..b</code> với giá trị được tính toán sử dụng các phép toán phức tạp, vậy nên tốt nhất là không compile.</p>
+<h3>Stack</h3>
+<p>tuple và array là 2 kiểu <strong>primitive</strong> và chúng được chứa trong stack của chương trình nên cần có kích thước (size) cố định, không đổi, biết lúc compile (statically determined).
+Các kiểu khác như vector, map, set được chứa trên heap nên có kích thước tùy ý, thay đổi được lúc chạy (runtime).</p>
+<h4>Stack overflow in Rust</h4>
+<p>Stack của chương trình trên Linux có kích thước mặc định là:</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">ulimit</span> --stack-size
+<span class="m">8192</span>
+</code></pre></div>
+
+<p>8192KB hay 8MB. </p>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span><span class="w"> </span><span class="n">aso</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="k">i64</span><span class="p">;</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1000</span><span class="p">];</span><span class="w">  </span><span class="c1">// OK</span>
+</code></pre></div>
+
+<p>Một giá trị kiểu i64 có kích thước là 64bits == 8 bytes, tạo 1 array với 1048576 (1024*1024) phần tử sẽ dẫn tới stack overflow:</p>
+<div class="highlight"><pre><span></span><code><span class="mi">16</span><span class="w"> </span><span class="o">|</span><span class="w">     </span><span class="kd">let</span><span class="w"> </span><span class="n">aso</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="k">i64</span><span class="p">;</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">];</span><span class="w"></span>
+<span class="w">   </span><span class="o">|</span><span class="w"></span>
+<span class="n">thread</span><span class="w"> </span><span class="o">&#39;</span><span class="na">main</span><span class="o">&#39;</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="n">overflowed</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="n">stack</span><span class="w"></span>
+<span class="n">fatal</span><span class="w"> </span><span class="n">runtime</span><span class="w"> </span><span class="n">error</span>: <span class="nc">stack</span><span class="w"> </span><span class="n">overflow</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Slice</h3>
+<blockquote>
+<p>Slices let you reference a contiguous sequence of elements in a collection rather than the whole collection. A slice is a kind of reference, so it does not have ownership.</p>
+</blockquote>
+<p>Slice refer (trỏ - tương tự pointer/con trỏ) tới 1 chuỗi các phần tử trong 1 tập hợp hay vì cả tập hợp. Nó chứa:</p>
+<ul>
+<li>địa chỉ của phần tử đầu tiên (trên máy 64bit có kích thước là 64bits == 8bytes)</li>
+<li>kích thước của slice (kiểu usize, trên máy 64bit có kích thước là 64bits == 8bytes)</li>
+</ul>
+<p>nên kiểu slice có kích thước biết khi compile.</p>
+<blockquote>
+<p>In Rust, a slice on a 64-bit system typically has a size of 16 bytes</p>
+</blockquote>
+<p>Trên máy 64-bit, 1 slice có kích thước 16 bytes.</p>
+<p>Cú pháp: <code>&amp;a1[2..4]</code>, kiểu <code>&amp;[i32]</code></p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">s</span>: <span class="kp">&amp;</span><span class="p">[</span><span class="kt">i32</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a1</span><span class="p">[</span><span class="mi">2</span><span class="o">..</span><span class="mi">4</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{:?}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// [5, 8]</span>
+</code></pre></div>
+
+<h3>Kết luận</h3>
+<ul>
+<li>Tuple để chứa các giá trị khác loại/kiểu, truy cập bằng <code>T.index</code>.</li>
+<li>Array có kiểu <code>[T;N]</code> với dấu <code>;</code> kì lạ, chỉ hỗ trợ check OOB đơn giản và hoàn toàn có thể bị Stack Overflow.</li>
+<li>Slice luôn biết trước size vì chỉ chứa 2 thông tin.</li>
+</ul>
+<h3>Tham khảo</h3>
+<p><a href="https://github.com/rust-lang/book/blob/async-2024/src/ch03-02-data-types.md">https://github.com/rust-lang/book/blob/async-2024/src/ch03-02-data-types.md</a></p>
+<p>Xem bài giới thiệu tổng quan về Rust tại <a href="https://pp.pymi.vn/article/aoc2021/">https://pp.pymi.vn/article/aoc2021/</a>.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-03-27T00:00:00+07:00">Thu 27 March 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#array-ref">array
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#oob-ref">oob
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#slice-ref">slice
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#stackoverflow-ref">stackoverflow
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#tuple-ref">tuple
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
