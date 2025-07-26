@@ -42,14 +42,14 @@ Mỗi dòng của `/etc/shadow` chứa 9 thông tin:
 
 - login name
 - password đã được mã hóa hoặc `!` hay `*` đánh dấu user sẽ không thể dùng password để login vào hệ thống.
-- lần cuối thay đổi password, tính theo số ngày từ 1/1/1970:
-  ```
-  $ python3 -c 'import datetime; print((datetime.datetime.now() - datetime.datetime(1970,1,1)).days)'
-  20294`
-  ```
-...
+- lần cuối thay đổi password, tính theo số ngày từ 1/1/1970.
 
-xem chi tiết tại `man 5 shadow`.
+```py
+$ python3 -c 'import datetime
+print((datetime.datetime.now() - datetime.datetime(1970,1,1)).days)'
+# 20294
+```
+- ...  xem chi tiết tại `man 5 shadow`.
 
 ### Đọc chi tiết password đã được mã hóa
 
@@ -59,10 +59,13 @@ Sử dụng dấu `$` để phân cách các phần:
 $6$rounds=100000$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0
 ```
 
-- `$6$` là **prefix**, cho biết đây là kết quả của việc sử dụng hashing method **sha512crypt**. Một vài các prefix thường thấy và hashing method tương ứng: `$y$`: **yescrypt** `$7$`: **script** `$2$`: **bcrypt**. Ví dụ trên dùng `AlmaLinux 9.6` mặc định sử dụng **sha512crypt**, trong khi Debian 12 (bookworm) lại dùng **yescrypt**.
+- `$6$` là **prefix**, cho biết đây là kết quả của việc sử dụng hashing method **sha512crypt**. Ví dụ trên dùng `AlmaLinux 9.6` mặc định sử dụng **sha512crypt**, trong khi Debian 12 (bookworm) lại dùng **yescrypt**. Một vài các prefix thường thấy và hashing method tương ứng:
+    - `$y$`: **yescrypt**
+    - `$7$`: **script**
+    - `$2$`: **bcrypt**
 - `rounds=100000`: số vòng lặp khi tính hash, ở đây là `100000`, giá trị càng lớn, tính hash càng lâu. Đây là một trong các biện pháp chống hacker bruteforce password.
 - `wYEmXgSx4U3GBF0i`: giá trị salt. Salt trong crypto là giá trị (thường là ngẫu nhiên) được nối thêm vào password trước khi tính hash, nhằm chống lại việc bruteforce password sử dụng bảng hash tính sẵn (rainbow table). Khi sử dụng salt khác nhau, 2 password giống nhau cho ra 2 mã hash khác nhau. User `root` và `pika` đều dùng chung password, nhưng do salt khác nhau nên hash khác nhau.
-- Phần còn lại: giá trị hash `AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0` biểu diễn ở dạng base-64 biến thể, không chứa dấu `+=` như base64 phổ biến, còn gọi là `B64` (từ khóa: `crypt b64`).
+- Phần còn lại: giá trị hash `AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0` biểu diễn ở dạng base64 biến thể, không chứa dấu `+=` như base64 phổ biến, còn gọi là `B64` (từ khóa: `crypt b64`).
 
 Function `crypt` dùng để đọc viết các giá trị nói trên. Chi tiết xem `man 5 crypt` và `man 3 crypt`:
 
