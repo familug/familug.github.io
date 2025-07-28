@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="rust, use, import, frontpage, " />
+
+<meta property="og:title" content="Rust không import "/>
+<meta property="og:url" content="./rust-khong-import.html" />
+<meta property="og:description" content="Mọi ngôn ngữ lập trình hiện đại đều có cơ chế để dùng lại code. C có #include&lt;stdio.h&gt; thì Python, Go, Java có import. Rust không như thế, không có import, không cần import. Rust dùng thư viện bằng path đầy đủ Không cần import. Ví dụ sử …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-08-01T00:00:00+07:00" />
+<meta name="twitter:title" content="Rust không import ">
+<meta name="twitter:description" content="Mọi ngôn ngữ lập trình hiện đại đều có cơ chế để dùng lại code. C có #include&lt;stdio.h&gt; thì Python, Go, Java có import. Rust không như thế, không có import, không cần import. Rust dùng thư viện bằng path đầy đủ Không cần import. Ví dụ sử …">
+
+        <title>Rust không import  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./rust-khong-import.html">
+                Rust không import
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Mọi ngôn ngữ lập trình hiện đại đều có cơ chế để dùng lại code. C có <code>#include&lt;stdio.h&gt;</code> thì Python, Go, Java có <code>import</code>. Rust không như thế, không có import, không cần import.</p>
+<h2>Rust dùng thư viện bằng path đầy đủ</h2>
+<p>Không cần import. Ví dụ sử dụng các function trong thư viện <code>std::fs</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span>::<span class="n">fs</span>::<span class="n">create_dir_all</span><span class="p">(</span><span class="s">&quot;a/b/c/d&quot;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span>::<span class="n">fs</span>::<span class="n">write</span><span class="p">(</span><span class="s">&quot;a/file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello&quot;</span><span class="p">).</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Cannot write file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span>::<span class="n">fs</span>::<span class="n">read_dir</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">path</span><span class="p">().</span><span class="n">is_dir</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Directory {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">file_name</span><span class="p">().</span><span class="n">to_string_lossy</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">path</span><span class="p">().</span><span class="n">is_file</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;File {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">file_name</span><span class="p">().</span><span class="n">to_string_lossy</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Code tạo thư mục a chứa thư mục b chứa thư mục c chứa thư mục d, tương tự lệnh <code>mkdir -p a/b/c/d</code> trên Linux.
+Sau đó ghi ra 1 file text tên "file" trong thư mục "a" dòng chữ "Hello". Liệt kê các file trong thư mục "a" và in ra màn hình đâu là thư mục đâu là file.</p>
+<p>Output:</p>
+<div class="highlight"><pre><span></span><code>File file
+Directory b
+</code></pre></div>
+
+<h3>Rust crate, module</h3>
+<p><code>std::fs::create_dir_all</code> là <strong>full path</strong> tới function <code>create_dir_all</code>.</p>
+<p><code>std</code> là 1 crate /kreɪt/ - đơn vị 1 "library" trong Rust. Xem các crates tại <a href="https://crates.io/">https://crates.io/</a></p>
+<p><code>fs</code> là 1 module - thường tương ứng với 1 file hay 1 thư mục, xem các module trong crate <code>std</code> tại <a href="https://doc.rust-lang.org/std/index.html">https://doc.rust-lang.org/std/index.html</a></p>
+<p>Rust có thể gọi function <code>create_dir_all</code> trong <code>fs</code> trong <code>std</code> mà không cần import.</p>
+<p>Nhưng gõ <code>std::fs::create_dir_all</code> dài, nên Rust có <code>use</code> dùng để tạo "shortcut".</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">fs</span>::<span class="n">create_dir_all</span><span class="p">;</span><span class="w"></span>
+<span class="c1">// use std::fs::{create_dir_all, write}; viết ngắn gọn thay vì viết use cho từng function.</span>
+<span class="c1">// use std::fs::{*}; tất cả</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">create_dir_all</span><span class="p">(</span><span class="s">&quot;a/b/c/d&quot;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>tương tự Python <code>from math import sqrt; sqrt(4)</code>.
+hay <code>from math import *; sqrt(4)</code></p>
+<p>Nếu viết <code>use std::fs</code> thì sẽ chỉ cần gõ <code>fs::create_dir_all</code> là đủ.
+Đây là "best practice" để vừa gõ ngắn hơn, vừa biết <code>create_dir_all</code> thuộc về <code>fs</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">fs</span><span class="p">;</span><span class="w"></span>
+
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">fs</span>::<span class="n">create_dir_all</span><span class="p">(</span><span class="s">&quot;a/b/c/d&quot;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="n">fs</span>::<span class="n">write</span><span class="p">(</span><span class="s">&quot;a/file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello&quot;</span><span class="p">).</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Cannot write file&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fs</span>::<span class="n">read_dir</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">).</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">rd</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">unwrap</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">path</span><span class="p">().</span><span class="n">is_dir</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Directory {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">file_name</span><span class="p">().</span><span class="n">to_string_lossy</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">path</span><span class="p">().</span><span class="n">is_file</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;File {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">file_name</span><span class="p">().</span><span class="n">to_string_lossy</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h2>Kết luận</h2>
+<p>Rust không import, chỉ use để tạo shortcut.</p>
+<p>Hết</p>
+<h2>Tham khảo</h2>
+<ul>
+<li>The Rust Programming Language <a href="https://web.archive.org/web/20240718162636/https://doc.rust-lang.org/stable/book/ch07-04-bringing-paths-into-scope-with-the-use-keyword.html">https://web.archive.org/web/20240718162636/https://doc.rust-lang.org/stable/book/ch07-04-bringing-paths-into-scope-with-the-use-keyword.html</a></li>
+</ul>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-08-01T00:00:00+07:00">Thu 01 August 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#import-ref">import
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#use-ref">use
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

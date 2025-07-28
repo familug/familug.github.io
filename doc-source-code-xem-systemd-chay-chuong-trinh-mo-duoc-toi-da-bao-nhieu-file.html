@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="systemd, linux, kernel, LimitNOFILE, C, frontpage, " />
+
+<meta property="og:title" content="Đọc source code xem systemd chạy chương trình mở được tối đa bao nhiêu file? "/>
+<meta property="og:url" content="./doc-source-code-xem-systemd-chay-chuong-trinh-mo-duoc-toi-da-bao-nhieu-file.html" />
+<meta property="og:description" content="Mặc định chương trình trên Linux chỉ mở được giới hạn file nhất định. Nếu chạy từ shell (như bash) giá trị này thường có thể xem từ lệnh $ ulimit -n 1024 giá trị này có thể thay đổi ngay trên shell $ ulimit -n 9999 $ ulimit -n 9999 Set process …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-03-12T00:00:00+07:00" />
+<meta name="twitter:title" content="Đọc source code xem systemd chạy chương trình mở được tối đa bao nhiêu file? ">
+<meta name="twitter:description" content="Mặc định chương trình trên Linux chỉ mở được giới hạn file nhất định. Nếu chạy từ shell (như bash) giá trị này thường có thể xem từ lệnh $ ulimit -n 1024 giá trị này có thể thay đổi ngay trên shell $ ulimit -n 9999 $ ulimit -n 9999 Set process …">
+
+        <title>Đọc source code xem systemd chạy chương trình mở được tối đa bao nhiêu file?  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./doc-source-code-xem-systemd-chay-chuong-trinh-mo-duoc-toi-da-bao-nhieu-file.html">
+                Đọc source code xem systemd chạy chương trình mở được tối đa bao nhiêu file?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Mặc định chương trình trên Linux chỉ mở được giới hạn file nhất định. Nếu chạy từ shell (như bash) giá trị này thường có thể xem từ lệnh </p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">ulimit</span> -n
+<span class="m">1024</span>
+</code></pre></div>
+
+<p>giá trị này có thể thay đổi ngay trên shell </p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">ulimit</span> -n <span class="m">9999</span>
+$ <span class="nb">ulimit</span> -n
+<span class="m">9999</span>
+</code></pre></div>
+
+<h3>Set process max open files trên Systemd</h3>
+<p>Khi chạy bằng systemd, các service sẽ kết thừa giá trị limit của systemd hoặc tự set bằng LimitNOFILE</p>
+<div class="highlight"><pre><span></span><code>$ systemd --version
+systemd <span class="m">249</span> <span class="o">(</span><span class="m">249</span>.11-0ubuntu3.12<span class="o">)</span>
+</code></pre></div>
+
+<p>Theo <code>man 2 setrlimit</code></p>
+<blockquote>
+<p>A child process created via fork(2) inherits its parent's resource  limits.   Resource  limits are preserved across execve(2).</p>
+</blockquote>
+<p>Xem giá trị theo 2 cách: dùng lệnh systemctl show và xem trên /proc filesystem</p>
+<div class="highlight"><pre><span></span><code><span class="o">%</span><span class="w"> </span><span class="n">systemctl</span><span class="w"> </span><span class="n">show</span><span class="w"> </span><span class="n">cron</span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="n">NOFILE</span><span class="w">   </span>
+<span class="n">LimitNOFILE</span><span class="o">=</span><span class="mi">524288</span><span class="w"></span>
+<span class="n">LimitNOFILESoft</span><span class="o">=</span><span class="mi">1024</span><span class="w"></span>
+
+<span class="o">%</span><span class="w"> </span><span class="n">systemctl</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="n">cron</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="n">PID</span><span class="w"></span>
+<span class="w">   </span><span class="n">Main</span><span class="w"> </span><span class="n">PID</span><span class="p">:</span><span class="w"> </span><span class="mi">464</span><span class="w"> </span><span class="p">(</span><span class="n">cron</span><span class="p">)</span><span class="w"></span>
+<span class="o">%</span><span class="w"> </span><span class="n">cat</span><span class="w"> </span><span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">464</span><span class="o">/</span><span class="n">limits</span><span class="w"> </span>
+<span class="n">Limit</span><span class="w">                     </span><span class="n">Soft</span><span class="w"> </span><span class="n">Limit</span><span class="w">           </span><span class="n">Hard</span><span class="w"> </span><span class="n">Limit</span><span class="w">           </span><span class="n">Units</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">cpu</span><span class="w"> </span><span class="n">time</span><span class="w">              </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">seconds</span><span class="w">   </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">size</span><span class="w">             </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="n">size</span><span class="w">             </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="n">size</span><span class="w">            </span><span class="mi">8388608</span><span class="w">              </span><span class="n">unlimited</span><span class="w">            </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">core</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">size</span><span class="w">        </span><span class="mi">0</span><span class="w">                    </span><span class="n">unlimited</span><span class="w">            </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">resident</span><span class="w"> </span><span class="n">set</span><span class="w">          </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">processes</span><span class="w">             </span><span class="mi">61289</span><span class="w">                </span><span class="mi">61289</span><span class="w">                </span><span class="n">processes</span><span class="w"> </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">open</span><span class="w"> </span><span class="n">files</span><span class="w">            </span><span class="mi">1024</span><span class="w">                 </span><span class="mi">524288</span><span class="w">               </span><span class="n">files</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">locked</span><span class="w"> </span><span class="n">memory</span><span class="w">         </span><span class="mi">8388608</span><span class="w">              </span><span class="mi">8388608</span><span class="w">              </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="n">space</span><span class="w">         </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">locks</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">locks</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">pending</span><span class="w"> </span><span class="n">signals</span><span class="w">       </span><span class="mi">61289</span><span class="w">                </span><span class="mi">61289</span><span class="w">                </span><span class="n">signals</span><span class="w">   </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">msgqueue</span><span class="w"> </span><span class="n">size</span><span class="w">         </span><span class="mi">819200</span><span class="w">               </span><span class="mi">819200</span><span class="w">               </span><span class="n">bytes</span><span class="w">     </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">nice</span><span class="w"> </span><span class="n">priority</span><span class="w">         </span><span class="mi">0</span><span class="w">                    </span><span class="mi">0</span><span class="w">                    </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">realtime</span><span class="w"> </span><span class="n">priority</span><span class="w">     </span><span class="mi">0</span><span class="w">                    </span><span class="mi">0</span><span class="w">                    </span>
+<span class="n">Max</span><span class="w"> </span><span class="n">realtime</span><span class="w"> </span><span class="n">timeout</span><span class="w">      </span><span class="n">unlimited</span><span class="w">            </span><span class="n">unlimited</span><span class="w">            </span><span class="n">us</span><span class="w">   </span>
+</code></pre></div>
+
+<h3>Soft limit vs hard limit</h3>
+<p>Theo <code>man 5 limits.conf</code>: </p>
+<div class="highlight"><pre><span></span><code><span class="nv">hard</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nv">enforcing</span><span class="w"> </span><span class="nv">hard</span><span class="w"> </span><span class="nv">resource</span><span class="w"> </span><span class="nv">limits</span>.<span class="w"> </span><span class="nv">These</span><span class="w"> </span><span class="nv">limits</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">superuser</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">enforced</span><span class="w"></span>
+<span class="nv">by</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">Kernel</span>.<span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">user</span><span class="w"> </span><span class="nv">cannot</span><span class="w"> </span><span class="nv">raise</span><span class="w"> </span><span class="nv">his</span><span class="w"> </span><span class="nv">requirement</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">system</span><span class="w"> </span><span class="nv">resources</span><span class="w"> </span><span class="nv">above</span><span class="w"> </span><span class="nv">such</span><span class="w"></span>
+<span class="nv">values</span>.<span class="w"></span>
+
+<span class="nv">soft</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nv">enforcing</span><span class="w"> </span><span class="nv">soft</span><span class="w"> </span><span class="nv">resource</span><span class="w"> </span><span class="nv">limits</span>.<span class="w"> </span><span class="nv">These</span><span class="w"> </span><span class="nv">limits</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">ones</span><span class="w"> </span><span class="nv">that</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">user</span><span class="w"> </span><span class="nv">can</span><span class="w"> </span><span class="nv">move</span><span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="nv">or</span><span class="w"></span>
+<span class="nv">down</span><span class="w"> </span><span class="nv">within</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">permitted</span><span class="w"> </span><span class="nv">range</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">any</span><span class="w"> </span><span class="nv">pre</span><span class="o">-</span><span class="nv">existing</span><span class="w"> </span><span class="nv">hard</span><span class="w"> </span><span class="nv">limits</span>.<span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">values</span><span class="w"> </span><span class="nv">specified</span><span class="w"></span>
+<span class="nv">with</span><span class="w"> </span><span class="nv">this</span><span class="w"> </span><span class="nv">token</span><span class="w"> </span><span class="nv">can</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">thought</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">as</span><span class="w"> </span><span class="nv">default</span><span class="w"> </span><span class="nv">values</span>,<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">normal</span><span class="w"> </span><span class="nv">system</span><span class="w"> </span><span class="nv">usage</span>.<span class="w"></span>
+</code></pre></div>
+
+<p>Theo <code>man 2 getrlimit</code></p>
+<div class="highlight"><pre><span></span><code><span class="nv">The</span><span class="w">  </span><span class="nv">soft</span><span class="w">  </span><span class="nv">limit</span><span class="w">  </span><span class="nv">is</span><span class="w">  </span><span class="nv">the</span><span class="w"> </span><span class="nv">value</span><span class="w"> </span><span class="nv">that</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">enforces</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">corre</span>‐<span class="w"></span>
+<span class="nv">sponding</span><span class="w"> </span><span class="nv">resource</span>.<span class="w">  </span><span class="nv">The</span><span class="w"> </span><span class="nv">hard</span><span class="w"> </span><span class="nv">limit</span><span class="w"> </span><span class="nv">acts</span><span class="w">  </span><span class="nv">as</span><span class="w">  </span><span class="nv">a</span><span class="w">  </span><span class="nv">ceiling</span><span class="w">  </span><span class="k">for</span><span class="w">  </span><span class="nv">the</span><span class="w">  </span><span class="nv">soft</span><span class="w"></span>
+<span class="nv">limit</span>:<span class="w">  </span><span class="nv">an</span><span class="w">  </span><span class="nv">unprivileged</span><span class="w"> </span><span class="nv">process</span><span class="w"> </span><span class="nv">may</span><span class="w"> </span><span class="nv">set</span><span class="w"> </span><span class="nv">only</span><span class="w"> </span><span class="nv">its</span><span class="w"> </span><span class="nv">soft</span><span class="w"> </span><span class="nv">limit</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+<span class="nv">in</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">range</span><span class="w"> </span><span class="nv">from</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nv">up</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">hard</span><span class="w"> </span><span class="nv">limit</span>,<span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="ss">(</span><span class="nv">irreversibly</span><span class="ss">)</span><span class="w"> </span><span class="nv">lower</span><span class="w">  </span><span class="nv">its</span><span class="w"></span>
+<span class="nv">hard</span><span class="w">   </span><span class="nv">limit</span>.<span class="w">    </span><span class="nv">A</span><span class="w">  </span><span class="nv">privileged</span><span class="w">  </span><span class="nv">process</span><span class="w">  </span><span class="ss">(</span><span class="nv">under</span><span class="w">  </span><span class="nv">Linux</span>:<span class="w">  </span><span class="nv">one</span><span class="w">  </span><span class="nv">with</span><span class="w">  </span><span class="nv">the</span><span class="w"></span>
+<span class="nv">CAP_SYS_RESOURCE</span><span class="w"> </span><span class="nv">capability</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">initial</span><span class="w"> </span><span class="nv">user</span><span class="w"> </span><span class="nv">namespace</span><span class="ss">)</span><span class="w"> </span><span class="nv">may</span><span class="w"> </span><span class="nv">make</span><span class="w"> </span><span class="nv">ar</span>‐<span class="w"></span>
+<span class="nv">bitrary</span><span class="w"> </span><span class="nv">changes</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">either</span><span class="w"> </span><span class="nv">limit</span><span class="w"> </span><span class="nv">value</span>.<span class="w"></span>
+</code></pre></div>
+
+<p>Hard limit là giá trị admin set tối đa, để người dùng khác trên cùng hệ thống không set vượt quá được (dùng ulimit). Với system service, không có "người dùng" set giá trị (người dùng là admin??!), giá trị có ý nghĩa duy nhất ở đây là soft limit, thường được set bằng luôn với hard limit.</p>
+<h3>Đọc code tìm giá trị tối đa cho Max open files LimitNOFILE</h3>
+<p>Lấy code tại tag v249 về:</p>
+<div class="highlight"><pre><span></span><code><span class="c">% git clone --depth 1 --branch v249 https://github.com/systemd/systemd</span><span class="w"></span>
+<span class="n">Cloning</span><span class="w"> </span><span class="s">into</span><span class="w"> </span><span class="s">&#39;systemd&#39;...</span><span class="w"></span>
+<span class="n">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Enumerating</span><span class="w"> </span><span class="n">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">4600</span><span class="p">,</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="n">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Counting</span><span class="w"> </span><span class="n">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="c">% (4600/4600), done.</span><span class="w"></span>
+<span class="n">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Compressing</span><span class="w"> </span><span class="n">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="c">% (4063/4063), done.</span><span class="w"></span>
+<span class="n">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Total</span><span class="w"> </span><span class="mi">4600</span><span class="w"> </span><span class="p">(</span><span class="n">delta</span><span class="w"> </span><span class="mi">765</span><span class="p">),</span><span class="w"> </span><span class="n">reused</span><span class="w"> </span><span class="mi">1588</span><span class="w"> </span><span class="p">(</span><span class="n">delta</span><span class="w"> </span><span class="mi">287</span><span class="p">),</span><span class="w"> </span><span class="nb">pack</span><span class="o">-</span><span class="n">reused</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">Receiving</span><span class="w"> </span><span class="s">objects:</span><span class="w"> </span><span class="s">100%</span><span class="w"> </span><span class="s">(4600/4600),</span><span class="w"> </span><span class="s">11.05</span><span class="w"> </span><span class="s">MiB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mf">2.92</span><span class="w"> </span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="n">Resolving</span><span class="w"> </span><span class="s">deltas:</span><span class="w"> </span><span class="s">100%</span><span class="w"> </span><span class="s">(765/765),</span><span class="w"> </span><span class="s">done.</span><span class="w"></span>
+<span class="n">Note</span><span class="p">:</span><span class="w"> </span><span class="n">switching</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="s">&#39;f6278558da0304ec6b646bb172ce4688c7f162a5&#39;</span><span class="p">.</span><span class="w"></span>
+<span class="k">...</span><span class="w"></span>
+</code></pre></div>
+
+<p>Tìm giá trị config LimitNOFILE trong các file code C</p>
+<div class="highlight"><pre><span></span><code><span class="o">%</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">Rin</span><span class="w"> </span><span class="n">LimitNOFILE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="s1">&#39;.c:&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="n">test</span><span class="w"></span>
+<span class="nl">grep</span><span class="p">:</span><span class="w"> </span><span class="n">test</span><span class="o">/</span><span class="nl">testdata</span><span class="p">:</span><span class="w"> </span><span class="nl">warning</span><span class="p">:</span><span class="w"> </span><span class="k">recursive</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">loop</span><span class="w"></span>
+<span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">main</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="mi">681</span><span class="err">:</span><span class="w">                </span><span class="err">{</span><span class="w"> </span><span class="ss">&quot;Manager&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;DefaultLimitNOFILE&quot;</span><span class="p">,</span><span class="w">           </span><span class="n">config_parse_rlimit</span><span class="p">,</span><span class="w">                </span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="n">arg_default_rlimit</span><span class="w">         </span><span class="err">}</span><span class="p">,</span><span class="w"></span>
+<span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="n">manager</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="mi">2706</span><span class="err">:</span><span class="w">        </span><span class="n">SD_BUS_PROPERTY</span><span class="p">(</span><span class="ss">&quot;DefaultLimitNOFILE&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bus_property_get_rlimit</span><span class="p">,</span><span class="w"> </span><span class="n">offsetof</span><span class="p">(</span><span class="n">Manager</span><span class="p">,</span><span class="w"> </span><span class="n">rlimit</span><span class="o">[</span><span class="n">RLIMIT_NOFILE</span><span class="o">]</span><span class="p">),</span><span class="w"> </span><span class="n">SD_BUS_VTABLE_PROPERTY_CONST</span><span class="p">),</span><span class="w"></span>
+<span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="n">manager</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="mi">2707</span><span class="err">:</span><span class="w">        </span><span class="n">SD_BUS_PROPERTY</span><span class="p">(</span><span class="ss">&quot;DefaultLimitNOFILESoft&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bus_property_get_rlimit</span><span class="p">,</span><span class="w"> </span><span class="n">offsetof</span><span class="p">(</span><span class="n">Manager</span><span class="p">,</span><span class="w"> </span><span class="n">rlimit</span><span class="o">[</span><span class="n">RLIMIT_NOFILE</span><span class="o">]</span><span class="p">),</span><span class="w"> </span><span class="n">SD_BUS_VTABLE_PROPERTY_CONST</span><span class="p">),</span><span class="w"></span>
+<span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="k">execute</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="mi">1073</span><span class="err">:</span><span class="w">        </span><span class="n">SD_BUS_PROPERTY</span><span class="p">(</span><span class="ss">&quot;LimitNOFILE&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bus_property_get_rlimit</span><span class="p">,</span><span class="w"> </span><span class="n">offsetof</span><span class="p">(</span><span class="n">ExecContext</span><span class="p">,</span><span class="w"> </span><span class="n">rlimit</span><span class="o">[</span><span class="n">RLIMIT_NOFILE</span><span class="o">]</span><span class="p">),</span><span class="w"> </span><span class="n">SD_BUS_VTABLE_PROPERTY_CONST</span><span class="p">),</span><span class="w"></span>
+<span class="n">src</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">dbus</span><span class="o">-</span><span class="k">execute</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="mi">1074</span><span class="err">:</span><span class="w">        </span><span class="n">SD_BUS_PROPERTY</span><span class="p">(</span><span class="ss">&quot;LimitNOFILESoft&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bus_property_get_rlimit</span><span class="p">,</span><span class="w"> </span><span class="n">offsetof</span><span class="p">(</span><span class="n">ExecContext</span><span class="p">,</span><span class="w"> </span><span class="n">rlimit</span><span class="o">[</span><span class="n">RLIMIT_NOFILE</span><span class="o">]</span><span class="p">),</span><span class="w"> </span><span class="n">SD_BUS_VTABLE_PROPERTY_CONST</span><span class="p">),</span><span class="w"></span>
+</code></pre></div>
+
+<p>Xem  RLIMIT_NOFILE trong <code>src/core/main.c</code> thấy systemd set giá trị tối đa số file có thể mở tới giá trị kernel giới hạn:</p>
+<div class="highlight"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">bump_rlimit_nofile</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="o">*</span><span class="n">saved_rlimit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="n">new_rlimit</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">nr</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* Get the underlying absolute limit the kernel enforces */</span><span class="w"></span>
+<span class="w">        </span><span class="n">nr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_nr_open</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* Calculate the new limits to use for us. Never lower from what we inherited. */</span><span class="w"></span>
+<span class="w">        </span><span class="n">new_rlimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAX</span><span class="p">((</span><span class="kt">rlim_t</span><span class="p">)</span><span class="w"> </span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="n">saved_rlimit</span><span class="o">-&gt;</span><span class="n">rlim_cur</span><span class="p">),</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="n">rlim_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MAX</span><span class="p">((</span><span class="kt">rlim_t</span><span class="p">)</span><span class="w"> </span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="n">saved_rlimit</span><span class="o">-&gt;</span><span class="n">rlim_max</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* Shortcut if nothing changes. */</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">saved_rlimit</span><span class="o">-&gt;</span><span class="n">rlim_max</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">new_rlimit</span><span class="p">.</span><span class="n">rlim_max</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">            </span><span class="n">saved_rlimit</span><span class="o">-&gt;</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">new_rlimit</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">log_debug</span><span class="p">(</span><span class="s">&quot;RLIMIT_NOFILE is already as high or higher than we need it, not bumping.&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* Bump up the resource limit for ourselves substantially, all the way to the maximum the kernel allows, for</span>
+<span class="cm">         * both hard and soft. */</span><span class="w"></span>
+<span class="w">        </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setrlimit_closest</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">new_rlimit</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">log_warning_errno</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Setting RLIMIT_NOFILE failed, ignoring: %m&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Giá trị tối đa tuyệt đối được Linux kernel quyết định</p>
+<div class="highlight"><pre><span></span><code><span class="w">        </span><span class="cm">/* Get the underlying absolute limit the kernel enforces */</span><span class="w"></span>
+<span class="w">        </span><span class="n">nr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_nr_open</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+
+<p>Tìm function này:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nt">grep</span><span class="w"> </span><span class="nt">-Rin</span><span class="w"> </span><span class="nt">read_nr_open</span><span class="w"></span>
+<span class="nt">src</span><span class="o">/</span><span class="nt">basic</span><span class="o">/</span><span class="nt">fd-util</span><span class="p">.</span><span class="nc">h</span><span class="p">:</span><span class="nd">106</span><span class="p">:</span><span class="nd">int</span><span class="w"> </span><span class="nt">read_nr_open</span><span class="o">(</span><span class="nt">void</span><span class="o">);</span><span class="w"></span>
+<span class="nt">src</span><span class="o">/</span><span class="nt">basic</span><span class="o">/</span><span class="nt">rlimit-util</span><span class="p">.</span><span class="nc">c</span><span class="p">:</span><span class="nd">382</span><span class="o">:</span><span class="w">                </span><span class="nt">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nt">read_nr_open</span><span class="o">();</span><span class="w"></span>
+<span class="nt">src</span><span class="o">/</span><span class="nt">basic</span><span class="o">/</span><span class="nt">fd-util</span><span class="p">.</span><span class="nc">c</span><span class="p">:</span><span class="nd">701</span><span class="p">:</span><span class="nd">int</span><span class="w"> </span><span class="nt">read_nr_open</span><span class="o">(</span><span class="nt">void</span><span class="o">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="err">src/test/test-fd-util.</span><span class="n">c</span><span class="p">:</span><span class="mi">183</span><span class="o">:</span><span class="kc">static</span><span class="w"> </span><span class="n">void</span><span class="w"> </span><span class="nf">test_read_nr_open</span><span class="p">(</span><span class="n">void</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="n">src</span><span class="o">/</span><span class="n">test</span><span class="o">/</span><span class="n">test-fd-util</span><span class="o">.</span><span class="n">c</span><span class="o">:</span><span class="mi">184</span><span class="o">:</span><span class="w">        </span><span class="nf">log_info</span><span class="p">(</span><span class="s2">&quot;nr-open: %i&quot;</span><span class="p">,</span><span class="w"> </span><span class="nf">read_nr_open</span><span class="p">());</span><span class="w"></span>
+<span class="err">src/test/test-fd-util.</span><span class="n">c</span><span class="p">:</span><span class="mi">291</span><span class="o">:</span><span class="w">        </span><span class="nf">test_read_nr_open</span><span class="p">();</span><span class="w"></span>
+<span class="err">src/core/main.</span><span class="n">c</span><span class="p">:</span><span class="mi">1228</span><span class="o">:</span><span class="w">                </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">read_nr_open</span><span class="p">();</span><span class="w"></span>
+<span class="err">src/core/main.</span><span class="n">c</span><span class="p">:</span><span class="mi">1260</span><span class="o">:</span><span class="w">        </span><span class="n">nr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">read_nr_open</span><span class="p">();</span><span class="w"></span>
+<span class="err">src/core/main.</span><span class="n">c</span><span class="p">:</span><span class="mi">2273</span><span class="o">:</span><span class="w">                </span><span class="n">nr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">read_nr_open</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+
+<p>Trong <code>src/basic/fd-util.c</code> có định nghĩa function <code>int read_nr_open(void) {</code></p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">read_nr_open</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">_cleanup_free_</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">nr_open</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* Returns the kernel&#39;s current fd limit, either by reading it of /proc/sys if that works, or using the</span>
+<span class="cm">         * hard-coded default compiled-in value of current kernels (1M) if not. This call will never fail. */</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_one_line_file</span><span class="p">(</span><span class="s">&quot;/proc/sys/fs/nr_open&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nr_open</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">log_debug_errno</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to read /proc/sys/fs/nr_open, ignoring: %m&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">                </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">safe_atoi</span><span class="p">(</span><span class="n">nr_open</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                        </span><span class="n">log_debug_errno</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to parse /proc/sys/fs/nr_open value &#39;%s&#39;, ignoring: %m&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">nr_open</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">else</span><span class="w"></span>
+<span class="w">                        </span><span class="k">return</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* If we fail, fall back to the hard-coded kernel limit of 1024 * 1024. */</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Function này đọc giá trị kernel set từ <code>/proc/sys/fs/nr_open</code> hoặc nếu fail sẽ dùng giá trị 1024 * 1024. Xem thử file này trên máy Ubuntu 22.04:</p>
+<div class="highlight"><pre><span></span><code><span class="c">% cat /proc/sys/fs/nr_open</span><span class="w"></span>
+<span class="n">1048576</span><span class="w"></span>
+</code></pre></div>
+
+<p>Cũng bằng với 1024 * 1024.</p>
+<p>Tìm function gọi function <code>read_nr_open</code>:</p>
+<div class="highlight"><pre><span></span><code>$ grep -Rin read_nr_open
+src/basic/fd-util.h:106:int read_nr_open<span class="o">(</span>void<span class="o">)</span><span class="p">;</span>
+src/basic/rlimit-util.c:382:                <span class="nv">limit</span> <span class="o">=</span> read_nr_open<span class="o">()</span><span class="p">;</span>
+src/basic/fd-util.c:701:int read_nr_open<span class="o">(</span>void<span class="o">)</span> <span class="o">{</span>
+src/test/test-fd-util.c:183:static void test_read_nr_open<span class="o">(</span>void<span class="o">)</span> <span class="o">{</span>
+src/test/test-fd-util.c:184:        log_info<span class="o">(</span><span class="s2">&quot;nr-open: %i&quot;</span>, read_nr_open<span class="o">())</span><span class="p">;</span>
+src/test/test-fd-util.c:291:        test_read_nr_open<span class="o">()</span><span class="p">;</span>
+src/core/main.c:1228:                <span class="nv">k</span> <span class="o">=</span> read_nr_open<span class="o">()</span><span class="p">;</span>
+src/core/main.c:1260:        <span class="nv">nr</span> <span class="o">=</span> read_nr_open<span class="o">()</span><span class="p">;</span>
+src/core/main.c:2273:                <span class="nv">nr</span> <span class="o">=</span> read_nr_open<span class="o">()</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Xem src/basic/rlimit-util.c</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">rlimit_nofile_bump</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* Bumps the (soft) RLIMIT_NOFILE resource limit as close as possible to the specified limit. If a negative</span>
+<span class="cm">         * limit is specified, bumps it to the maximum the kernel and the hard resource limit allows. This call should</span>
+<span class="cm">         * be used by all our programs that might need a lot of fds, and that know how to deal with high fd numbers</span>
+<span class="cm">         * (i.e. do not use select() — which chokes on fds &gt;= 1024) */</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">limit</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_nr_open</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">limit</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">setrlimit_closest</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">RLIMIT_MAKE_CONST</span><span class="p">(</span><span class="n">limit</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">log_debug_errno</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Failed to set RLIMIT_NOFILE: %m&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Khi limit &lt; 0, limit sẽ nhận giá trị của <code>read_nr_open()</code>, khi limit &gt;=3, gọi <code>setrlimit_closest</code></p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">setrlimit_closest</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">resource</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="o">*</span><span class="n">rlim</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="n">highest</span><span class="p">,</span><span class="w"> </span><span class="n">fixed</span><span class="p">;</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span><span class="w"> </span><span class="n">rlim</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EPERM</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">errno</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* So we failed to set the desired setrlimit, then let&#39;s try</span>
+<span class="cm">         * to get as close as we can */</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">getrlimit</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">highest</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">errno</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="cm">/* If the hard limit is unbounded anyway, then the EPERM had other reasons, let&#39;s propagate the original EPERM</span>
+<span class="cm">         * then */</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">highest</span><span class="p">.</span><span class="n">rlim_max</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">RLIM_INFINITY</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="o">-</span><span class="n">EPERM</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">fixed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MIN</span><span class="p">(</span><span class="n">rlim</span><span class="o">-&gt;</span><span class="n">rlim_cur</span><span class="p">,</span><span class="w"> </span><span class="n">highest</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">),</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="n">rlim_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MIN</span><span class="p">(</span><span class="n">rlim</span><span class="o">-&gt;</span><span class="n">rlim_max</span><span class="p">,</span><span class="w"> </span><span class="n">highest</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Giá trị được set là <code>MIN(rlim-&gt;rlim_cur, highest.rlim_max)</code>, nên người dùng không thể set cao hơn giá trị <code>highest.rlim_max</code>, tức giá trị max hard limit kế thừa từ systemd, hay kết quả của function read_nr_open, ở ví dụ này là 1024*1024.</p>
+<h3>Tạo service chạy Python thử set hard limit lớn hơn 1024*1024</h3>
+<p>Python3.10 hiển thị giá trị RLIMIT_NOFILE của Python process:</p>
+<div class="highlight"><pre><span></span><code><span class="o">%</span> <span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import resource; print(resource.getrlimit(resource.RLIMIT_NOFILE))&#39;</span> 
+<span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">1048576</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Tạo 1 systemd service tên <code>pymi</code> lần lượt set LimitNOFILE=5242880 và 5000 </p>
+<div class="highlight"><pre><span></span><code><span class="c1"># systemctl  cat pymi.service </span>
+<span class="c1"># /lib/systemd/system/pymi.service</span>
+<span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
+<span class="n">Description</span><span class="o">=</span><span class="n">FAMILUG</span><span class="o">.</span><span class="n">org</span> <span class="n">rlimit</span> <span class="n">test</span>
+<span class="n">After</span><span class="o">=</span><span class="n">remote</span><span class="o">-</span><span class="n">fs</span><span class="o">.</span><span class="n">target</span> <span class="n">nss</span><span class="o">-</span><span class="n">user</span><span class="o">-</span><span class="n">lookup</span><span class="o">.</span><span class="n">target</span>
+
+<span class="p">[</span><span class="n">Service</span><span class="p">]</span>
+<span class="n">ExecStart</span><span class="o">=</span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import resource; print(resource.getrlimit(resource.RLIMIT_NOFILE))&#39;</span>
+<span class="n">LimitNOFILE</span><span class="o">=</span><span class="mi">5242880</span>
+<span class="n">IgnoreSIGPIPE</span><span class="o">=</span><span class="n">false</span>
+<span class="n">KillMode</span><span class="o">=</span><span class="n">process</span>
+
+<span class="p">[</span><span class="n">Install</span><span class="p">]</span>
+<span class="n">WantedBy</span><span class="o">=</span><span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="o">.</span><span class="n">target</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="c1"># systemctl daemon-reload</span><span class="w"></span>
+<span class="c1"># systemctl start pymi</span><span class="w"></span>
+<span class="c1"># systemctl status pymi</span><span class="w"></span>
+<span class="n">root</span><span class="err">@</span><span class="n">mini</span><span class="p">:</span><span class="o">~</span><span class="c1"># systemctl status pymi</span><span class="w"></span>
+<span class="err">○</span><span class="w"> </span><span class="n">pymi</span><span class="o">.</span><span class="n">service</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">FAMILUG</span><span class="o">.</span><span class="n">org</span><span class="w"> </span><span class="n">rlimit</span><span class="w"> </span><span class="n">test</span><span class="w"></span>
+<span class="w">     </span><span class="n">Loaded</span><span class="p">:</span><span class="w"> </span><span class="n">loaded</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">pymi</span><span class="o">.</span><span class="n">service</span><span class="p">;</span><span class="w"> </span><span class="n">disabled</span><span class="p">;</span><span class="w"> </span><span class="n">vendor</span><span class="w"> </span><span class="n">preset</span><span class="p">:</span><span class="w"> </span><span class="n">enabled</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="n">Active</span><span class="p">:</span><span class="w"> </span><span class="n">inactive</span><span class="w"> </span><span class="p">(</span><span class="n">dead</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">Thg</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">00</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">13</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="w"> </span><span class="n">Started</span><span class="w"> </span><span class="n">FAMILUG</span><span class="o">.</span><span class="n">org</span><span class="w"> </span><span class="n">rlimit</span><span class="w"> </span><span class="n">test</span><span class="o">.</span><span class="w"></span>
+<span class="n">Thg</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">00</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">13</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="n">python3</span><span class="p">[</span><span class="mi">215501</span><span class="p">]:</span><span class="w"> </span><span class="p">(</span><span class="mi">1048576</span><span class="p">,</span><span class="w"> </span><span class="mi">1048576</span><span class="p">)</span><span class="w"></span>
+<span class="n">Thg</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">00</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">13</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="w"> </span><span class="n">pymi</span><span class="o">.</span><span class="n">service</span><span class="p">:</span><span class="w"> </span><span class="n">Deactivated</span><span class="w"> </span><span class="n">successfully</span><span class="o">.</span><span class="w"></span>
+<span class="n">Thg</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">00</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">33</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="w"> </span><span class="n">Started</span><span class="w"> </span><span class="n">FAMILUG</span><span class="o">.</span><span class="n">org</span><span class="w"> </span><span class="n">rlimit</span><span class="w"> </span><span class="n">test</span><span class="o">.</span><span class="w"></span>
+<span class="n">Thg</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">00</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">34</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="n">python3</span><span class="p">[</span><span class="mi">216937</span><span class="p">]:</span><span class="w"> </span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p">)</span><span class="w"></span>
+<span class="n">Thg</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="mi">00</span><span class="p">:</span><span class="mi">49</span><span class="p">:</span><span class="mi">34</span><span class="w"> </span><span class="n">mini</span><span class="w"> </span><span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="w"> </span><span class="n">pymi</span><span class="o">.</span><span class="n">service</span><span class="p">:</span><span class="w"> </span><span class="n">Deactivated</span><span class="w"> </span><span class="n">successfully</span><span class="o">.</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết quả: </p>
+<ul>
+<li>Khi set 5242880 (5 triệu), giá trị này bị set về giá trị tối đa của kernel set 1048576.</li>
+<li>khi set 5000, chương trình Python thấy cả 2 soft và hard limit đều = 5000.</li>
+</ul>
+<h2>Kết luận</h2>
+<p>Tại systemd v249, Không thể set LimitNOFILE lớn hơn giá trị trong <code>/proc/sys/fs/nr_open</code>.</p>
+<p>Nhưng giá trị trong nr_open có thể thay đổi bằng sysctl:</p>
+<div class="highlight"><pre><span></span><code># sysctl -a | grep nr_open
+fs.nr_open = 1048576
+</code></pre></div>
+
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-03-12T00:00:00+07:00">Tue 12 March 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#c-ref">C
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#kernel-ref">kernel
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#limitnofile-ref">LimitNOFILE
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#linux-ref">linux
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="./tags.html#systemd-ref">systemd
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

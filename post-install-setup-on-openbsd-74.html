@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="openbsd, wifi, ifconfig, fw_update, en,, " />
+
+<meta property="og:title" content="Post-install setup on OpenBSD 7.4 "/>
+<meta property="og:url" content="./post-install-setup-on-openbsd-74.html" />
+<meta property="og:description" content="After installing OpenBSD 7.4, here are customizations to make it more usable. $ uname -a OpenBSD obsd.dev.obsd 7.4 GENERIC.MP#2 amd Install wireless driver Run ifconfig and see interface names. $ ifconfig | grep flags | grep -o .*: lo0: re0: iwx0: enc0: pflog0: In this case, the interface named …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-02-12T00:00:00+07:00" />
+<meta name="twitter:title" content="Post-install setup on OpenBSD 7.4 ">
+<meta name="twitter:description" content="After installing OpenBSD 7.4, here are customizations to make it more usable. $ uname -a OpenBSD obsd.dev.obsd 7.4 GENERIC.MP#2 amd Install wireless driver Run ifconfig and see interface names. $ ifconfig | grep flags | grep -o .*: lo0: re0: iwx0: enc0: pflog0: In this case, the interface named …">
+
+        <title>Post-install setup on OpenBSD 7.4  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./post-install-setup-on-openbsd-74.html">
+                Post-install setup on OpenBSD 7.4
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>After installing OpenBSD 7.4, here are customizations to make it more usable.</p>
+<div class="highlight"><pre><span></span><code>$ uname -a
+OpenBSD obsd.dev.obsd <span class="m">7</span>.4 GENERIC.MP#2 amd
+</code></pre></div>
+
+<h3>Install wireless driver</h3>
+<p>Run <code>ifconfig</code> and see interface names.</p>
+<div class="highlight"><pre><span></span><code>$ ifconfig <span class="p">|</span> grep flags <span class="p">|</span> grep -o .*:
+lo0:
+re0:
+iwx0:
+enc0:
+pflog0:
+</code></pre></div>
+
+<p>In this case, the interface named <code>iwx0</code>. Find details about it in <code>dmesg</code>:</p>
+<div class="highlight"><pre><span></span><code>$ dmesg <span class="p">|</span> grep iwx0 
+iwx0: could not <span class="nb">read</span> firmware iwx-cc-a0-77 <span class="o">(</span>error <span class="m">2</span><span class="o">)</span>
+</code></pre></div>
+
+<p>Download the driver from <a href="http://firmware.openbsd.org/firmware/">http://firmware.openbsd.org/firmware/</a>, choose the version you using, in this case is 7.4: <a href="http://firmware.openbsd.org/firmware/7.4/iwx-firmware-20230629.tgz">http://firmware.openbsd.org/firmware/7.4/iwx-firmware-20230629.tgz</a></p>
+<p>copy the file to an USB formatted as vfat filesystem so all OSes can read from it.</p>
+<h3>Mount USB</h3>
+<p>Find the partition to mount: run as root</p>
+<p>If the device is <code>sd1</code>, use <code>sd1c</code> as <code>man disklabel</code> explained:</p>
+<blockquote>
+<p>disklabel supports 15 configurable partitions, a through p
+excluding c.  The c partition describes the entire physical
+disk, is automatically created by the kernel, and cannot be
+modified or deleted by disklabel.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code># disklabel -h /dev/sd1c
+# /dev/sd1c:                                                            
+type: SCSI                                                              
+disk: SCSI disk                                                         
+label: DataTraveler 3.0                                                 
+duid: 0000000000000000
+flags:
+bytes/sector: 512
+sectors/track: 63
+tracks/cylinder: 255
+sectors/cylinder: 16065
+cylinders: 1884
+total sectors: 30277632 # total bytes: 15138816.0K
+boundstart: 0
+boundend: 30277632 
+
+16 partitions:
+#                size           offset  fstype [fsize bsize   cpg]
+  c:      15138816.0K                0  unused                    
+  i:           480.0K               64   MSDOS                    
+  j:        679424.0K             1024   MSDOS    
+</code></pre></div>
+
+<p>Here the partition we want to mount is <code>j</code>.</p>
+<div class="highlight"><pre><span></span><code>obsd# mount /dev/sd1j /mnt/                                            
+obsd# ls /mnt
+iwx-firmware-20230629.tgz
+</code></pre></div>
+
+<p>Run as root: <code>fw_update /mnt/iwx-firmware-20230629.tgz</code> to install the driver.</p>
+<h3>Turn on wifi</h3>
+<p>Run as root:</p>
+<div class="highlight"><pre><span></span><code># ifconfig iwx0 nwid WIFI_NAME wpakey PASSWORD
+# ifconfig iwx0 up
+# dhclient iwx0
+</code></pre></div>
+
+<p>To auto-connect to the wifi on startup, add a file named: <code>/etc/hostname.iwx0</code> with content:</p>
+<div class="highlight"><pre><span></span><code>nwid WIFI_NAME wpakey PASSWORD
+inet autoconf
+</code></pre></div>
+
+<p>Note: change <code>iwx0</code> in filename to your real interface name.</p>
+<h3>Install packages</h3>
+<div class="highlight"><pre><span></span><code># pkg_add firefox git tmux redshift
+</code></pre></div>
+
+<h3>Update firmware</h3>
+<div class="highlight"><pre><span></span><code># fw_update
+</code></pre></div>
+
+<h3>Change window manager</h3>
+<p>Default window manager is fwwm, right click choose cwm.</p>
+<p>To set it permanently, write a file at <code>$HOME/.xsession</code></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># use UTF-8 everywhere</span><span class="w"></span>
+<span class="k">export</span><span class="w"> </span><span class="n">LANG</span><span class="o">=</span><span class="n">en_US</span><span class="o">.</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="w"></span>
+
+<span class="c1"># load Xresources file</span><span class="w"></span>
+<span class="n">xrdb</span><span class="w"> </span><span class="o">-</span><span class="n">merge</span><span class="w"> </span><span class="o">$</span><span class="n">HOME</span><span class="o">/.</span><span class="n">Xresources</span><span class="w"></span>
+
+<span class="n">xsetroot</span><span class="w"> </span><span class="o">-</span><span class="n">solid</span><span class="w"> </span><span class="n">slategrey</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="n">xterm</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="n">redshift</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="n">exec</span><span class="w"> </span><span class="n">cwm</span><span class="w"></span>
+</code></pre></div>
+
+<p>Read <code>man cwm</code> for default key bindings.</p>
+<h3>Enable power management to suspend</h3>
+<div class="highlight"><pre><span></span><code>rcctl start apmd
+</code></pre></div>
+
+<p>Then type <code>zzz</code> to suspend.</p>
+<p>Append a line to /etc/rc.conf.local</p>
+<div class="highlight"><pre><span></span><code>apmd_flags=
+</code></pre></div>
+
+<p>To start apmd with system.</p>
+<h2>Conclusion</h2>
+<p>Hello OpenBSD once again in 2024!</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-02-12T00:00:00+07:00">Mon 12 February 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#en-ref">en,</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#fw_update-ref">fw_update
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#ifconfig-ref">ifconfig
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#openbsd-ref">openbsd
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#wifi-ref">wifi
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
