@@ -157,6 +157,7 @@ Hết.
 - `man 5 passwd`
 - `man 5 shadow`
 - [Fedora: Changes/yescrypt as default hashing method for shadow](https://fedoraproject.org/wiki/Changes/yescrypt_as_default_hashing_method_for_shadow#Release_Notes)
+- <https://www.openwall.com/yescrypt/> yescrypt homepage
 
 HVN at <https://pymi.vn> and <https://www.familug.org>.
 
