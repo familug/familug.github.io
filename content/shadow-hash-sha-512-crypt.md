@@ -6,12 +6,12 @@ Slug: shadow-hash-sha-512-crypt
 
 Các hệ điều hành Linux sử dụng file `/etc/passwd` để chứa thông tin các user của hệ thống và `/etc/shadow` để chứa thông tin về password tương ứng của các user này.
 
-Mọi tài khoản đều có thể xem `/etc/passwd`, nhưng file `/etc/shadow` được bảo mật, thường chỉ có root mới xem được:
+Mọi tài khoản đều có thể xem `/etc/passwd`, nhưng file `/etc/shadow` được bảo mật, chỉ có root và các user trong group shadow mới xem được:
 
 ```
 # ls -l /etc/passwd /etc/shadow
--rw-r--r-- 1 root root   3443 Jul 25  18 21:02 /etc/passwd
--rw-r----- 1 root shadow 1855 Jul 25  25 20:52 /etc/shadow
+-rw-r--r-- 1 root root   3443 Jul 25 21:02 /etc/passwd
+-rw-r----- 1 root shadow 1855 Jul 25 20:52 /etc/shadow
 ```
 
 Admin không chỉnh sửa trực tiếp nội dung file `/etc/shadow` mà dùng các công cụ quản lý user trên hệ thống như `useradd`, `usermod`, `passwd`.
@@ -41,7 +41,7 @@ pika:$6$rounds=100000$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT
 Mỗi dòng của `/etc/shadow` chứa 9 thông tin:
 
 - login name
-- password đã được mã hóa hoặc `!` hay `*` đánh dấu user sẽ không thể dùng password để login vào hệ thống.
+- password đã được mã hóa, hoặc có thể là dấu `!` hay `*`, thể hiện rằng user không thể đăng nhập hệ thống bằng password.
 - lần cuối thay đổi password, tính theo số ngày từ 1/1/1970.
 
 ```py
@@ -59,13 +59,13 @@ Sử dụng dấu `$` để phân cách các phần:
 $6$rounds=100000$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0
 ```
 
-- `$6$` là **prefix**, cho biết đây là kết quả của việc sử dụng hashing method **sha512crypt**. Ví dụ trên dùng `AlmaLinux 9.6` mặc định sử dụng **sha512crypt**, trong khi Debian 12 (bookworm) lại dùng **yescrypt**. Một vài các prefix thường thấy và hashing method tương ứng:
+- `$6$` là **prefix**, cho biết đây là kết quả của việc sử dụng hashing method **sha512crypt**. Ví dụ trên dùng `AlmaLinux 9.6` mặc định sử dụng **sha512crypt**, trong khi các OS phiên bản mới hơn như Fedora 35, Debian 12 (bookworm) đã chuyển qua mặc định dùng **yescrypt**, một hashing method có khả năng chống crack tốt hơn. Các prefix thường thấy và hashing method tương ứng:
     - `$y$`: **yescrypt**
-    - `$7$`: **script**
+    - `$7$`: **scrypt**
     - `$2$`: **bcrypt**
 - `rounds=100000`: số vòng lặp khi tính hash, ở đây là `100000`, giá trị càng lớn, tính hash càng lâu. Đây là một trong các biện pháp chống hacker bruteforce password.
 - `wYEmXgSx4U3GBF0i`: giá trị salt. Salt trong crypto là giá trị (thường là ngẫu nhiên) được nối thêm vào password trước khi tính hash, nhằm chống lại việc bruteforce password sử dụng bảng hash tính sẵn (rainbow table). Khi sử dụng salt khác nhau, 2 password giống nhau cho ra 2 mã hash khác nhau. User `root` và `pika` đều dùng chung password, nhưng do salt khác nhau nên hash khác nhau.
-- Phần còn lại: giá trị hash `AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0` biểu diễn ở dạng base64 biến thể, không chứa dấu `+=` như base64 phổ biến, còn gọi là `B64` (từ khóa: `crypt b64`).
+- Phần còn lại: giá trị hash `AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0` biểu diễn ở dạng biến thể của base64 , không chứa dấu `+=` như base64 thông thường, còn gọi là `B64` (từ khóa: `crypt b64`).
 
 Function `crypt` dùng để đọc viết các giá trị nói trên. Chi tiết xem `man 5 crypt` và `man 3 crypt`:
 
@@ -76,12 +76,12 @@ crypt (3)            - passphrase hashing
 crypt (3posix)       - string encoding function (CRYPT)
 ```
 
-### Sinh password có thể dùng cho shadow với mkpassword
+### Tạo password có thể dùng cho shadow với mkpasswd
 
 - Debian/Ubuntu: `sudo apt install whois`
 - Fedora/RockyLinux/AlmaLinux: `sudo dnf install mkpasswd`
 
-Mật khẩu chưa mã hóa là: `familug.org`.
+Password chưa mã hóa là: `familug.org`.
 
 Tạo lại encrypted password cho user pika:
 
@@ -96,7 +96,7 @@ $ echo -n familug.org | mkpasswd --method=sha-512 --round 100000 --salt iA2WWPgA
 $6$rounds=100000$iA2WWPgA5yY1mjXj$dHNFwg4Nh5j30Sq6vC/O74wBuuJGdt23pgU3eV//M9wOF1RcqF3lAc/HZ9rpgqcRawFjw0fiMMAqO9SADvSdo0
 ```
 
-Set encrypted password cho user pika:
+Đặt encrypted password cho user pika:
 
 ```
 # #-p, --password PASSWORD       use encrypted password for the new password
@@ -115,9 +115,9 @@ $ python3 -c 'import crypt; print(crypt.crypt("familug.org", "$6$rounds=100000$w
 $6$rounds=100000$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0
 ```
 
-Module này đã bị [remove từ 3.13](https://docs.python.org/3.12/library/crypt.html).
+Module này đã bị [loại bỏ từ 3.13](https://docs.python.org/3.12/library/crypt.html).
 
-### Sinh encrypted password sha512crypt với Rust
+### Tạo encrypted password sha512crypt với Rust
 
 ```toml
 # Cargo.toml
@@ -156,6 +156,7 @@ Hết.
 - `man 5 crypt`
 - `man 5 passwd`
 - `man 5 shadow`
+- [Fedora: Changes/yescrypt as default hashing method for shadow](https://fedoraproject.org/wiki/Changes/yescrypt_as_default_hashing_method_for_shadow#Release_Notes)
 
 HVN at <https://pymi.vn> and <https://www.familug.org>.
 
