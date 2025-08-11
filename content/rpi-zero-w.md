@@ -66,7 +66,7 @@ Tài liệu có hỗ trợ [bảng tra cứu số lần nháy đèn với lỗi 
 7 lần nháy ngắn tương ứng với lỗi "Kernel image not found". Phần cứng chỉ hỗ trợ 32bits không đọc được nội dung file kernel 64bits.
 
 ### Ghi file image ra thẻ nhớ với rpi-imager hỏng
-Tải lại file image 32bits <https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2025-05-13/2025-05-13-raspios-bookworm-arm64-lite.img.xz>, giải nén ra rồi chạy `rpi-imager`.
+Tải lại file [image 32bits](https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2025-05-13/2025-05-13-raspios-bookworm-armhf-lite.img.xz), giải nén ra rồi chạy `rpi-imager`.
 
 `rpi-imager` có sẵn trên Ubuntu 22.04, bản đã cũ
 
@@ -79,8 +79,8 @@ rpi-imager:
 
 Tải bản mới từ trang chủ <https://downloads.raspberrypi.com/imager/imager_latest_amd64.deb>. Nhưng nếu làm vào 1 ngày kém may mắn, thì phiên bản 1.9.4 có [bug khiến thiết bị không kết nối wifi sau khi cài đặt xong](https://github.com/raspberrypi/rpi-imager/issues/1094). Bản 1.9.6 đã fix lỗi này.
 
-Đây không phải lần đầu tiên `rpi-imager` có bug, khiến không ít người dùng đã đào tận đến source code C++ để xem app này làm gì.
-Đa phần công việc được thực hiện bởi [raspberrypi-sys-mod](https://github.com/RPi-Distro/raspberrypi-sys-mods/blob/31aed138d84d15d3934fae9110f1f439b694d756/usr/lib/raspberrypi-sys-mods/init_config).
+Đây không phải lần đầu tiên `rpi-imager` có bug, không ít người dùng đã đào tận đến source code C++ để xem app này làm gì.
+Đa phần công việc được thực hiện bởi [python script raspberrypi-sys-mod](https://github.com/RPi-Distro/raspberrypi-sys-mods/blob/31aed138d84d15d3934fae9110f1f439b694d756/usr/lib/raspberrypi-sys-mods/init_config).
 
 #### Phụ lục
 Nội dung file cấu hình wifi NetworkManager:
