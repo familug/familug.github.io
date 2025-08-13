@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="rust, debug, gdb, frontpage, " />
+
+<meta property="og:title" content="Học Rust với gdb "/>
+<meta property="og:url" content="./hoc-rust-voi-gdb.html" />
+<meta property="og:description" content="Dùng Rust viết ví dụ để học gdb. gdb là gì $ whatis gdb gdb (1) - The GNU Debugger GDB là 1 debugger trên dòng lệnh, mặc dù ít biết tới nhưng nó có cả giao diện TUI - giống như đồ họa trên text. gdb là debugger lừng danh luôn dùng …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2022-11-28T00:00:00+07:00" />
+<meta name="twitter:title" content="Học Rust với gdb ">
+<meta name="twitter:description" content="Dùng Rust viết ví dụ để học gdb. gdb là gì $ whatis gdb gdb (1) - The GNU Debugger GDB là 1 debugger trên dòng lệnh, mặc dù ít biết tới nhưng nó có cả giao diện TUI - giống như đồ họa trên text. gdb là debugger lừng danh luôn dùng …">
+
+        <title>Học Rust với gdb  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./hoc-rust-voi-gdb.html">
+                Học Rust với gdb
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Dùng Rust viết ví dụ để học gdb.</p>
+<h2>gdb là gì</h2>
+<div class="highlight"><pre><span></span><code>$ whatis gdb
+gdb <span class="o">(</span><span class="m">1</span><span class="o">)</span>              - The GNU Debugger
+</code></pre></div>
+
+<p>GDB là 1 debugger trên dòng lệnh, mặc dù ít biết tới nhưng nó có cả giao diện
+TUI - giống như đồ họa trên text. gdb là debugger lừng danh luôn dùng để debug
+code C. Ngoài C, gdb hỗ trợ nhiều ngôn ngữ bao gồm cả Rust/Go...</p>
+<p><a href="https://sourceware.org/gdb/">What Languages does GDB Support?</a></p>
+<div class="highlight"><pre><span></span><code><span class="n">GDB</span><span class="w"> </span><span class="n">supports</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">languages</span><span class="w"> </span><span class="p">(</span><span class="ow">in</span><span class="w"> </span><span class="n">alphabetical</span><span class="w"> </span><span class="k">order</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">Ada</span><span class="w"></span>
+<span class="w">    </span><span class="n">Assembly</span><span class="w"></span>
+<span class="w">    </span><span class="n">C</span><span class="w"></span>
+<span class="w">    </span><span class="n">C</span><span class="o">++</span><span class="w"></span>
+<span class="w">    </span><span class="n">D</span><span class="w"></span>
+<span class="w">    </span><span class="k">Fortran</span><span class="w"></span>
+<span class="w">    </span><span class="k">Go</span><span class="w"></span>
+<span class="w">    </span><span class="n">Objective</span><span class="o">-</span><span class="n">C</span><span class="w"></span>
+<span class="w">    </span><span class="n">OpenCL</span><span class="w"></span>
+<span class="w">    </span><span class="n">Modula</span><span class="o">-</span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="k">Pascal</span><span class="w"></span>
+<span class="w">    </span><span class="n">Rust</span><span class="w"></span>
+</code></pre></div>
+
+<p>gdb hỗ trợ các ngôn ngữ compile thành binary, còn Python có sẵn <code>pdb</code> cũng
+tương tự.</p>
+<h2>Cài gdb trên Ubuntu 20.04</h2>
+<div class="highlight"><pre><span></span><code>$ sudo apt install -y gdb
+</code></pre></div>
+
+<h2>Cài Rust trên Ubuntu 20.04</h2>
+<div class="highlight"><pre><span></span><code>$ curl --proto <span class="s1">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs <span class="p">|</span> sh
+</code></pre></div>
+
+<p>theo <a href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a></p>
+<h2>Tạo chương trình Rust đơn giản với stack và heap</h2>
+<p>Tạo project mới:</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">cargo</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">gdbplay</span><span class="w"></span>
+<span class="w">     </span><span class="n">Created</span><span class="w"> </span><span class="kt">binary</span><span class="w"> </span><span class="p">(</span><span class="n">application</span><span class="p">)</span><span class="w"> </span><span class="n n-Quoted">`gdbplay`</span><span class="w"> </span><span class="n">package</span><span class="w"></span>
+</code></pre></div>
+
+<p>Sửa nội dung file <code>gdbplay/src/main.rs</code>  như sau:</p>
+<div class="highlight"><pre><span></span><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">stack_only</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">stack_and_heap</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">fn</span> <span class="nf">stack_only</span><span class="p">(</span><span class="n">_x</span>: <span class="kt">i32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="k">fn</span> <span class="nf">stack_and_heap</span><span class="p">(</span><span class="n">_y</span>: <span class="kt">i32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Box</span>::<span class="n">new</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{} {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h2>Debug rust với gdb</h2>
+<p>Các câu lệnh cơ bản của gdb trong bài:</p>
+<ul>
+<li><code>list</code>: in source code ra màn hình</li>
+<li><code>b N</code>: đặt breakpoint tại dòng N, debugger sẽ dừng lại khi chạy tới dòng N</li>
+<li><code>start</code>: bắt đầu chạy chương trình</li>
+<li><code>s</code>: step into - chui vào function</li>
+<li><code>c</code>: continue - chạy tới breakpoint tiếp theo.</li>
+<li><code>n</code>: next - chạy tới dòng tiếp theo</li>
+<li><code>bt</code>: hiển thị backtrace - tất cả các "stackframe"</li>
+<li><code>info locals</code>: in ra các biến local</li>
+<li><code>info args</code>: in ra các argument của function hiện tại.</li>
+</ul>
+<p>Gõ <code>help all</code> để xem các câu lệnh khác.</p>
+<p>Các câu lệnh gõ vào ở dòng bắt đầu với (gdb)</p>
+<div class="highlight"><pre><span></span><code><span class="o">$</span><span class="w"> </span><span class="n">cargo</span><span class="w"> </span><span class="n">build</span><span class="w"></span>
+<span class="w">   </span><span class="n">Compiling</span><span class="w"> </span><span class="n">gdbplay</span><span class="w"> </span><span class="n">v0</span><span class="o">.</span><span class="mf">1.0</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hvn</span><span class="o">/</span><span class="n">me</span><span class="o">/</span><span class="n">familug</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">gdbplay</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Finished</span><span class="w"> </span><span class="n">dev</span><span class="w"> </span><span class="p">[</span><span class="n">unoptimized</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">debuginfo</span><span class="p">]</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mf">0.21</span><span class="n">s</span><span class="w"></span>
+<span class="o">$</span><span class="w"> </span><span class="n">gdb</span><span class="w"> </span><span class="n">target</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">gdbplay</span><span class="w"></span>
+<span class="n">GNU</span><span class="w"> </span><span class="n">gdb</span><span class="w"> </span><span class="p">(</span><span class="n">Ubuntu</span><span class="w"> </span><span class="mf">9.2</span><span class="o">-</span><span class="mi">0</span><span class="n">ubuntu1</span><span class="o">~</span><span class="mf">20.04</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="mf">9.2</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="n">Reading</span><span class="w"> </span><span class="n">symbols</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">target</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">gdbplay</span><span class="o">...</span><span class="w"></span>
+<span class="n">warning</span><span class="p">:</span><span class="w"> </span><span class="n">Missing</span><span class="w"> </span><span class="n">auto</span><span class="o">-</span><span class="nb">load</span><span class="w"> </span><span class="n">script</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="o">.</span><span class="n">debug_gdb_scripts</span><span class="w"></span>
+<span class="n">of</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hvn</span><span class="o">/</span><span class="n">me</span><span class="o">/</span><span class="n">familug</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">gdbplay</span><span class="o">/</span><span class="n">target</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">gdbplay</span><span class="o">.</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">list</span><span class="w"></span>
+<span class="mi">1</span><span class="w">   </span><span class="n">fn</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="mi">2</span><span class="w">       </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="mi">3</span><span class="w">       </span><span class="n">stack_only</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="mi">4</span><span class="w">       </span><span class="n">stack_and_heap</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+<span class="mi">5</span><span class="w">   </span><span class="p">}</span><span class="w"></span>
+<span class="mi">6</span><span class="w"></span>
+<span class="mi">7</span><span class="w">   </span><span class="n">fn</span><span class="w"> </span><span class="n">stack_only</span><span class="p">(</span><span class="n">_x</span><span class="p">:</span><span class="w"> </span><span class="n">i32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="mi">8</span><span class="w">       </span><span class="n">let</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
+<span class="mi">9</span><span class="w">       </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s2">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w"></span>
+<span class="mi">10</span><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">list</span><span class="w"></span>
+<span class="mi">11</span><span class="w"></span>
+<span class="mi">12</span><span class="w">  </span><span class="n">fn</span><span class="w"> </span><span class="n">stack_and_heap</span><span class="p">(</span><span class="n">_y</span><span class="p">:</span><span class="w"> </span><span class="n">i32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="mi">13</span><span class="w">      </span><span class="n">let</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"></span>
+<span class="mi">14</span><span class="w">      </span><span class="n">let</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Box</span><span class="p">::</span><span class="n">new</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span><span class="w"></span>
+<span class="mi">15</span><span class="w">      </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s2">&quot;{} {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">);</span><span class="w"></span>
+<span class="mi">16</span><span class="w"></span>
+<span class="mi">17</span><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="mi">7</span><span class="w"></span>
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="mh">0x9508</span><span class="p">:</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">rs</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mf">8.</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="mi">9</span><span class="w"></span>
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="mh">0x9510</span><span class="p">:</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">rs</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mf">9.</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">start</span><span class="w"></span>
+<span class="n">Temporary</span><span class="w"> </span><span class="k">breakpoint</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="mh">0x94a4</span><span class="p">:</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">rs</span><span class="p">,</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="mf">2.</span><span class="w"></span>
+<span class="n">Starting</span><span class="w"> </span><span class="n">program</span><span class="p">:</span><span class="w"> </span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hvn</span><span class="o">/</span><span class="n">me</span><span class="o">/</span><span class="n">familug</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">content</span><span class="o">/</span><span class="n">gdbplay</span><span class="o">/</span><span class="n">target</span><span class="o">/</span><span class="n">debug</span><span class="o">/</span><span class="n">gdbplay</span><span class="w"></span>
+<span class="p">[</span><span class="n">Thread</span><span class="w"> </span><span class="n">debugging</span><span class="w"> </span><span class="n">using</span><span class="w"> </span><span class="n">libthread_db</span><span class="w"> </span><span class="n">enabled</span><span class="p">]</span><span class="w"></span>
+<span class="n">Using</span><span class="w"> </span><span class="n">host</span><span class="w"> </span><span class="n">libthread_db</span><span class="w"> </span><span class="n">library</span><span class="w"> </span><span class="s2">&quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;</span><span class="o">.</span><span class="w"></span>
+
+<span class="n">Temporary</span><span class="w"> </span><span class="k">breakpoint</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">gdbplay</span><span class="p">::</span><span class="n">main</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">rs</span><span class="p">:</span><span class="mi">2</span><span class="w"></span>
+<span class="mi">2</span><span class="w">       </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="n">Hello</span><span class="p">,</span><span class="w"> </span><span class="n">world</span><span class="o">!</span><span class="w"></span>
+<span class="mi">3</span><span class="w">       </span><span class="n">stack_only</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">s</span><span class="w"></span>
+
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">gdbplay</span><span class="p">::</span><span class="n">stack_only</span><span class="w"> </span><span class="p">(</span><span class="n">_x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">rs</span><span class="p">:</span><span class="mi">8</span><span class="w"></span>
+<span class="mi">8</span><span class="w">       </span><span class="n">let</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">gdbplay</span><span class="p">::</span><span class="n">stack_only</span><span class="w"> </span><span class="p">(</span><span class="n">_x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">rs</span><span class="p">:</span><span class="mi">9</span><span class="w"></span>
+<span class="mi">9</span><span class="w">       </span><span class="n">println</span><span class="o">!</span><span class="p">(</span><span class="s2">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">bt</span><span class="w"></span>
+<span class="c1">#0  gdbplay::stack_only (_x=1) at src/main.rs:9</span><span class="w"></span>
+<span class="c1">#1  0x000055555555d4e3 in gdbplay::main () at src/main.rs:3</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="n">locals</span><span class="w"></span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w"></span>
+<span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="n">args</span><span class="w"></span>
+<span class="n">_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+</code></pre></div>
+
+<p>các biến <code>a</code> hay <code>_x</code> nằm trên stack. Các biến trên stack sẽ tự động được dọn dẹp sau khi hết scope (ở đây là function).</p>
+<p>Giờ đổi sang chế độ "TUI", đồ họa trên dòng lệnh, gõ <code>layout next</code></p>
+<p><img alt="gdb_tui" src="./images/gdb_tui.png"></p>
+<p><code>p</code> là một <a href="https://doc.rust-lang.org/book/ch15-00-smart-pointers.html">"smart pointer"</a> trỏ tới địa chỉ bộ nhớ  <code>0x55555555a3ad0</code> trên heap. Nếu p là một pointer thông thường như trên C, nó sẽ không tự biến mất khi function kết thúc, và dẫn tới "memleak", lập trình viên phải "free" nó trên code, thì với smart pointer, giá trị 9 mà p trỏ tới sẽ được dọn dẹp khi hết scope (ở đây là function).</p>
+<p>Gõ <code>x ten_bien</code> để "examine" hay hiển thị giá trị của biến.
+<code>x /d ten_bien</code> sẽ hiển thị ở dạng số nguyên. Xem thêm tại "help x".</p>
+<p><code>n</code> - next tiếp chạy tới cuối sẽ thấy:</p>
+<div class="highlight"><pre><span></span><code>(gdb) n
+[Inferior 1 (process 37385) exited normally]
+(gdb) n
+The program is not being run.
+</code></pre></div>
+
+<h3>Kết luận</h3>
+<p>gdb viết tắt các câu lệnh, nhưng khi đã hiểu thì không còn khó.
+Happy debugging.</p>
+<p>Hết.</p>
+<p>HVN at http://pymi.vn and https://www.familug.org.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2022-11-28T00:00:00+07:00">Mon 28 November 2022</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#debug-ref">debug
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#gdb-ref">gdb
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
