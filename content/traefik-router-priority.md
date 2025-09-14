@@ -11,12 +11,12 @@ Slug: traefik-router-priority
 Traefik là một HTTP reverse proxy và load balancer giúp triển khai microservices dễ dàng.
 Traefik có tính năng tương tự NGINX, với điểm mạnh lớn nhất là khả năng tích hợp, cấu hình tự động với hệ thống đã chạy như Kubernetes, Docker, ...
 
-Traefik được viết bằng Go, về hiệu năng chưa có gì vượt trội so với NGINX, nhưng có nhiều tính năng hiện đại như: tích hợp HTTPS dễ dàng, hỗ trợ sẵn dashboard, metrics, rate limit middelware,...
+Traefik được viết bằng Go, về hiệu năng chưa có gì vượt trội so với NGINX, nhưng có nhiều tính năng hiện đại như: tích hợp HTTPS dễ dàng, hỗ trợ sẵn dashboard, metrics, rate limit,...
 
 ## Build Traefik từ source
 
+Tạo file build.sh
 ```sh
-cat build.sh
 git clone https://github.com/traefik/traefik --depth 1 --branch v3.5
 cd traefik
 touch webui/static/index.html
@@ -25,6 +25,7 @@ make dist
 ./dist/linux/amd64/traefik version
 ```
 
+Chạy để build với go1.24:
 ```
 bash build.sh
 Cloning into 'traefik'...
@@ -176,14 +177,13 @@ func (r routes) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
 // Less implements sort.Interface.
 func (r routes) Less(i, j int) bool { return r[i].priority > r[j].priority }
 ```
-Chú ý function `Less` ở đây trả về true khi phần tử `r[i].priority > r[j].priority`.
 `Sort` interface sắp xếp theo thứ tự tăng dần:
 
 > Sort sorts data in ascending order as determined by the Less method.
 > It makes one call to data.Len to determine n and `O(n*log(n))` calls to
 > data.Less and data.Swap. The sort is not guaranteed to be stable.
 
-nên ở đây route có priority cao nhất sẽ đứng đầu slice.
+Nhưng function `Less` ở đây trả về true khi phần tử `r[i].priority > r[j].priority`, tức priority càng cao thì xem như càng đứng trước, vì vậy route có priority cao nhất sẽ đứng đầu.
 
 Khi `ServeHTTP` nhận HTTP request, nó duyệt qua các routes, route có priority cao hơn được duyệt trước:
 
