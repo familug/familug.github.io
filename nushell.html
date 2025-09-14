@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="nushell, jq, yq, jmespath, json, yaml, csv, cli, frontpage, " />
+
+<meta property="og:title" content="Tìm kiếm công cụ xử lý JSON, YAML xịn nhất: jq, yq, jmes... nushell "/>
+<meta property="og:url" content="./nushell.html" />
+<meta property="og:description" content="Ngành IT ngày nay ngập tràn JSON và YAML, 2 định dạng này ở khắp mọi nơi. Việc sử dụng các CLI tool truyền thống (ví dụ: grep) không hiệu quả khiến người dùng phải tìm kiếm những công cụ mới. Hàng trăm công cụ được sinh ra để truy …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-04-16T00:00:00+07:00" />
+<meta name="twitter:title" content="Tìm kiếm công cụ xử lý JSON, YAML xịn nhất: jq, yq, jmes... nushell ">
+<meta name="twitter:description" content="Ngành IT ngày nay ngập tràn JSON và YAML, 2 định dạng này ở khắp mọi nơi. Việc sử dụng các CLI tool truyền thống (ví dụ: grep) không hiệu quả khiến người dùng phải tìm kiếm những công cụ mới. Hàng trăm công cụ được sinh ra để truy …">
+
+        <title>Tìm kiếm công cụ xử lý JSON, YAML xịn nhất: jq, yq, jmes... nushell  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./nushell.html">
+                Tìm kiếm công cụ xử lý JSON, YAML xịn nhất: jq, yq, jmes... nushell
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Ngành IT ngày nay ngập tràn JSON và YAML, 2 định dạng này ở khắp mọi nơi. Việc sử dụng các CLI tool truyền thống (ví dụ: grep) không hiệu quả khiến người dùng phải tìm kiếm những công cụ mới. Hàng trăm công cụ được sinh ra để truy cập/xử lý dữ liệu từ 1 JSON object, và cộng đồng khá ưa chuộng <code>jq</code>. Nhưng đây đã phải là lựa chọn tốt nhất để "xem và xử lý" JSON, YAML...? Thử các công cụ này để tìm ra giải pháp xịn nhất.</p>
+<h3>JMESPath</h3>
+<p>JMESPath không phổ biến khi xử lý JSON tùy ý, nhưng là cú pháp có sẵn khi dùng <code>aws cli --query</code>.
+JMESPath cũng có câu lệnh cli là <code>jp</code> <a href="https://github.com/jmespath/jp">https://github.com/jmespath/jp</a> nhưng ít người biết.
+Cú pháp JMESPath <a href="https://jmespath.org/">https://jmespath.org/</a> trông hơi giống <code>jq</code> nhưng không phải, và tính năng cũng kém hơn:</p>
+<div class="highlight"><pre><span></span><code><span class="c"> aws </span><span class="nb">--</span><span class="c">region ap</span><span class="nb">-</span><span class="c">southeast</span><span class="nb">-</span><span class="c">1 lambda  list</span><span class="nb">-</span><span class="c">functions </span><span class="nb">--</span><span class="c">query &#39;Functions</span><span class="k">[</span><span class="c">?LastModified </span><span class="nv">&gt;</span><span class="c"> `2023</span><span class="nb">-</span><span class="c">01</span><span class="nb">-</span><span class="c">02`</span><span class="k">]</span><span class="nt">.</span><span class="k">[</span><span class="c">FunctionName</span><span class="nt">,</span><span class="c">LastModified</span><span class="k">]</span><span class="c">&#39; </span><span class="nb">--</span><span class="c">output table</span>
+<span class="nb">-------------------------------------------------</span><span class="c"></span>
+<span class="c">|                 ListFunctions                 |</span>
+<span class="nb">+--------------+--------------------------------+</span><span class="c"></span>
+<span class="c">|  myfunction2 |  2023</span><span class="nb">-</span><span class="c">12</span><span class="nb">-</span><span class="c">14T13:49:38</span><span class="nt">.</span><span class="c">000</span><span class="nb">+</span><span class="c">0000  |</span>
+<span class="c">|  pymicloud1  |  2023</span><span class="nb">-</span><span class="c">12</span><span class="nb">-</span><span class="c">14T16:20:11</span><span class="nt">.</span><span class="c">000</span><span class="nb">+</span><span class="c">0000  |</span>
+<span class="c">|  hntop       |  2024</span><span class="nb">-</span><span class="c">01</span><span class="nb">-</span><span class="c">08T14:10:58</span><span class="nt">.</span><span class="c">000</span><span class="nb">+</span><span class="c">0000  |</span>
+<span class="nb">+--------------+--------------------------------+</span><span class="c"></span>
+</code></pre></div>
+
+<p>khá kỳ lạ khi phải sử dụng backtick <code>`2023-01-02`</code> để quote JSON value, nếu dùng <code>"2023-01-02"</code> sẽ không nhận được gì!</p>
+<p>aws cli có <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-filter.html#cli-usage-filter-server-side">2 kiểu filter: server side và client side</a>. <code>--query</code> filter từ kết quả đã nhận được từ AWS, trong khi <code>--filter</code> sẽ filter từ phía API của AWS.</p>
+<p>Có vấn đề với cả 2 kiểu filter này:</p>
+<ul>
+<li>server filter: chỉ một số service hỗ trợ option này như ec2, rds, và syntax của mỗi cái cũng khác nhau</li>
+<li>client filter: mỗi lần chỉnh sửa nội dung query là 1 lần gọi tới AWS API. Sau 10 lần chỉnh sửa để viết được query đúng thì mất rất nhiều thời gian.</li>
+</ul>
+<p>Kết luận: rất khó dùng hàng ngày, trừ khi viết script cần filter trực tiếp lấy ra 1 vài giá trị. Thay vì dùng aws cli --query, có thể output ra JSON rồi dùng các công cụ sau để xử lý.</p>
+<div class="highlight"><pre><span></span><code><span class="n">aws</span><span class="w"> </span><span class="o">--</span><span class="n">region</span><span class="w"> </span><span class="n">ap</span><span class="o">-</span><span class="n">southeast</span><span class="o">-</span><span class="mh">1</span><span class="w"> </span><span class="n">lambda</span><span class="w">  </span><span class="n">list</span><span class="o">-</span><span class="n">functions</span><span class="w">  </span><span class="o">--</span><span class="k">output</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">functions</span><span class="p">.</span><span class="n">json</span><span class="w"></span>
+</code></pre></div>
+
+<h3>python với Jupyter notebook</h3>
+<p>Python hỗ trợ JSON từ stdlib <code>import json</code>, mọi biến đổi if else for... đều có thể thực hiện bằng cú pháp ngắn gọn.
+Khi làm việc với AWS API, <code>import boto3</code> rồi viết code trên Jupyter notebook là một lựa chọn rất hấp dẫn:</p>
+<ul>
+<li>output được lưu trên Jupyter notebook</li>
+<li>code có thể export ra file python để làm script dùng trong hệ thống</li>
+<li>dễ dàng lấy output của function call này làm input cho function call khác, vì đây là lập trình.</li>
+</ul>
+<h3>jq</h3>
+<p><code>jq</code> <a href="https://jqlang.org/tutorial/">https://jqlang.org/tutorial/</a> là công cụ phổ biến nhất để xem và xử lý JSON trên CLI.</p>
+<p>Nhược điểm: không hỗ trợ YAML.</p>
+<p>Hiển nhiên là phải học cú pháp của <code>jq</code>, điều này là tất yếu vì tất cả các phương án trong bài này đều cần học 1 ngôn ngữ query/lập trình.</p>
+<p>Ví dụ sau lấy ra các title có chữ "remote" từ ngày 2025-04-13 trên GitHub API repo <code>awesome-jobs/vietnam</code>:</p>
+<div class="highlight"><pre><span></span><code>curl -o issues.json  https://api.github.com/repos/awesome-jobs/vietnam/issues
+cat issues.json | jq &#39;.[] | {created_at,title,html_url} | select(.created_at &gt; &quot;2025-04-13&quot; and (.title | ascii_downcase | test(&quot;remote&quot;)))&#39;
+</code></pre></div>
+
+<p>Output:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;created_at&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;2025-04-16T08:48:11Z&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;[Remote Fulltime] Frontend Software Engineer - $3000 Gross - Basic English communication&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;html_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;https://github.com/awesome-jobs/vietnam/issues/4676&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;created_at&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;2025-04-14T11:39:43Z&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;title&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;[Remote Fulltime] Mobile Tech Lead - $4000 Gross&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;html_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s">&quot;https://github.com/awesome-jobs/vietnam/issues/4674&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<h3>yq</h3>
+<p><a href="https://github.com/mikefarah/yq">https://github.com/mikefarah/yq</a></p>
+<p><code>yq</code> giống như <code>jq</code> nhưng hỗ trợ cả file YAML.</p>
+<blockquote>
+<p>yq is a portable command-line YAML, JSON, XML, CSV, TOML and properties processor</p>
+</blockquote>
+<p>nên có vẻ như nếu đã dùng <code>jq</code> thì không có lý do gì để không dùng <code>yq</code> cả.</p>
+<h3>Nushell</h3>
+<p><a href="https://github.com/nushell/nushell">https://github.com/nushell/nushell</a></p>
+<blockquote>
+<p>A new type of shell.</p>
+</blockquote>
+<p>Nushell là 1 shell mới hiện đại, tương tự các shell truyền thống <code>bash</code>, <code>zsh</code>,... nhưng output/input của mỗi câu lệnh là data có cấu trúc (structured data) thay vì string.</p>
+<p>Đừng để bị đánh lừa bởi chữ <code>shell</code> vì Nushell vừa là shell, vừa là 1 ngôn ngữ lập trình functional. Cũng không cần phải dùng Nushell thay zsh/bash nếu không muốn, hãy coi nó như 1 công cụ xử lý dữ liệu trực tiếp.</p>
+<p><center>
+<img alt="nushell" src="./images/nushell.png">
+</center></p>
+<p>Các command trong Nushell được viết lại hoàn toàn (bằng Rust) để hỗ trợ input/output ra các structured data thay vì string.</p>
+<p>Bật trên container <code>podman run -it --rm ghcr.io/nushell/nushell</code></p>
+<div class="highlight"><pre><span></span><code>~&gt; ls /etc/ | sort-by modified | take 5
+╭───┬──────────────┬──────┬───────┬──────────────╮
+│ # │     name     │ type │ size  │   modified   │
+├───┼──────────────┼──────┼───────┼──────────────┤
+│ 0 │ /etc/fstab   │ file │  89 B │ 3 months ago │
+│ 1 │ /etc/group-  │ file │ 510 B │ 3 months ago │
+│ 2 │ /etc/inittab │ file │ 570 B │ 3 months ago │
+│ 3 │ /etc/modules │ file │  15 B │ 3 months ago │
+│ 4 │ /etc/motd    │ file │ 284 B │ 3 months ago │
+╰───┴──────────────┴──────┴───────┴──────────────╯
+</code></pre></div>
+
+<p>Mỗi dòng ở dây là 1 <code>record</code> (như struct/named tuple/data class).
+Output của Nushell thường là 1 bảng, dễ dàng truy cập từng cột (như pandas).
+Nushell thậm chí có sẵn http client, không cần tới curl, builtin hỗ trợ <a href="https://www.nushell.sh/book/loading_data.html#sqlite">JSON, YAML, CSV, sqlite, ...</a> ...</p>
+<p>Tài liệu: <a href="https://www.nushell.sh/book/">https://www.nushell.sh/book/</a></p>
+<h4>Gửi HTTP GET request, xử lý JSON</h4>
+<div class="highlight"><pre><span></span><code><span class="n">http</span><span class="w"> </span><span class="n">get</span><span class="w"> </span><span class="n">https</span><span class="o">:</span><span class="c1">//api.github.com/repos/awesome-jobs/vietnam/issues |</span>
+<span class="n">select</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="n">html_url</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="n">where</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">2025</span><span class="mo">-04</span><span class="mi">-13</span><span class="err">&#39;</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">$it</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="o">|</span><span class="w">  </span><span class="n">str</span><span class="w"> </span><span class="n">downcase</span><span class="w">  </span><span class="p">)</span><span class="w"> </span><span class="n">has</span><span class="w"> </span><span class="err">&#39;</span><span class="n">remote</span><span class="err">&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="n">upsert</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">|</span><span class="n">it</span><span class="o">|</span><span class="w"> </span><span class="n">$it</span><span class="p">.</span><span class="n">created_at</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="n">substring</span><span class="w"> </span><span class="mf">0..9</span><span class="p">}</span><span class="w"> </span><span class="o">|</span><span class="w"></span>
+<span class="n">to</span><span class="w"> </span><span class="n">yaml</span><span class="w"></span>
+<span class="cp"># output</span>
+<span class="o">-</span><span class="w"> </span><span class="n">created_at</span><span class="o">:</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">2025</span><span class="mo">-04</span><span class="mi">-16</span><span class="err">&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nl">title</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="p">[</span><span class="n">Remote</span><span class="w"> </span><span class="n">Fulltime</span><span class="p">]</span><span class="w"> </span><span class="n">Frontend</span><span class="w"> </span><span class="n">Software</span><span class="w"> </span><span class="n">Engineer</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">$3000</span><span class="w"> </span><span class="n">Gross</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Basic</span><span class="w"> </span><span class="n">English</span><span class="w"> </span><span class="n">communication</span><span class="err">&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nl">html_url</span><span class="p">:</span><span class="w"> </span><span class="n">https</span><span class="o">:</span><span class="c1">//github.com/awesome-jobs/vietnam/issues/4676</span>
+<span class="o">-</span><span class="w"> </span><span class="n">created_at</span><span class="o">:</span><span class="w"> </span><span class="err">&#39;</span><span class="mi">2025</span><span class="mo">-04</span><span class="mi">-14</span><span class="err">&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nl">title</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="p">[</span><span class="n">Remote</span><span class="w"> </span><span class="n">Fulltime</span><span class="p">]</span><span class="w"> </span><span class="n">Mobile</span><span class="w"> </span><span class="n">Tech</span><span class="w"> </span><span class="n">Lead</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">$4000</span><span class="w"> </span><span class="n">Gross</span><span class="err">&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="nl">html_url</span><span class="p">:</span><span class="w"> </span><span class="n">https</span><span class="o">:</span><span class="c1">//github.com/awesome-jobs/vietnam/issues/4674</span>
+</code></pre></div>
+
+<p>hay dùng regex:</p>
+<div class="highlight"><pre><span></span><code>where created_at &gt; &#39;2025-04-13&#39; and title  =~ &#39;(?i)remote&#39;
+</code></pre></div>
+
+<blockquote>
+<p>=~ or like    regex match / string contains another</p>
+</blockquote>
+<h4>Tính toán, biến đổi map, filter, reduce</h4>
+<p>Làm bài ProjectEuler 1, ghi ra file pe1:</p>
+<div class="highlight"><pre><span></span><code>~&gt; 0..999 | filter {|i| $i mod 3 == 0 or $i mod 5 == 0} | reduce {|x,acc| $acc + $x} | save pe1.txt
+~&gt; open pe1.txt
+233168
+</code></pre></div>
+
+<p>chú ý có dấu space <code>$acc + $x</code>.</p>
+<h4>update YAML file</h4>
+<div class="highlight"><pre><span></span><code>~&gt; cat pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+~&gt; open pod.yaml | upsert spec.containers.0.image nginx:latest | save pod2.yaml
+~&gt; cat pod2.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+</code></pre></div>
+
+<p>Nushell rất khác, nên mọi kiến thức về các shell khác không dùng được ở đây, ví dụ <code>save</code> để ghi ra file chứ không phải <code>&gt;</code>. Cách set biến environment cũng khác.
+<a href="https://www.nushell.sh/book/coming_from_bash.html">https://www.nushell.sh/book/coming_from_bash.html</a></p>
+<p>Ở đây chỉ bàn tới việc dùng nushell để khám phá, biến đổi JSON/YAML.</p>
+<p>Nushell còn có tính năng hỗ trợ viết tool CLI rất đơn giản và mạnh mẽ sẽ khám phá vào bài sau.</p>
+<h3>Kết luận</h3>
+<p>Thời đại mới cần những công cụ mới. Nushell đã mở lối đi riêng trở thành một công cụ (ít người biết) rất mạnh mẽ cho thời đại AI 4.0.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-04-16T00:00:00+07:00">Wed 16 April 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#cli-ref">cli
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#csv-ref">csv
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#jmespath-ref">jmespath
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#jq-ref">jq
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#json-ref">json
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#nushell-ref">nushell
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#yaml-ref">yaml
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#yq-ref">yq
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

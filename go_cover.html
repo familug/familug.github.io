@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="readcode, go, prometheus, metric, timeseries, frontpage, " />
+
+<meta property="og:title" content="[go] Viết test code prometheus xem delta và rate tính thế nào "/>
+<meta property="og:url" content="./go_cover.html" />
+<meta property="og:description" content="Bài trước đã dùng mắt để chạy code funcDelta và funcRate của Prometheus để xem code chạy qua những dòng nào, những phép tính nào được tính trong extrapolatedRate. Bài này sẽ sử dụng go test coverage để xem code nào được chạy. Viết test Prometheus Code của funcDelta và …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-09-24T00:00:00+07:00" />
+<meta name="twitter:title" content="[go] Viết test code prometheus xem delta và rate tính thế nào ">
+<meta name="twitter:description" content="Bài trước đã dùng mắt để chạy code funcDelta và funcRate của Prometheus để xem code chạy qua những dòng nào, những phép tính nào được tính trong extrapolatedRate. Bài này sẽ sử dụng go test coverage để xem code nào được chạy. Viết test Prometheus Code của funcDelta và …">
+
+        <title>[go] Viết test code prometheus xem delta và rate tính thế nào  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./go_cover.html">
+                [go] Viết test code prometheus xem delta và rate tính thế nào
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p><a href="./prometheus_rate.html">Bài trước</a> đã dùng mắt để chạy code <code>funcDelta</code> và <code>funcRate</code> của Prometheus để xem code chạy qua những dòng nào, những phép tính nào được tính trong <code>extrapolatedRate</code>.
+Bài này sẽ sử dụng <a href="https://go.dev/blog/cover">go test coverage</a> để xem code nào được chạy.</p>
+<h2>Viết test Prometheus</h2>
+<p>Code của <code>funcDelta</code> và <code>funcRate</code> đều nằm trong file <code>promql/functions.go</code>, theo quy ước chung của Go, test sẽ nằm trong <code>promql/functions_test.go</code>, nhưng file này chỉ chứa có 2 test:</p>
+<div class="highlight"><pre><span></span><code><span class="o">$</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="o">^</span><span class="k">func</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="n">functions</span><span class="o">*</span><span class="n">_test</span><span class="o">.</span><span class="n">go</span><span class="w"></span>
+<span class="n">functions_internal_test</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">1</span><span class="w"></span>
+<span class="n">functions_test</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2</span><span class="w"></span>
+</code></pre></div>
+
+<p>Lý do là <a href="https://prometheus.io/docs/prometheus/latest/querying/basics/#querying-prometheus">PromQL</a> tự tạo ra 1 kiểu/ngôn ngữ test riêng cho ngôn ngữ PromQL, nằm trong thư mục <code>promqltest/</code> chứ không phải Golang test thông thường. file <code>promqltest/README.md</code> viết:</p>
+<blockquote>
+<p>The PromQL test scripting language</p>
+<p>This package contains two things:</p>
+<ul>
+<li>an implementation of a test scripting language for PromQL engines</li>
+<li>a predefined set of tests written in that scripting language</li>
+</ul>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ find promql/promqltest
+promql/promqltest
+promql/promqltest/README.md
+promql/promqltest/testdata
+promql/promqltest/testdata/aggregators.test
+promql/promqltest/testdata/at_modifier.test
+promql/promqltest/testdata/collision.test
+promql/promqltest/testdata/literals.test
+promql/promqltest/testdata/selectors.test
+promql/promqltest/testdata/staleness.test
+promql/promqltest/testdata/trig_functions.test
+promql/promqltest/testdata/range_queries.test
+promql/promqltest/testdata/functions.test
+promql/promqltest/testdata/native_histograms.test
+promql/promqltest/testdata/operators.test
+promql/promqltest/testdata/limit.test
+promql/promqltest/testdata/histograms.test
+promql/promqltest/testdata/subquery.test
+promql/promqltest/test.go
+promql/promqltest/test_test.go
+</code></pre></div>
+
+<p>may thay, trong <code>functions_test</code> vẫn có 1 function, và 1 là đủ để làm ví dụ rồi:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">TestDeriv</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// https://github.com/prometheus/prometheus/issues/2674#issuecomment-315439393</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// This requires more precision than the usual test system offers,</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// so we test it by hand.</span><span class="w"></span>
+</code></pre></div>
+
+<p>Copy function này, tạo function để test funcDelta:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">TestDelta</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">storage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">teststorage</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">storage</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">opts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">promql</span><span class="p">.</span><span class="nx">EngineOpts</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">Logger</span><span class="p">:</span><span class="w">     </span><span class="kc">nil</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">Reg</span><span class="p">:</span><span class="w">        </span><span class="kc">nil</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">MaxSamples</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">Timeout</span><span class="p">:</span><span class="w">    </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">engine</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">promql</span><span class="p">.</span><span class="nx">NewEngine</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">storage</span><span class="p">.</span><span class="nx">Appender</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">metric</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">labels</span><span class="p">.</span><span class="nx">FromStrings</span><span class="p">(</span><span class="s">&quot;__name__&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745659174</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745674174</span><span class="p">,</span><span class="w"> </span><span class="mi">122</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745689174</span><span class="p">,</span><span class="w"> </span><span class="mi">134</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745704174</span><span class="p">,</span><span class="w"> </span><span class="mi">149</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">NoError</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">Commit</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">query</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nx">NewInstantQuery</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">storage</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;delta(foo[1m])&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">timestamp</span><span class="p">.</span><span class="nx">Time</span><span class="p">(</span><span class="mi">1726745705174</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">NoError</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">query</span><span class="p">.</span><span class="nx">Exec</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">NoError</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">vec</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Vector</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">Len</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">vec</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Expected 1 result, got %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">vec</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="nx">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Expected 0.0 as value, got %f&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Chạy test tạo coverprofile</p>
+<div class="highlight"><pre><span></span><code>$ go <span class="nb">test</span> -run TestDelta -coverprofile<span class="o">=</span>coverage.delta
+--- FAIL: TestDelta <span class="o">(</span><span class="m">0</span>.01s<span class="o">)</span>
+    functions_test.go:61:
+            Error Trace:    ~/prometheus/promql/functions_test.go:61
+            Error:          Not equal:
+                            expected: <span class="m">0</span>
+                            actual  : <span class="m">38</span>.666666666666664
+            Test:           TestDelta
+            Messages:       Expected <span class="m">0</span>.0 as value, got <span class="m">38</span>.666667
+FAIL
+coverage: <span class="m">14</span>.5% of statements
+<span class="nb">exit</span> status <span class="m">1</span>
+FAIL    github.com/prometheus/prometheus/promql <span class="m">0</span>.023s
+$ go tool cover -html<span class="o">=</span>coverage.delta
+</code></pre></div>
+
+<p>File này chỉ là 1 file text với nội dung</p>
+<div class="highlight"><pre><span></span><code><span class="n">mode</span><span class="o">:</span><span class="w"> </span><span class="kd">set</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">engine</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">86.41</span><span class="o">,</span><span class="mf">88.2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">engine</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">102.41</span><span class="o">,</span><span class="mf">104.2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">engine</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">106.42</span><span class="o">,</span><span class="mf">108.2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">engine</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">110.43</span><span class="o">,</span><span class="mf">112.2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">functions</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">61.116</span><span class="o">,</span><span class="mf">65.2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">functions</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">71.148</span><span class="o">,</span><span class="mf">89.60</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="n">github</span><span class="o">.</span><span class="na">com</span><span class="sr">/prometheus/prometheus/promql/</span><span class="n">functions</span><span class="o">.</span><span class="na">go</span><span class="o">:</span><span class="mf">89.60</span><span class="o">,</span><span class="mf">91.3</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+</code></pre></div>
+
+<p>mở trình duyệt với hình:
+<img alt="delta" src="./images/delta_cover.webp"></p>
+<p>Tương tự để test rate:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">TestRate</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">storage</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">teststorage</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">storage</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">opts</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">promql</span><span class="p">.</span><span class="nx">EngineOpts</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">Logger</span><span class="p">:</span><span class="w">     </span><span class="kc">nil</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">Reg</span><span class="p">:</span><span class="w">        </span><span class="kc">nil</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">MaxSamples</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">Timeout</span><span class="p">:</span><span class="w">    </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">engine</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">promql</span><span class="p">.</span><span class="nx">NewEngine</span><span class="p">(</span><span class="nx">opts</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">storage</span><span class="p">.</span><span class="nx">Appender</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">metric</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">labels</span><span class="p">.</span><span class="nx">FromStrings</span><span class="p">(</span><span class="s">&quot;__name__&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745659174</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745674174</span><span class="p">,</span><span class="w"> </span><span class="mi">122</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745689174</span><span class="p">,</span><span class="w"> </span><span class="mi">134</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">a</span><span class="p">.</span><span class="nx">Append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">metric</span><span class="p">,</span><span class="w"> </span><span class="mi">1726745704174</span><span class="p">,</span><span class="w"> </span><span class="mi">149</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">NoError</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">Commit</span><span class="p">())</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">query</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">engine</span><span class="p">.</span><span class="nx">NewInstantQuery</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">storage</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rate(foo[1m])&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">timestamp</span><span class="p">.</span><span class="nx">Time</span><span class="p">(</span><span class="mi">1726745705174</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">NoError</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">query</span><span class="p">.</span><span class="nx">Exec</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">NoError</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Err</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">vec</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Vector</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">Len</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="nx">vec</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Expected 1 result, got %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">vec</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="nx">require</span><span class="p">.</span><span class="nx">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="nx">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Expected 0.0 as value, got %f&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Chạy</p>
+<div class="highlight"><pre><span></span><code>$ go <span class="nb">test</span> -run TestRate -coverprofile<span class="o">=</span>coverage.rate
+--- FAIL: TestRate <span class="o">(</span><span class="m">0</span>.01s<span class="o">)</span>
+    functions_test.go:61:
+            Error Trace:    /home/hvn/code/prometheus/promql/functions_test.go:61
+            Error:          Not equal:
+                            expected: <span class="m">0</span>
+                            actual  : <span class="m">0</span>.6444444444444444
+            Test:           TestRate
+            Messages:       Expected <span class="m">0</span>.0 as value, got <span class="m">0</span>.644444
+FAIL
+coverage: <span class="m">14</span>.9% of statements
+<span class="nb">exit</span> status <span class="m">1</span>
+FAIL    github.com/prometheus/prometheus/promql <span class="m">0</span>.021s
+$ go tool cover -html<span class="o">=</span>coverage.rate
+</code></pre></div>
+
+<p><img alt="rate" src="./images/rate_cover.webp"></p>
+<h2>Kết luận</h2>
+<p>Prometheus function không tính sai, nó chỉ tính đúng như trong tài liệu mô tả. Hãy đọc tài liệu.
+Hoặc đọc code.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://tuoitre.vn/ban-doc-tuoi-tre-lien-tuc-dong-gop-gui-den-nguoi-dan-mien-bac-20240910182204886.htm">Ủng hộ đồng bào bị ảnh hưởng bởi cơn bão số 3.</a></p>
+<blockquote>
+<p>Báo Tuổi Trẻ, Ngân hàng Công thương chi nhánh 3, TP.HCM. Số tài khoản: 113000006100 (Việt Nam đồng). Nội dung: Ủng hộ đồng bào bị ảnh hưởng bởi cơn bão số 3.</p>
+</blockquote>
+<p><img alt="yagi" src="./images/yagi.webp"></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-09-24T00:00:00+07:00">Tue 24 September 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#metric-ref">metric
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#prometheus-ref">prometheus
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#readcode-ref">readcode
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="./tags.html#timeseries-ref">timeseries
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

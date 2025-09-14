@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="til, k8s, kubernetes, frontpage, " />
+
+<meta property="og:title" content="[TIL] K8S Opentelemetry operator thêm environment cho pod "/>
+<meta property="og:url" content="./til-otel-operator.html" />
+<meta property="og:description" content="Các kubernetes operator có đủ loại và đủ tính năng, nhưng tự thêm biến environment vào cho pod (sau khi thêm annotations vào pod) thì nay thấy có OpenTelemetry Operator, trích code: // injectCommonSDKConfig adds common SDK configuration environment variables to the necessary pod // agentIndex represents the index of the pod …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-02-05T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] K8S Opentelemetry operator thêm environment cho pod ">
+<meta name="twitter:description" content="Các kubernetes operator có đủ loại và đủ tính năng, nhưng tự thêm biến environment vào cho pod (sau khi thêm annotations vào pod) thì nay thấy có OpenTelemetry Operator, trích code: // injectCommonSDKConfig adds common SDK configuration environment variables to the necessary pod // agentIndex represents the index of the pod …">
+
+        <title>[TIL] K8S Opentelemetry operator thêm environment cho pod  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./til-otel-operator.html">
+                [TIL] K8S Opentelemetry operator thêm environment cho pod
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Các kubernetes operator có đủ loại và đủ tính năng, nhưng tự thêm biến environment vào cho pod (sau khi thêm annotations vào pod) thì nay thấy có OpenTelemetry Operator, trích <a href="https://github.com/open-telemetry/opentelemetry-operator/blob/6782fdfb2a4cb59541bec2299a4553cd952debee/pkg/instrumentation/sdk.go#L296">code</a>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// injectCommonSDKConfig adds common SDK configuration environment variables to the necessary pod</span><span class="w"></span>
+<span class="c1">// agentIndex represents the index of the pod the needs the env vars to instrument the application.</span><span class="w"></span>
+<span class="c1">// appIndex represents the index of the pod the will produce the telemetry.</span><span class="w"></span>
+<span class="c1">// When the pod handling the instrumentation is the same as the pod producing the telemetry agentIndex</span><span class="w"></span>
+<span class="c1">// and appIndex should be the same value.  This is true for dotnet, java, nodejs, and python instrumentations.</span><span class="w"></span>
+<span class="c1">// Go requires the agent to be a different container in the pod, so the agentIndex should represent this new sidecar</span><span class="w"></span>
+<span class="c1">// and appIndex should represent the application being instrumented.</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">i</span><span class="w"> </span><span class="o">*</span><span class="nx">sdkInjector</span><span class="p">)</span><span class="w"> </span><span class="nx">injectCommonSDKConfig</span><span class="w"></span>
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+<span class="w">    </span><span class="nx">configureExporter</span><span class="p">(</span><span class="nx">otelinst</span><span class="p">.</span><span class="nx">Spec</span><span class="p">.</span><span class="nx">Exporter</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">pod</span><span class="p">,</span><span class="w"> </span><span class="nx">container</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="c1">// https://github.com/open-telemetry/opentelemetry-operator/blob/af567cdfd563e8a5c7a221337c4ff5edfbdf63b9/pkg/instrumentation/exporter.go#L17</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">configureExporter</span><span class="p">(</span><span class="nx">exporter</span><span class="w"> </span><span class="nx">v1alpha1</span><span class="p">.</span><span class="nx">Exporter</span><span class="p">,</span><span class="w"> </span><span class="nx">pod</span><span class="w"> </span><span class="o">*</span><span class="nx">corev1</span><span class="p">.</span><span class="nx">Pod</span><span class="p">,</span><span class="w"> </span><span class="nx">container</span><span class="w"> </span><span class="o">*</span><span class="nx">corev1</span><span class="p">.</span><span class="nx">Container</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">exporter</span><span class="p">.</span><span class="nx">Endpoint</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">getIndexOfEnv</span><span class="p">(</span><span class="nx">container</span><span class="p">.</span><span class="nx">Env</span><span class="p">,</span><span class="w"> </span><span class="nx">constants</span><span class="p">.</span><span class="nx">EnvOTELExporterOTLPEndpoint</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="nx">container</span><span class="p">.</span><span class="nx">Env</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">container</span><span class="p">.</span><span class="nx">Env</span><span class="p">,</span><span class="w"> </span><span class="nx">corev1</span><span class="p">.</span><span class="nx">EnvVar</span><span class="p">{</span><span class="w"></span>
+<span class="w">                </span><span class="nx">Name</span><span class="p">:</span><span class="w">  </span><span class="nx">constants</span><span class="p">.</span><span class="nx">EnvOTELExporterOTLPEndpoint</span><span class="p">,</span><span class="w"></span>
+<span class="w">                </span><span class="nx">Value</span><span class="p">:</span><span class="w"> </span><span class="nx">exporter</span><span class="p">.</span><span class="nx">Endpoint</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="p">})</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+</code></pre></div>
+
+<p>sau khi thêm annotations:</p>
+<div class="highlight"><pre><span></span><code><span class="n">annotations</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="n">instrumentation</span><span class="o">.</span><span class="na">opentelemetry</span><span class="o">.</span><span class="na">io</span><span class="o">/</span><span class="n">inject</span><span class="o">-</span><span class="n">sdk</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<p>sẽ thêm nhiều environments <code>OTEL_.*</code> cho pod.</p>
+<p>Hết.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-02-05T00:00:00+07:00">Wed 05 February 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#k8s-ref">k8s
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#kubernetes-ref">kubernetes
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#til-ref">til
+                    <span class="superscript">7</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="clojure, vscode, frontpage, " />
+
+<meta property="og:title" content="Code Clojure với VSCode + Calva, vẽ đồ thị với Clerk "/>
+<meta property="og:url" content="./code-clojure-voi-vscode-calva-ve-do-thi-voi-clerk.html" />
+<meta property="og:description" content="Bài hướng dẫn siêu tốc để cài đặt và code Clojure với VS Code, ngoài ra có thể vẽ đồ thị như Jupyter. Cài đặt Clojure Theo hướng dẫn trên trang chủ https://clojure.org/guides/install_clojure#_posix_instructions Test trên debian 12 bookworm: Cài java sudo apt update sudo apt …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-01-24T00:00:00+07:00" />
+<meta name="twitter:title" content="Code Clojure với VSCode + Calva, vẽ đồ thị với Clerk ">
+<meta name="twitter:description" content="Bài hướng dẫn siêu tốc để cài đặt và code Clojure với VS Code, ngoài ra có thể vẽ đồ thị như Jupyter. Cài đặt Clojure Theo hướng dẫn trên trang chủ https://clojure.org/guides/install_clojure#_posix_instructions Test trên debian 12 bookworm: Cài java sudo apt update sudo apt …">
+
+        <title>Code Clojure với VSCode + Calva, vẽ đồ thị với Clerk  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./code-clojure-voi-vscode-calva-ve-do-thi-voi-clerk.html">
+                Code Clojure với VSCode + Calva, vẽ đồ thị với Clerk
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Bài hướng dẫn siêu tốc để cài đặt và code Clojure với VS Code, ngoài ra có thể vẽ đồ thị như Jupyter.</p>
+<h3>Cài đặt</h3>
+<h4>Clojure</h4>
+<p>Theo hướng dẫn trên trang chủ <a href="https://clojure.org/guides/install_clojure#_posix_instructions">https://clojure.org/guides/install_clojure#_posix_instructions</a></p>
+<p>Test trên debian 12 bookworm:</p>
+<p>Cài java</p>
+<div class="highlight"><pre><span></span><code>sudo apt update
+sudo apt install -y rlwrap curl openjdk-17-jre
+</code></pre></div>
+
+<p>Cài clojure</p>
+<div class="highlight"><pre><span></span><code>curl -L -O https://github.com/clojure/brew-install/releases/latest/download/posix-install.sh
+chmod +x posix-install.sh
+sudo ./posix-install.sh
+</code></pre></div>
+
+<p>sau khi cài xong, gõ lệnh <code>clj</code> thấy kết quả sau là được:</p>
+<div class="highlight"><pre><span></span><code>$ clj --version
+Clojure CLI version <span class="m">1</span>.12.0.1488
+</code></pre></div>
+
+<h4>Editor VS Code</h4>
+<p>Cài VS Code <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a> rồi cài plugin <a href="https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva">Calva</a>.</p>
+<h4>Tạo repo</h4>
+<p>Tạo repo với file <code>deps.edn</code> theo hướng dẫn trang chủ <a href="https://clojure.org/guides/deps_and_cli#_writing_a_program">https://clojure.org/guides/deps_and_cli#_writing_a_program</a></p>
+<div class="highlight"><pre><span></span><code>$ mkdir hello-world
+$ <span class="nb">cd</span> hello-world
+$ <span class="nb">echo</span> <span class="o">{}</span> &gt; deps.edn
+$ mkdir src
+</code></pre></div>
+
+<p>Tạo file src/hello.clj:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="kd">ns </span><span class="nv">hello</span><span class="p">)</span><span class="w"></span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">hello</span><span class="w"> </span><span class="p">[</span><span class="nv">name</span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Hello, &quot;</span><span class="w"> </span><span class="nb">name </span><span class="s">&quot;!&quot;</span><span class="p">))</span><span class="w"></span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">run</span><span class="w"> </span><span class="p">[</span><span class="nv">args</span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">hello</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)))</span><span class="w"></span>
+</code></pre></div>
+
+<p>Chạy chương trình:</p>
+<div class="highlight"><pre><span></span><code>clj -X hello/run
+Hello, world!
+</code></pre></div>
+
+<h3>Tài liệu học clojure</h3>
+<ul>
+<li>Trang chủ basic <a href="https://clojure.org/guides/learn/clojure">https://clojure.org/guides/learn/clojure</a></li>
+<li>Clojure distilled <a href="https://yogthos.net/ClojureDistilled.html#further-reading">https://yogthos.net/ClojureDistilled.html#further-reading</a></li>
+<li>Clojure from the ground up <a href="https://aphyr.com/posts/301-clojure-from-the-ground-up-welcome">https://aphyr.com/posts/301-clojure-from-the-ground-up-welcome</a></li>
+</ul>
+<h3>Viết chương trình lấy hot job trên mạng</h3>
+<ul>
+<li>Dùng http client kết nối đến API của GitHub</li>
+<li>Parse JSON với thư viện cheshire</li>
+<li>Hiển thị dạng bảng với pprint (pretty print)</li>
+<li>Load file code thành 1 "notebook" với Clerk và vẽ đồ thị</li>
+</ul>
+<h4>deps.edn</h4>
+<p>deps.edn chứa các thông tin về project, tương tự package.json trong nodejs, go.mod trong Golang, cargo.toml trong Rust, hay pyproject.toml trong Python.</p>
+<p>Cú pháp EDN gần giống JSON, sửa file <code>deps.edn</code> để thêm 2 dependencies vào project này:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="ss">:deps</span><span class="w"> </span><span class="p">{</span><span class="nv">cheshire</span><span class="w"> </span><span class="p">{</span><span class="ss">:mvn/version</span><span class="w"> </span><span class="s">&quot;5.13.0&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="nv">io.github.nextjournal/clerk</span><span class="w"> </span><span class="p">{</span><span class="ss">:mvn/version</span><span class="w"> </span><span class="s">&quot;0.17.1102&quot;</span><span class="p">}}}</span><span class="w"></span>
+</code></pre></div>
+
+<p>đây là 1 dictionary/map chứa key ":deps" có value là 1 dictionary/map chứa 2 cặp key value là tên package - phiên bản của nó. Version tìm trên <a href="https://clojars.org/cheshire">clojar cheshire</a> và <a href="https://clojars.org/io.github.nextjournal/clerk">clerk</a>.</p>
+<p>Khi bật <code>clj</code>, nó tự động đọc <code>deps.edn</code> và tải các dependencies + load vào.</p>
+<h4>Code &amp; chạy với REPL dùng Calva</h4>
+<p>Mở file hello.clj, sửa nội dung:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="kd">ns </span><span class="nv">hello</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="ss">:require</span><span class="w"></span>
+<span class="w">   </span><span class="p">[</span><span class="nv">cheshire.core</span><span class="w"> </span><span class="ss">:as</span><span class="w"> </span><span class="nv">json</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="p">[</span><span class="nv">clojure.pprint</span><span class="w"> </span><span class="ss">:as</span><span class="w"> </span><span class="nv">pp</span><span class="p">]))</span><span class="w"></span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">hello</span><span class="w"> </span><span class="p">[</span><span class="nv">name</span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;Hello, &quot;</span><span class="w"> </span><span class="nb">name </span><span class="s">&quot;!&quot;</span><span class="p">))</span><span class="w"></span>
+
+<span class="p">(</span><span class="nf">hello</span><span class="w"> </span><span class="s">&quot;world&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="p">(</span><span class="k">def </span><span class="nv">resp</span><span class="w"> </span><span class="p">(</span><span class="nb">slurp </span><span class="s">&quot;https://api.github.com/repos/awesome-jobs/vietnam/issues&quot;</span><span class="p">))</span><span class="w"></span>
+<span class="p">(</span><span class="k">def </span><span class="nv">jobs</span><span class="w"> </span><span class="p">(</span><span class="nf">json/parse-string</span><span class="w"> </span><span class="nv">resp</span><span class="w"> </span><span class="nv">true</span><span class="p">))</span><span class="w"></span>
+<span class="p">(</span><span class="k">def </span><span class="nv">table</span><span class="w"> </span><span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">select-keys </span><span class="nv">%</span><span class="w"> </span><span class="p">[</span><span class="ss">:created_at</span><span class="w"> </span><span class="ss">:title</span><span class="w"> </span><span class="ss">:html_url</span><span class="p">])</span><span class="w"> </span><span class="nv">jobs</span><span class="p">))</span><span class="w"></span>
+<span class="p">(</span><span class="nf">pp/print-table</span><span class="w"> </span><span class="nv">table</span><span class="p">)</span><span class="w"></span>
+<span class="c1">; output</span><span class="w"></span>
+<span class="c1">; |          :created_at |                                                                                                                       :title |                                           :html_url |</span><span class="w"></span>
+<span class="c1">; |----------------------+------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------|</span><span class="w"></span>
+<span class="c1">; | 2025-01-24T12:01:58Z | Hanoi FT - Hybrid/Remote - (Senior/Technical Lead/Manager) Fullstack Developer Python/Node.js/PHP - Up to $4000 (Negotiable) | https://github.com/awesome-jobs/vietnam/issues/4593 |</span><span class="w"></span>
+<span class="c1">; | 2025-01-22T10:38:28Z |                                                                                Remote Fulltime - Up to $4000 Gross - C# Lead | https://github.com/awesome-jobs/vietnam/issues/4592 |</span><span class="w"></span>
+
+<span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">&#39;</span><span class="p">[</span><span class="nv">nextjournal.clerk</span><span class="w"> </span><span class="ss">:as</span><span class="w"> </span><span class="nv">clerk</span><span class="p">])</span><span class="w"></span>
+<span class="p">(</span><span class="nf">comment</span><span class="w"></span>
+<span class="w">  </span><span class="p">(</span><span class="nf">clerk/serve!</span><span class="w"> </span><span class="p">{</span><span class="ss">:browse</span><span class="w"> </span><span class="nv">true</span><span class="w"> </span><span class="ss">:watch-paths</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;src&quot;</span><span class="p">]})</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="p">(</span><span class="nf">clerk/table</span><span class="w"> </span><span class="nv">table</span><span class="p">)</span><span class="w"></span>
+<span class="p">(</span><span class="nf">clerk/plotly</span><span class="w"> </span><span class="p">{</span><span class="ss">:data</span><span class="w"> </span><span class="p">[{</span><span class="ss">:x</span><span class="w"> </span><span class="p">(</span><span class="nb">map </span><span class="ss">:created_at</span><span class="w"> </span><span class="nv">table</span><span class="p">)</span><span class="w"></span>
+<span class="w">                       </span><span class="ss">:y</span><span class="w"> </span><span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">count </span><span class="p">(</span><span class="ss">:title</span><span class="w"> </span><span class="nv">%</span><span class="p">))</span><span class="w"> </span><span class="nv">table</span><span class="p">)}]})</span><span class="w"></span>
+<span class="p">(</span><span class="nf">java.lang.System/currentTimeMillis</span><span class="p">)</span><span class="w"> </span><span class="c1">; &lt;-- dòng này không bao giờ thay đổi</span><span class="w"></span>
+<span class="o">^</span><span class="ss">::clerk/no-cache</span><span class="w"> </span><span class="p">(</span><span class="nf">java.lang.System/currentTimeMillis</span><span class="p">)</span><span class="w"> </span><span class="c1">; &lt;-- dòng này đổi mỗi lần load lại</span><span class="w"></span>
+</code></pre></div>
+
+<p>Đặt cursor của chuột xuống cuối dấu <code>)</code> của khối code đầu tiên, gõ Ctrl Enter hoặc chuột phải chọn "Eval current form". Một cửa sổ pop-up hiện ra thông báo chứa kết nối với REPL server, bấm nút "Connect".</p>
+<p><img alt="REPL connect" src="./images/clj_calva_connect.webp"></p>
+<p>Chọn "Start your project with a REPL and connect (a.k.a Jack-in)" rồi chọn "deps.edn".
+Calva plugin trong VS Code sẽ mở 1 cửa sổ dọc bên cạnh và hiển thị "REPL".</p>
+<h4>REPL</h4>
+<p>REPL giống như "python interactive mode" có thể gõ code trực tiếp, nhưng thú vị hơn là nó "kết nối" với cửa sổ chỉnh sửa code, khiến dễ dàng chỉnh sửa và chạy code mà không cần copy qua lại giữa 2 cửa sổ.
+REPL là một ưu điểm rất lớn của các LISP language như Clojure, trang chủ có hẳn 1 mục riêng chi tiết về cách viết code với RÊPL <a href="https://clojure.org/guides/repl/introduction">https://clojure.org/guides/repl/introduction</a>.</p>
+<p>Lần lượt gõ enter cuối mỗi khối code để chạy nó (như trong Jupyter gõ từng cell), nếu code print, kết quả sẽ hiện bên cửa sổ chạy REPL. Nếu return, kết quả hiển thị ngay tại chỗ đặt cursor (nhưng không ghi vào file - để ghi vào file thành comment phải gõ phím khác).</p>
+<p><img alt="REPL eval" src="./images/clj_calva_eval.webp"></p>
+<p>Để chạy cả file, bấm Ctrl a chọn tất cả code rồi Ctrl Enter.</p>
+<p>Xem top 10 phím tắt hay dùng của Calva tại đây <a href="https://calva.io/commands-top10/">https://calva.io/commands-top10/</a>.</p>
+<h4>Clerk notebook</h4>
+<p><code>(clerk/serve! ...</code> mở 1 tab trình duyệt tới địa chỉ 127.0.0.1:7777, tại đây chọn file hello.clj sẽ hiện ra "notebook". Mỗi lần lưu file, code sẽ được chạy lại và hiển thị kết quả lên trình duyệt.
+Đặt cursor xuống cuối dòng này rồi ctrl Enter để chạy nó. Code này nằm trong <code>(comment ...)</code> nên không được chạy lúc bấm Ctrl a. Phải comment code này để khi Clerk eval cả file sẽ không mở thêm 1 server clerk khác nữa.</p>
+<p><strong>Chú ý</strong> mọi kết quả đều được cache lại, nên nếu dòng code không thay đổi, giá trị cũng sẽ không thay đổi kế cả restart lại chương trình.
+Thêm vào trước khối code <code>^::clerk/no-cache</code> để không dùng cache cho khối code đó,
+hay xóa thư mục <code>.clerk</code> trong thư mục <code>hello-world</code> đi để xóa cache. Xem thêm tại <a href="https://book.clerk.vision/#cached-evaluation">https://book.clerk.vision/#cached-evaluation</a></p>
+<p><img alt="clerk" src="./images/clj_clerk.png"></p>
+<p>PS: nếu muốn dùng Jupyter với Clojure có thể cài <a href="https://github.com/clojupyter/clojupyter">https://github.com/clojupyter/clojupyter</a>.</p>
+<h3>Kết luận</h3>
+<p>Có thể code Clojure dùng VS Code, với REPL tích hợp cùng editor, không bao giờ phải gõ từng dòng hay copy/paste code, hiển thị như notebook qua Clerk,</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-01-24T00:00:00+07:00">Fri 24 January 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#clojure-ref">clojure
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#vscode-ref">vscode
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

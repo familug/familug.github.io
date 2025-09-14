@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="go, golang, map, frontpage, " />
+
+<meta property="og:title" content="[TIL] Go map format/print có thứ tự "/>
+<meta property="og:url" content="./til_go_map_print_order.html" />
+<meta property="og:description" content="Kiểu dữ liệu map trong Go không có thứ tự khi duyệt qua: A map is an unordered group of elements of one type, called the element type, indexed by a set of unique keys of another type, called the key type. https://go.dev/ref/spec#Map_types When iterating …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-03-24T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] Go map format/print có thứ tự ">
+<meta name="twitter:description" content="Kiểu dữ liệu map trong Go không có thứ tự khi duyệt qua: A map is an unordered group of elements of one type, called the element type, indexed by a set of unique keys of another type, called the key type. https://go.dev/ref/spec#Map_types When iterating …">
+
+        <title>[TIL] Go map format/print có thứ tự  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./til_go_map_print_order.html">
+                [TIL] Go map format/print có thứ tự
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Kiểu dữ liệu <code>map</code> trong Go không có thứ tự khi duyệt qua:</p>
+<blockquote>
+<p>A map is an unordered group of elements of one type, called the element type, indexed by a set of unique keys of another type, called the key type. 
+<a href="https://go.dev/ref/spec#Map_types">https://go.dev/ref/spec#Map_types</a></p>
+<p>When iterating over a map with a range loop, the iteration order is not specified and is not guaranteed to be the same from one iteration to the next. 
+<a href="https://go.dev/blog/maps#iteration-order">https://go.dev/blog/maps#iteration-order</a></p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">m</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;FAMILUG&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;since&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2010&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;loc&quot;</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;Vietnam&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nb">println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">m</span><span class="p">)</span><span class="w">      </span>
+</code></pre></div>
+
+<p>Output</p>
+<div class="highlight"><pre><span></span><code>// lần 1
+name FAMILUG
+since 2010
+loc Vietnam
+map[loc:Vietnam name:FAMILUG since:2010]
+
+// lần 2 
+since 2010
+loc Vietnam
+name FAMILUG
+map[loc:Vietnam name:FAMILUG since:2010]
+</code></pre></div>
+
+<p>Vậy <code>print(m)</code> kết quả liệu có khác nhau mỗi lần chạy? Từ <a href="https://go.dev/doc/go1.12#fmtpkgfmt">Go 1.12 (2018)</a> thì không, output print(map) luôn cố định và được sắp xếp theo thứ tự key:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">fmt</span>¶<span class="w"></span>
+
+<span class="nv">Maps</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">now</span><span class="w"> </span><span class="nv">printed</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">key</span><span class="o">-</span><span class="nv">sorted</span><span class="w"> </span><span class="nv">order</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">ease</span><span class="w"> </span><span class="nv">testing</span>.<span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">ordering</span><span class="w"> </span><span class="nv">rules</span><span class="w"> </span><span class="nv">are</span>:<span class="w"></span>
+
+<span class="w">    </span><span class="nv">When</span><span class="w"> </span><span class="nv">applicable</span>,<span class="w"> </span><span class="nv">nil</span><span class="w"> </span><span class="nv">compares</span><span class="w"> </span><span class="nv">low</span><span class="w"></span>
+<span class="w">    </span><span class="nv">ints</span>,<span class="w"> </span><span class="nv">floats</span>,<span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">strings</span><span class="w"> </span><span class="nv">order</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="o">&lt;</span><span class="w"></span>
+<span class="w">    </span><span class="nv">NaN</span><span class="w"> </span><span class="nv">compares</span><span class="w"> </span><span class="nv">less</span><span class="w"> </span><span class="nv">than</span><span class="w"> </span><span class="nv">non</span><span class="o">-</span><span class="nv">NaN</span><span class="w"> </span><span class="nv">floats</span><span class="w"></span>
+<span class="w">    </span><span class="nv">bool</span><span class="w"> </span><span class="nv">compares</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="nv">before</span><span class="w"> </span><span class="nv">true</span><span class="w"></span>
+<span class="w">    </span><span class="nv">Complex</span><span class="w"> </span><span class="nv">compares</span><span class="w"> </span><span class="nv">real</span>,<span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nv">imaginary</span><span class="w"></span>
+<span class="w">    </span><span class="nv">Pointers</span><span class="w"> </span><span class="nv">compare</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">machine</span><span class="w"> </span><span class="nv">address</span><span class="w"></span>
+<span class="w">    </span><span class="nv">Channel</span><span class="w"> </span><span class="nv">values</span><span class="w"> </span><span class="nv">compare</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">machine</span><span class="w"> </span><span class="nv">address</span><span class="w"></span>
+<span class="w">    </span><span class="nv">Structs</span><span class="w"> </span><span class="nv">compare</span><span class="w"> </span><span class="nv">each</span><span class="w"> </span><span class="nv">field</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">turn</span><span class="w"></span>
+<span class="w">    </span><span class="nv">Arrays</span><span class="w"> </span><span class="nv">compare</span><span class="w"> </span><span class="nv">each</span><span class="w"> </span><span class="nv">element</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">turn</span><span class="w"></span>
+<span class="w">    </span><span class="nv">Interface</span><span class="w"> </span><span class="nv">values</span><span class="w"> </span><span class="nv">compare</span><span class="w"> </span><span class="nv">first</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">reflect</span>.<span class="nv">Type</span><span class="w"> </span><span class="nv">describing</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">concrete</span><span class="w"> </span><span class="nv">type</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">concrete</span><span class="w"> </span><span class="nv">value</span><span class="w"> </span><span class="nv">as</span><span class="w"> </span><span class="nv">described</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">previous</span><span class="w"> </span><span class="nv">rules</span>.<span class="w"></span>
+
+<span class="nv">When</span><span class="w"> </span><span class="nv">printing</span><span class="w"> </span><span class="nv">maps</span>,<span class="w"> </span><span class="nv">non</span><span class="o">-</span><span class="nv">reflexive</span><span class="w"> </span><span class="nv">key</span><span class="w"> </span><span class="nv">values</span><span class="w"> </span><span class="nv">like</span><span class="w"> </span><span class="nv">NaN</span><span class="w"> </span><span class="nv">were</span><span class="w"> </span><span class="nv">previously</span><span class="w"> </span><span class="nv">displayed</span><span class="w"> </span><span class="nv">as</span><span class="w"> </span><span class="o">&lt;</span><span class="nv">nil</span><span class="o">&gt;</span>.<span class="w"> </span><span class="nv">As</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">this</span><span class="w"> </span><span class="nv">release</span>,<span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">correct</span><span class="w"> </span><span class="nv">values</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">printed</span>.<span class="w"></span>
+</code></pre></div>
+
+<p><a href="https://github.com/golang/go/commit/a440cc0d702e15c19bcc984f7a8f5c10f83726ab#diff-da2756b47399fcd2096dbc973b290baab35dc1d2074a4978671aa3dc90ad8337R757-R758">See commit by Rob Pike</a></p>
+<h3>Kết luận</h3>
+<p>Output print hay format map type được sắp xếp theo key.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-03-24T00:00:00+07:00">Mon 24 March 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#golang-ref">golang
+                    <span class="superscript">6</span>
+</a></li>
+                <li><a href="./tags.html#map-ref">map
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
