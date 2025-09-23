@@ -4,10 +4,10 @@ Category: frontpage
 Tags: ssh,
 Slug: til-ssh-escape
 
-Khi SSH kết nối tới 1 host, sau đó để một thời gian kết nối bị "đứt" và gõ vào terminal không thấy hiện gì, cảm giác như bị "treo", đó là khi một tổ hợp phím kỳ diệu giúp sửa vấn đề mà không phải đóng terminal bật lại: SSH escape character.
+Khi kết nối SSH tới 1 host, sau đó để một thời gian kết nối bị "đứt" và gõ vào terminal không thấy hiện gì, cảm giác như bị "treo", đó là khi một tổ hợp phím kỳ diệu giúp sửa vấn đề mà không phải đóng terminal rồi bật lại: SSH escape character.
 
 ## SSH client escape character
-Bí kíp này, như mọi bí kíp khác, được viết ở dưới tài liệu của man page. Gõ `man 1 ssh`, cuộn xuống dưới:
+Bí kíp này, như mọi bí kíp khác, được viết ở phần cuối tài liệu manpage. Gõ `man 1 ssh`, cuộn xuống dưới:
 
 ```
 ESCAPE CHARACTERS
