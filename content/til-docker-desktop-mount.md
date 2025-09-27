@@ -1,4 +1,4 @@
-Title: [TIL] Docker trên MacOS share toàn bộ /Users/you với Docker Machine
+Title: [TIL] Docker trên MacOS share toàn bộ thư mục $HOME /Users/you với Docker Machine
 Date: 2025/09/26
 Category: frontpage
 Tags: docker, podman, container, vm, macos
