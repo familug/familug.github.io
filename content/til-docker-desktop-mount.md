@@ -23,6 +23,19 @@ Vì thư mục được mount nằm trong `/Users`, đã được share với m�
 -v, --volume stringArray Bind mount a volume into the container
 ```
 
+Code [Podman](https://github.com/containers/podman/blob/a118fdf4e2343dcafa6b14331fc99a8d68dd761b/vendor/go.podman.io/common/pkg/config/default_darwin.go#L16-L22):
+```
+#vendor/go.podman.io/common/pkg/config/default_darwin.go
+// getDefaultMachineVolumes returns default mounted volumes (possibly with env vars, which will be expanded)
+func getDefaultMachineVolumes() []string {
+        return []string{
+                "/Users:/Users",
+                "/private:/private",
+                "/var/folders:/var/folders",
+        }
+}
+```
+
 ### Kết luận
 Người dùng Podman Desktop cũng có thể gõ `podman machine ssh` rồi `ls /Users` để khám phá mọi thứ như trên MacOS.
 
