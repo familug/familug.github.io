@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="til, shell, sh, bash, rust, frontpage, " />
+
+<meta property="og:title" content="[TIL] script cài Rust dùng 20 bytes đầu để nhận biết hệ thống "/>
+<meta property="og:url" content="./til_rustup.html" />
+<meta property="og:description" content="Cách cài đặt chính thức đươc khuyên dùng tại trang chủ https://www.rust-lang.org/tools/install: curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh nhưng... curl | sh thường bị xem là nguy hiểm, do người dùng thường không kiểm tra nội dung sript. Vậy hãy tải …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-02-19T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] script cài Rust dùng 20 bytes đầu để nhận biết hệ thống ">
+<meta name="twitter:description" content="Cách cài đặt chính thức đươc khuyên dùng tại trang chủ https://www.rust-lang.org/tools/install: curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh nhưng... curl | sh thường bị xem là nguy hiểm, do người dùng thường không kiểm tra nội dung sript. Vậy hãy tải …">
+
+        <title>[TIL] script cài Rust dùng 20 bytes đầu để nhận biết hệ thống  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./til_rustup.html">
+                [TIL] script cài Rust dùng 20 bytes đầu để nhận biết hệ thống
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Cách cài đặt chính thức đươc khuyên dùng tại trang chủ <a href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a>:</p>
+<div class="highlight"><pre><span></span><code>curl --proto <span class="s1">&#39;=https&#39;</span> --tlsv1.2 -sSf https://sh.rustup.rs <span class="p">|</span> sh
+</code></pre></div>
+
+<p>nhưng... <code>curl | sh</code> thường bị xem là nguy hiểm, do người dùng thường không kiểm tra nội dung sript.
+Vậy hãy tải nó về và đọc:</p>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="s s-Atom">curl</span> <span class="o">-</span><span class="nv">Lo</span> <span class="s s-Atom">rustup</span><span class="p">.</span><span class="s s-Atom">sh</span> <span class="s s-Atom">https</span><span class="p">:</span><span class="o">//</span><span class="s s-Atom">sh</span><span class="p">.</span><span class="s s-Atom">rustup</span><span class="p">.</span><span class="s s-Atom">rs</span>
+  <span class="c1">% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span>
+                                 <span class="nv">Dload</span>  <span class="nv">Upload</span>   <span class="nv">Total</span>   <span class="nv">Spent</span>    <span class="nv">Left</span>  <span class="nv">Speed</span>
+<span class="mi">100</span> <span class="mi">26495</span>  <span class="mi">100</span> <span class="mi">26495</span>    <span class="mi">0</span>     <span class="mi">0</span>   <span class="mi">149</span><span class="s s-Atom">k</span>      <span class="mi">0</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span> <span class="s s-Atom">--:--:--</span>  <span class="mi">149</span><span class="s s-Atom">k</span>
+</code></pre></div>
+
+<h2>Đọc code</h2>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+<span class="c1"># shellcheck shell=dash</span>
+<span class="c1"># shellcheck disable=SC2039  # local is non-POSIX</span>
+
+<span class="c1"># This is just a little script that can be downloaded from the internet to</span>
+<span class="c1"># install rustup. It just does platform detection, downloads the installer</span>
+<span class="c1"># and runs it.</span>
+...
+
+<span class="c1"># It runs on Unix shells like {a,ba,da,k,z}sh.</span>
+</code></pre></div>
+
+<p>đây là 1 file shell code, thậm chí không dùng bash mà dùng dash (POSIX compliant), sử dụng shellcheck để check code theo các best-practice, có thể chạy được với các shell</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">echo</span>  <span class="o">{</span>a,ba,da,k,z<span class="o">}</span>sh
+ash bash dash ksh zsh
+</code></pre></div>
+
+<p><strong>It just does platform detection, downloads the installer and runs it.</strong></p>
+<p>nó chỉ nhận biết đây là hệ thống gì để tải bàn cải đặt phù hợp về rồi chạy.
+Nhưng làm sao nhận biết được hệ thống đang chạy (windows/linux/macos/arm 32/64 bit?) chỉ với <code>sh</code> và coreutils? dùng magic!</p>
+<p>Giống như chương trình <code>file</code>, đọc vào các byte đầu tiên của file để nhận diện nó.</p>
+<div class="highlight"><pre><span></span><code>get_architecture<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">local</span> _ostype _cputype _bitness _arch _clibtype
+    <span class="nv">_ostype</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>uname -s<span class="k">)</span><span class="s2">&quot;</span>
+    <span class="nv">_cputype</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>uname -m<span class="k">)</span><span class="s2">&quot;</span>
+...
+</code></pre></div>
+
+<p>Chạy thử:</p>
+<div class="highlight"><pre><span></span><code>$ uname -s
+Linux
+$ uname -m
+x86_64
+$ uname -a
+Linux hostname <span class="m">6</span>.8.0-52-generic <span class="c1">#53~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Jan 15 19:18:46 UTC 2 x86_64 x86_64 x86_64 GNU/Linux</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>get_bitness<span class="o">()</span> <span class="o">{</span>
+    need_cmd head
+    <span class="c1"># Architecture detection without dependencies beyond coreutils.</span>
+    <span class="c1"># ELF files start out &quot;\x7fELF&quot;, and the following byte is</span>
+    <span class="c1">#   0x01 for 32-bit and</span>
+    <span class="c1">#   0x02 for 64-bit.</span>
+    <span class="c1"># The printf builtin on some shells like dash only supports octal</span>
+    <span class="c1"># escape sequences, so we use those.</span>
+    <span class="nb">local</span> _current_exe_head
+    <span class="nv">_current_exe_head</span><span class="o">=</span><span class="k">$(</span>head -c <span class="m">5</span> /proc/self/exe <span class="k">)</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$_current_exe_head</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">printf</span> <span class="s1">&#39;\177ELF\001&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="m">32</span>
+    <span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$_current_exe_head</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">printf</span> <span class="s1">&#39;\177ELF\002&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="m">64</span>
+    <span class="k">else</span>
+        err <span class="s2">&quot;unknown platform bitness&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>đọc vào 5 bytes đầu của chương trình đang chạy (sh) thông qua symlink /proc/self/exe để biết nó thuộc loại nào, nếu byte thứ 5 là 02, đây là 64-bit, nếu là 01 là 32 bit:</p>
+<div class="highlight"><pre><span></span><code>$ head -c <span class="m">20</span> /proc/self/exe <span class="p">|</span> xxd
+<span class="m">00000000</span>: 7f45 4c46 <span class="m">0201</span> <span class="m">0100</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  .ELF............
+<span class="m">00000010</span>: <span class="m">0300</span> 3e00                                ..&gt;.
+</code></pre></div>
+
+<p>xxd hiển thị mỗi byte bằng 2 ký tự dạng hex, 2 bytes 1 cặp, 7f45 là 2 byte đầu, 4c46 là 2 byte tiếp...
+ở máy này byte thứ 5 là 02, vậy đây là 64-bit.</p>
+<p>ELF là định dạng file binary trên Linux, theo <code>man elf</code>:</p>
+<blockquote>
+<p>elf - format of Executable and Linking Format (ELF) files</p>
+</blockquote>
+<p>Tương tự, để tìm "endian" là big-endian (Most significant bit - MSB) hay little-endian (Least Significant Bit - LSB), dùng byte thứ 6:</p>
+<div class="highlight"><pre><span></span><code>get_endianness<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">local</span> <span class="nv">cputype</span><span class="o">=</span><span class="nv">$1</span>
+    <span class="nb">local</span> <span class="nv">suffix_eb</span><span class="o">=</span><span class="nv">$2</span>
+    <span class="nb">local</span> <span class="nv">suffix_el</span><span class="o">=</span><span class="nv">$3</span>
+
+    <span class="c1"># detect endianness without od/hexdump, like get_bitness() does.</span>
+    need_cmd head
+    need_cmd tail
+
+    <span class="nb">local</span> _current_exe_endianness
+    <span class="nv">_current_exe_endianness</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>head -c <span class="m">6</span> /proc/self/exe <span class="p">|</span> tail -c <span class="m">1</span><span class="k">)</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$_current_exe_endianness</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">printf</span> <span class="s1">&#39;\001&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">cputype</span><span class="si">}${</span><span class="nv">suffix_el</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">elif</span> <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$_current_exe_endianness</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">printf</span> <span class="s1">&#39;\002&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">cputype</span><span class="si">}${</span><span class="nv">suffix_eb</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span>
+        err <span class="s2">&quot;unknown platform endianness&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>nếu là 01 là little endian, nếu là 02 là bit endian. Ở máy này là 01, tức little endian.</p>
+<p><code>printf '\002'</code> in ra giá trị 2 trong hệ octal (8). Chú ý ở đây nói về giá trị (byte) chứ không nói tới dạng string biểu diễn của số 2 - ASCII 50.</p>
+<div class="highlight"><pre><span></span><code>is_host_amd64_elf<span class="o">()</span> <span class="o">{</span>
+    need_cmd head
+    need_cmd tail
+    <span class="c1"># ELF e_machine detection without dependencies beyond coreutils.</span>
+    <span class="c1"># Two-byte field at offset 0x12 indicates the CPU,</span>
+    <span class="c1"># but we&#39;re interested in it being 0x3E to indicate amd64, or not that.  local _current_exe_machine</span>
+    <span class="nv">_current_exe_machine</span><span class="o">=</span><span class="k">$(</span>head -c <span class="m">19</span> /proc/self/exe <span class="p">|</span> tail -c <span class="m">1</span><span class="k">)</span>
+    <span class="o">[</span> <span class="s2">&quot;</span><span class="nv">$_current_exe_machine</span><span class="s2">&quot;</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">printf</span> <span class="s1">&#39;\076&#39;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">]</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>printf '\076' in ra giá trị ở hệ 8 076 ứng với 62 ở hệ 10, và 0x3e ở hệ 16. Máy này có giá trị 3e, nên là amd64_elf.</p>
+<p>Thử 1 vòng for từ 1 đến 20 để xem file nhận ra những gì sau mỗi byte:</p>
+<div class="highlight"><pre><span></span><code>$ <span class="k">for</span> i <span class="k">in</span> <span class="o">{</span><span class="m">1</span>..20<span class="o">}</span><span class="p">;</span> <span class="k">do</span> <span class="nb">echo</span> <span class="nv">$i</span><span class="p">;</span> head -c <span class="nv">$i</span> /proc/self/exe &gt; test<span class="p">;</span> file test<span class="p">;</span>  <span class="k">done</span>
+<span class="m">1</span>
+test: very short file <span class="o">(</span>no magic<span class="o">)</span>
+<span class="m">2</span>
+test: International EBCDIC text, with no line terminators
+<span class="m">3</span>
+test: International EBCDIC text, with no line terminators
+<span class="m">4</span>
+test: ELF
+<span class="m">5</span>
+test: ELF <span class="m">64</span>-bit
+<span class="m">6</span>
+test: ELF <span class="m">64</span>-bit LSB
+<span class="m">7</span>
+test: ELF <span class="m">64</span>-bit LSB
+<span class="m">8</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">9</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">10</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">11</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">12</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">13</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">14</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">15</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">16</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">17</span>
+test: ELF <span class="m">64</span>-bit LSB <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">18</span>
+test: ELF <span class="m">64</span>-bit LSB shared object, <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">19</span>
+test: ELF <span class="m">64</span>-bit LSB shared object, <span class="o">(</span>SYSV<span class="o">)</span>
+<span class="m">20</span>
+test: ELF <span class="m">64</span>-bit LSB shared object, x86-64, <span class="o">(</span>SYSV<span class="o">)</span>
+</code></pre></div>
+
+<p>Xem thêm source code chương trình file: <a href="https://github.com/file/file/blob/dadc01f2a875c21a10ae69c5d74e868423790e31/magic/Magdir/elf#L349-L403">https://github.com/file/file/blob/dadc01f2a875c21a10ae69c5d74e868423790e31/magic/Magdir/elf#L349-L403</a></p>
+<p>Bonus, 4 function <code>say</code>, <code>err</code>, <code>check_cmd</code> và <code>need_cmd</code> rất ngắn gọn và hữu ích:</p>
+<div class="highlight"><pre><span></span><code>say<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">printf</span> <span class="s1">&#39;rustup: %s\n&#39;</span> <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+
+err<span class="o">()</span> <span class="o">{</span>
+    say <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
+    <span class="nb">exit</span> <span class="m">1</span>
+<span class="o">}</span>
+
+need_cmd<span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> ! check_cmd <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="p">;</span> <span class="k">then</span>
+        err <span class="s2">&quot;need &#39;</span><span class="nv">$1</span><span class="s2">&#39; (command not found)&quot;</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+check_cmd<span class="o">()</span> <span class="o">{</span>
+    <span class="nb">command</span> -v <span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span> &gt; /dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Script này sẽ tải binary từ địa chỉ như <a href="http://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init">http://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init</a> rồi chmod u+x rồi chạy file, sau khi xong, xóa file đã tải.</p>
+<div class="highlight"><pre><span></span><code>ensure downloader <span class="s2">&quot;</span><span class="nv">$_url</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$_file</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$_arch</span><span class="s2">&quot;</span>
+ensure chmod u+x <span class="s2">&quot;</span><span class="nv">$_file</span><span class="s2">&quot;</span>
+...
+ignore <span class="s2">&quot;</span><span class="nv">$_file</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+...
+ignore rm <span class="s2">&quot;</span><span class="nv">$_file</span><span class="s2">&quot;</span>
+ignore rmdir <span class="s2">&quot;</span><span class="nv">$_dir</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<p>Xem repo script &amp; rustup binary tại <a href="https://github.com/rust-lang/rustup/blob/1.27.1/rustup-init.sh">https://github.com/rust-lang/rustup/blob/1.27.1/rustup-init.sh</a></p>
+<h3>Kết luận</h3>
+<p>sh script ở mọi nơi, và cũng có thể sạch đẹp + magic.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-02-19T00:00:00+07:00">Wed 19 February 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#bash-ref">bash
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#sh-ref">sh
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#shell-ref">shell
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="./tags.html#til-ref">til
+                    <span class="superscript">7</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

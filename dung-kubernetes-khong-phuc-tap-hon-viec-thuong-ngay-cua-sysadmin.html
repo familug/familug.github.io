@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="K8S, kubernetes, container, frontpage, " />
+
+<meta property="og:title" content="Dùng kubernetes không phức tạp hơn việc thường ngày của sysadmin "/>
+<meta property="og:url" content="./dung-kubernetes-khong-phuc-tap-hon-viec-thuong-ngay-cua-sysadmin.html" />
+<meta property="og:description" content="Bài viết dành cho các sysadmin/DevOps: Những người nghe nói đến K8S và các lời chê về sự phức tạp của nó Những người định học dùng K8S mà ngại nhiều khái niệm mới. Những người có kiến thức về các hệ thống trước &#34;thời&#34; Kubernetes (K8S), giúp kết …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2021-11-14T00:00:00+07:00" />
+<meta name="twitter:title" content="Dùng kubernetes không phức tạp hơn việc thường ngày của sysadmin ">
+<meta name="twitter:description" content="Bài viết dành cho các sysadmin/DevOps: Những người nghe nói đến K8S và các lời chê về sự phức tạp của nó Những người định học dùng K8S mà ngại nhiều khái niệm mới. Những người có kiến thức về các hệ thống trước &#34;thời&#34; Kubernetes (K8S), giúp kết …">
+
+        <title>Dùng kubernetes không phức tạp hơn việc thường ngày của sysadmin  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./dung-kubernetes-khong-phuc-tap-hon-viec-thuong-ngay-cua-sysadmin.html">
+                Dùng kubernetes không phức tạp hơn việc thường ngày của sysadmin
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Bài viết dành cho các sysadmin/DevOps:</p>
+<ul>
+<li>Những người nghe nói đến K8S và các lời chê về sự phức tạp của nó</li>
+<li>Những người định học dùng K8S mà ngại nhiều khái niệm mới.</li>
+</ul>
+<p>Những người có kiến thức về các hệ thống trước "thời" Kubernetes (K8S), giúp kết nối các khái niệm, hiểu lý do tại sao K8S lại phức tạp đến thế.</p>
+<p><img src="https://kubernetes.io/images/wheel.svg" width=600></p>
+<p>Để <strong>dùng</strong> K8S, người dùng sẽ gặp phải một loạt các khái niệm:</p>
+<ul>
+<li>pod</li>
+<li>deployment</li>
+<li>rollout</li>
+<li>replicaset</li>
+<li>daemonset</li>
+<li>service</li>
+<li>configmap</li>
+<li>secret</li>
+<li>namespace</li>
+<li>resourcequota</li>
+<li>persistentVolume</li>
+<li>PersistentVolumeClaim</li>
+</ul>
+<p>Sau đó các khái niệm ngoài K8S, các tool dùng với K8S như:</p>
+<ul>
+<li>helm/chart</li>
+<li>...</li>
+</ul>
+<p>tất cả các khái niệm này đều không mới, chỉ là các tên mới dành cho hệ thống dùng container, tương đương với các khái niệm/kiến thức khi quản trị một hệ thống server truyền thống (máy ảo/máy vật lý).</p>
+<h3>Pod</h3>
+<p>Pod là đơn vị nhỏ nhất được quản lý trong K8S. Pod là một hoặc nhiều container cùng bật cùng tắt, cùng chung IP, cùng chung ổ cứng. Vì mỗi container thường là một 1 process, nên nếu cần chạy 2 process khác nhau thì cần có 2 container. Trên server Linux truyền thống, nếu cần chạy 1 service (systemd) và muốn chạy 1 script mỗi ngày, người ta có thể dễ dàng dùng cron, cron luôn được cài sẵn, luôn có ở đó. Trong thế giới container, muốn chạy 1 process là cần bật 1 container mới. Một pod có thể chứa 1 container chạy chương trình chính, 1 container chạy cron.</p>
+<p>Người mới dùng container (như Docker), sẽ thường hỏi: <a href="https://stackoverflow.com/questions/37458287/how-to-run-a-cron-job-inside-a-docker-container">làm thế nào để chạy cron trong container</a>:</p>
+<blockquote>
+<p>Trả lời ngắn gọn: bật thêm 1 container chạy crond.</p>
+</blockquote>
+<p>Khi K8S đã có khái niệm cronjob thì không cần chạy container trong pod để chạy cron như nói trên nữa, nhưng pod vẫn có thể chứa các container chạy thứ khác.</p>
+<p>Pod thường được config tự restart khi tắt, tương tự tác dụng quan trọng của các hệ thống init như Systemd hay Upstart, SysV.</p>
+<h3>Deployment</h3>
+<p>Một deployment chứa 1 replicaset.
+Một replicaset lo việc chạy N pod hay gọi là N replicas.
+Khi tạo 1 deployment nginx với replicas=5, nó sẽ tạo ra 5 pods, dễ dàng tăng giảm số replica.</p>
+<p>deployment lo chuyện ... deploy. Khi deploy (triển khai) một phiên bản mới của phần mềm, sysadmin sẽ phải lo xử lý bản cũ, làm thế nào để deploy, cho người dùng truy cập vào bản mới bản cũ ra sao, theo các chiến thuật nào: <a href="https://spinnaker.io/docs/concepts/#deployment-strategies">blue-green, canary, rolling?</a></p>
+<p>Bài toán này luôn tồn tại khi cần deploy một phần mềm, một hệ thống, chưa bao giờ biến mất. Không dùng K8S, sysadmin sẽ phải dùng tool khác, hoặc tự xây dựng theo một mô hình với các tool dùng khi deploy như Jenkins, ansible, bash...</p>
+<h3>Daemonset</h3>
+<p>daemonset liên quan tới "chuyện của kubernetes": khi cần đảm bảo mỗi node của K8S cần có duy nhất 1 pod chạy một chương trình (thường là các "agent" xử lý logging/metrics để các pod trên cùng node gửi log/metric qua "agent" này tới nơi tập trung), daemonset đảm bảo tính duy nhất trên mỗi node và có ở mọi node.</p>
+<p>Vấn đề này cũng tồn tại trong hệ thống truyền thống, mọi server đều cần cài logging agent (fluentd/filebeat...) /metric agent (nếu dùng pull model như prometheus, hay push sử dụng statsd).</p>
+<h3>PersistentVolume</h3>
+<h3>PersistentVolumeClaim</h3>
+<p>Mọi server đều có ổ cứng (trong container gọi là volume), có server cần nhiều ổ cứng. PersistentVolume + PersistentVolumeClaim thực hiện chuyện cấp phát/quản lý ổ cứng (như làm gì volume khi pod đã tắt).</p>
+<p>Các doanh nghiệp lớn nếu từng dùng Ceph hay GlusterFS thì dùng Volume là khái niệm tương đương.</p>
+<h3>Namespace, resourcequota</h3>
+<p>Khi có nhiều phòng ban, doanh nghiệp sẽ cần phân chia tài nguyên cho mỗi phòng ban. Namespace giúp phân tách các resource (pod/deploy/service...) theo các namespace khác nhau, và áp dụng quota (giới hạn) khác nhau. Giúp việc phân chia tài nguyên máy tính cho các phòng ban.</p>
+<h3>configmap</h3>
+<p>Sự khác nhau giữa 2 server chạy NGINX là config của chúng. Container thường chỉ chứa chương trình, người dùng sẽ phải cung cấp config mong muốn, file config không được build sẵn trong image của container mà cung cấp qua configmap trước khi chạy - dù là config file hay qua biến  environment.</p>
+<h3>secret</h3>
+<p>Trên server truyền thống, các secret như pasword/token thường được ghi vào config file/set trong environment  variable trước khi service chạy. Việc quản lý các secret này thường: "do sysadmin/devops X biết", "trong trí nhớ của anh" hay thậm chí ghi vào giấy nhớ dán trong phòng sysadmin... một số công ty có thể dùng phần mềm quản lý password rồi chia sẻ cho team như keepass, 1password, Hashicorp Vault...
+Trên kubernetes chứa chúng trong "secret".</p>
+<p>PS: secret này mặc định không mã hóa (encrypt), chỉ encode base64 nên không có tính bảo mật.</p>
+<p>PSS: có thể bật encrypt.</p>
+<h3>service</h3>
+<p>service thực hiện việc cho cả thế giới truy cập vào 1 deployment. Thường sử dụng LoadBalancer trên các hệ thống cloud để chia đều các kết nối cho các pod.</p>
+<p>Trên server truyền thống, đó là cài NGINX hay HAProxy, cấu hình IP, VIP (Virtual IP), đảm bảo High Availability (HA) cho dịch vụ vẫn hoạt động khi 1 máy chạy NGINX/HAProxy bị tắt.</p>
+<h3>helm/chart</h3>
+<p>Linux server truyền thống cài phần mềm bằng apt/yum/dnf, cấu hình bằng copy/sửa tay các file config, thì từ 2010 trở đi, bắt đầu phổ biến việc cài đặt + cấu hình bằng 1 Configuration Management tool như Salt/Ansible/Chef/Puppet.</p>
+<p>Chức năng chính thường có:</p>
+<ul>
+<li>download hay dùng apt/yum để cài phần mềm</li>
+<li>copy một vài file template rồi điền giá trị vào vị trị</li>
+<li>tạo, cấu hình chmod/chown một vài file, thư mục</li>
+<li>start service (systemd/upstart/sysV)</li>
+</ul>
+<p>Trên kubernetes, Helm là công cụ phổ biến nhất để làm chuyện này.</p>
+<ul>
+<li>khai báo container image để K8S tải về</li>
+<li>các config/secret cần để service chạy và điền vào file config qua Go template.</li>
+<li>tạo service/deployment rồi chạy</li>
+</ul>
+<h2>Kết luận</h2>
+<p>Kubernetes có nhiều khái niệm, nhưng không nhiều hơn quản lý server truyền thống, không khó hơn, nhưng tất nhiên việc phải học lại từ đầu những thứ đã biết mà tương đương sẽ không dễ chịu chút nào.</p>
+<p>PS: bài này không nói về bên trong K8S, các thành phần để chạy nó hay việc cài đặt vận hành K8S, etcd, kubelet...
+Một số có thể phản biện: không hiểu bên trong kubernetes thế nào sao chạy, mặc dù trong thế giới sysadmin truyền thống, số người hiểu về bên trong Linux Kernel, Systemd, NGINX, SaltStack, Ansible, Jenkins cũng không đủ nhiều.</p>
+<h2>The end</h2>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2021-11-14T00:00:00+07:00">Sun 14 November 2021</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#container-ref">container
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#k8s-ref">K8S
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#kubernetes-ref">kubernetes
+                    <span class="superscript">4</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

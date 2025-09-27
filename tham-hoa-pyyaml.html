@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="yaml, pyyaml, python, frontpage, " />
+
+<meta property="og:title" content="Thảm họa PyYAML "/>
+<meta property="og:url" content="./tham-hoa-pyyaml.html" />
+<meta property="og:description" content="PyYAML, thư viện parse YAML phổ biến bậc nhất của Python, được dùng trong các phần mềm dùng YAML như Ansible, SaltStack, ... &gt; YAML: YAML Ain&#39;t Markup Language™ Ví dụ Salt state: install_network_packages: pkg.installed: - pkgs: - rsync - lftp - curl Mặc định nguy hiểm YAML không phải một ngôn ngữ/format …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-06-09T00:00:00+07:00" />
+<meta name="twitter:title" content="Thảm họa PyYAML ">
+<meta name="twitter:description" content="PyYAML, thư viện parse YAML phổ biến bậc nhất của Python, được dùng trong các phần mềm dùng YAML như Ansible, SaltStack, ... &gt; YAML: YAML Ain&#39;t Markup Language™ Ví dụ Salt state: install_network_packages: pkg.installed: - pkgs: - rsync - lftp - curl Mặc định nguy hiểm YAML không phải một ngôn ngữ/format …">
+
+        <title>Thảm họa PyYAML  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./tham-hoa-pyyaml.html">
+                Thảm họa PyYAML
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>PyYAML, thư viện parse YAML phổ biến bậc nhất của Python, được dùng trong các phần mềm dùng YAML như Ansible, SaltStack, ...</p>
+<div class="highlight"><pre><span></span><code>&gt; YAML: YAML Ain&#39;t Markup Language™
+</code></pre></div>
+
+<p>Ví dụ <a href="https://docs.saltproject.io">Salt</a> state:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">install_network_packages</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pkgs</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rsync</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lftp</span><span class="w"></span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">curl</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Mặc định nguy hiểm</h3>
+<p>YAML không phải một ngôn ngữ/format đơn giản như JSON, nó có hàng tá tính năng mà có thể bạn không biết tới. Dùng YAML giống như dùng <code>pickle</code> hơn là <code>json</code> (có thể chứa object tùy ý).</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">x</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="c1"># !!python/name:__main__.double &#39;&#39;</span>
+</code></pre></div>
+
+<p>Function mặc định (và siêu phổ biến) để đọc file YAML: <code>yaml.load</code>, có thể chạy code Python, và là tác giả của hàng loạt lỗ hổng bảo mật được gắn CVE:</p>
+<ul>
+<li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-18342">CVE-2017-18342</a> In PyYAML before 5.1, the yaml.load() API could execute arbitrary code if used with untrusted data. The load() function has been deprecated in version 5.1 and the 'UnsafeLoader' has been introduced for backward compatibility with the function.</li>
+<li>Rất nhiều nữa <a href="https://www.opencve.io/cve?vendor=pyyaml">https://www.opencve.io/cve?vendor=pyyaml</a>...</li>
+</ul>
+<p>Đến sau 2017, người dùng mới bắt đầu làm quen với function mới <code>yaml.safe_load</code>, an toàn hơn.</p>
+<p>Cài <code>pip install 'pyyaml&lt;5.1'</code> để trải nghiệm CVE này:</p>
+<div class="highlight"><pre><span></span><code><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import yaml; yaml.load(&quot;!!python/object/new:os.system [echo EXPLOIT!]&quot;)&#39;</span>                              <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">EXPLOIT</span><span class="err">!</span>
+</code></pre></div>
+
+<p>Theo <a href="https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation">https://github.com/yaml/pyyaml/wiki/PyYAML-yaml.load(input)-Deprecation</a></p>
+<h2>Phức tạp, nhiều phiên bản</h2>
+<p>JSON có... 1 phiên bản duy nhất?!!</p>
+<p>YAML có 1.0 1.1 1.2 và còn nữa.
+Phiên bản 1.2 có từ 2009, mà PyYAML chỉ hỗ trợ YAML 1.1</p>
+<div class="highlight"><pre><span></span><code>&gt;   - YAML 1.2:
+    - Revision 1.2.2      # Oct 1, 2021 *New*
+    - Revision 1.2.1      # Oct 1, 2009
+    - Revision 1.2.0      # Jul 21, 2009
+  - YAML 1.1
+</code></pre></div>
+
+<p>Muốn dùng YAML 1.2, phải dùng <code>ruamel.yaml</code></p>
+<div class="highlight"><pre><span></span><code>  - PyYAML        # YAML 1.1, pure python and libyaml binding
+  - ruamel.yaml   # YAML 1.2, update of PyYAML; comments round-trip
+</code></pre></div>
+
+<h3>PyYAML 6.0+ không tương thích phiên bản cũ</h3>
+<p>Phiên bản mới nhất 6.0, ra đời năm 2021, không tương thích với code các bản cũ.</p>
+<p>6.0</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">yaml</span>
+<span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;key: value&quot;</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">CLoader</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>CHỮ L ở <code>Loader=</code> VIẾT HOA</strong></p>
+<p>5</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">yaml</span>
+<span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;key: value&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>bản 6 bắt buộc argument Loader phải được set. Tới tháng 6 2023, tài liệu tutorial trang chủ vẫn không update <a href="https://pyyaml.org/wiki/PyYAMLDocumentation">https://pyyaml.org/wiki/PyYAMLDocumentation</a>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span><span class="w"></span>
+<span class="s2">... - Hesperiidae</span><span class="w"></span>
+<span class="s2">... - Papilionidae</span><span class="w"></span>
+<span class="s2">... - Apatelodidae</span><span class="w"></span>
+<span class="s2">... - Epiplemidae</span><span class="w"></span>
+<span class="s2">... &quot;&quot;&quot;</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Issue GitHub: <a href="https://github.com/yaml/pyyaml/issues/576">https://github.com/yaml/pyyaml/issues/576</a></p>
+<p>May thay nếu dùng <code>yaml.safe_load</code> thì không đổi, nó sẽ gọi <code>Loader=yaml.SafeLoader)</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse the first YAML document in a stream</span>
+<span class="sd">    and produce the corresponding Python object.</span>
+
+<span class="sd">    Resolve only basic YAML tags. This is known</span>
+<span class="sd">    to be safe for untrusted input.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">load</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">SafeLoader</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>Tham khảo</h3>
+<ul>
+<li><a href="https://yaml.org/">https://yaml.org/</a></li>
+</ul>
+<h3>Kết luận</h3>
+<p>YAML không đơn giản như JSON, nếu không nhất thiết, chớ động vào.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-06-09T00:00:00+07:00">Fri 09 June 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#python-ref">python
+                    <span class="superscript">11</span>
+</a></li>
+                <li><a href="./tags.html#pyyaml-ref">pyyaml
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#yaml-ref">yaml
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

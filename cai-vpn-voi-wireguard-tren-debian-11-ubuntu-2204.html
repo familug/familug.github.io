@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="vpn, wireguard, privacy, frontpage, " />
+
+<meta property="og:title" content="Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04 "/>
+<meta property="og:url" content="./cai-vpn-voi-wireguard-tren-debian-11-ubuntu-2204.html" />
+<meta property="og:description" content="Tự cài VPN có dễ không? xưa khó lắm nay khác xưa nhiều rồi. VPN là gì Virtual Private Network (VPN) là tên một công nghệ cho phép mở rộng mạng nội bộ (private network) qua internet, nhờ đó có thể giúp kết nối mạng an toàn và riêng tư …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2022-11-22T00:00:00+07:00" />
+<meta name="twitter:title" content="Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04 ">
+<meta name="twitter:description" content="Tự cài VPN có dễ không? xưa khó lắm nay khác xưa nhiều rồi. VPN là gì Virtual Private Network (VPN) là tên một công nghệ cho phép mở rộng mạng nội bộ (private network) qua internet, nhờ đó có thể giúp kết nối mạng an toàn và riêng tư …">
+
+        <title>Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./cai-vpn-voi-wireguard-tren-debian-11-ubuntu-2204.html">
+                Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Tự cài VPN có dễ không? xưa khó lắm nay khác xưa nhiều rồi.</p>
+<p><img alt="wireguard" src="./images/wireguard.png"></p>
+<h2>VPN là gì</h2>
+<p>Virtual Private Network (VPN) là tên một công nghệ cho phép mở rộng mạng nội bộ (private network) qua internet, nhờ đó có thể giúp kết nối mạng an toàn và riêng tư hơn.</p>
+<p>Ví dụ khi vào một quán cafe và kết nối tới pymi.vn:</p>
+<p>Máy bạn --&gt; Wifi quán cafe --&gt; nhà cung cấp mạng (ví dụ FPT) --&gt; pymi.vn. Trên 3 con đường kết nối đó có thể rình rập nhiều nguy hiểm:</p>
+<ul>
+<li>hacker ngồi quán cafe và nghe trộm kết nối mạng rồi tấn công tạo trang giả mạo để đánh cắp tài khoản của bạn</li>
+<li>mọi kết nối đi qua nhà mạng FPT <strong>có thể</strong> được ghi lại, cũng <strong>có thể</strong> bị can thiệp.</li>
+<li>trang pymi.vn có IP của bạn có thể truy ra vị trí bạn truy cập.</li>
+<li>rất nhiều nữa.</li>
+</ul>
+<p>Sử dụng VPN, mô hình thay đổi thành</p>
+<p>Máy bạn --&gt; wifi quán cafe --&gt; nhà cung cấp mạng --&gt; VPN --&gt; pymi.vn</p>
+<ul>
+<li>hacker ngồi quán cafe chỉ có thể biết bạn truy cập tới IP của VPN</li>
+<li>nhà cung cấp mạng chỉ có thể biết bạn truy cập tới IP của VPN</li>
+<li>trang pymi.vn chỉ có IP của VPN server nên chỉ biết vị trí của server, không phải vị trí nhà bạn.</li>
+</ul>
+<p>Vài nhược điểm:</p>
+<ul>
+<li>do thông qua thêm 1 hop (điểm) nên kết nối có thể chậm hơn một chút.</li>
+<li>do phải dùng thêm 1 phần mềm nên trên máy di động sẽ tốn thêm chút pin</li>
+<li>vì các website sẽ thấy IP của VPN server nên biết bạn đang dùng VPN và có thể sẽ chặn, ví dụ một vài sàn crypto (không phải tất cả).</li>
+</ul>
+<p>Chú ý: VPN không giúp bạn trở nên "ẩn danh như hacker" trên mạng.</p>
+<p>Cài đặt VPN vốn không phải chuyện đơn giản, vậy nên các nhà cung cấp VPN luôn ăn nên làm ra, và ngày càng nhiều:</p>
+<ul>
+<li>1.1.1.1 của Cloudflare</li>
+<li><a href="https://www.mozilla.org/en-US/products/vpn/more/what-is-a-vpn/">Mozilla VPN</a></li>
+<li>ProtonVPN</li>
+<li>search ra cả đống</li>
+</ul>
+<p>Người tự cài VPN server, thường có 2 lựa chọn:</p>
+<ul>
+<li>IPSec: rất rất phức tạp</li>
+<li>OpenVPN: đơn giản hơn, rất phổ biến, nhưng vẫn khá phức tạp</li>
+</ul>
+<p>Cho đến khoảng 2020, khi xuất hiện 1 phần mềm siêu mới, rất xịn với tên <a href="https://www.wireguard.com/">WireGuard</a>, cài đặt cũng dễ dàng, đã làm việc setup VPN đơn giản hơn bao giờ hết.</p>
+<p>Về chất lượng/độ bảo mật thì đủ tin cậy khi:</p>
+<ul>
+<li>wireguard được merge code vào <a href="https://github.com/torvalds/linux/commit/bd2463ac7d7ec51d432f23bf0e893fb371a908cd">Linux kernel 5.6</a></li>
+<li>wireguard được <a href="https://lists.zx2c4.com/pipermail/wireguard/2020-June/005588.html">merge</a> code vào <a href="/tags.html#openbsd-ref">OpenBSD - hệ điều hành nổi tiếng về bảo mật (sản sinh ra OpenSSH)</a>.</li>
+</ul>
+<p>PS: mọi câu lệnh trong bài này đều chạy với user root.</p>
+<h2>Cài đặt wireguard</h2>
+<p>Server dùng Debian 11 hay Ubuntu 22.04</p>
+<div class="highlight"><pre><span></span><code><span class="n">sudo</span><span class="w"> </span><span class="n">apt</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="n">wireguard</span><span class="w"> </span><span class="n">unbound</span><span class="w"></span>
+</code></pre></div>
+
+<h2>Mô hình</h2>
+<p>Để setup VPN gồm 2 bước:
+- setup kết nối từ máy mình (gọi là peer) tới server (gọi là endpoint)
+- config server để cho phép VPN kết nối ra ngoài internet</p>
+<h2>Cấu hình peer &lt;-&gt; server</h2>
+<p>Wireguard có 2 câu lệnh, hoạt động khác nhau:</p>
+<ul>
+<li>wg</li>
+<li>wg-quick</li>
+</ul>
+<p>ở đây sẽ dùng wg-quick để bật tắt VPN vì đơn giản hơn.</p>
+<h3>server</h3>
+<p>Sinh private &amp; public key:</p>
+<div class="highlight"><pre><span></span><code><span class="p">#</span><span class="w"> </span><span class="n">touch</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">wireguard</span><span class="o">/</span><span class="n">private</span><span class="w"></span>
+<span class="p">#</span><span class="w"> </span><span class="n">chmod</span><span class="w"> </span><span class="mh">400</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">wireguard</span><span class="o">/</span><span class="n">private</span><span class="w"></span>
+<span class="p">#</span><span class="w"> </span><span class="n">wg</span><span class="w"> </span><span class="n">genkey</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">wireguard</span><span class="o">/</span><span class="n">private</span><span class="w"></span>
+<span class="p">#</span><span class="w"> </span><span class="n">wg</span><span class="w"> </span><span class="n">pubkey</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">wireguard</span><span class="o">/</span><span class="n">private</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">wireguard</span><span class="o">/</span><span class="n">public</span><span class="w"></span>
+</code></pre></div>
+
+<p>Viết file config /etc/wireguard/wg0.conf , tên file wg0.conf sẽ dùng cho network interface tên là wg0.
+Gõ man wg-quick rồi copy config mẫu.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[Interface]</span><span class="w"></span>
+<span class="na">Address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10.10.0.1/16</span><span class="w"></span>
+<span class="na">PrivateKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">THAY_NOIDUNG_PRIVATE_KEY_VAO_DAY</span><span class="w"></span>
+<span class="na">ListenPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">51820</span><span class="w"></span>
+
+<span class="k">[Peer]</span><span class="w"></span>
+<span class="na">PublicKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">THAY_NOIDUNG_PUBKEY_PEER1_VAO_DAY</span><span class="w"></span>
+<span class="na">AllowedIPs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10.10.0.2/32</span><span class="w"></span>
+
+<span class="c1"># [Peer]</span><span class="w"></span>
+<span class="c1"># PublicKey = THAY_NOIDUNG_PUBKEY_PEER2_VAO_DAY</span><span class="w"></span>
+<span class="c1"># AllowedIPs = 10.10.0.3/32</span><span class="w"></span>
+</code></pre></div>
+
+<p>Address là địa chỉ IP gán cho interface của server, ví dụ này chọn private network : 10.10.0.1/16, các peer khác sẽ có IP tùy ý trong 10.10.0.2 -&gt; 10.10.xx.yy</p>
+<p>Gõ <code>ip ad | grep inet</code> để lấy public IP của server, dùng để config peer.</p>
+<h3>Peer</h3>
+<p>Trên máy peer, làm tương tự các bước sinh private/public key rồi gõ config vào /etc/wireguard/wg0.conf</p>
+<div class="highlight"><pre><span></span><code><span class="k">[Interface]</span><span class="w"></span>
+<span class="na">Address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">10.10.0.2/32</span><span class="w"></span>
+<span class="na">PrivateKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">PRIVATE_KEY_CUA_PEER</span><span class="w"></span>
+
+<span class="k">[Peer]</span><span class="w"></span>
+<span class="na">PublicKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">PUBLIC_KEY_CUA_SERVER</span><span class="w"></span>
+<span class="na">Endpoint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">PUBLIC_IP_CUA_SERVER:51820</span><span class="w"></span>
+<span class="na">AllowedIPs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0.0.0.0/0</span><span class="w"></span>
+</code></pre></div>
+
+<p>rồi bật:</p>
+<div class="highlight"><pre><span></span><code>sudo wg-quick up wg0
+</code></pre></div>
+
+<h3>server</h3>
+<p>Copy public key của peer điền vào phần <code>[peer]</code> <code>THAY_NOIDUNG_PUBKEY_PEER1_VAO_DAY</code> trên server /etc/wireguard/wg0.conf.</p>
+<p>Sau đó bật wireguard: <code>sudo wg-quick up wg0</code></p>
+<p>Gõ wg để xem public key và trạng thái kết nối của các peer.</p>
+<p>Tới đây nếu kết nối thành công, khi gõ wg ở server sẽ thấy:</p>
+<div class="highlight"><pre><span></span><code># wg
+interface: wg0
+  public key: serverpubkey
+  private key: (hidden)
+  listening port: 51820
+
+peer: pXXXvEXXXX=
+  endpoint: XXXX:57226
+  allowed ips: 10.10.0.2/32
+  latest handshake: 23 hours, 14 minutes, 44 seconds ago
+  transfer: 512.48 KiB received, 824.25 KiB sent
+
+# ip ad
+...
+4: wg0: &lt;POINTOPOINT,NOARP,UP,LOWER_UP&gt; mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/none
+    inet 10.10.0.1/16 scope global wg0
+       valid_lft forever preferred_lft forever
+</code></pre></div>
+
+<p>Ở peer có thể ping server: ping 10.10.0.1</p>
+<p>Trên cả 2 máy (ở đây peer ví dụ là 1 máy Ubuntu), gõ</p>
+<div class="highlight"><pre><span></span><code><span class="n">systemctl</span><span class="w"> </span><span class="n">enable</span><span class="w"> </span><span class="n">wg</span><span class="o">-</span><span class="n">quick</span><span class="nv">@wg0</span><span class="w"></span>
+</code></pre></div>
+
+<p>để tự bật VPN khi bật máy.</p>
+<h2>Config để kết nối internet qua VPN</h2>
+<p>Sau các bước trên, mới chỉ kết nối tới VPN, chứ chưa kết nối ra internet được.</p>
+<p>Để kết nối ra internet, phía server phải config cho phép "forward" các network packet, và phải config firewall để đổi IP source của máy peer thành của VPN.</p>
+<p>Mở file /etc/sysctl.d/99-sysctl.conf</p>
+<div class="highlight"><pre><span></span><code>#<span class="w"> </span><span class="nv">Uncomment</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">enable</span><span class="w"> </span><span class="nv">packet</span><span class="w"> </span><span class="nv">forwarding</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">IPv4</span><span class="w"></span>
+<span class="nv">net</span>.<span class="nv">ipv4</span>.<span class="nv">ip_forward</span><span class="o">=</span><span class="mi">1</span><span class="w"></span>
+#<span class="w"> </span><span class="nv">Uncomment</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">enable</span><span class="w"> </span><span class="nv">packet</span><span class="w"> </span><span class="nv">forwarding</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">IPv6</span><span class="w"></span>
+<span class="nv">net</span>.<span class="nv">ipv6</span>.<span class="nv">conf</span>.<span class="nv">all</span>.<span class="nv">forwarding</span><span class="o">=</span><span class="mi">1</span><span class="w"></span>
+</code></pre></div>
+
+<p>Rồi gõ <code>sysctl -p</code></p>
+<p>Tạo /etc/rc.local</p>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/bin/sh</span>
+iptables -t nat -A POSTROUTING -s <span class="m">10</span>.10.0.0/16 -o <span class="nv">$THAY_DEFAULT_INTERFACE</span> -j MASQUERADE
+</code></pre></div>
+
+<p>với <code>$THAY_DEFAULT_INTERFACE</code> là interface mặc định xuất hiện ở output:</p>
+<div class="highlight"><pre><span></span><code>ip route | grep default
+</code></pre></div>
+
+<p>VD: <code>default via 4.3.2.1 dev eth1 proto dhcp src 4.3.2.1 metric 100</code> -&gt; eth1</p>
+<p>Rồi <code>chmod a+x /etc/rc.local; /etc/rc.local</code></p>
+<p>Tới đây mọi thứ đã xong có thể truy cập internet qua VPN, reboot lại server để thực hiện bài test khi server mất điện trong tương lai bật lên vẫn chạy ngon lành cành mít.</p>
+<h3>Kiểm tra DNS leak</h3>
+<p>Khi kết nối tới VPN, người dùng không mong muốn người khác biết mình truy cập trang nào, nhưng nếu config DNS không đúng sẽ bị lộ thông tin (DNS leak).
+Truy cập vào trang <a href="https://www.dnsleaktest.com/">https://www.dnsleaktest.com/</a> để test xem có bị rò rỉ DNS không. Nếu server ở nước ngoài, kết quả cũng hiện ở nước ngoài là ok.</p>
+<p>PS: wireguard có phần mềm trên Android, iOS, Windows, MacOS và tất nhiên Linux như Debian Ubuntu.</p>
+<h3>Kết luận</h3>
+<p>Tổng cộng thao tác</p>
+<ul>
+<li>server: 1 config 1 rc 1 sysctl là 3 file, mỗi file 2-4 dòng, gõ 2 câu lệnh</li>
+<li>peer: 1 config 1 rc, 2 câu lệnh</li>
+</ul>
+<p>Setup VPN chưa bao giờ dễ dàng đến thế!</p>
+<h2>Tham khảo</h2>
+<ul>
+<li><a href="https://www.wireguard.com/quickstart/">https://www.wireguard.com/quickstart/</a></li>
+<li><a href="https://ubuntu.com/server/docs/wireguard-vpn-defaultgw">https://ubuntu.com/server/docs/wireguard-vpn-defaultgw</a></li>
+</ul>
+<p>Happy safe surfing.</p>
+<p>Hết.</p>
+<p>HVN at http://pymi.vn and https://www.familug.org.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2022-11-22T00:00:00+07:00">Tue 22 November 2022</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#privacy-ref">privacy
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#vpn-ref">vpn
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#wireguard-ref">wireguard
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
