@@ -26,6 +26,11 @@ If you change the encoding, Requests will use the new value of r.encoding whenev
 ```
 
 `requests` thực hiện "đoán một cách có học" (educated guesses) encoding của response dựa trên HTTP headers.
+```
+        response.encoding = get_encoding_from_headers(response.headers)
+```
+<https://github.com/psf/requests/blob/v2.32.5/src/requests/adapters.py#L355>.
+
 Xem code thấy nó chỉ dựa trên header `content-type`:
 ```
 def get_encoding_from_headers(headers):
@@ -89,6 +94,9 @@ In [56]: resp.encoding = 'utf-8'
 
 In [57]: resp.text.split("<title>")[1].split("</title>")[0]
 Out[57]: 'ながら日経 - ポッドキャスト - Apple Podcast'
+
+In [62]: resp.connection
+Out[62]: <requests.adapters.HTTPAdapter at 0x772dba31ccd0>
 ```
 
 PS: curl cũng encode đúng với utf-8:
