@@ -12,27 +12,22 @@ Vì Python mặc định encoding trên Linux là `utf-8`, người dùng dễ m
 
 [Tài liệu](https://github.com/psf/requests/blob/v2.32.5/docs/user/quickstart.rst?plain=1#L84-L121) viết:
 
+> When you make a request, Requests makes educated guesses about the encoding of the response based on the HTTP headers. The text encoding guessed by Requests is used when you access r.text. You can find out what encoding Requests is using, and change it, using the r.encoding property:
+
+> r.encoding
+> 'utf-8'
+
+> r.encoding = 'ISO-8859-1'
+
+> If you change the encoding, Requests will use the new value of r.encoding whenever you call r.text. You might want to do this in any situation where you can apply special logic to work out what the encoding of the content will be. For example, HTML and XML have the ability to specify their encoding in their body. In situations like this, you should use r.content to find the encoding, and then set r.encoding. This will let you use r.text with the correct encoding.
+
+`requests` thực hiện "đoán một cách có học" (educated guesses) encoding của response dựa trên HTTP headers <https://github.com/psf/requests/blob/v2.32.5/src/requests/adapters.py#L355>.
+```py
+    response.encoding = get_encoding_from_headers(response.headers)
 ```
-Requests will automatically decode content from the server. Most unicode charsets are seamlessly decoded.
-
-When you make a request, Requests makes educated guesses about the encoding of the response based on the HTTP headers. The text encoding guessed by Requests is used when you access r.text. You can find out what encoding Requests is using, and change it, using the r.encoding property:
-
-r.encoding
-'utf-8'
-
-r.encoding = 'ISO-8859-1'
-
-If you change the encoding, Requests will use the new value of r.encoding whenever you call r.text. You might want to do this in any situation where you can apply special logic to work out what the encoding of the content will be. For example, HTML and XML have the ability to specify their encoding in their body. In situations like this, you should use r.content to find the encoding, and then set r.encoding. This will let you use r.text with the correct encoding.
-```
-
-`requests` thực hiện "đoán một cách có học" (educated guesses) encoding của response dựa trên HTTP headers.
-```
-        response.encoding = get_encoding_from_headers(response.headers)
-```
-<https://github.com/psf/requests/blob/v2.32.5/src/requests/adapters.py#L355>.
 
 Xem code thấy nó chỉ dựa trên header `content-type`:
-```
+```py
 def get_encoding_from_headers(headers):
     """Returns encodings from given HTTP Header Dict.
 
