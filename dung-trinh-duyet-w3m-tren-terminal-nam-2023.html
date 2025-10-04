@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="w3m, cli, browser, frontpage, " />
+
+<meta property="og:title" content="Dùng trình duyệt w3m trên terminal năm 2023 "/>
+<meta property="og:url" content="./dung-trinh-duyet-w3m-tren-terminal-nam-2023.html" />
+<meta property="og:description" content="Năm 2023, khi chiếc điện thoại 5 triệu cũng có 4-8GB RAM, laptop 8-16GB, thì lý do gì để không dùng Chrome/Firefox mà dùng một cái trình duyệt trên dòng lệnh? Hóa ra vẫn có. Chuyện rằng máy có 16GB RAM (onboard VGA), mỗi lần vào combat Dota2 trên …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-05-15T00:00:00+07:00" />
+<meta name="twitter:title" content="Dùng trình duyệt w3m trên terminal năm 2023 ">
+<meta name="twitter:description" content="Năm 2023, khi chiếc điện thoại 5 triệu cũng có 4-8GB RAM, laptop 8-16GB, thì lý do gì để không dùng Chrome/Firefox mà dùng một cái trình duyệt trên dòng lệnh? Hóa ra vẫn có. Chuyện rằng máy có 16GB RAM (onboard VGA), mỗi lần vào combat Dota2 trên …">
+
+        <title>Dùng trình duyệt w3m trên terminal năm 2023  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./dung-trinh-duyet-w3m-tren-terminal-nam-2023.html">
+                Dùng trình duyệt w3m trên terminal năm 2023
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Năm 2023, khi chiếc điện thoại 5 triệu cũng có 4-8GB RAM, laptop 8-16GB, thì lý do gì để không dùng Chrome/Firefox mà dùng một cái trình duyệt trên dòng lệnh?</p>
+<p><img alt="w3m" src="./images/w3m.png"></p>
+<p>Hóa ra vẫn có. Chuyện rằng máy có 16GB RAM (onboard VGA), mỗi lần vào combat Dota2 trên steam phải tắt hết các chương trình khác đi để đảm bảo không giật lag, có lần để Firefox rồi chơi, lúc combat 5 đánh 5, giật văng tắt luôn game (OOM, kernel kill).</p>
+<p>w3m? mở 1 trang web mất 14MB RAM, so với ít nhất 200-500MB trên Firefox hay Chrome, nên chơi game cũng khỏi cần tắt.</p>
+<h3>Cài đặt</h3>
+<div class="highlight"><pre><span></span><code>sudo apt install w3m -y
+</code></pre></div>
+
+<h3>Sử dụng</h3>
+<p><code>w3m URL</code></p>
+<div class="highlight"><pre><span></span><code>w3m ddg.gg
+</code></pre></div>
+
+<p>hay mở các tài liệu trên máy (nếu trước đó cài <code>apt install python3-doc</code>)</p>
+<div class="highlight"><pre><span></span><code>w3m /usr/share/doc
+</code></pre></div>
+
+<p>Mở nhiều trang cùng lúc? cài thêm <code>tmux</code> rồi mở nhiều cửa sổ tmux.</p>
+<p>Bạn có biết app <a href="https://www.mozilla.org/en-US/firefox/browsers/mobile/focus/">Firefox focus</a> trên di động? Tính năng siêu việt của nó là: chỉ mở được 1 tab duy nhất.</p>
+<h4>Vài phím tắt hữu dụng</h4>
+<ul>
+<li>H hiện help</li>
+<li>q tắt</li>
+<li>Tab để di chuyển</li>
+<li>U thanh URL, đổi địa chỉ </li>
+<li>Esc a thêm bookmark</li>
+<li>Esc b hiện bookmark</li>
+<li>B back, trở lại trang trước </li>
+</ul>
+<h3>Kết luận</h3>
+<p>w3m không xem được ảnh hay video, không chạy JS, nhưng đủ để đọc tài liệu/chữ. Kèm theo các ưu điểm:</p>
+<ul>
+<li>nhẹ</li>
+<li>không quảng cáo</li>
+<li>không JS, không hack</li>
+</ul>
+<p>PS: xem được ảnh nếu cài thêm <code>w3m-img</code></p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-05-15T00:00:00+07:00">Mon 15 May 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#browser-ref">browser
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#cli-ref">cli
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#w3m-ref">w3m
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
