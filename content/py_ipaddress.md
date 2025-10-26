@@ -1,10 +1,10 @@
-Title: [Python] Tính số IP trong mạng
+Title: [Python] Tính toán IP trong mạng
 Date: 2025/10/26
 Category: frontpage
 Tags: python, network, subnet, ipv4
 Slug: py_ipaddress
 
-Python từ 3.3 có sẵn thư viện `ipaddress` rất tiện lợi để tính toán IP trong network.
+Python từ 3.3 có sẵn thư viện `ipaddress` rất tiện lợi để tính toán IP trong mạng.
 
 ### Thư viện ipaddress
 
@@ -38,17 +38,21 @@ This class represents and manipulates 32-bit IPv4 network + addresses..
         .prefixlen: 27
 ```
 
-Thử tạo 1 network với địa chỉ `10.10.1.241/29`:
+Thử tạo 1 mạng với địa chỉ `10.10.1.241/29`:
 
 ```py
 >>> ipaddress.ip_network("10.10.1.241/29", strict=False)
 IPv4Network('10.10.1.240/29')
 ```
-set strict=False vì địa chỉ đầu vào vốn không phải địa chỉ network hợp lệ, Python sẽ tự tính giá trị chính xác là `10.10.1.240`.
-Còn `10.10.1.241` là 1 host trong network này.
+set strict=False vì địa chỉ đầu vào vốn không phải địa chỉ mạng hợp lệ, Python sẽ tự tính giá trị chính xác là `10.10.1.240`.
+Còn `10.10.1.241` là 1 host trong mạng này.
 
 ```py
 >>> ip = ipaddress.ip_network("10.10.1.241/29", strict=False)
+>>> type(ip)
+<class 'ipaddress.IPv4Network'>
+>>> ip
+IPv4Network('10.10.1.240/29')
 >>> ip.
 ip.address_exclude(   ip.hostmask           ip.is_multicast       ip.netmask            ip.reverse_pointer    ip.version
 ip.broadcast_address  ip.hosts()            ip.is_private         ip.network_address    ip.subnet_of(         ip.with_hostmask
@@ -67,27 +71,22 @@ IPv4Address('255.255.255.248')
 29
 ```
 
-ip object có các attribute:
+IPv4Network object có các attribute:
 
-- Số IP trong network: `8 == 2**(32-29) == 2**3`
-- địa chỉ đầu tiên là địa chỉ network: `10.10.1.240`
+- Số IP trong mạng: `8 == 2**(32-29) == 2**3`
+- địa chỉ đầu tiên là địa chỉ mạng: `10.10.1.240`
 - địa chỉ cuối là địa chỉ broadcast: `10.10.1.247`
 - các địa chỉ còn lại từ 241 tới 246 có thể cấp cho các host.
 
+### Kiểm tra IP có nằm trong mạng không
 ```py
->>> type(ip)
-<class 'ipaddress.IPv4Network'>
->>> ip
-IPv4Network('10.10.1.240/29')
->>> ipaddress.IPv4
-ipaddress.IPv4Address(    ipaddress.IPv4Interface(  ipaddress.IPv4Network(
 >>> ipaddress.IPv4Address("10.10.1.242") in ip
 True
 >>> ipaddress.IPv4Address("10.10.1.249") in ip
 False
 ```
 
-### Tính tất cả các network /29 trong 10.10.1.0/24
+### Tính tất cả các mạng con /29 trong 10.10.1.0/24
 
 ```py
 >>> nip = ipaddress.ip_network("10.10.1.0/24")
