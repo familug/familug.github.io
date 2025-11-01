@@ -1,7 +1,7 @@
-Title: Ansible không ưu tiên CLI option --user bằng inventory 
+Title: Ansible không ưu tiên CLI option --user cao bằng inventory 
 Date: 2025/11/01
 Category: frontpage
-Tags: ansible, inventory,
+Tags: ansible, inventory
 Slug: ansible-remote-user-option
 
 99% các chương trình có giao diện dòng lệnh CLI đều ưu tiên option được người dùng chỉ định mức ưu tiên cao nhất. Ansible đặc biệt, vì nó nằm trong 1% còn lại.
@@ -53,6 +53,11 @@ tức command-line value có mức ưu tiên thấp nhất.
 
 > When you type something directly at the command line, you may feel that your hand-crafted values should override all others, but Ansible does not work that way. Command-line options have low precedence - they override configuration only. They do not override playbook keywords, variables from inventory or variables from playbooks.
 [source](https://github.com/ansible/ansible-documentation/blob/307434dd188f5a4d7631d205e7c741f3a2a8964b/docs/docsite/rst/reference_appendices/general_precedence.rst?plain=1#L47C1-L47C332)
+
+### Giải pháp
+>   #. Extra vars (for example, ``-e "user=my_user"``)(always win precedence) [source](https://github.com/ansible/ansible-documentation/blob/307434dd188f5a4d7631d205e7c741f3a2a8964b/docs/docsite/rst/playbook_guide/playbooks_variables.rst?plain=1#L429)
+
+extra vars được gán qua option -e có độ ưu tiên cao nhất, thay vì -u cli_user, hãy dùng `-e ansible_user=cli_user`.
 
 ### Kết luận
 Ansible rất thành công so với các đối thủ lừng lẫy một thời của nó: Salt, Puppet, Chef. Người thành công thường có lối đi riêng ???!!!
