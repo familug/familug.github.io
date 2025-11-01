@@ -1,4 +1,4 @@
-Title: Ansible không ưu tiên CLI option --user cao bằng inventory 
+Title: Ansible không ưu tiên CLI option --user cao bằng inventory
 Date: 2025/11/01
 Category: frontpage
 Tags: ansible, inventory
