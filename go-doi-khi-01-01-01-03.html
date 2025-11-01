@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="go, golang, bashgodaily, pitfall, const, float, frontpage, " />
+
+<meta property="og:title" content="[Go] Đôi khi 0.1 + 0.1 + 0.1 == 0.3 "/>
+<meta property="og:url" content="./go-doi-khi-01-01-01-03.html" />
+<meta property="og:description" content="Trong cuộc sống, những thứ đúng là đúng, sai là sai thật dễ dàng, còn những thứ đôi khi thế này, đôi khi thế nọ, thì tùy. Như các học viên của https://pymi.vn đều biết vì sao 0.1 + 0.1 + 0.1 != 0.3 trong Python và …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-01-31T00:00:00+07:00" />
+<meta name="twitter:title" content="[Go] Đôi khi 0.1 + 0.1 + 0.1 == 0.3 ">
+<meta name="twitter:description" content="Trong cuộc sống, những thứ đúng là đúng, sai là sai thật dễ dàng, còn những thứ đôi khi thế này, đôi khi thế nọ, thì tùy. Như các học viên của https://pymi.vn đều biết vì sao 0.1 + 0.1 + 0.1 != 0.3 trong Python và …">
+
+        <title>[Go] Đôi khi 0.1 + 0.1 + 0.1 == 0.3  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./go-doi-khi-01-01-01-03.html">
+                [Go] Đôi khi 0.1 + 0.1 + 0.1 == 0.3
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Trong cuộc sống, những thứ đúng là đúng, sai là sai thật dễ dàng, còn những thứ đôi khi thế này, đôi khi thế nọ, thì tùy.</p>
+<p>Như các học viên của <a href="https://pymi.vn">https://pymi.vn</a> đều biết <a href="https://pymi.vn/blog/why-not-float/">vì sao 0.1 + 0.1 + 0.1 != 0.3</a> trong Python và hầu hết các ngôn ngữ khác, thì với Go, thực hiện 1 phép tính cộng đơn giản theo 2 cách khác nhau, cho ra 2 kết quả khác nhau.</p>
+<p><img alt="go nowhere const" src="./images/go_nowhere.webp"></p>
+<h3>Cách giống các ngôn ngữ khác</h3>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.1</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v + %v + %v == 0.3? %t\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%.17f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết quả giống như Python và các ngôn ngữ khác, 0.1 + 0.1 + 0.1 != 0.3 do kết quả vế trái là <code>0.30000000000000004</code></p>
+<div class="highlight"><pre><span></span><code><span class="mf">0.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="err">?</span><span class="w"> </span><span class="n">false</span><span class="w"></span>
+<span class="mf">0.300000</span><span class="w"></span>
+<span class="mf">0.30000000000000004</span><span class="w"></span>
+</code></pre></div>
+
+<p><a href="https://go.dev/play/p/eDe3szlFyi7">https://go.dev/play/p/eDe3szlFyi7</a></p>
+<h3>Cách của riêng Go</h3>
+<p>Nếu viết khác đi một chút, sử dụng từ khóa <code>const</code>, hay viết trực tiếp mà không gán cho biến <code>x</code>, kết quả lại là đúng:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.1</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v + %v + %v == 0.3? %t\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="o">+</span><span class="nx">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v + %v + %v == 0.3? %t\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="o">+</span><span class="mf">0.1</span><span class="o">+</span><span class="mf">0.1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%.30f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="o">+</span><span class="mf">0.1</span><span class="o">+</span><span class="mf">0.1</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%.30f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">0.3</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết quả:</p>
+<div class="highlight"><pre><span></span><code><span class="mf">0.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="err">?</span><span class="w"> </span><span class="n">true</span><span class="w"></span>
+<span class="mf">0.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="err">?</span><span class="w"> </span><span class="n">true</span><span class="w"></span>
+<span class="mf">0.299999999999999988897769753748</span><span class="w"></span>
+<span class="mf">0.299999999999999988897769753748</span><span class="w"></span>
+</code></pre></div>
+
+<p><a href="https://go.dev/play/p/IPuQD9aLlV8">https://go.dev/play/p/IPuQD9aLlV8</a></p>
+<p>Vậy rốt cuộc là sao?</p>
+<h4>Go const</h4>
+<p>Từ khóa <code>const</code> trong Go khác với trong các ngôn ngữ khác, không phải mỗi chuyện nó immutable (không thay đổi), mà cách tính toán giá trị cũng không như "thường".</p>
+<p>Cách viết <code>0.1+0.1+0.1</code> cũng là const trong Go, gọi chính xác là <code>const expression</code>.</p>
+<p>Sự khác biệt to lớn này khiến các tác giả Go phải viết một bài blog để giải thích <code>const</code> khác các ngôn ngữ thế nào <a href="https://go.dev/blog/constants">https://go.dev/blog/constants</a>.</p>
+<p>Trích blog nói trên:</p>
+<blockquote>
+<p>First, a quick definition. In Go, const is a keyword introducing a name for a scalar value such as 2 or 3.14159 or "scrumptious". Such values, named or otherwise, are called constants in Go. Constants can also be created by expressions built from constants, such as 2+3 or 2+3i or math.Pi/2 or ("go"+"pher").</p>
+</blockquote>
+<p>Khi viết 0.1 trong Go, giá trị này <strong>không có kiểu</strong> (have no type), hay còn gọi là <code>untyped constant</code>. Nhưng nó có <strong>kiểu mặc định</strong> (default type) KHI CẦN. Hoặc cũng có thể đổi sang một kiểu khác. Trong Go có 2 kiểu float là float32 và float64.</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.1</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%T\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="c1">// float64</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">y</span><span class="w"> </span><span class="kt">float32</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.2</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%T\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="c1">// float32</span><span class="w"></span>
+<span class="w">    </span><span class="nx">z</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.1</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%T\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">z</span><span class="o">+</span><span class="nx">y</span><span class="p">)</span><span class="w"> </span><span class="c1">// Compile error: invalid operation: z + y (mismatched types float64 and float32)</span><span class="w"></span>
+</code></pre></div>
+
+<p><code>x</code> có default type là <code>float64</code>, khi cộng với giá trị <code>y</code> kiểu <code>float32</code>, <code>x</code> lúc này có kiểu <code>float32</code> mà không cần phải đổi kiểu.</p>
+<ul>
+<li>Chú ý, <code>const x = 0.1</code> (untyped) khác với <code>z := 0.1</code> (biến z kiểu float64).</li>
+<li>Chú ý, <code>const x float32 = 0.1</code> đã có kiểu float32, khác với untyped const.</li>
+</ul>
+<h4>Tính toán const expression</h4>
+<p>Trong bài blog:</p>
+<blockquote>
+<p>Numeric constants live in an arbitrary-precision numeric space; they are just regular numbers.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">Huge</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">1e1000</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">Huge</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e999</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>in ra 10.</p>
+<p>Các const được tính toán bởi Go compiler - khi build, chứ không tính KHI CHẠY, sử dụng kiểu dữ liệu có độ chính xác cao hơn so với float64</p>
+<p>Trong Go spec <a href="https://go.dev/ref/spec#Constants">https://go.dev/ref/spec#Constants</a></p>
+<blockquote>
+<p>Numeric constants represent exact values of arbitrary precision and do not overflow.
+ Implementation restriction: Although numeric constants have arbitrary precision in the language, a compiler may implement them using an internal representation with limited precision. That said, every implementation must:
+  Represent floating-point constants, including the parts of a complex constant, with a mantissa of at least 256 bits and a signed binary exponent of at least 16 bits.</p>
+</blockquote>
+<p>Vậy khi tính toán 0.1+0.1+0.1 với 256 bits (so với float64 chỉ có 64 bit), độ chính xác cao hơn 4 lần, kết quả cho 0.1+0.1+0.1 bằng với giá trị biểu diễn 0.3 (xem ở trên, vẫn không bằng 0.3 về mặt tóan học).</p>
+<h3>Kết luận</h3>
+<p>Kiểu float64 trong Go vẫn tuân theo <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE754</a>, nên kết luận về kiểu float vẫn giống như Python. Điều khác biệt chỉ là một số trường hợp nhỏ xảy ra khi sử dụng const.</p>
+<p>Go thật đơn giản, ha!</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-01-31T00:00:00+07:00">Tue 31 January 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#bashgodaily-ref">bashgodaily
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#const-ref">const
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#float-ref">float
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#golang-ref">golang
+                    <span class="superscript">6</span>
+</a></li>
+                <li><a href="./tags.html#pitfall-ref">pitfall
+                    <span class="superscript">5</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="readcode, go, prometheus, metric, timeseries, frontpage, " />
+
+<meta property="og:title" content="[go] Đọc code prometheus xem vì sao delta tính sai kết quả "/>
+<meta property="og:url" content="./prometheus_rate.html" />
+<meta property="og:description" content="Prometheus là gì The Prometheus monitoring system and time series /ˈsɪr.iːz/ database. Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-09-19T00:00:00+07:00" />
+<meta name="twitter:title" content="[go] Đọc code prometheus xem vì sao delta tính sai kết quả ">
+<meta name="twitter:description" content="Prometheus là gì The Prometheus monitoring system and time series /ˈsɪr.iːz/ database. Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are …">
+
+        <title>[go] Đọc code prometheus xem vì sao delta tính sai kết quả  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./prometheus_rate.html">
+                [go] Đọc code prometheus xem vì sao delta tính sai kết quả
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>Prometheus là gì</h2>
+<blockquote>
+<p>The Prometheus monitoring system and time series /ˈsɪr.iːz/ database.
+Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are observed.</p>
+</blockquote>
+<p>Prometheus là tên phần mềm metric monitoring tiêu chuẩn ngày nay. 10 năm trước là graphite.
+Stack phổ biến thời cloud: Prometheus lưu trữ time series, hiển thị biểu đồ dùng grafana, gửi cảnh báo alert dùng alertmanager.</p>
+<p>Prometheus viết bằng Go, bắt nguồn từ SoundCloud, code xem tại <a href="https://github.com/prometheus/prometheus">https://github.com/prometheus/prometheus</a></p>
+<blockquote>
+<p>Prometheus is an open-source systems monitoring and alerting toolkit originally built at SoundCloud. Since its inception in 2012, many companies and organizations have adopted Prometheus, and the project has a very active developer and user community. It is now a standalone open source project and maintained independently of any company. To emphasize this, and to clarify the project's governance structure, Prometheus joined the Cloud Native Computing Foundation in 2016 as the second hosted project, after Kubernetes.</p>
+</blockquote>
+<h2>Cài và chạy Prometheus</h2>
+<p>Cài đặt bằng việc tải file <a href="https://prometheus.io/docs/introduction/first_steps/#downloading-prometheus">binary</a>. Hay build từ source:</p>
+<div class="highlight"><pre><span></span><code>$ git clone https://github.com/prometheus/prometheus --branch v2.54.1
+Cloning into <span class="s1">&#39;prometheus&#39;</span>...
+...
+Receiving objects: <span class="m">100</span>% <span class="o">(</span><span class="m">118939</span>/118939<span class="o">)</span>, <span class="m">200</span>.60 MiB <span class="p">|</span> <span class="m">7</span>.23 MiB/s, <span class="k">done</span>.
+...
+
+$ sudo apt install -y golang-1.21
+...
+</code></pre></div>
+
+<p>Cài nodejs bản 20 để build frontend cho prometheus <a href="https://nodejs.org/en/download/package-manager">https://nodejs.org/en/download/package-manager</a></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># installs nvm (Node Version Manager)</span><span class="w"></span>
+<span class="n">curl</span><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="o">-</span><span class="w"> </span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">nvm</span><span class="o">-</span><span class="n">sh</span><span class="o">/</span><span class="n">nvm</span><span class="o">/</span><span class="n">v0</span><span class="o">.</span><span class="mf">40.0</span><span class="o">/</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">bash</span><span class="w"></span>
+
+<span class="c1"># download and install Node.js (you may need to restart the terminal)</span><span class="w"></span>
+<span class="n">nvm</span><span class="w"> </span><span class="n">install</span><span class="w"> </span><span class="mi">20</span><span class="w"></span>
+
+<span class="c1"># verifies the right Node.js version is in the environment</span><span class="w"></span>
+<span class="n">node</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="c1"># should print `v20.17.0`</span><span class="w"></span>
+
+<span class="c1"># verifies the right npm version is in the environment</span><span class="w"></span>
+<span class="n">npm</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"> </span><span class="c1"># should print `10.8.2</span><span class="w"></span>
+</code></pre></div>
+
+<p>Build prometheus:</p>
+<div class="highlight"><pre><span></span><code><span class="o">$</span><span class="w"> </span><span class="n">cd</span><span class="w"> </span><span class="n">prometheus</span><span class="w"></span>
+<span class="o">$</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="n">build</span><span class="w"></span>
+<span class="n">cd</span><span class="w"> </span><span class="n">web</span><span class="o">/</span><span class="n">ui</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">npm</span><span class="w"> </span><span class="n">install</span><span class="w"></span>
+
+<span class="n">changed</span><span class="w"> </span><span class="mi">1609</span><span class="w"> </span><span class="n">packages</span><span class="p">,</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">audited</span><span class="w"> </span><span class="mi">1615</span><span class="w"> </span><span class="n">packages</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="mi">28</span><span class="n">s</span><span class="w"></span>
+
+<span class="o">...</span><span class="w"></span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">building</span><span class="w"> </span><span class="n">binaries</span><span class="w"></span>
+<span class="o">.../</span><span class="n">promu</span><span class="w"> </span><span class="n">build</span><span class="w"> </span><span class="o">--</span><span class="n">prefix</span><span class="w"> </span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hvn</span><span class="o">/</span><span class="n">code</span><span class="o">/</span><span class="n">prometheus</span><span class="w"></span>
+<span class="w"> </span><span class="o">&gt;</span><span class="w">   </span><span class="n">prometheus</span><span class="w"></span>
+<span class="n">go</span><span class="p">:</span><span class="w"> </span><span class="n">downloading</span><span class="w"> </span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">KimMachineGun</span><span class="o">/</span><span class="n">automemlimit</span><span class="w"> </span><span class="n">v0</span><span class="o">.</span><span class="mf">6.1</span><span class="w"></span>
+<span class="n">go</span><span class="p">:</span><span class="w"> </span><span class="n">downloading</span><span class="w"> </span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">alecthomas</span><span class="o">/</span><span class="n">units</span><span class="w"> </span><span class="n">v0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">-</span><span class="mi">20240626203959</span><span class="o">-</span><span class="mi">61</span><span class="n">d1e3462e30</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">building</span><span class="w"> </span><span class="n">binaries</span><span class="w"></span>
+<span class="o">...</span><span class="n">bin</span><span class="o">/</span><span class="n">promu</span><span class="w"> </span><span class="n">build</span><span class="w"> </span><span class="o">--</span><span class="n">prefix</span><span class="w"> </span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hvn</span><span class="o">/</span><span class="n">code</span><span class="o">/</span><span class="n">prometheus</span><span class="w"></span>
+<span class="w"> </span><span class="o">&gt;</span><span class="w">   </span><span class="n">prometheus</span><span class="w"></span>
+</code></pre></div>
+
+<p>Tạo file config <a href="https://prometheus.io/docs/introduction/first_steps/#configuring-prometheus">https://prometheus.io/docs/introduction/first_steps/#configuring-prometheus</a>:</p>
+<div class="highlight"><pre><span></span><code>$ cat <span class="s">&lt;&lt;EOF &gt; prometheus.yaml</span>
+<span class="s">global:</span>
+<span class="s">  scrape_interval:     15s</span>
+<span class="s">  evaluation_interval: 15s</span>
+
+<span class="s">rule_files:</span>
+<span class="s">  # - &quot;first.rules&quot;</span>
+<span class="s">  # - &quot;second.rules&quot;</span>
+
+<span class="s">scrape_configs:</span>
+<span class="s">  - job_name: prometheus</span>
+<span class="s">    static_configs:</span>
+<span class="s">      - targets: [&#39;localhost:9090&#39;]</span>
+<span class="s">EOF</span>
+</code></pre></div>
+
+<p>Chạy:</p>
+<div class="highlight"><pre><span></span><code>$ ./prometheus --config.file<span class="o">=</span>./prometheus.yaml
+<span class="nv">ts</span><span class="o">=</span><span class="m">2024</span>-09-12T13:28:55.525Z <span class="nv">caller</span><span class="o">=</span>main.go:601 <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;No time or size retention was set so using the default time retention&quot;</span> <span class="nv">duration</span><span class="o">=</span>15d
+...
+<span class="nv">ts</span><span class="o">=</span><span class="m">2024</span>-09-12T13:29:14.998Z <span class="nv">caller</span><span class="o">=</span>web.go:571 <span class="nv">level</span><span class="o">=</span>info <span class="nv">component</span><span class="o">=</span>web <span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;Start listening for connections&quot;</span> <span class="nv">address</span><span class="o">=</span><span class="m">0</span>.0.0.0:9090
+...
+</code></pre></div>
+
+<h4>Xem metric trên giao diện</h4>
+<p>Mở trình duyệt địa chỉ http://127.0.0.1:9090</p>
+<p>Gõ http sẽ có "auto complete" để chọn metric <code>prometheus_http_requests_total</code></p>
+<p><img alt="prom_query" src="./images/prom_query.webp"></p>
+<p>Chọn label <code>handler="/api/v1/query</code>":</p>
+<div class="highlight"><pre><span></span><code>prometheus_http_requests_total{handler=&quot;/api/v1/query&quot;}
+</code></pre></div>
+
+<p>Các metric này của chính chương trình Prometheus để tự monitor chính mình.
+Cụ thể, time series trên đếm số lượt truy cập tới đường dẫn <code>/api/v1/query</code>, mỗi lần người dùng query metric qua giao diện trên sẽ tăng giá trị thêm 1.</p>
+<h4>Instant vector selector</h4>
+<blockquote>
+<p>Instant vector selectors allow the selection of a set of time series and a single sample value for each at a given timestamp (point in time). In the simplest form, only a metric name is specified, which results in an instant vector containing elements for all time series that have this metric name.</p>
+</blockquote>
+<p>Instant vector selector trả về các time series và 1 giá trị cho mỗi time series tại thời điểm hiện tại.</p>
+<p>Ví dụ:
+<code>prometheus_http_requests_total{handler="/api/v1/query"}</code> trả về giá trị cho các label <code>code</code> khác nhau:</p>
+<div class="highlight"><pre><span></span><code>prometheus_http_requests_total{code=&quot;200&quot;, handler=&quot;/api/v1/query&quot;, instance=&quot;localhost:9090&quot;, job=&quot;prometheus&quot;} 88
+prometheus_http_requests_total{code=&quot;400&quot;, handler=&quot;/api/v1/query&quot;, instance=&quot;localhost:9090&quot;, job=&quot;prometheus&quot;} 1
+</code></pre></div>
+
+<h4>Range vector selector</h4>
+<blockquote>
+<p>Range vector literals work like instant vector literals, except that they select a range of samples back from the current instant. Syntactically, a time duration is appended in square brackets ([]) at the end of a vector selector to specify how far back in time values should be fetched for each resulting range vector element.</p>
+</blockquote>
+<p>Range vector selector hoạt động như Instant vector selector, ngoại trừ việc nó trả về 1 dãy các giá trị trong khoảng thời gian lựa chọn tới thời điểm hiện tại. Ví dụ:</p>
+<p><code>prometheus_http_requests_total{handler="/api/v1/query"}[1m]</code> trả về:</p>
+<div class="highlight"><pre><span></span><code><span class="n">prometheus_http_requests_total</span><span class="p">{</span><span class="n">code</span><span class="o">=</span><span class="s">&quot;200&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="o">=</span><span class="s">&quot;/api/v1/query&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">instance</span><span class="o">=</span><span class="s">&quot;localhost:9090&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">job</span><span class="o">=</span><span class="s">&quot;prometheus&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="mi">90</span><span class="w"> </span><span class="mf">@1726745269.174</span><span class="w"></span>
+<span class="mi">92</span><span class="w"> </span><span class="mf">@1726745284.174</span><span class="w"></span>
+<span class="mi">105</span><span class="w"> </span><span class="mf">@1726745299.174</span><span class="w"></span>
+<span class="mi">114</span><span class="w"> </span><span class="mf">@1726745314.174</span><span class="w"></span>
+
+<span class="n">prometheus_http_requests_total</span><span class="p">{</span><span class="n">code</span><span class="o">=</span><span class="s">&quot;400&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="o">=</span><span class="s">&quot;/api/v1/query&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">instance</span><span class="o">=</span><span class="s">&quot;localhost:9090&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">job</span><span class="o">=</span><span class="s">&quot;prometheus&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="mi">1</span><span class="w"> </span><span class="mf">@1726745269.174</span><span class="w"></span>
+<span class="mi">1</span><span class="w"> </span><span class="mf">@1726745284.174</span><span class="w"></span>
+<span class="mi">1</span><span class="w"> </span><span class="mf">@1726745299.174</span><span class="w"></span>
+<span class="mi">3</span><span class="w"> </span><span class="mf">@1726745314.174</span><span class="w"></span>
+</code></pre></div>
+
+<p>Do trong file config cấu hình <code>scrape_interval=15s</code>, trong 1m (1 phút) sẽ có 4 giá trị kèm thời gian trả về.</p>
+<h4>Các function</h4>
+<p><a href="https://prometheus.io/docs/prometheus/latest/querying/functions/">Query function</a> cung cấp sẵn các function để tính toán. Như tính</p>
+<ul>
+<li><code>sum</code>: tổng</li>
+<li><code>abs</code>: giá trị tuyệt đối</li>
+<li><code>avg_over_time</code>: giá trị trung bình</li>
+<li><code>rate</code>: giá trị tăng trung bình mỗi giây</li>
+<li><code>delta</code>: hiệu của giá trị đầu và cuối</li>
+</ul>
+<p>Có thể thấy các function này hoạt động trên mỗi time series trong cùng 1 metrics, đa phần chỉ có ý nghĩa khi dùng với range selector (lấy trung bình của số lượt truy cập mỗi giây trong vòng 1 phút vừa rồi).</p>
+<p>Viết <code>rate(prometheus_http_requests_total{handler="/api/v1/query"}[1m])</code> trả về lần lượt giá trị cho từng series của cùng metric <code>prometheus_http_requests_total</code>:</p>
+<div class="highlight"><pre><span></span><code>{code=&quot;200&quot;, handler=&quot;/api/v1/query&quot;, instance=&quot;localhost:9090&quot;, job=&quot;prometheus&quot;} 0.02222222222222222
+{code=&quot;400&quot;, handler=&quot;/api/v1/query&quot;, instance=&quot;localhost:9090&quot;, job=&quot;prometheus&quot;} 0
+</code></pre></div>
+
+<p>Để tập trung, ta sẽ chỉ query code="200".</p>
+<h4>delta() tính sai?</h4>
+<p>Dùng range vector selector:
+<code>prometheus_http_requests_total{code="200", handler="/api/v1/query"}[1m]</code></p>
+<p>Trả về:</p>
+<div class="highlight"><pre><span></span><code><span class="n">prometheus_http_requests_total</span><span class="p">{</span><span class="n">code</span><span class="o">=</span><span class="s">&quot;200&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="o">=</span><span class="s">&quot;/api/v1/query&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">instance</span><span class="o">=</span><span class="s">&quot;localhost:9090&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">job</span><span class="o">=</span><span class="s">&quot;prometheus&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="mi">120</span><span class="w"> </span><span class="mf">@1726745659.174</span><span class="w"></span>
+<span class="mi">122</span><span class="w"> </span><span class="mf">@1726745674.174</span><span class="w"></span>
+<span class="mi">134</span><span class="w"> </span><span class="mf">@1726745689.174</span><span class="w"></span>
+<span class="mi">149</span><span class="w"> </span><span class="mf">@1726745704.174</span><span class="w"></span>
+</code></pre></div>
+
+<p><img alt="prom_functions" src="./images/prom_functions.webp"></p>
+<blockquote>
+<p>delta(v range-vector) calculates the difference between the first and last value of each time series element in a range vector v, returning an instant vector with the given deltas and equivalent labels.</p>
+</blockquote>
+<p><a href="https://github.com/prometheus/prometheus/blob/v2.54.1/docs/querying/functions.md#delta">https://github.com/prometheus/prometheus/blob/v2.54.1/docs/querying/functions.md#delta</a></p>
+<p>Vậy nếu tính nhẩm có delta có giá trị là 149 - 120 = 29, nhưng kết quả lại là <code>38.666666666666</code>. Vậy delta tính sai?</p>
+<p>Khoan đã, tài liệu còn viết:</p>
+<blockquote>
+<p>The delta is extrapolated to cover the full time range as specified in the range vector selector, so that it is possible to get a non-integer result even if the sample values are all integers.</p>
+</blockquote>
+<h4>extrapolated là gì?</h4>
+<p>extrapolate dịch ra tiếng Việt là "ngoại suy", ở đây kết quả được suy ra từ số liệu đã có. Tại sao phải suy?</p>
+<p>vì lấy giá trị thời gian cuối trừ giá trị đầu 1726745704 - 1726745659  = 45 giây,
+mà range cần lấy là 1m = 60 giây, nên <strong>tính năng</strong> của <code>delta</code> sẽ suy ra (149-120)/45 * 60 = 38.666666666666.</p>
+<p>Vậy delta không tính sai, delta chỉ tính đúng như tài liệu của nó mô tả.</p>
+<h4>rate() tính đúng?</h4>
+<blockquote>
+<p>rate(v range-vector) calculates the per-second average rate of increase of the time series in the range vector. Breaks in monotonicity (such as counter resets due to target restarts) are automatically adjusted for. Also, the calculation extrapolates to the ends of the time range, allowing for missed scrapes or imperfect alignment of scrape cycles with the range's time period.</p>
+</blockquote>
+<p><a href="https://github.com/prometheus/prometheus/blob/v2.54.1/docs/querying/functions.md#rate">https://github.com/prometheus/prometheus/blob/v2.54.1/docs/querying/functions.md#rate</a></p>
+<p>rate bằng (149-120)/45 = 0.64444444444 như mong đợi trong trường hợp này, nhưng tài liệu có nhắc tới "extrapolates" trong trường hợp khác.</p>
+<h3>Đọc code Prometheus</h3>
+<div class="highlight"><pre><span></span><code>$ find . -name <span class="s1">&#39;*.go&#39;</span> <span class="p">|</span> xargs grep delta
+...
+./promql/functions.go:  <span class="s2">&quot;delta&quot;</span>:              funcDelta,
+./promql/functions.go:  <span class="s2">&quot;idelta&quot;</span>:             funcIdelta,
+</code></pre></div>
+
+<p>thấy file <code>promql/functions.go</code> là nơi chứa code của các function.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="nx">funcDelta</span><span class="p">(</span><span class="nx">vals</span><span class="w"> </span><span class="p">[]</span><span class="nx">parser</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="w"> </span><span class="nx">parser</span><span class="p">.</span><span class="nx">Expressions</span><span class="p">,</span><span class="w"> </span><span class="nx">enh</span><span class="w"> </span><span class="o">*</span><span class="nx">EvalNodeHelper</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">Vector</span><span class="p">,</span><span class="w"> </span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">extrapolatedRate</span><span class="p">(</span><span class="nx">vals</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="p">,</span><span class="w"> </span><span class="nx">enh</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c1">// === rate(node parser.ValueTypeMatrix) (Vector, Annotations) ===</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">funcRate</span><span class="p">(</span><span class="nx">vals</span><span class="w"> </span><span class="p">[]</span><span class="nx">parser</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="w"> </span><span class="nx">parser</span><span class="p">.</span><span class="nx">Expressions</span><span class="p">,</span><span class="w"> </span><span class="nx">enh</span><span class="w"> </span><span class="o">*</span><span class="nx">EvalNodeHelper</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">Vector</span><span class="p">,</span><span class="w"> </span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">extrapolatedRate</span><span class="p">(</span><span class="nx">vals</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="p">,</span><span class="w"> </span><span class="nx">enh</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>cả 2 đều gọi tới <code>extrapolatedRate</code>
+Xem online <a href="https://github.com/prometheus/prometheus/blob/v2.54.1/promql/functions.go#L71-L173">https://github.com/prometheus/prometheus/blob/v2.54.1/promql/functions.go#L71-L173</a></p>
+<div class="highlight"><pre><span></span><code><span class="c1">// extrapolatedRate is a utility function for rate/increase/delta.</span><span class="w"></span>
+<span class="c1">// It calculates the rate (allowing for counter resets if isCounter is true),</span><span class="w"></span>
+<span class="c1">// extrapolates if the first/last sample is close to the boundary, and returns</span><span class="w"></span>
+<span class="c1">// the result as either per-second (if isRate is true) or overall.</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">extrapolatedRate</span><span class="p">(</span><span class="nx">vals</span><span class="w"> </span><span class="p">[]</span><span class="nx">parser</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span><span class="w"> </span><span class="nx">args</span><span class="w"> </span><span class="nx">parser</span><span class="p">.</span><span class="nx">Expressions</span><span class="p">,</span><span class="w"> </span><span class="nx">enh</span><span class="w"> </span><span class="o">*</span><span class="nx">EvalNodeHelper</span><span class="p">,</span><span class="w"> </span><span class="nx">isCounter</span><span class="p">,</span><span class="w"> </span><span class="nx">isRate</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">Vector</span><span class="p">,</span><span class="w"> </span><span class="nx">annotations</span><span class="p">.</span><span class="nx">Annotations</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">)</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nx">numSamplesMinusOne</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">        </span><span class="nx">firstT</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">T</span><span class="w"></span>
+<span class="w">        </span><span class="nx">lastT</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="nx">numSamplesMinusOne</span><span class="p">].</span><span class="nx">T</span><span class="w"></span>
+<span class="w">        </span><span class="nx">resultFloat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="nx">numSamplesMinusOne</span><span class="p">].</span><span class="nx">F</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="w"></span>
+
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Duration between first/last samples and boundary of range.</span><span class="w"></span>
+<span class="w">    </span><span class="nx">durationToStart</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">firstT</span><span class="o">-</span><span class="nx">rangeStart</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="w"></span>
+<span class="w">    </span><span class="nx">durationToEnd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">rangeEnd</span><span class="o">-</span><span class="nx">lastT</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">sampledInterval</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">lastT</span><span class="o">-</span><span class="nx">firstT</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="w"></span>
+<span class="w">    </span><span class="nx">averageDurationBetweenSamples</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sampledInterval</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">numSamplesMinusOne</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// If the first/last samples are close to the boundaries of the range,</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// extrapolate the result. This is as we expect that another sample</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// will exist given the spacing between samples we&#39;ve seen thus far,</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// with an allowance for noise.</span><span class="w"></span>
+<span class="w">    </span><span class="nx">extrapolationThreshold</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">averageDurationBetweenSamples</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1.1</span><span class="w"></span>
+<span class="w">    </span><span class="nx">extrapolateToInterval</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sampledInterval</span><span class="w"></span>
+
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+<span class="w">    </span><span class="nx">extrapolateToInterval</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">durationToStart</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">durationToEnd</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nx">extrapolationThreshold</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">durationToEnd</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">averageDurationBetweenSamples</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">extrapolateToInterval</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">durationToEnd</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">factor</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">extrapolateToInterval</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">sampledInterval</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">isRate</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">factor</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="nx">ms</span><span class="p">.</span><span class="nx">Range</span><span class="p">.</span><span class="nx">Seconds</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">resultHistogram</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">resultFloat</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="nx">factor</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">resultHistogram</span><span class="p">.</span><span class="nx">Mul</span><span class="p">(</span><span class="nx">factor</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">enh</span><span class="p">.</span><span class="nx">Out</span><span class="p">,</span><span class="w"> </span><span class="nx">Sample</span><span class="p">{</span><span class="nx">F</span><span class="p">:</span><span class="w"> </span><span class="nx">resultFloat</span><span class="p">,</span><span class="w"> </span><span class="nx">H</span><span class="p">:</span><span class="w"> </span><span class="nx">resultHistogram</span><span class="p">}),</span><span class="w"> </span><span class="nx">annos</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>funcDelta có isRate=false isCounter=false, kết quả là</p>
+<div class="highlight"><pre><span></span><code><span class="nx">sampledInterval</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">lastT</span><span class="o">-</span><span class="nx">firstT</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="w"></span>
+<span class="nx">factor</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">extrapolateToInterval</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">sampledInterval</span><span class="w"></span>
+<span class="nx">resultFloat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="nx">numSamplesMinusOne</span><span class="p">].</span><span class="nx">F</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="w"></span>
+<span class="nx">resultFloat</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">factor</span><span class="w"></span>
+</code></pre></div>
+
+<p>hay</p>
+<div class="highlight"><pre><span></span><code>(giá trị cuối - giá trị đầu) * extrapolateToInterval / (thời gian sample cuối - thời gian sample đầu)
+(149-120) * 60 /45 = 38.666666666666.
+</code></pre></div>
+
+<p>funcRate có isRate=true isCounter=true, kết quả là</p>
+<div class="highlight"><pre><span></span><code><span class="nx">sampledInterval</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">float64</span><span class="p">(</span><span class="nx">lastT</span><span class="o">-</span><span class="nx">firstT</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="w"></span>
+<span class="nx">factor</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">extrapolateToInterval</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">sampledInterval</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="nx">isRate</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">factor</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="nx">ms</span><span class="p">.</span><span class="nx">Range</span><span class="p">.</span><span class="nx">Seconds</span><span class="p">()</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="nx">resultFloat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="nx">numSamplesMinusOne</span><span class="p">].</span><span class="nx">F</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">isCounter</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">break</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">// Handle counter resets:</span><span class="w"></span>
+<span class="nx">prevValue</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="w"></span>
+<span class="nx">resultFloat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="nx">numSamplesMinusOne</span><span class="p">].</span><span class="nx">F</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">F</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">currPoint</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">samples</span><span class="p">.</span><span class="nx">Floats</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">currPoint</span><span class="p">.</span><span class="nx">F</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">prevValue</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">resultFloat</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">prevValue</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">prevValue</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">currPoint</span><span class="p">.</span><span class="nx">F</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="nx">resultFloat</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">factor</span><span class="w"></span>
+</code></pre></div>
+
+<p>hay</p>
+<div class="highlight"><pre><span></span><code>(giá trị sample cuối - giá trị sample đầu) * extrapolateToInterval / (thời gian sample cuối - thời gian sample đầu) / interval của range vector
+(149-120) * 60 / 45 / 60 = 0.6444444444444444
+</code></pre></div>
+
+<p>đọc code trên thấy extrapolateToInterval thường cũng bằng với interval của range. Giá trị của rate có thể được extrapolated nếu series bị reset (Ví dụ: đang đếm tới 123 thì service được monitor bị restart đếm lại từ 0).</p>
+<h2>Kết luận</h2>
+<p>Prometheus function không tính sai, nó chỉ tính đúng như trong tài liệu mô tả. Hãy đọc tài liệu.
+Hoặc đọc code.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://tuoitre.vn/ban-doc-tuoi-tre-lien-tuc-dong-gop-gui-den-nguoi-dan-mien-bac-20240910182204886.htm">Ủng hộ đồng bào bị ảnh hưởng bởi cơn bão số 3.</a></p>
+<blockquote>
+<p>Báo Tuổi Trẻ, Ngân hàng Công thương chi nhánh 3, TP.HCM. Số tài khoản: 113000006100 (Việt Nam đồng). Nội dung: Ủng hộ đồng bào bị ảnh hưởng bởi cơn bão số 3.</p>
+</blockquote>
+<p><img alt="yagi" src="./images/yagi.webp"></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-09-19T00:00:00+07:00">Thu 19 September 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#metric-ref">metric
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#prometheus-ref">prometheus
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#readcode-ref">readcode
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="./tags.html#timeseries-ref">timeseries
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

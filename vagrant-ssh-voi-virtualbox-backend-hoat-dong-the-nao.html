@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="sysadmin, virtualbox, vagrant, frontpage, " />
+
+<meta property="og:title" content="Vagrant ssh (với VirtualBox backend) hoạt động thế nào? "/>
+<meta property="og:url" content="./vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html" />
+<meta property="og:description" content="Vagrant là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã chui vào máy ảo mới tạo: vagrant init vagrant up vagrant ssh Bên dưới có rất nhiều &#34;magic&#34; xảy ra, đó là những giá trị mà Vagrant mang lại thay vì tạo máy ào …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2021-02-13T01:00:00+07:00" />
+<meta name="twitter:title" content="Vagrant ssh (với VirtualBox backend) hoạt động thế nào? ">
+<meta name="twitter:description" content="Vagrant là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã chui vào máy ảo mới tạo: vagrant init vagrant up vagrant ssh Bên dưới có rất nhiều &#34;magic&#34; xảy ra, đó là những giá trị mà Vagrant mang lại thay vì tạo máy ào …">
+
+        <title>Vagrant ssh (với VirtualBox backend) hoạt động thế nào?  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./vagrant-ssh-voi-virtualbox-backend-hoat-dong-the-nao.html">
+                Vagrant ssh (với VirtualBox backend) hoạt động thế nào?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p><a href="https://www.familug.org/2020/02/vagrant.html">Vagrant</a>
+là công cụ tuyệt vời để tạo máy ảo, với 3 câu lệnh, ta đã
+chui vào máy ảo mới tạo:</p>
+<div class="highlight"><pre><span></span><code>vagrant init
+vagrant up
+vagrant ssh
+</code></pre></div>
+
+<p>Bên dưới có rất nhiều "magic" xảy ra, đó là những giá trị mà Vagrant
+mang lại thay vì tạo máy ào bằng tay với VirtualBox/VMWare/KVM...</p>
+<p>Vagrant ssh là câu lệnh thú vị và bất ngờ khi tìm hiểu: kết nối
+mạng từ máy thật (host) vào máy ảo (guest) như thế nào.</p>
+<p>Test với máy ảo chạy fedora, không chỉnh sửa config gì sau khi <code>vagrant init</code> ngoài box:</p>
+<div class="highlight"><pre><span></span><code>  config.vm.box = &quot;fedora/33-cloud-base&quot;
+  config.vm.box_version = &quot;33.20201019.0&quot;
+</code></pre></div>
+
+<h3>Bật debug</h3>
+<p>Cách đơn giản để tìm hiểu 1 phần mềm bất kỳ là bật chế độ 
+logging debug/verbose lên, vagrant không là ngoại lệ.</p>
+<div class="highlight"><pre><span></span><code>VAGRANT_LOG=info vagrant ssh
+</code></pre></div>
+
+<p>có các chế độ log nhiều hơn như <code>VAGRANT_LOG=debug</code> nhưng
+với info cũng đã đủ rồi:</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">VAGRANT_LOG</span><span class="o">=</span><span class="n">info</span><span class="w"> </span><span class="n">vagrant</span><span class="w"> </span><span class="n">ssh</span><span class="w"></span>
+<span class="w"> </span><span class="n">INFO</span><span class="w"> </span><span class="n">global</span><span class="o">:</span><span class="w"> </span><span class="n">Vagrant</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="mf">2.2.6</span><span class="w"></span>
+<span class="w"> </span><span class="n">INFO</span><span class="w"> </span><span class="n">global</span><span class="o">:</span><span class="w"> </span><span class="n">Ruby</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="mf">2.4.9</span><span class="w"></span>
+<span class="w"> </span><span class="n">INFO</span><span class="w"> </span><span class="n">global</span><span class="o">:</span><span class="w"> </span><span class="n">RubyGems</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="mf">2.6.14.4</span><span class="w"></span>
+<span class="w"> </span><span class="n">INFO</span><span class="w"> </span><span class="n">vagrant</span><span class="o">:</span><span class="w"> </span><span class="err">`</span><span class="n">vagrant</span><span class="err">`</span><span class="w"> </span><span class="n">invoked</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;ssh&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="w"> </span><span class="n">INFO</span><span class="w"> </span><span class="n">subprocess</span><span class="o">:</span><span class="w"> </span><span class="n">Starting</span><span class="w"> </span><span class="n">process</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;/usr/local/bin/VBoxManage&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;showvminfo&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;63dfeb70-1337-4db3-84f4-4bf3514aa225&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="w"> </span><span class="n">INFO</span><span class="w"> </span><span class="n">ssh</span><span class="o">:</span><span class="w"> </span><span class="n">Invoking</span><span class="w"> </span><span class="n">SSH</span><span class="o">:</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">ssh</span><span class="w"> </span><span class="p">[</span><span class="s">&quot;vagrant@127.0.0.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-p&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;2222&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-o&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;LogLevel=FATAL&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-o&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Compression=yes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-o&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DSAAuthentication=yes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-o&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;IdentitiesOnly=yes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-o&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;StrictHostKeyChecking=no&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-o&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;UserKnownHostsFile=/dev/null&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-i&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/Users/user/me/fedora/.vagrant/machines/default/virtualbox/private_key&quot;</span><span class="p">]</span><span class="w"></span>
+<span class="n">Last</span><span class="w"> </span><span class="n">login</span><span class="o">:</span><span class="w"> </span><span class="n">Wed</span><span class="w"> </span><span class="n">Feb</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">08</span><span class="o">:</span><span class="mi">22</span><span class="o">:</span><span class="mi">51</span><span class="w"> </span><span class="mi">2021</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="mf">10.0.2.2</span><span class="w"></span>
+<span class="p">[</span><span class="n">vagrant</span><span class="p">@</span><span class="n">localhost</span><span class="w"> </span><span class="o">~</span><span class="p">]</span><span class="n">$</span><span class="w"> </span>
+</code></pre></div>
+
+<p>vagrant ssh vào máy ảo qua <code>lo</code> (loopback interface), dùng <code>127.0.0.1</code> chứ
+không phải bất kỳ network interface nào khác.</p>
+<h3>VirtualBox networking modes</h3>
+<p>https://www.virtualbox.org/manual/ch06.html</p>
+<p>VirtualBox có các networking modes sau: </p>
+<div class="highlight"><pre><span></span><code>Network Address Translation (NAT). (máy guest có thể kết nối internet)
+NAT Network. (các máy guest có thể kết nôí đến nhau)
+Bridged networking. (máy guest sử dụng network thật mà máy host đang dùng)
+Internal networking. (???)
+Host-only networking. (máy guest sẽ có địa chỉ IP mà máy host có thể truy cập)
+</code></pre></div>
+
+<p><img alt="NAT" src="./images/nat.png"></p>
+<p>Mặc định, vagrant sẽ dùng NAT, máy guest sẽ có thể kết nối internet, vagrant
+sẽ cấu hình port forwarding, từ 1 port nào đó trên máy host, tới port 22 trên
+máy guest, để có thể ssh: <code>vagrant@127.0.0.1 -p 2222...</code></p>
+<p><img alt="Port forwarding" src="./images/portforwarding.png"></p>
+<p>Khi cần chạy 1 service mà muốn các máy trong mạng đều truy cập được, máy ảo
+cần thêm 1 interface ở mode: bridge, nó sẽ hoạt động như 1 máy thật trong mạng,
+với IP của mạng thật.</p>
+<p>Khi cần chạy 1 service mà muốn máy host truy cập được, có thể forward port
+với NAT nói trên, hoặc tạo 1 host-only interface.</p>
+<h3>SSH Key</h3>
+<p>Một Vagrant box tải từ vagrant cloud sẽ đảm bảo nó có sẵn user vagrant,
+cho phép ssh qua 1 cặp <a href="https://github.com/hashicorp/vagrant/tree/main/keys">SSH key</a>
+cung cấp sẵn. Sau lần đầu ssh vào,
+vagrant sẽ sinh 1 cặp key mới và thay thế cặp key mặc định này.
+https://www.vagrantup.com/docs/boxes/base#vagrant-user</p>
+<div class="highlight"><pre><span></span><code>~/me/fedora/.vagrant/machines/default/virtualbox/private_key
+</code></pre></div>
+
+<p>Toàn bộ thông tin này có trong output bình thường của lệnh vagrant up
+khi chạy lần đầu:</p>
+<div class="highlight"><pre><span></span><code>$ vagrant up<span class="p">;</span>                                                    <span class="o">[</span><span class="m">0</span><span class="o">]</span>
+Bringing machine <span class="s1">&#39;default&#39;</span> up with <span class="s1">&#39;virtualbox&#39;</span> provider...
+<span class="o">==</span>&gt; default: Importing base box <span class="s1">&#39;generic/openbsd6&#39;</span>...
+<span class="o">==</span>&gt; default: Matching MAC address <span class="k">for</span> NAT networking...
+<span class="o">==</span>&gt; default: Checking <span class="k">if</span> box <span class="s1">&#39;generic/openbsd6&#39;</span> version <span class="s1">&#39;2.0.6&#39;</span> is up to date...
+<span class="o">==</span>&gt; default: A newer version of the box <span class="s1">&#39;generic/openbsd6&#39;</span> <span class="k">for</span> provider <span class="s1">&#39;virtualbox&#39;</span> <span class="nv">is</span>
+<span class="o">==</span>&gt; default: available! You currently have version <span class="s1">&#39;2.0.6&#39;</span>. The latest is <span class="nv">version</span>
+<span class="o">==</span>&gt; default: <span class="s1">&#39;3.2.4&#39;</span>. Run <span class="sb">`</span>vagrant box update<span class="sb">`</span> to update.
+<span class="o">==</span>&gt; default: Setting the name of the VM: <span class="nv">openbsd_default_1613198270097_41776</span>
+<span class="o">==</span>&gt; default: Fixed port collision <span class="k">for</span> <span class="nv">22</span> <span class="o">=</span>&gt; <span class="m">2222</span>. Now on port <span class="m">2200</span>.
+<span class="o">==</span>&gt; default: Clearing any previously <span class="nb">set</span> network interfaces...
+<span class="o">==</span>&gt; default: Preparing network interfaces based on configuration...
+    default: Adapter <span class="m">1</span>: <span class="nv">nat</span>
+<span class="o">==</span>&gt; default: Forwarding ports...
+    default: <span class="m">22</span> <span class="o">(</span>guest<span class="o">)</span> <span class="o">=</span>&gt; <span class="m">2200</span> <span class="o">(</span>host<span class="o">)</span> <span class="o">(</span>adapter <span class="m">1</span><span class="o">)</span>
+<span class="o">==</span>&gt; default: Running <span class="s1">&#39;pre-boot&#39;</span> VM customizations...
+<span class="o">==</span>&gt; default: Booting VM...
+<span class="o">==</span>&gt; default: Waiting <span class="k">for</span> machine to boot. This may take a few minutes...
+    default: SSH address: <span class="m">127</span>.0.0.1:2200
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+    default: 
+    default: Vagrant insecure key detected. Vagrant will automatically replace
+    default: this with a newly generated keypair <span class="k">for</span> better security.
+    default: 
+    default: Inserting generated public key within guest...
+    default: Removing insecure key from the guest <span class="k">if</span> it<span class="err">&#39;</span>s present...
+    default: Key inserted! Disconnecting and reconnecting using new SSH key...
+<span class="o">==</span>&gt; default: Machine booted and ready!
+</code></pre></div>
+
+<h2>Kết luận</h2>
+<p>Với những hiểu biết này, ta đã có thể tạo các máy ảo và dùng như
+vagrant, hay thậm chí tạo các vagrant box để tự dùng.</p>
+<p>https://www.vagrantup.com/docs/boxes/base</p>
+<h2>Xem thêm</h2>
+<p>Hướng dẫn vagrant cơ bản tại https://www.familug.org/2020/02/vagrant.html</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2021-02-13T01:00:00+07:00">Sat 13 February 2021</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#sysadmin-ref">sysadmin
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#vagrant-ref">vagrant
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#virtualbox-ref">virtualbox
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

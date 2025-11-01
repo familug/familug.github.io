@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="bash, shell, scripting, POSIX, frontpage, " />
+
+<meta property="og:title" content="bash chậm tới mức nào? "/>
+<meta property="og:url" content="./bash-cham-toi-muc-nao.html" />
+<meta property="og:description" content="trên những môi trường không có ngôn ngữ nào khác, bash vẫn là lựa chọn duy nhất: docker entrypoint (script chạy 1 chương trình phức tạp trong docker) bash không dùng để viết chương trình cần hiệu năng cao, nhưng liệu bash chậm tới mức nào? Tính tổng từ 1 …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-09-02T00:00:00+07:00" />
+<meta name="twitter:title" content="bash chậm tới mức nào? ">
+<meta name="twitter:description" content="trên những môi trường không có ngôn ngữ nào khác, bash vẫn là lựa chọn duy nhất: docker entrypoint (script chạy 1 chương trình phức tạp trong docker) bash không dùng để viết chương trình cần hiệu năng cao, nhưng liệu bash chậm tới mức nào? Tính tổng từ 1 …">
+
+        <title>bash chậm tới mức nào?  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./bash-cham-toi-muc-nao.html">
+                bash chậm tới mức nào?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>trên những môi trường không có ngôn ngữ nào khác, bash vẫn là lựa chọn duy nhất:</p>
+<ul>
+<li>docker entrypoint (script chạy 1 chương trình phức tạp trong docker)</li>
+</ul>
+<p>bash không dùng để viết chương trình cần hiệu năng cao, nhưng liệu bash chậm tới mức nào?</p>
+<h3>Tính tổng từ 1 đến 1 triệu</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">#1</span>
+<span class="nv">x</span><span class="o">=</span><span class="m">0</span>
+<span class="k">for</span> i <span class="k">in</span> <span class="o">{</span><span class="m">1</span>..1000000<span class="o">}</span> <span class="p">;</span> <span class="k">do</span>
+     <span class="nv">x</span><span class="o">=</span><span class="k">$((</span>x+i<span class="k">))</span>
+<span class="k">done</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$x</span><span class="s2">&quot;</span>
+
+<span class="c1">#2</span>
+<span class="nv">x</span><span class="o">=</span><span class="m">0</span>
+<span class="k">for</span> i <span class="k">in</span> <span class="k">$(</span>seq <span class="m">1</span> <span class="m">1000000</span><span class="k">)</span> <span class="p">;</span> <span class="k">do</span>
+     <span class="nv">x</span><span class="o">=</span><span class="k">$((</span>x+i<span class="k">))</span>
+<span class="k">done</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$x</span><span class="s2">&quot;</span>
+
+<span class="c1">#3</span>
+<span class="nv">x</span><span class="o">=</span><span class="m">0</span>
+<span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span><span class="m">1</span><span class="p">;</span>i&lt;<span class="o">=</span><span class="m">1000000</span><span class="p">;</span>i++<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+     <span class="nv">x</span><span class="o">=</span><span class="k">$((</span>x+i<span class="k">))</span>
+<span class="k">done</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$x</span><span class="s2">&quot;</span>
+
+<span class="c1">#4</span>
+<span class="nv">x</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">i</span><span class="o">=</span><span class="m">1</span>
+<span class="k">while</span> <span class="o">[</span> <span class="nv">$i</span> -le <span class="m">1000000</span> <span class="o">]</span><span class="p">;</span> <span class="k">do</span>
+    <span class="nv">x</span><span class="o">=</span><span class="k">$((</span>x+i<span class="k">))</span>
+    <span class="nv">i</span><span class="o">=</span><span class="k">$((</span>i+1<span class="k">))</span>
+<span class="k">done</span>
+<span class="nb">echo</span> <span class="s2">&quot;</span><span class="nv">$x</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<p>Trong 4 cách trên,</p>
+<ul>
+<li>cách 1 với {1..1000000} tạo 1 triệu phần tử trong RAM (như Python dùng <code>list(range(1,1_000_001))</code>), dùng hết 284MB RAM.</li>
+<li>cách 2 với seq 1 1000000 chỉ dùng 3.7MB RAM, nhưng phụ thuộc vào chương trình seq bên ngoài</li>
+<li>cách 3 và 4 tương tự nhau nhưng cách 4 chạy trên tất cả cách loại (POSIX) shell.</li>
+</ul>
+<p>Dùng <code>shellcheck</code> để biết cách 3 không chạy trên <code>sh</code>:</p>
+<div class="highlight"><pre><span></span><code>$ sudo apt install -y shellcheck
+$ shellcheck --shell sh slow.sh
+
+In slow.sh line <span class="m">2</span>:
+<span class="k">for</span> i <span class="k">in</span> <span class="o">{</span><span class="m">1</span>..1000000<span class="o">}</span> <span class="p">;</span> <span class="k">do</span>
+         ^----------^ SC3009 <span class="o">(</span>warning<span class="o">)</span>: In POSIX sh, brace expansion is undefined.
+
+
+In slow.sh line <span class="m">16</span>:
+<span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span><span class="m">1</span><span class="p">;</span>i&lt;<span class="o">=</span><span class="m">1000000</span><span class="p">;</span>i++<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+^-^ SC3005 <span class="o">(</span>warning<span class="o">)</span>: In POSIX sh, arithmetic <span class="k">for</span> loops are undefined.
+                      ^-- SC3018 <span class="o">(</span>warning<span class="o">)</span>: In POSIX sh, ++ is undefined.
+
+For more information:
+  https://www.shellcheck.net/wiki/SC3005 -- In POSIX sh, arithmetic <span class="k">for</span> loops...
+  https://www.shellcheck.net/wiki/SC3009 -- In POSIX sh, brace expansion is u...
+  https://www.shellcheck.net/wiki/SC3018 -- In POSIX sh, ++ is undefined.
+</code></pre></div>
+
+<p>Chạy cách 1 với <code>{1..1000000}</code>:</p>
+<div class="highlight"><pre><span></span><code>$ /usr/bin/time -v bash slow.sh
+<span class="m">500000500000</span>
+    Command being timed: <span class="s2">&quot;bash slow.sh&quot;</span>
+    User <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">2</span>.14
+    System <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.09
+    Percent of CPU this job got: <span class="m">99</span>%
+    Elapsed <span class="o">(</span>wall clock<span class="o">)</span> <span class="nb">time</span> <span class="o">(</span>h:mm:ss or m:ss<span class="o">)</span>: <span class="m">0</span>:02.24
+...
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">284852</span>
+...
+    Minor <span class="o">(</span>reclaiming a frame<span class="o">)</span> page faults: <span class="m">72418</span>
+    Voluntary context switches: <span class="m">1</span>
+    Involuntary context switches: <span class="m">10</span>
+...
+</code></pre></div>
+
+<p>Chạy cách 4 với while:</p>
+<div class="highlight"><pre><span></span><code>$ /usr/bin/time -v bash slow.sh
+<span class="m">500000500000</span>    Command being timed: <span class="s2">&quot;bash slow.sh&quot;</span>
+    User <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">5</span>.05
+    System <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.00
+    Percent of CPU this job got: <span class="m">99</span>%
+    Elapsed <span class="o">(</span>wall clock<span class="o">)</span> <span class="nb">time</span> <span class="o">(</span>h:mm:ss or m:ss<span class="o">)</span>: <span class="m">0</span>:05.05
+...
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">3712</span>
+...
+    Minor <span class="o">(</span>reclaiming a frame<span class="o">)</span> page faults: <span class="m">155</span>
+    Voluntary context switches: <span class="m">1</span>
+    Involuntary context switches: <span class="m">27</span>
+...
+</code></pre></div>
+
+<p>Mất 5 giây để tính, trong khi với Python - 1 trong những ngôn ngữ lập trình chậm nhất, chỉ mất 0.08 giây tính cả thời gian bật Python, dùng 9MB RAM. Với Python 1 giây có thể tính tổng tới 15 triệu, tức bash chậm hơn Python <code>15*5 = 75</code> lần.</p>
+<div class="highlight"><pre><span></span><code>$ /usr/bin/time -v python3 sum.py
+<span class="m">500000500000</span>
+    Command being timed: <span class="s2">&quot;python3 sum.py&quot;</span>
+    User <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.08
+    System <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.00
+    Percent of CPU this job got: <span class="m">100</span>%
+    Elapsed <span class="o">(</span>wall clock<span class="o">)</span> <span class="nb">time</span> <span class="o">(</span>h:mm:ss or m:ss<span class="o">)</span>: <span class="m">0</span>:00.08
+...
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">9088</span>
+...
+    Minor <span class="o">(</span>reclaiming a frame<span class="o">)</span> page faults: <span class="m">943</span>
+    Voluntary context switches: <span class="m">1</span>
+...
+</code></pre></div>
+
+<p>1 điều đáng chú ý là dùng <code>dash</code> - 1 POSIX shell có sẵn trên Ubuntu chạy nhanh hơn và tốn ít RAM hơn bash:</p>
+<div class="highlight"><pre><span></span><code>$ /usr/bin/time -v dash slow.sh
+<span class="m">500000500000</span>    Command being timed: <span class="s2">&quot;dash slow.sh&quot;</span>
+    User <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">1</span>.76
+    System <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.00
+    Percent of CPU this job got: <span class="m">99</span>%
+    Elapsed <span class="o">(</span>wall clock<span class="o">)</span> <span class="nb">time</span> <span class="o">(</span>h:mm:ss or m:ss<span class="o">)</span>: <span class="m">0</span>:01.76
+    Average shared text size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Average unshared data size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Average stack size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Average total size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">1536</span>
+    Average resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Major <span class="o">(</span>requiring I/O<span class="o">)</span> page faults: <span class="m">0</span>
+    Minor <span class="o">(</span>reclaiming a frame<span class="o">)</span> page faults: <span class="m">78</span>
+    Voluntary context switches: <span class="m">1</span>
+    Involuntary context switches: <span class="m">45</span>
+    Swaps: <span class="m">0</span>
+    File system inputs: <span class="m">0</span>
+    File system outputs: <span class="m">0</span>
+    Socket messages sent: <span class="m">0</span>
+    Socket messages received: <span class="m">0</span>
+    Signals delivered: <span class="m">0</span>
+    Page size <span class="o">(</span>bytes<span class="o">)</span>: <span class="m">4096</span>
+    Exit status: <span class="m">0</span>
+</code></pre></div>
+
+<h3>Chậm thì sao?</h3>
+<p>Khi dùng để chạy các chương trình trong container, nếu không hoàn thành quá trình trong thời gian giới hạn, container sẽ bị restart để chạy lại từ đầu, và khi chạy lại thì vẫn chậm, vẫn không kịp, lại restart, ... tạo thành 1 vòng lặp vô hạn. Mặc dù ví dụ trên bash chạy 5 giây, nhưng khi dùng trong các container với 250m CPU (1/4 CPU), bash sẽ mất ~20 giây để chạy, trên thực tế, mất gần 50 giây:</p>
+<div class="highlight"><pre><span></span><code>$ systemd-run --scope --uid<span class="o">=</span><span class="m">1000</span> -p <span class="nv">CPUQuota</span><span class="o">=</span><span class="m">25</span>% /usr/bin/time -v bash slow.sh
+<span class="o">====</span> AUTHENTICATING FOR org.freedesktop.systemd1.manage-units <span class="o">===</span>
+Authentication is required to manage system services or other units.
+Authenticating as: username
+Password:
+<span class="o">====</span> AUTHENTICATION <span class="nv">COMPLETE</span> <span class="o">===</span>
+Running scope as unit: run-u139.scope
+<span class="m">500000500000</span>    Command being timed: <span class="s2">&quot;bash slow.sh&quot;</span>
+    User <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">12</span>.32
+    System <span class="nb">time</span> <span class="o">(</span>seconds<span class="o">)</span>: <span class="m">0</span>.00
+    Percent of CPU this job got: <span class="m">25</span>%
+    Elapsed <span class="o">(</span>wall clock<span class="o">)</span> <span class="nb">time</span> <span class="o">(</span>h:mm:ss or m:ss<span class="o">)</span>: <span class="m">0</span>:49.25
+...
+    Maximum resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">3712</span>
+    Average resident <span class="nb">set</span> size <span class="o">(</span>kbytes<span class="o">)</span>: <span class="m">0</span>
+    Major <span class="o">(</span>requiring I/O<span class="o">)</span> page faults: <span class="m">0</span>
+    Minor <span class="o">(</span>reclaiming a frame<span class="o">)</span> page faults: <span class="m">152</span>
+    Voluntary context switches: <span class="m">1</span>
+    Involuntary context switches: <span class="m">623</span>
+</code></pre></div>
+
+<h2>Kết luận</h2>
+<p>bash chậm.</p>
+<p>Written using</p>
+<div class="highlight"><pre><span></span><code>$ bash --version
+GNU bash, version <span class="m">5</span>.1.16<span class="o">(</span><span class="m">1</span><span class="o">)</span>-release <span class="o">(</span>x86_64-pc-linux-gnu<span class="o">)</span>
+</code></pre></div>
+
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-09-02T00:00:00+07:00">Mon 02 September 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#bash-ref">bash
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#posix-ref">POSIX
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#scripting-ref">scripting
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#shell-ref">shell
+                    <span class="superscript">5</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

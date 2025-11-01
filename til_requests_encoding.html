@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="python, requests, encoding, http, frontpage, " />
+
+<meta property="og:title" content="[TIL] requests đoán &#34;có giáo dục&#34; encoding và có thể sai "/>
+<meta property="og:url" content="./til_requests_encoding.html" />
+<meta property="og:description" content="requests là thư viện HTTP client phổ biến nhất của Python, nó phổ biến vì dễ dùng, chỉ cần import requests; requests.get là xong. Trông dễ như vậy bởi requests đã cấu hình mặc định hết rất nhiều thứ như: connection, headers, adapter, session, encoding, ... mà mặc định thì …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-10-04T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] requests đoán &#34;có giáo dục&#34; encoding và có thể sai ">
+<meta name="twitter:description" content="requests là thư viện HTTP client phổ biến nhất của Python, nó phổ biến vì dễ dùng, chỉ cần import requests; requests.get là xong. Trông dễ như vậy bởi requests đã cấu hình mặc định hết rất nhiều thứ như: connection, headers, adapter, session, encoding, ... mà mặc định thì …">
+
+        <title>[TIL] requests đoán &#34;có giáo dục&#34; encoding và có thể sai  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./til_requests_encoding.html">
+                [TIL] requests đoán "có giáo dục" encoding và có thể sai
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p><code>requests</code> là thư viện HTTP client phổ biến nhất của Python, nó phổ biến vì dễ dùng, chỉ cần <code>import requests; requests.get</code> là xong.
+Trông dễ như vậy bởi <code>requests</code> đã cấu hình mặc định hết rất nhiều thứ như: connection, headers, adapter, session, encoding, ... mà mặc định thì nhiều khi đúng, đôi khi sai.</p>
+<h2>Encoding</h2>
+<p>Vì Python mặc định encoding trên Linux là <code>utf-8</code>, người dùng dễ mặc định là <code>requests</code> cũng vậy, nhưng thực tế thì:</p>
+<p><a href="https://github.com/psf/requests/blob/v2.32.5/docs/user/quickstart.rst?plain=1#L84-L121">Tài liệu</a> viết:</p>
+<blockquote>
+<p>When you make a request, Requests makes educated guesses about the encoding of the response based on the HTTP headers. The text encoding guessed by Requests is used when you access r.text. You can find out what encoding Requests is using, and change it, using the r.encoding property:</p>
+<p>r.encoding
+'utf-8'</p>
+<p>r.encoding = 'ISO-8859-1'</p>
+<p>If you change the encoding, Requests will use the new value of r.encoding whenever you call r.text. You might want to do this in any situation where you can apply special logic to work out what the encoding of the content will be. For example, HTML and XML have the ability to specify their encoding in their body. In situations like this, you should use r.content to find the encoding, and then set r.encoding. This will let you use r.text with the correct encoding.</p>
+</blockquote>
+<p><code>requests</code> thực hiện "đoán một cách có học" (educated guesses) encoding của response dựa trên HTTP headers <a href="https://github.com/psf/requests/blob/v2.32.5/src/requests/adapters.py#L355">https://github.com/psf/requests/blob/v2.32.5/src/requests/adapters.py#L355</a>.</p>
+<div class="highlight"><pre><span></span><code>    <span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">get_encoding_from_headers</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Xem code thấy nó chỉ dựa trên header <code>content-type</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">get_encoding_from_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns encodings from given HTTP Header Dict.</span>
+
+<span class="sd">    :param headers: dictionary to extract encoding from.</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">content_type</span> <span class="o">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">content_type</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">_parse_content_type_header</span><span class="p">(</span><span class="n">content_type</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;charset&quot;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;charset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;ISO-8859-1&quot;</span>
+
+    <span class="k">if</span> <span class="s2">&quot;application/json&quot;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+        <span class="c1"># Assume UTF-8 based on RFC 4627: https://www.ietf.org/rfc/rfc4627.txt since the charset was unset</span>
+        <span class="k">return</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="c1"># https://github.com/psf/requests/blob/v2.32.5/src/requests/utils.py#L529-L551</span>
+</code></pre></div>
+
+<p>nếu có <code>charset</code> trong <code>content-type</code> <code>requests</code> sẽ dùng giá trị của charset. Ví dụ:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">Content-Type</span><span class="o">:</span><span class="w"> </span><span class="nt">text</span><span class="o">/</span><span class="nt">html</span><span class="o">;</span><span class="w"> </span><span class="nt">charset</span><span class="o">=</span><span class="nt">utf-8</span><span class="w"></span>
+</code></pre></div>
+
+<p>Khi không có <code>charset</code>, nếu <code>content-type</code> chứa <code>text</code> dùng <code>ISO-8859-1</code>, còn nếu là <code>json</code> dùng <code>utf-8</code>.
+Vậy khi dùng với các JSON API, <code>requests</code> sẽ dùng <code>utf-8</code> nên kết quả luôn như mong đợi, nhưng nếu lấy trang HTML, khi header không set, encoding có thể bị sai.</p>
+<h3>resp.content vs resp.text</h3>
+<p><code>content</code> và <code>text</code> là 2 property của response object, <code>content</code> chứa byte và người dùng có thể tự <code>decode</code> với encoding tùy ý.
+<code>text</code> đọc <code>.encoding</code> rồi decode:</p>
+<div class="highlight"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">48</span><span class="p">]:</span> <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://podcasts.apple.com/jp/podcast/</span><span class="si">%E</span><span class="s1">3</span><span class="si">%81%</span><span class="s1">AA</span><span class="si">%E</span><span class="s1">3</span><span class="si">%81%</span><span class="s1">8C</span><span class="si">%E</span><span class="s1">3</span><span class="si">%82%</span><span class="s1">89</span><span class="si">%E</span><span class="s1">6</span><span class="si">%97%</span><span class="s1">A5</span><span class="si">%E</span><span class="s1">7%B5%8C/id1627014612&#39;</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">49</span><span class="p">]:</span> <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">50</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+<span class="n">ISO</span><span class="o">-</span><span class="mi">8859</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">51</span><span class="p">]:</span> <span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">))</span>
+<span class="n">text</span><span class="o">/</span><span class="n">html</span>
+</code></pre></div>
+
+<p>do header <code>Content-Type</code> không có <code>charset</code>, lại chứa <code>text</code>, nên <code>requests</code> set <code>encoding = 'ISO-8859-1'</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">54</span><span class="p">]:</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;title&gt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;/title&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">54</span><span class="p">]:</span> <span class="s1">&#39;ã</span><span class="se">\x81</span><span class="s1">ªã</span><span class="se">\x81\x8c</span><span class="s1">ã</span><span class="se">\x82\x89</span><span class="s1">æ</span><span class="se">\x97</span><span class="s1">¥çµ</span><span class="se">\x8c</span><span class="s1"> - ã</span><span class="se">\x83\x9d</span><span class="s1">ã</span><span class="se">\x83\x83</span><span class="s1">ã</span><span class="se">\x83\x89</span><span class="s1">ã</span><span class="se">\x82\xad</span><span class="s1">ã</span><span class="se">\x83</span><span class="s1">£ã</span><span class="se">\x82</span><span class="s1">¹ã</span><span class="se">\x83\x88</span><span class="s1"> - Apple Podcast&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">55</span><span class="p">]:</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&lt;title&gt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&lt;/title&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">55</span><span class="p">]:</span> <span class="s1">&#39;ながら日経 - ポッドキャスト - Apple Podcast&#39;</span>
+</code></pre></div>
+
+<p>tự set <code>encoding = 'utf-8'</code> để text hiển thị đúng:</p>
+<div class="highlight"><pre><span></span><code><span class="n">In</span> <span class="p">[</span><span class="mi">56</span><span class="p">]:</span> <span class="n">resp</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">57</span><span class="p">]:</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;title&gt;&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&lt;/title&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">57</span><span class="p">]:</span> <span class="s1">&#39;ながら日経 - ポッドキャスト - Apple Podcast&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">62</span><span class="p">]:</span> <span class="n">resp</span><span class="o">.</span><span class="n">connection</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">62</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">requests</span><span class="o">.</span><span class="n">adapters</span><span class="o">.</span><span class="n">HTTPAdapter</span> <span class="n">at</span> <span class="mh">0x772dba31ccd0</span><span class="o">&gt;</span>
+</code></pre></div>
+
+<p>PS: curl cũng encode đúng với utf-8:</p>
+<div class="highlight"><pre><span></span><code>$ curl -s https://podcasts.apple.com/jp/podcast/%E3%81%AA%E3%81%8C%E3%82%89%E6%97%A5%E7%B5%8C/id1627014612 | grep -o &#39;<span class="nt">&lt;title&gt;</span>.*<span class="nt">&lt;/title&gt;</span>&#39;
+<span class="nt">&lt;title&gt;</span>ながら日経 - ポッドキャスト - Apple Podcast<span class="nt">&lt;/title&gt;</span>
+</code></pre></div>
+
+<p>Xem code method <code>text</code>:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Content of the response, in unicode.</span>
+
+<span class="sd">        If Response.encoding is None, encoding will be guessed using</span>
+<span class="sd">        ``charset_normalizer`` or ``chardet``.</span>
+
+<span class="sd">        The encoding of the response content is determined based solely on HTTP</span>
+<span class="sd">        headers, following RFC 2616 to the letter. If you can take advantage of</span>
+<span class="sd">        non-HTTP knowledge to make a better guess at the encoding, you should</span>
+<span class="sd">        set ``r.encoding`` appropriately before accessing this property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Try charset from content-type</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Fallback to auto-detected encoding.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apparent_encoding</span>
+
+        <span class="c1"># Decode unicode from given encoding.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">LookupError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="c1"># A LookupError is raised if the encoding was not found which could</span>
+            <span class="c1"># indicate a misspelling or similar mistake.</span>
+            <span class="c1">#</span>
+            <span class="c1"># A TypeError can be raised if encoding is None</span>
+            <span class="c1">#</span>
+            <span class="c1"># So we try blindly encoding.</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">content</span>
+</code></pre></div>
+
+<p><a href="https://github.com/psf/requests/blob/v2.32.5/src/requests/models.py#L909">https://github.com/psf/requests/blob/v2.32.5/src/requests/models.py#L909</a></p>
+<h3>Kết luận</h3>
+<p><code>requests</code> dễ nhưng không đơn giản.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-10-04T00:00:00+07:00">Sat 04 October 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#encoding-ref">encoding
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#http-ref">http
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#python-ref">python
+                    <span class="superscript">13</span>
+</a></li>
+                <li><a href="./tags.html#requests-ref">requests
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

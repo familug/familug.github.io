@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ps, top, thread, python, linux, unix, cli, frontpage, " />
+
+<meta property="og:title" content="ps và top hiển thị số thread "/>
+<meta property="og:url" content="./ps-va-top-hien-thi-so-thread.html" />
+<meta property="og:description" content="Người dùng Linux hẳn đều biết dùng lệnh ps -ef hay top để xem các &#34;chương trình&#34; đang chạy. Chương trình trên Linux thường ám chỉ 1 (vài) process đang chạy, mỗi process được gắn số ProcessID (PID). Một process có thể chạy nhiều OS thread, để xem số lượng …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-06-19T00:00:00+07:00" />
+<meta name="twitter:title" content="ps và top hiển thị số thread ">
+<meta name="twitter:description" content="Người dùng Linux hẳn đều biết dùng lệnh ps -ef hay top để xem các &#34;chương trình&#34; đang chạy. Chương trình trên Linux thường ám chỉ 1 (vài) process đang chạy, mỗi process được gắn số ProcessID (PID). Một process có thể chạy nhiều OS thread, để xem số lượng …">
+
+        <title>ps và top hiển thị số thread  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./ps-va-top-hien-thi-so-thread.html">
+                ps và top hiển thị số thread
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Người dùng Linux hẳn đều biết dùng lệnh <code>ps -ef</code> hay <code>top</code> để xem các "chương trình" đang chạy.
+Chương trình trên Linux thường ám chỉ 1 (vài) process đang chạy, mỗi process được gắn số ProcessID (PID).</p>
+<p>Một process có thể chạy nhiều OS thread, để xem số lượng thread (NLWP) hay thread ID (LWP), thêm option <code>-L</code></p>
+<h3>Xem thread với <code>ps</code></h3>
+<div class="highlight"><pre><span></span><code>$ ps -efL <span class="p">|</span> grep python3
+<span class="c1"># Dòng này được thêm vào cho dễ hiểu</span>
+UID          PID    PPID     LWP  C NLWP STIME TTY          TIME CMD
+--------------------------------------------------------------------------------
+hvn         <span class="m">3818</span>    <span class="m">1585</span>    <span class="m">3818</span>  <span class="m">0</span>    <span class="m">2</span> <span class="m">21</span>:28 pts/0    <span class="m">00</span>:00:00 python3 main.py
+hvn         <span class="m">3818</span>    <span class="m">1585</span>    <span class="m">3819</span>  <span class="m">0</span>    <span class="m">2</span> <span class="m">21</span>:28 pts/0    <span class="m">00</span>:00:00 python3 main.py
+</code></pre></div>
+
+<p>PID là 3818, 2 thread ID lần lượt là 3818 và 3819.</p>
+<p>Code Python3</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+
+<span class="k">class</span> <span class="nc">MyThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;running&quot;</span><span class="p">)</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">MyThread</span><span class="p">()</span>
+<span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+
+<h3>Xem thread với <code>top</code></h3>
+<p>Trong <code>top</code>, bấm chữ <code>H</code> (hoa) để hiển thị thread, cột PID lúc này sẽ hiển thị threadID.</p>
+<div class="highlight"><pre><span></span><code>$ top -Hbn1 <span class="p">|</span> grep python3
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   <span class="m">3979</span> hvn       <span class="m">20</span>   <span class="m">0</span>   <span class="m">87912</span>  <span class="m">10232</span>   <span class="m">4900</span> S   <span class="m">0</span>.0   <span class="m">0</span>.1   <span class="m">0</span>:00.05 python3
+   <span class="m">3980</span> hvn       <span class="m">20</span>   <span class="m">0</span>   <span class="m">87912</span>  <span class="m">10232</span>   <span class="m">4900</span> S   <span class="m">0</span>.0   <span class="m">0</span>.1   <span class="m">0</span>:00.00 python3
+$ ps -efL <span class="p">|</span> grep python3
+UID          PID    PPID     LWP  C NLWP STIME TTY          TIME CMD
+hvn         <span class="m">3979</span>    <span class="m">1585</span>    <span class="m">3979</span>  <span class="m">0</span>    <span class="m">2</span> <span class="m">21</span>:35 pts/0    <span class="m">00</span>:00:00 python3 main.py
+hvn         <span class="m">3979</span>    <span class="m">1585</span>    <span class="m">3980</span>  <span class="m">0</span>    <span class="m">2</span> <span class="m">21</span>:35 pts/0    <span class="m">00</span>:00:00 python3 main.py
+</code></pre></div>
+
+<h3>Tham khảo</h3>
+<ul>
+<li>man top</li>
+</ul>
+<div class="highlight"><pre><span></span><code>      -H  :Threads-mode operation Instructs top to display individual threads.
+      Without this command-line option a summation of all threads  in  each
+      process  is shown.  Later this can be changed with the `H&#39; interactive
+      command.
+</code></pre></div>
+
+<ul>
+<li>man ps</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="w">       </span><span class="o">-</span><span class="nv">f</span><span class="w">     </span><span class="k">Do</span><span class="w"> </span><span class="nv">full</span><span class="o">-</span><span class="nv">format</span><span class="w"> </span><span class="nv">listing</span>.<span class="w">  </span><span class="nv">This</span><span class="w"> </span><span class="nv">option</span><span class="w"> </span><span class="nv">can</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">combined</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nv">many</span><span class="w"></span>
+<span class="w">       </span><span class="nv">other</span><span class="w"> </span><span class="nv">UNIX</span><span class="o">-</span><span class="nv">style</span><span class="w"> </span><span class="nv">options</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">add</span><span class="w"> </span><span class="nv">additional</span><span class="w"> </span><span class="nv">columns</span>.<span class="w">  </span><span class="nv">It</span><span class="w"> </span><span class="nv">also</span><span class="w"> </span><span class="nv">causes</span><span class="w"> </span><span class="nv">the</span><span class="w"></span>
+<span class="w">       </span><span class="nv">command</span><span class="w"> </span><span class="nv">arguments</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">printed</span>.<span class="w">  </span><span class="nv">When</span><span class="w"> </span><span class="nv">used</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="o">-</span><span class="nv">L</span>,<span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">NLWP</span><span class="w"> </span><span class="ss">(</span><span class="nv">number</span><span class="w"> </span><span class="nv">of</span><span class="w"></span>
+<span class="w">               </span><span class="nv">threads</span><span class="ss">)</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">LWP</span><span class="w"> </span><span class="ss">(</span><span class="nv">thread</span><span class="w"> </span><span class="nv">ID</span><span class="ss">)</span><span class="w"> </span><span class="nv">columns</span><span class="w"> </span><span class="nv">will</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">added</span>.<span class="w">  </span><span class="nv">See</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">c</span><span class="w"></span>
+<span class="w">       </span><span class="nv">option</span>,<span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">format</span><span class="w"> </span><span class="nv">keyword</span><span class="w"> </span><span class="nv">args</span>,<span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">format</span><span class="w"> </span><span class="nv">keyword</span><span class="w"> </span><span class="nv">comm</span>.<span class="w"></span>
+</code></pre></div>
+
+<h3>Kết luận</h3>
+<p>Có thể nhìn tận mắt thread đang chạy với ps và top.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-06-19T00:00:00+07:00">Mon 19 June 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#cli-ref">cli
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#linux-ref">linux
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="./tags.html#ps-ref">ps
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#python-ref">python
+                    <span class="superscript">13</span>
+</a></li>
+                <li><a href="./tags.html#thread-ref">thread
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#top-ref">top
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#unix-ref">unix
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

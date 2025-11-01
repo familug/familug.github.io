@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="sysadmin, workstation, opinion, frontpage, " />
+
+<meta property="og:title" content="Máy làm việc có nên cùng hệ điều hành với server? "/>
+<meta property="og:url" content="./may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html" />
+<meta property="og:description" content="Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc &#34;nếu làm Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu&#34;, để có kinh nghiệm khi dùng hàng ngày ứng dụng cho công việc. Sau gần 8 năm đi làm (since 2013), kết luận hiện …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2021-03-01T01:02:03+07:00" />
+<meta name="twitter:title" content="Máy làm việc có nên cùng hệ điều hành với server? ">
+<meta name="twitter:description" content="Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc &#34;nếu làm Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu&#34;, để có kinh nghiệm khi dùng hàng ngày ứng dụng cho công việc. Sau gần 8 năm đi làm (since 2013), kết luận hiện …">
+
+        <title>Máy làm việc có nên cùng hệ điều hành với server?  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./may-lam-viec-co-nen-cung-he-dieu-hanh-voi-server.html">
+                Máy làm việc có nên cùng hệ điều hành với server?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Trước đây khi mới học dùng Linux/làm sysadmin, mình từng nghĩ việc "nếu làm
+Ubuntu sysadmin thì máy bàn/ máy cá nhân phải dùng Ubuntu", để có kinh nghiệm
+khi dùng hàng ngày ứng dụng cho công việc.</p>
+<p><img alt="Photo by &lt;a href=&quot;https://unsplash.com/@xps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText&quot;&gt;XPS&lt;/a&gt; on &lt;a href=&quot;https://unsplash.com/@xps?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText&quot;&gt;Unsplash&lt;/a&gt;" src="./images/xps.jpg"></p>
+<p>Sau gần 8 năm đi làm (since 2013), kết luận hiện tại mình đưa ra là: không
+cần thiết.</p>
+<h2>Kiến thức đi làm khác với kiến thức dùng hàng ngày</h2>
+<p>Thứ công nghệ khiến mình bị shock nhất trong những năm đầu làm sysadmin,
+đó là OpenLDAP. Bạn sẽ không bao giờ hiểu được nó là thứ gì và tại sao lại cần,
+cho đến khi đi làm môi trường doanh nghiệp, khi công ty có hàng trăm hay hàng
+nghìn nhân viên. Bạn sẽ không bao giờ chơi với OpenLDAP ở nhà cả, chẳng
+có lý do gì làm vậy.
+Ngắn gọn: OpenLDAP/ActiveDirectory hay các hệ thống "directory" thường dùng lưu
+trữ
+thông tin về các cá nhân, và nó hoạt động như 1 database tối ưu cho việc truy
+cập, người dùng có thể dùng 1 tài khoản để đăng nhập vào nhiều chương trình
+như email, dịch vụ nội bộ a,b,c... lý do là LDAP đã quá phổ biến và các
+ngôn ngữ lập trình đều có sẵn thư viện giúp việc này chỉ mất &lt; 1 ngày để làm.</p>
+<p>Vậy nên cả ngày dùng Ubuntu, cũng chẳng giúp ích gì cho dùng OpenLDAP.</p>
+<p>Vài thứ kiến thức / công nghệ khác mà dùng máy cá nhân giống máy server không
+giúp ích gì:</p>
+<ul>
+<li>Kiến thức setup BIOS, Grub, format ổ cứng... khi server dùng cloud.</li>
+<li>Kiến thức về kết nối các thiết bị phần cứng: loa phím chuột</li>
+<li>Cấu hình wifi</li>
+<li>cấu hình giao diện đồ họa (DE, WM, X.org)</li>
+</ul>
+<p>Vài thứ kiến thức / công nghệ mà chỉ dùng khi đi làm, còn máy cá nhân không
+dùng bao giờ:</p>
+<ul>
+<li>Terraform, Kubernetes</li>
+<li>Databases, NGINX, Jenkins, ELK, Prometheus,...</li>
+<li>SaltStack, Ansible (có thể dùng nhưng rất giới hạn).</li>
+</ul>
+<h2>Những kiến thức hữu dụng cả ở máy cá nhân/làm việc và công việc</h2>
+<p>Thành thạo sử dụng các câu lệnh UNIX, vừa giúp các công việc hàng ngày, vừa
+hữu dụng khi đi làm:</p>
+<ul>
+<li>cd</li>
+<li>cp</li>
+<li>find</li>
+<li>grep</li>
+<li>ls</li>
+<li>mkdir</li>
+<li>mv</li>
+<li>ps</li>
+<li>top</li>
+<li>vi</li>
+</ul>
+<p>.., xem thêm tại <a href="https://www.familug.org/2014/11/cmd-linux-utilities-co-gi-can-thiet.html">đây</a>.</p>
+<p>các chương trình này đều tuân theo chuẩn "POSIX" và tương tự nhau trên các
+hệ điều hành: Ubuntu, Fedora, ArchLinux,... OSX/MacOS, OpenBSD, FreeBSD,
+hay cả Windows Subsystem for Linux (WSL).</p>
+<ul>
+<li>git/GitHub/GitLab</li>
+<li>tmux</li>
+<li>cài máy ảo (KVM/VirtualBox) hay dùng container (docker) để có môi trường
+  giống server khi cần thiết.</li>
+<li>kiến thức network: ping, netstat, DNS, iptable, tcpdumb...</li>
+<li>kiến thức lập trình</li>
+<li>đọc log</li>
+</ul>
+<p>Những thứ "căn bản" này, lại là thứ hữu ích.</p>
+<h2>Kết luận</h2>
+<p>Kinh nghiệm với một công nghệ nào đó, có giá trị ở một mức độ nhất định.
+Người dùng máy bàn Ubuntu 10 năm, giỏi cấu hình giao diện đẹp lóng lánh,
+cũng khó chắc mà đủ kiến thức và kinh nghiệm Kubernetes, hay OpenLDAP để đi làm.</p>
+<p>Chuyện server chạy Ubuntu còn máy làm việc/cá nhân dùng MacOS, Windows (WSL),
+hay ArchLinux, OpenBSD đều hoàn toàn bình thường, OK. Thậm chí, các lập trình
+viên sang chảnh giờ đều dùng MacOS trong khi code đều chạy trên một Linux server
+nào đó như Ubuntu.</p>
+<p>Xông lên và khám phá những thứ mới, những hệ điều hành mới, dùng 1 workstation
+OS giống máy server sẽ không giúp bạn quá nhiều. Nếu đã plan sau 5 năm trở
+thành senior DevOps, 2 năm đầu hãy dùng Ubuntu, rồi mỗi năm sau đó chuyển qua
+1 OS mới, càng khác biệt càng tốt: Fedora, ArchLinux, FreeBSD/OpenBSD...
+kinh nghiệm thu được sẽ nhiều hơn là 5 năm làm đi làm lại 1 vài task trên
+Ubuntu.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2021-03-01T01:02:03+07:00">Mon 01 March 2021</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#opinion-ref">opinion
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#sysadmin-ref">sysadmin
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#workstation-ref">workstation
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

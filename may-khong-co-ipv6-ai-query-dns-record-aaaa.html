@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="DNS, IPV6, tcpdump, getaddrinfo, gethostbyname, frontpage, " />
+
+<meta property="og:title" content="Máy không có IPv6, ai query DNS record AAAA? "/>
+<meta property="og:url" content="./may-khong-co-ipv6-ai-query-dns-record-aaaa.html" />
+<meta property="og:description" content="Đa phần các máy tính vào cuối 2023 đều đã sử dụng IPv6, đặc biệt là các Linux server. Nhưng khi đã tắt IPv6, disable qua sysctl: # sysctl -w net.ipv6.conf.all.disable_ipv6=1 bật tcpdump vẫn thấy các ứng dụng query AAAA record (lấy địa chỉ IPv6 tương …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-12-10T00:00:00+07:00" />
+<meta name="twitter:title" content="Máy không có IPv6, ai query DNS record AAAA? ">
+<meta name="twitter:description" content="Đa phần các máy tính vào cuối 2023 đều đã sử dụng IPv6, đặc biệt là các Linux server. Nhưng khi đã tắt IPv6, disable qua sysctl: # sysctl -w net.ipv6.conf.all.disable_ipv6=1 bật tcpdump vẫn thấy các ứng dụng query AAAA record (lấy địa chỉ IPv6 tương …">
+
+        <title>Máy không có IPv6, ai query DNS record AAAA?  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./may-khong-co-ipv6-ai-query-dns-record-aaaa.html">
+                Máy không có IPv6, ai query DNS record AAAA?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Đa phần các máy tính vào cuối 2023 đều đã sử dụng IPv6, đặc biệt là các Linux server. Nhưng khi đã tắt IPv6, disable qua sysctl:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># sysctl -w net.ipv6.conf.all.disable_ipv6=1</span>
+</code></pre></div>
+
+<p>bật tcpdump vẫn thấy các ứng dụng query AAAA record (lấy địa chỉ IPv6 tương ứng với domain), tại sao?</p>
+<h2>Thí nghiệm</h2>
+<p>Mở 1 cửa sổ chạy tcpdump port 53:</p>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="nv">@box</span><span class="err">:</span><span class="o">~</span><span class="err">#</span><span class="w"> </span><span class="n">tcpdump</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="mi">53</span><span class="w"></span>
+<span class="nl">tcpdump</span><span class="p">:</span><span class="w"> </span><span class="n">verbose</span><span class="w"> </span><span class="k">output</span><span class="w"> </span><span class="n">suppressed</span><span class="p">,</span><span class="w"> </span><span class="k">use</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="o">[</span><span class="n">v</span><span class="o">]</span><span class="p">...</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">full</span><span class="w"> </span><span class="n">protocol</span><span class="w"> </span><span class="n">decode</span><span class="w"></span>
+<span class="n">listening</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">eth0</span><span class="p">,</span><span class="w"> </span><span class="n">link</span><span class="o">-</span><span class="n">type</span><span class="w"> </span><span class="n">EN10MB</span><span class="w"> </span><span class="p">(</span><span class="n">Ethernet</span><span class="p">),</span><span class="w"> </span><span class="n">snapshot</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="mi">262144</span><span class="w"> </span><span class="n">bytes</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+</code></pre></div>
+
+<p>Mở cửa sổ khác, bật Python3, import socket và gọi các function để lấy địa chỉ IP từ tên miền:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">socket</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="s2">&quot;pymi.vn&quot;</span><span class="p">)</span>
+<span class="s1">&#39;104.21.61.168&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="s2">&quot;pymi.vn&quot;</span><span class="p">)</span>
+<span class="s1">&#39;172.67.212.45&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="s2">&quot;familug.org&quot;</span><span class="p">)</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">TypeError</span><span class="p">:</span> <span class="n">getaddrinfo</span><span class="p">()</span> <span class="n">missing</span> <span class="mi">1</span> <span class="n">required</span> <span class="n">positional</span> <span class="n">argument</span><span class="p">:</span> <span class="s1">&#39;port&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="s2">&quot;familug.org&quot;</span><span class="p">,</span> <span class="mi">443</span><span class="p">)</span>
+<span class="p">[(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketKind</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;216.239.32.21&#39;</span><span class="p">,</span> <span class="mi">443</span><span class="p">)),</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketKind</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;216.239.32.21&#39;</span><span class="p">,</span> <span class="mi">443</span><span class="p">)),</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">AddressFamily</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">SocketKind</span><span class="o">.</span><span class="n">SOCK_RAW</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;216.239.32.21&#39;</span><span class="p">,</span> <span class="mi">443</span><span class="p">))]</span>
+<span class="o">&gt;&gt;&gt;</span>
+</code></pre></div>
+
+<p>Đoạn code trên sử dụng <code>gethostbyname</code>, một function cổ điển để lấy IP, tương ứng với function trên C, xem <code>man 3 gethostbyname</code>.</p>
+<p>Kết quả tcpdump sẽ chỉ có IPv4:</p>
+<div class="highlight"><pre><span></span><code><span class="m">12</span>:21:25.019583 IP box.41423 &gt; <span class="m">192</span>.168.122.1.domain: <span class="m">57705</span>+ A? pymi.vn. <span class="o">(</span><span class="m">25</span><span class="o">)</span>
+<span class="m">12</span>:21:25.020054 IP <span class="m">192</span>.168.122.1.domain &gt; box.41423: <span class="m">57705</span> <span class="m">2</span>/0/0 A <span class="m">172</span>.67.212.45, A <span class="m">104</span>.21.61.168 <span class="o">(</span><span class="m">57</span><span class="o">)</span>
+</code></pre></div>
+
+<p>Còn khi query familug.org, sử dụng function <code>getaddrinfo</code> kèm them port 443, kết quả</p>
+<div class="highlight"><pre><span></span><code><span class="m">12</span>:21:39.722169 IP box.49228 &gt; <span class="m">192</span>.168.122.1.domain: <span class="m">29210</span>+ A? familug.org. <span class="o">(</span><span class="m">29</span><span class="o">)</span>
+<span class="m">12</span>:21:39.722208 IP box.49228 &gt; <span class="m">192</span>.168.122.1.domain: <span class="m">23059</span>+ AAAA? familug.org. <span class="o">(</span><span class="m">29</span><span class="o">)</span>
+<span class="m">12</span>:21:39.889210 IP <span class="m">192</span>.168.122.1.domain &gt; box.49228: <span class="m">29210</span> <span class="m">1</span>/0/0 A <span class="m">216</span>.239.32.21 <span class="o">(</span><span class="m">45</span><span class="o">)</span>
+<span class="m">12</span>:21:39.896108 IP <span class="m">192</span>.168.122.1.domain &gt; box.49228: <span class="m">23059</span> <span class="m">0</span>/1/0 <span class="o">(</span><span class="m">90</span><span class="o">)</span>
+</code></pre></div>
+
+<p>thấy có query id 23059 <code>AAAA? familug.org.</code> và kết quả 0/1/0.</p>
+<p><code>gethostbyname</code> đã rất cũ và hiện nay được coi là <strong>obsoleted</strong> (lỗi thời), các ứng dụng hiện đại đều được khuyên dùng <code>getaddrinfo</code>.</p>
+<blockquote>
+<p>The obsolescent h_errno external integer, and the obsolescent gethostbyaddr() and gethostbyname() functions are removed, along with the HOST_NOT_FOUND, NO_DATA, NO_RECOVERY, and TRY_AGAIN macros.
+<a href="https://pubs.opengroup.org/onlinepubs/9699919799/">https://pubs.opengroup.org/onlinepubs/9699919799/</a></p>
+</blockquote>
+<p>Vậy nên dù máy không có IPv6, ứng dụng vẫn gọi <code>getaddrinfo</code>, function này vẫn sẽ lấy địa chỉ IPv6 của domain tương ứng.</p>
+<p>Và có vẻ như không thể dễ dàng disable tính năng nay, tức các ứng dụng sẽ luôn query IPv6 dù muốn hay không.</p>
+<h2>Kết luận</h2>
+<p>AAAA là DNS record IPv6, <code>getaddrinfo</code> luôn lấy cả 4 và 6... để được điểm 10.</p>
+<h2>Tham khảo</h2>
+<ul>
+<li><a href="https://serverfault.com/questions/632665/how-to-disable-aaaa-lookups">How to disable AAAA lookups?</a></li>
+<li>man 3 gethostbyname</li>
+<li>man 3 getaddrinfo</li>
+</ul>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-12-10T00:00:00+07:00">Sun 10 December 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#dns-ref">DNS
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#getaddrinfo-ref">getaddrinfo
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#gethostbyname-ref">gethostbyname
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#ipv6-ref">IPV6
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#tcpdump-ref">tcpdump
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

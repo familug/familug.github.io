@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="assembly, asm, gcc, gas, as, ld, elf, xxd, hexdump, frontpage, " />
+
+<meta property="og:title" content="Hello world dùng x64 assembly "/>
+<meta property="og:url" content="./hello-world-dung-x64-assembly.html" />
+<meta property="og:description" content="Assembly (asm) ở Việt Nam được gọi là &#34;hợp ngữ cũng có thể được gọi là mã máy tượng trưng&#34;, là một ngôn ngữ lập trình cấp thấp, thường tương ứng 1 lệnh với 1 lệnh của CPU. Lập trình assembly ngày nay không còn phổ biến như trước khi …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2022-10-16T00:00:00+07:00" />
+<meta name="twitter:title" content="Hello world dùng x64 assembly ">
+<meta name="twitter:description" content="Assembly (asm) ở Việt Nam được gọi là &#34;hợp ngữ cũng có thể được gọi là mã máy tượng trưng&#34;, là một ngôn ngữ lập trình cấp thấp, thường tương ứng 1 lệnh với 1 lệnh của CPU. Lập trình assembly ngày nay không còn phổ biến như trước khi …">
+
+        <title>Hello world dùng x64 assembly  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./hello-world-dung-x64-assembly.html">
+                Hello world dùng x64 assembly
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Assembly (asm) ở Việt Nam được gọi là <a href="https://vi.wikipedia.org/wiki/H%E1%BB%A3p_ng%E1%BB%AF">"hợp ngữ cũng có thể được gọi là mã máy tượng trưng"</a>, là một ngôn ngữ lập trình cấp thấp, thường tương ứng 1 lệnh với 1 lệnh của CPU.
+Lập trình assembly ngày nay không còn phổ biến như trước khi có C.</p>
+<p>C/Zig/Rust... được dùng để viết code "low level", nhưng khi cần tốc độ tối đa, lập trình nhúng, viết driver, hay thực hiện reverse engineering, binary exploitation, asm là ngôn ngữ được ưa chuộng.</p>
+<p><img alt="cpu" src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-1.2.1&amp;dl=olivier-collet-JMwCe3w7qKk-unsplash.jpg&amp;w=640&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb"></p>
+<p>Photo by <a href="https://unsplash.com/@ocollet?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Olivier Collet</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a></p>
+<ul>
+<li>Code Rust ---compile -&gt; binary</li>
+<li>Code C ---compile -&gt; binary</li>
+<li>Code ASM ---compile -&gt; binary</li>
+</ul>
+<p>Loạt bài viết này giới thiệu vài chương trình assembly đơn giản, cách compile, chạy, các tool dùng để tìm hiểu file binary.</p>
+<p>Assembly đơn giản (giới hạn không nhiều lệnh, luật lệ rõ ràng), nhưng không dễ (mất rất nhiều bước để làm một việc, rất thủ công).</p>
+<h3>Hello world</h3>
+<p>Là một chương trình in ra màn hình dòng chữ "hello world".</p>
+<p>Code Python:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello,world&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Code C:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">puts</span><span class="p">(</span><span class="s">&quot;Hello, world</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Code asm trong file hello.s - copy từ wikipedia <a href="https://en.wikipedia.org/wiki/GNU_Assembler#Example_program">https://en.wikipedia.org/wiki/GNU_Assembler#Example_program</a></p>
+<div class="highlight"><pre><span></span><code><span class="na">.global</span><span class="w"> </span><span class="no">_start</span><span class="w"></span>
+
+<span class="na">.text</span><span class="w"></span>
+<span class="nl">_start:</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$4</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span><span class="w">   </span><span class="c1"># 4 (code for &quot;write&quot; syscall) -&gt; EAX register</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$1</span><span class="p">,</span><span class="w"> </span><span class="nv">%ebx</span><span class="w">   </span><span class="c1"># 1 (file descriptor for stdout) -&gt; EBX (1st argument to syscall)</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$message</span><span class="p">,</span><span class="w"> </span><span class="nv">%ecx</span><span class="w"> </span><span class="c1"># address of message string -&gt; ECX (2nd argument)</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$len</span><span class="p">,</span><span class="w"> </span><span class="nv">%edx</span><span class="w"> </span><span class="c1"># len (32 bit address) -&gt; EDX (3rd arg)</span>
+<span class="w">    </span><span class="nf">int</span><span class="w">   </span><span class="no">$0x80</span><span class="w">      </span><span class="c1"># interrupt with location 0x80 (128), which invokes the kernel&#39;s system call procedure</span>
+
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$1</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span><span class="w">   </span><span class="c1"># 1 (&quot;exit&quot;) -&gt; EAX</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$0</span><span class="p">,</span><span class="w"> </span><span class="nv">%ebx</span><span class="w">   </span><span class="c1"># 0 (with success) -&gt; EBX</span>
+<span class="w">    </span><span class="nf">int</span><span class="w">  </span><span class="no">$0x80</span><span class="w">      </span><span class="c1"># see previous</span>
+<span class="na">.data</span><span class="w"></span>
+<span class="nl">message:</span><span class="w"></span>
+<span class="w">    </span><span class="na">.ascii</span><span class="w">  </span><span class="s">&quot;Hello, PyMivn!\n&quot;</span><span class="w"> </span><span class="c1"># inline ascii string</span>
+<span class="w">    </span><span class="nf">len</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">15</span><span class="w"></span>
+</code></pre></div>
+
+<p>Compile dùng <code>gcc</code></p>
+<div class="highlight"><pre><span></span><code>$ gcc -c hello.s
+$ ls -l
+-rw-rw-r--  <span class="m">1</span> hvn hvn  <span class="m">904</span> Oct <span class="m">16</span> <span class="m">14</span>:11 hello.o
+-rw-rw-r--  <span class="m">1</span> hvn hvn  <span class="m">598</span> Oct <span class="m">16</span> <span class="m">14</span>:11 hello.s
+$ file hello.o
+hello.o: ELF <span class="m">64</span>-bit LSB relocatable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, not stripped
+</code></pre></div>
+
+<p><code>gcc -c</code> compile source code hello.s sẽ sinh ra object file hello.o.
+GCC sẽ gọi GNU Assembler (gas - lệnh là <code>as</code>) để thực hiện compile. Ngoài <code>as</code>, trên Linux còn phổ biến <code>nasm</code>. Trên Windows phổ biến <a href="https://learn.microsoft.com/en-us/cpp/assembler/masm/microsoft-macro-assembler-reference?view=msvc-170">MASM</a></p>
+<h4>ld - linker</h4>
+<p><code>man ld</code></p>
+<blockquote>
+<p>ld combines a number of object and archive files, relocates their data
+and ties up symbol references. Usually the last step in compiling a
+program is to run ld.</p>
+</blockquote>
+<p><code>ld</code> thực hiện link (các) file object, ở đây chỉ có 1 file hello.o, thành file binary cuối cùng chạy đuợc, có tên mặc định là a.out.</p>
+<div class="highlight"><pre><span></span><code>$ ld hello.o
+$ ls -l
+-rwxrwxr-x  <span class="m">1</span> hvn hvn <span class="m">8920</span> Oct <span class="m">16</span> <span class="m">14</span>:13 a.out
+$ file a.out
+a.out: ELF <span class="m">64</span>-bit LSB executable, x86-64, version <span class="m">1</span> <span class="o">(</span>SYSV<span class="o">)</span>, statically linked, not stripped
+$ ./a.out
+Hello, PyMivn!
+</code></pre></div>
+
+<h4>ELF file</h4>
+<p>file binary chạy được tên <code>a.out</code> trên Linux có format <code>ELF</code>.</p>
+<div class="highlight"><pre><span></span><code>$ whatis elf
+elf <span class="o">(</span><span class="m">5</span><span class="o">)</span>              - format of Executable and Linking Format <span class="o">(</span>ELF<span class="o">)</span> files
+</code></pre></div>
+
+<p>Trên MacOS sử dụng format <code>Mach-O</code>, trên Windows sử dụng format <code>Portable Executable (PE)</code>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Comparison_of_executable_file_formats">https://en.wikipedia.org/wiki/Comparison_of_executable_file_formats</a>.</p>
+<h4>Chi tiết code asm</h4>
+<h5>AT&amp;T và Intel syntax</h5>
+<p>asm có hai nhánh syntax chính, là AT&amp;T và Intel.
+Intel phổ biến trên Windows, AT&amp;T phổ biến trên Unix/Linux.
+Xem chi tiết so sánh tại <a href="https://en.wikipedia.org/wiki/AT%26T_syntax#Syntax">https://en.wikipedia.org/wiki/AT%26T_syntax#Syntax</a></p>
+<h5>hello.s</h5>
+<p>Code asm trong bài này chứa 3 section. <code>.global</code>, <code>.data</code> và <code>.text</code>, sử dụng AT&amp;T syntax.</p>
+<blockquote>
+<p><a href="https://sourceware.org/binutils/docs-2.39/as/Global.html">.global makes the symbol visible to ld</a></p>
+</blockquote>
+<p><code>.global</code> sẽ khai báo function nào được chạy, ở đây là <code>_start</code> (thực chất là export symbol <code>_start</code> cho linker nhìn thấy)</p>
+<div class="highlight"><pre><span></span><code><span class="na">.global</span><span class="w"> </span><span class="no">_start</span><span class="w"></span>
+</code></pre></div>
+
+<p><code>.data</code> còn gọi là data segment chứa các global variable &amp; static variable.</p>
+<div class="highlight"><pre><span></span><code><span class="na">.data</span><span class="w"></span>
+<span class="nl">message:</span><span class="w"></span>
+<span class="w">    </span><span class="na">.ascii</span><span class="w">  </span><span class="s">&quot;Hello, PyMivn!\n&quot;</span><span class="w"> </span><span class="c1"># inline ascii string</span>
+<span class="w">    </span><span class="nf">len</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="mi">15</span><span class="w"></span>
+</code></pre></div>
+
+<p><code>.text</code> chứa code của chương trình.  Function <code>_start</code></p>
+<div class="highlight"><pre><span></span><code><span class="na">.text</span><span class="w"></span>
+<span class="nl">_start:</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$4</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span><span class="w">   </span><span class="c1"># 4 (code for &quot;write&quot; syscall) -&gt; EAX register</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$1</span><span class="p">,</span><span class="w"> </span><span class="nv">%ebx</span><span class="w">   </span><span class="c1"># 1 (file descriptor for stdout) -&gt; EBX (1st argument to syscall)</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$message</span><span class="p">,</span><span class="w"> </span><span class="nv">%ecx</span><span class="w"> </span><span class="c1"># address of message string -&gt; ECX (2nd argument)</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$len</span><span class="p">,</span><span class="w"> </span><span class="nv">%edx</span><span class="w"> </span><span class="c1"># len (32 bit address) -&gt; EDX (3rd arg)</span>
+<span class="w">    </span><span class="nf">int</span><span class="w">   </span><span class="no">$0x80</span><span class="w">      </span><span class="c1"># interrupt with location 0x80 (128), which invokes the kernel&#39;s system call procedure</span>
+
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$1</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span><span class="w">   </span><span class="c1"># 1 (&quot;exit&quot;) -&gt; EAX</span>
+<span class="w">    </span><span class="nf">mov</span><span class="w">  </span><span class="no">$0</span><span class="p">,</span><span class="w"> </span><span class="nv">%ebx</span><span class="w">   </span><span class="c1"># 0 (with success) -&gt; EBX</span>
+<span class="w">    </span><span class="nf">int</span><span class="w">  </span><span class="no">$0x80</span><span class="w">      </span><span class="c1"># see previous</span>
+</code></pre></div>
+
+<p>%eax %ebx %ecx %edx là 4 register (thanh ghi) trong CPU, để chứa các giá trị.</p>
+<div class="highlight"><pre><span></span><code>mov $4, %eax
+</code></pre></div>
+
+<p>tương đương với viết code C <code>eax = 4</code>. <code>int $0x80</code> thực hiện interrupt tại địa chỉ 0x80, tức thực hiện gọi syscall. Dòng <code>int $0x80</code> có thể viết thành <code>syscall</code>.</p>
+<p>Về cơ bản đoạn code trên thực hiện gọi 2 syscall số 4-write và 1-exit</p>
+<p>Code giả:</p>
+<div class="highlight"><pre><span></span><code><span class="n">syscall</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="n">syscall</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>hay</p>
+<div class="highlight"><pre><span></span><code><span class="n">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="w"> </span><span class="n">message</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"></span>
+<span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Chạy với lệnh <code>strace</code> để xem các syscall đã được dùng:</p>
+<div class="highlight"><pre><span></span><code>$ strace ./a.out &gt; /dev/null
+execve<span class="o">(</span><span class="s2">&quot;./a.out&quot;</span>, <span class="o">[</span><span class="s2">&quot;./a.out&quot;</span><span class="o">]</span>, 0x7ffd32dba4c0 /* <span class="m">58</span> vars */<span class="o">)</span> <span class="o">=</span> <span class="m">0</span>
+strace: <span class="o">[</span> Process <span class="nv">PID</span><span class="o">=</span><span class="m">327701</span> runs <span class="k">in</span> <span class="m">32</span> bit mode. <span class="o">]</span>
+write<span class="o">(</span><span class="m">1</span>, <span class="s2">&quot;Hello, PyMivn!\n&quot;</span>, <span class="m">15</span><span class="o">)</span>        <span class="o">=</span> <span class="m">15</span>
+exit<span class="o">(</span><span class="m">0</span><span class="o">)</span>                                 <span class="o">=</span> ?
++++ exited with <span class="m">0</span> +++
+</code></pre></div>
+
+<p>Phiên bản dùng Intel syntax:</p>
+<div class="highlight"><pre><span></span><code><span class="na">.intel_syntax</span><span class="w"> </span><span class="no">noprefix</span><span class="w"></span>
+<span class="na">.global</span><span class="w"> </span><span class="no">_start</span><span class="w"></span>
+
+<span class="na">.text</span><span class="w"></span>
+<span class="nl">_start:</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">eax</span><span class="p">,</span><span class="w"> </span><span class="mi">0x4</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ebx</span><span class="p">,</span><span class="w"> </span><span class="mi">0x1</span><span class="w"></span>
+<span class="w">    </span><span class="nf">lea</span><span class="w"> </span><span class="no">ecx</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="no">message</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">edx</span><span class="p">,</span><span class="w"> </span><span class="mi">0xf</span><span class="w"></span>
+<span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">0x80</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">eax</span><span class="p">,</span><span class="w"> </span><span class="mi">0x1</span><span class="w"></span>
+<span class="w">    </span><span class="nf">mov</span><span class="w"> </span><span class="no">ebx</span><span class="p">,</span><span class="w"> </span><span class="mi">0x0</span><span class="w"></span>
+<span class="w">    </span><span class="nf">int</span><span class="w"> </span><span class="mi">0x80</span><span class="w"></span>
+
+<span class="na">.data</span><span class="w"></span>
+<span class="nl">message:</span><span class="w"></span>
+<span class="w">    </span><span class="na">.ascii</span><span class="w">  </span><span class="s">&quot;Hello, PyMivn!\n&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<h4>Hex view xxd</h4>
+<p>xxd in ra mã <a href="https://n.pymi.vn/byt351.html">hex</a> của từng byte.</p>
+<div class="highlight"><pre><span></span><code>$ whatis xxd
+xxd <span class="o">(</span><span class="m">1</span><span class="o">)</span>              - make a hexdump or <span class="k">do</span> the reverse.
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>$ xxd a.out <span class="p">|</span> grep -v <span class="s1">&#39;0000 0000 0000 0000 0000 0000 0000 0000&#39;</span>
+<span class="m">00000000</span>: 7f45 4c46 <span class="m">0201</span> <span class="m">0100</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  .ELF............
+<span class="m">00000010</span>: <span class="m">0200</span> 3e00 <span class="m">0100</span> <span class="m">0000</span> <span class="m">0010</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ..&gt;.......@.....
+<span class="m">00000020</span>: <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">5821</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  @.......X!......
+<span class="m">00000030</span>: <span class="m">0000</span> <span class="m">0000</span> <span class="m">4000</span> <span class="m">3800</span> <span class="m">0300</span> <span class="m">4000</span> <span class="m">0600</span> <span class="m">0500</span>  ....@.8...@.....
+<span class="m">00000040</span>: <span class="m">0100</span> <span class="m">0000</span> <span class="m">0400</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ................
+<span class="m">00000050</span>: <span class="m">0000</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ..@.......@.....
+<span class="m">00000060</span>: e800 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> e800 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ................
+<span class="m">00000070</span>: <span class="m">0010</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0100</span> <span class="m">0000</span> <span class="m">0500</span> <span class="m">0000</span>  ................
+<span class="m">00000080</span>: <span class="m">0010</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0010</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ..........@.....
+<span class="m">00000090</span>: <span class="m">0010</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">2200</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ..@.....<span class="s2">&quot;.......</span>
+<span class="s2">000000a0: 2200 0000 0000 0000 0010 0000 0000 0000  &quot;</span>...............
+000000b0: <span class="m">0100</span> <span class="m">0000</span> <span class="m">0600</span> <span class="m">0000</span> <span class="m">0020</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ......... ......
+000000c0: <span class="m">0020</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0020</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  . @...... @.....
+000000d0: 0f00 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> 0f00 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ................
+000000e0: <span class="m">0010</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ................
+<span class="m">00001000</span>: b804 <span class="m">0000</span> 00bb <span class="m">0100</span> <span class="m">0000</span> b900 <span class="m">2040</span> 00ba  ............ @..
+<span class="m">00001010</span>: 0f00 <span class="m">0000</span> cd80 b801 <span class="m">0000</span> 00bb <span class="m">0000</span> <span class="m">0000</span>  ................
+<span class="m">00001020</span>: cd80 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ................
+<span class="m">00002000</span>: <span class="m">4865</span> 6c6c 6f2c <span class="m">2050</span> 794d <span class="m">6976</span> 6e21 0a00  Hello, PyMivn!..
+<span class="m">00002020</span>: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0300</span> <span class="m">0100</span>  ................
+<span class="m">00002030</span>: <span class="m">0010</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ..@.............
+<span class="m">00002040</span>: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0300</span> <span class="m">0200</span> <span class="m">0020</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ......... @.....
+<span class="m">00002050</span>: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0100</span> <span class="m">0000</span> <span class="m">0400</span> f1ff  ................
+<span class="m">00002070</span>: <span class="m">0900</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0200</span> <span class="m">0020</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ......... @.....
+<span class="m">00002080</span>: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">1100</span> <span class="m">0000</span> <span class="m">0000</span> f1ff  ................
+<span class="m">00002090</span>: 0f00 <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ................
+000020a0: 1a00 <span class="m">0000</span> <span class="m">1000</span> <span class="m">0100</span> <span class="m">0010</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ..........@.....
+000020b0: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">1500</span> <span class="m">0000</span> <span class="m">1000</span> <span class="m">0200</span>  ................
+000020c0: 0f20 <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  . @.............
+000020d0: <span class="m">2100</span> <span class="m">0000</span> <span class="m">1000</span> <span class="m">0200</span> 0f20 <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  !........ @.....
+000020e0: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">2800</span> <span class="m">0000</span> <span class="m">1000</span> <span class="m">0200</span>  ........<span class="o">(</span>.......
+000020f0: <span class="m">1020</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  . @.............
+<span class="m">00002100</span>: <span class="m">0068</span> 656c 6c6f 2e6f 006d <span class="m">6573</span> <span class="m">7361</span> <span class="m">6765</span>  .hello.o.message
+<span class="m">00002110</span>: 006c 656e 005f 5f62 <span class="m">7373</span> 5f73 <span class="m">7461</span> <span class="m">7274</span>  .len.__bss_start
+<span class="m">00002120</span>: 005f <span class="m">6564</span> <span class="m">6174</span> <span class="m">6100</span> 5f65 6e64 <span class="m">0000</span> 2e73  ._edata._end...s
+<span class="m">00002130</span>: 796d <span class="m">7461</span> <span class="m">6200</span> 2e73 <span class="m">7472</span> <span class="m">7461</span> <span class="m">6200</span> 2e73  ymtab..strtab..s
+<span class="m">00002140</span>: <span class="m">6873</span> <span class="m">7472</span> <span class="m">7461</span> <span class="m">6200</span> 2e74 <span class="m">6578</span> <span class="m">7400</span> 2e64  hstrtab..text..d
+<span class="m">00002150</span>: <span class="m">6174</span> <span class="m">6100</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ata.............
+<span class="m">00002190</span>: <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> 1b00 <span class="m">0000</span> <span class="m">0100</span> <span class="m">0000</span>  ................
+000021a0: <span class="m">0600</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0010</span> <span class="m">4000</span> <span class="m">0000</span> <span class="m">0000</span>  ..........@.....
+000021b0: <span class="m">0010</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">2200</span> <span class="m">0000</span> <span class="m">0000</span> <span class="m">0000</span>  ........<span class="s2">&quot;.......</span>
+<span class="s2">000021c0: 0000 0000 0000 0000 0100 0000 0000 0000  ................</span>
+<span class="s2">000021d0: 0000 0000 0000 0000 2100 0000 0100 0000  ........!.......</span>
+<span class="s2">000021e0: 0300 0000 0000 0000 0020 4000 0000 0000  ......... @.....</span>
+<span class="s2">000021f0: 0020 0000 0000 0000 0f00 0000 0000 0000  . ..............</span>
+<span class="s2">00002200: 0000 0000 0000 0000 0100 0000 0000 0000  ................</span>
+<span class="s2">00002210: 0000 0000 0000 0000 0100 0000 0200 0000  ................</span>
+<span class="s2">00002230: 1020 0000 0000 0000 f000 0000 0000 0000  . ..............</span>
+<span class="s2">00002240: 0400 0000 0600 0000 0800 0000 0000 0000  ................</span>
+<span class="s2">00002250: 1800 0000 0000 0000 0900 0000 0300 0000  ................</span>
+<span class="s2">00002270: 0021 0000 0000 0000 2d00 0000 0000 0000  .!......-.......</span>
+<span class="s2">00002280: 0000 0000 0000 0000 0100 0000 0000 0000  ................</span>
+<span class="s2">00002290: 0000 0000 0000 0000 1100 0000 0300 0000  ................</span>
+<span class="s2">000022b0: 2d21 0000 0000 0000 2700 0000 0000 0000  -!......&#39;.......</span>
+<span class="s2">000022c0: 0000 0000 0000 0000 0100 0000 0000 0000  ................</span>
+<span class="s2">000022d0: 0000 0000 0000 0000                      ........</span>
+</code></pre></div>
+
+<p>Bài viết thực hiện trên Ubuntu 20.04.</p>
+<h3>Tham khảo</h3>
+<p>Free books:</p>
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/X86_Assembly">https://en.wikibooks.org/wiki/X86_Assembly</a></li>
+<li><a href="https://0xinfection.github.io/reversing/">https://0xinfection.github.io/reversing/</a></li>
+<li><a href="https://pacman128.github.io/static/pcasm-book.pdf">https://pacman128.github.io/static/pcasm-book.pdf</a></li>
+<li><a href="https://mirror.ossplanet.net/nongnu/pgubook/ProgrammingGroundUp-1-0-booksize.pdf">https://mirror.ossplanet.net/nongnu/pgubook/ProgrammingGroundUp-1-0-booksize.pdf</a></li>
+<li><a href="http://www.egr.unlv.edu/~ed/assembly64.pdf">http://www.egr.unlv.edu/~ed/assembly64.pdf</a></li>
+<li><a href="https://beginners.re/">Reverse Engineering for Beginners</a></li>
+<li>More at <a href="https://www.linuxlinks.com/excellent-free-books-learn-assembly/">https://www.linuxlinks.com/excellent-free-books-learn-assembly/</a></li>
+</ul>
+<h3>Kết luận</h3>
+<p>Viết helloworld.asm không quá khó.</p>
+<p>Happy hacking!</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2022-10-16T00:00:00+07:00">Sun 16 October 2022</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#as-ref">as
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#asm-ref">asm
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#assembly-ref">assembly
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#elf-ref">elf
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#gas-ref">gas
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#gcc-ref">gcc
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#hexdump-ref">hexdump
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#ld-ref">ld
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#xxd-ref">xxd
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

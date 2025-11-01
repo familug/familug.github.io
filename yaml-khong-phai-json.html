@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="YAML, anchor, alias, merge, JSON, frontpage, " />
+
+<meta property="og:title" content="YAML không phải JSON "/>
+<meta property="og:url" content="./yaml-khong-phai-json.html" />
+<meta property="og:description" content="YAML dễ dùng để viết file cấu hình YAML là định dạng file phổ biến .yaml hay .yml, thường dùng để viết file cấu hình cho phần mềm như Kubernetes, Ansible, SaltStack, Elasticsearch, ... Phổ biến tới mức ngày nay có hẳn nghề: &#34;YAML engineer&#34;. YAML được ưa chuộng để viết …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-07-17T00:00:00+07:00" />
+<meta name="twitter:title" content="YAML không phải JSON ">
+<meta name="twitter:description" content="YAML dễ dùng để viết file cấu hình YAML là định dạng file phổ biến .yaml hay .yml, thường dùng để viết file cấu hình cho phần mềm như Kubernetes, Ansible, SaltStack, Elasticsearch, ... Phổ biến tới mức ngày nay có hẳn nghề: &#34;YAML engineer&#34;. YAML được ưa chuộng để viết …">
+
+        <title>YAML không phải JSON  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./yaml-khong-phai-json.html">
+                YAML không phải JSON
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h3>YAML dễ dùng để viết file cấu hình</h3>
+<p>YAML là định dạng file phổ biến <code>.yaml</code> hay <code>.yml</code>, thường dùng để viết file cấu hình cho phần mềm như Kubernetes, Ansible, SaltStack, Elasticsearch, ...
+Phổ biến tới mức ngày nay có hẳn nghề: <a href="https://www.google.com/search?hl=en&amp;q=yaml%20engineer">"YAML engineer"</a>.</p>
+<p>YAML được ưa chuộng để viết file cấu hình thay vì dùng JSON do các nhược điểm của JSON:</p>
+<ul>
+<li>Khó sửa: thiếu/thừa dấu <code>,</code> hay nhầm dấu <code>"</code> với <code>'</code> là hỏng ngay</li>
+<li>Không hỗ trợ comment #ahuhu</li>
+</ul>
+<p>Cú pháp YAML cơ bản khá dễ dàng tương đương với JSON, tên gọi khác nhau do JSON (JavaScript Object Notation) dùng tên của JavaScript:</p>
+<p><strong>object</strong> này chứa <strong>name</strong> <code>tags</code> với <strong>value</strong> là 1 <strong>array</strong></p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;my name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FAMILUG&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="nt">&quot;age&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Linux&quot;</span><span class="p">]}</span><span class="w"></span>
+</code></pre></div>
+
+<p><strong>mapping</strong> này chứa <strong>key</strong> <code>tags</code> với <strong>value</strong> là 1 <strong>sequence</strong></p>
+<div class="highlight"><pre><span></span><code><span class="nt">my name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FAMILUG</span><span class="w"></span>
+<span class="nt">age</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">13</span><span class="w"></span>
+<span class="nt">tags</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Python</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Linux</span><span class="w"></span>
+</code></pre></div>
+
+<p>Dừng lại ở đó, đủ dùng 10 năm.</p>
+<h3>YAML có nhiều tính năng</h3>
+<p>JSON chỉ dùng để biểu diễn dữ liệu, viết 1 là 1, viết 2 là 2, YAML có nhiều tính năng bất ngờ... như merge 2 mappings.</p>
+<h4>YAML anchor và YAML alias</h4>
+<p>Hai từ tiếng Anh này khá dễ đọc sai, phiên âm:</p>
+<ul>
+<li>anchor <code>/ˈæŋ.kɚ/</code></li>
+<li>alias <code>/ˈeɪ.li.əs/</code></li>
+</ul>
+<p><a href="http://yaml.org/spec/1.2.0/#id2565016">http://yaml.org/spec/1.2.0/#id2565016</a></p>
+<p>Anchor <code>&amp;NAME</code> để ký hiệu vị trí của 1 giá trị, <code>*NAME</code> để chỉ tới (refer) nội dung của anchor. Khái niệm này tương tự con trỏ (pointer) trong các ngôn ngữ như C, C++, Go, Rust,...</p>
+<p><code>NAME</code> có thể là bất kỳ kí tự gì ngoài <code>[]{},</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="kn">import</span> <span class="n">YAML</span>
+<span class="n">yaml</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s1">&#39;safe&#39;</span><span class="p">)</span>
+
+<span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+    <span class="sd">&quot;&quot;&quot;first name: &amp;F-n python</span>
+<span class="sd">    second: *F-n&quot;&quot;&quot;</span>
+<span class="p">)</span>
+<span class="c1"># {&#39;first name&#39;: &#39;python&#39;, &#39;second&#39;: &#39;python&#39;}</span>
+</code></pre></div>
+
+<p>Ví dụ này dùng tên <code>F-n</code> làm anchor name.</p>
+<h4>YAML merge</h4>
+<p><a href="https://yaml.org/type/merge.html">YAML Merge</a> <code>&lt;&lt;</code> là một tính năng optional của bản 1.1, có thư viện có thể hỗ trợ, có thư viện thì không.</p>
+<blockquote>
+<p>Specify one or more mappings to be merged with the current one.</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">yaml.load(&quot;&quot;&quot;</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">d1</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="nl">&amp;head</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FAMILUG</span><span class="w"></span>
+<span class="w">  </span><span class="nt">age</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">18</span><span class="w"></span>
+<span class="nt">d2</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;body</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PyMi</span><span class="w"></span>
+<span class="w">  </span><span class="nt">color</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WhitePink</span><span class="w"></span>
+<span class="nt">d3</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&lt;&lt;</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">*head</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">*body</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="s">&quot;&quot;&quot;</span><span class="w"></span>
+<span class="s">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết quả</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="s1">&#39;d1&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;FAMILUG&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">},</span>
+ <span class="s1">&#39;d2&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;PyMi&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;WhitePink&#39;</span><span class="p">},</span>
+ <span class="s1">&#39;d3&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;FAMILUG&#39;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;WhitePink&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}}</span>
+</code></pre></div>
+
+<p>đáng chú ý rằng khác với Python dict update, value sau sẽ đè lên value trước nếu cùng key, thì YAML ngược lại, giá trị xuất hiện trước sẽ được dùng: name được lấy ở phần tử d1 FAMILUG chứ không phải từ d2.</p>
+<h3>Dùng trong thực tế</h3>
+<p><a href="https://docs.docker.com/compose/compose-file/10-fragments/">dockercompose file</a>:</p>
+<div class="highlight"><pre><span></span><code>volumes:
+db-data: <span class="p">&amp;</span>default-volume
+driver: default
+metrics: *default-volume
+
+services:
+first:
+  image: my-image:latest
+  environment: <span class="p">&amp;</span>env
+    FOO: BAR
+    ZOT: QUIX
+second:
+  image: another-image:latest
+  environment:
+    &lt;&lt;: *env
+    YET_ANOTHER: VARIABLE
+</code></pre></div>
+
+<p><a href="https://docs.gitlab.com/ee/ci/yaml/yaml_optimization.html#anchors">GitLabCI</a>:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">.default_scripts</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;default_scripts</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default-script1.sh</span><span class="w"></span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default-script2.sh</span><span class="w"></span>
+
+<span class="nt">job1</span><span class="p">:</span><span class="w"></span>
+<span class="nt">script</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nv">*default_scripts</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./job-script.sh</span><span class="w"></span>
+</code></pre></div>
+
+<p>Helm <a href="https://helm.sh/docs/chart_template_guide/yaml_techniques/">https://helm.sh/docs/chart_template_guide/yaml_techniques/</a></p>
+<p>K8S kustomize <a href="https://github.com/kubernetes-sigs/kustomize/issues/3675">https://github.com/kubernetes-sigs/kustomize/issues/3675</a></p>
+<h2>Tham khảo</h2>
+<ul>
+<li><a href="./tham-hoa-pyyaml.html">Thảm họa PyYAML</a></li>
+<li><a href="http://yaml.org/spec/1.2.0/">http://yaml.org/spec/1.2.0/</a></li>
+<li><a href="https://www.json.org/json-en.html">https://www.json.org/json-en.html</a></li>
+<li><a href="https://yaml.readthedocs.io/en/latest/basicuse.html">https://yaml.readthedocs.io/en/latest/basicuse.html</a></li>
+</ul>
+<h2>Kết luận</h2>
+<p>YAML, không phải MarkUp Language, càng không phải là JSON.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-07-17T00:00:00+07:00">Mon 17 July 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#alias-ref">alias
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#anchor-ref">anchor
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#json-ref">JSON
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#merge-ref">merge
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#yaml-ref">YAML
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

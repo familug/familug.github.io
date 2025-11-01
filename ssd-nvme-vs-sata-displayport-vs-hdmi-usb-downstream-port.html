@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="SSD, NVMe, SATA, DP, HDMI, USB, hardware, PCIe, M.2, frontpage, " />
+
+<meta property="og:title" content="SSD NVMe vs SATA, DisplayPort vs HDMI, USB downstream port "/>
+<meta property="og:url" content="./ssd-nvme-vs-sata-displayport-vs-hdmi-usb-downstream-port.html" />
+<meta property="og:description" content="^---- USB Downstream | DisplayPort ----^ SSD NVMe khác gì SSD SATA Solid-state Drive (SSD) là thế hệ ổ cứng mới, không sử dụng đĩa quay như Hard Disk Drive (HDD), SSD tốc độ nhanh gấp 5 tới vài trăm lần so với HDD. SATA là gì Serial ATA (SATA) (~2004) là công …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-07-12T00:00:00+07:00" />
+<meta name="twitter:title" content="SSD NVMe vs SATA, DisplayPort vs HDMI, USB downstream port ">
+<meta name="twitter:description" content="^---- USB Downstream | DisplayPort ----^ SSD NVMe khác gì SSD SATA Solid-state Drive (SSD) là thế hệ ổ cứng mới, không sử dụng đĩa quay như Hard Disk Drive (HDD), SSD tốc độ nhanh gấp 5 tới vài trăm lần so với HDD. SATA là gì Serial ATA (SATA) (~2004) là công …">
+
+        <title>SSD NVMe vs SATA, DisplayPort vs HDMI, USB downstream port  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./ssd-nvme-vs-sata-displayport-vs-hdmi-usb-downstream-port.html">
+                SSD NVMe vs SATA, DisplayPort vs HDMI, USB downstream port
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p><center>
+<img alt="USB Downstream - DisplayPort" src="./images/dp_usbdownstream.jpg"></p>
+<p>^---- USB Downstream | DisplayPort ----^
+</center></p>
+<h2>SSD NVMe khác gì SSD SATA</h2>
+<p>Solid-state Drive (SSD) là thế hệ ổ cứng mới, không sử dụng đĩa quay như Hard Disk Drive (HDD),
+SSD tốc độ nhanh gấp 5 tới vài trăm lần so với HDD.</p>
+<h3>SATA là gì</h3>
+<p>Serial ATA (SATA) (~2004) là công nghệ sử dụng AHCI driver giao tiếp với ổ cứng HDD, công nghệ này cũng được
+dùng với SSD giúp cắm được vào các máy tính đời cũ, nhưng cản trở SSD bung mình bứt phá.</p>
+<p>Các ổ cứng SATA <strong>THƯỜNG</strong> có hình chữ nhật giống bao thuốc lá.</p>
+<h3>NVMe là gì</h3>
+<p>Non-Volatile Memory Express (NVMe) (~2011) driver được thiết kế cho SSD, kết hợp sử dụng khe cắm PCIe, cho tốc độ nhanh hơn SATA có thể lên tới 100 lần.</p>
+<p>Các ổ cứng NVMe <strong>THƯỜNG</strong> dài thon như 2 ngón tay, hay phong kẹo cao su.</p>
+<div class="highlight"><pre><span></span><code>$ mount <span class="p">|</span> grep <span class="s1">&#39; on / &#39;</span>
+/dev/nvme0n1p1 on / <span class="nb">type</span> ext4 <span class="o">(</span>rw,relatime,errors<span class="o">=</span>remount-ro<span class="o">)</span>
+</code></pre></div>
+
+<h2>M.2 2280 vs 2.5 inch</h2>
+<p>NVMe và SATA là các chuẩn giao tiếp, không phải hình dáng của ổ cứng. Hình dáng (form factor) có 2 loại phổ biến:</p>
+<ul>
+<li>2.5 inch: hình dáng truyền thống của ổ HDD cho laptop, sau đó là SSD sử dụng SATA.</li>
+<li>M.2 2280: (đọc là m dot two) 22 80: rộng 22mm dài 80mm, là kiểu dáng phổ biến của SDD sử dụng NVMe.</li>
+</ul>
+<p>Giao thức có ảnh hưởng tới hình dáng, nhưng không quyết định. Vẫn có SSD có dáng M.2 dùng SATA mặc dù ngày càng ít.
+M.2 SATA sẽ có 2 "khe" thay vì M.2 NVMe chỉ có 1 "khe", xem hình tại <a href="https://www.kingston.com/en/blog/pc-performance/two-types-m2-vs-ssd">kingston</a> hay các trang web bán phần cứng máy tính.</p>
+<h2>PCIe 3x4</h2>
+<p>PCI Express (Peripheral Component Interconnect Express) PCIe, là giao diện phần cứng để lắp các thiết bị máy tính (VGA, SSD, ...) ngày nay.</p>
+<ul>
+<li>PCIe thế hệ 3 gọi là PCIe 3, phiên bản 3.0 có từ 2010 và được sản xuất phổ biến nhất tại 2023, với giá rẻ nhất.</li>
+<li>PCIe 4 đã xuất hiện với các thiết bị tầm trung.</li>
+<li>PCIe 5 còn hiếm.</li>
+<li>PCIe 6 đã có ở đâu đó và 7 đang được lên kế hoạch.</li>
+</ul>
+<p>PCIe có thể chứa nhiều lane cùng gửi nhận tín hiệu cùng lúc làm tăng tốc độ, x4 là 4 lane, x16 là 16 lane về lý thuyết nhanh hơn x4 4 lần.
+M.2 có thể sử dụng tối đa 4 lane (x4).</p>
+<p><a href="https://en.wikipedia.org/wiki/PCI_Express#History_and_revisions">https://en.wikipedia.org/wiki/PCI_Express#History_and_revisions</a></p>
+<h2>Đọc thông số 1 ổ cứng SSD</h2>
+<p>Tới đây đã có thể giải mã thông số khi mua ổ cứng SSD, ví dụ:
+<code>XPG SPECTRIX PCIe Gen3x4 M.2 2280 Solid State Drive</code>:</p>
+<ul>
+<li>PCIe 3 với 4 lane</li>
+<li>M.2 form rộng 22mm dài 80mm</li>
+</ul>
+<h2>DisplayPort (DP) vs HDMI</h2>
+<p>Các cổng/dây cắm truyền hình ảnh từ máy tính qua màn hình:</p>
+<div class="highlight"><pre><span></span><code><span class="n">VGA</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">DVI</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">HDMI</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">DP</span><span class="w"></span>
+</code></pre></div>
+
+<p>DisplayPort (DP) là công nghệ mới hơn HDMI, với các chỉ số vượt trội. Ngày nay hầu hết các màn hình đều có kèm dây DP nhưng người dùng vẫn quen dùng dây HDMI. DisplayPort cũng có thể sử dụng qua khe cắm USB-C (VD: MacBook).</p>
+<h3>USB Downstream port sau màn hình máy tính</h3>
+<p>USB Downstream là cổng cắm sau các màn hình ngày nay, có hình gần vuông, để với đầu kia cắm vào 1 cổng USB trên máy tính, cho phép sử dụng các cổng USB trên màn hình thay vì cắm trực tiếp vào máy tính, hoạt động như 1 USB Hub.</p>
+<h2>Tham khảo</h2>
+<ul>
+<li><a href="https://www.kingston.com/en/blog/pc-performance/nvme-vs-sata">https://www.kingston.com/en/blog/pc-performance/nvme-vs-sata</a></li>
+<li><a href="https://www.kingston.com/en/blog/pc-performance/pcie-gen-4-explained">https://www.kingston.com/en/blog/pc-performance/pcie-gen-4-explained</a></li>
+<li><a href="https://hackaday.com/2023/07/11/displayport-a-better-video-interface/">https://hackaday.com/2023/07/11/displayport-a-better-video-interface/</a></li>
+<li><a href="https://downloads.dell.com/manuals/all-products/esuprt_electronics_accessories/esuprt_electronics_accessories_monitors/dell-p2319h-monitor_user%27s-guide_en-us.pdf">https://downloads.dell.com/manuals/all-products/esuprt_electronics_accessories/esuprt_electronics_accessories_monitors/dell-p2319h-monitor_user%27s-guide_en-us.pdf</a></li>
+<li><a href="https://superuser.com/questions/856297/what-do-the-upstream-downstream-usb-ports-on-a-monitor-do#856348">https://superuser.com/questions/856297/what-do-the-upstream-downstream-usb-ports-on-a-monitor-do#856348</a></li>
+</ul>
+<h2>Kết luận</h2>
+<p>Khi phần mềm thay đổi mỗi 2 năm thì phần cứng cũng không thua kém gì, không update, sẽ bị dated.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-07-12T00:00:00+07:00">Wed 12 July 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#dp-ref">DP
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#hardware-ref">hardware
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#hdmi-ref">HDMI
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#m2-ref">M.2
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#nvme-ref">NVMe
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#pcie-ref">PCIe
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#sata-ref">SATA
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#ssd-ref">SSD
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#usb-ref">USB
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

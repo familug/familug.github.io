@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="pagesize, python, rust, c, cli, frontpage, " />
+
+<meta property="og:title" content="[TIL] Lấy memory page size với CLI, Python, Rust, C "/>
+<meta property="og:url" content="./til-pagesize.html" />
+<meta property="og:description" content="page size là gì? $ apropos pagesize getpagesize (2) - get memory page size $ man 2 getpagesize getpagesize - get memory page size SYNOPSIS #include &lt;unistd.h&gt; int getpagesize(void); .. DESCRIPTION The function getpagesize() returns the number of bytes in a memory page, where &#34;page&#34; is a fixed-length block, the unit for memory …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-07-19T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] Lấy memory page size với CLI, Python, Rust, C ">
+<meta name="twitter:description" content="page size là gì? $ apropos pagesize getpagesize (2) - get memory page size $ man 2 getpagesize getpagesize - get memory page size SYNOPSIS #include &lt;unistd.h&gt; int getpagesize(void); .. DESCRIPTION The function getpagesize() returns the number of bytes in a memory page, where &#34;page&#34; is a fixed-length block, the unit for memory …">
+
+        <title>[TIL] Lấy memory page size với CLI, Python, Rust, C  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./til-pagesize.html">
+                [TIL] Lấy memory page size với CLI, Python, Rust, C
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>page size là gì?</h2>
+<div class="highlight"><pre><span></span><code>$ apropos pagesize
+getpagesize <span class="o">(</span><span class="m">2</span><span class="o">)</span>      - get memory page size
+
+$ man <span class="m">2</span> getpagesize
+       getpagesize - get memory page size
+
+SYNOPSIS
+       <span class="c1">#include &lt;unistd.h&gt;</span>
+
+       int getpagesize<span class="o">(</span>void<span class="o">)</span><span class="p">;</span>
+
+..
+
+DESCRIPTION
+       The  <span class="k">function</span>  getpagesize<span class="o">()</span>  returns the number of bytes <span class="k">in</span> a memory page,
+       where <span class="s2">&quot;page&quot;</span> is a fixed-length block, the unit <span class="k">for</span>  memory  allocation  and
+       file mapping performed by mmap<span class="o">(</span><span class="m">2</span><span class="o">)</span>.
+</code></pre></div>
+
+<p>C function <code>getpagesize</code> trả về số bytes trong một <code>memory page</code>, trong đó <code>page</code> là một block có độ dài cố định, là đơn vị để cấp phát bộ nhớ (memory allocation).</p>
+<h2>Lấy page size bằng CLI, Python, Rust, C</h2>
+<h3>CLI</h3>
+<div class="highlight"><pre><span></span><code>$ whatis getconf
+getconf <span class="o">(</span><span class="m">1</span><span class="o">)</span>          - Query system configuration variables
+getconf <span class="o">(</span>1posix<span class="o">)</span>     - get configuration values
+$ getconf PAGESIZE
+<span class="m">4096</span>
+</code></pre></div>
+
+<h3>Python</h3>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import resource; print(resource.getpagesize())&#39;</span>
+<span class="mi">4096</span>
+</code></pre></div>
+
+<p>Code C của lib <code>resource</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span><span class="c1">               // getpagesize()</span><span class="cp"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">resource_getpagesize_impl</span><span class="p">(</span><span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="n">module</span><span class="p">)</span><span class="w"></span>
+<span class="cm">/*[clinic end generated code: output=9ba93eb0f3d6c3a9 input=546545e8c1f42085]*/</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">pagesize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="cp">#if defined(HAVE_GETPAGESIZE)</span>
+<span class="w">    </span><span class="n">pagesize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getpagesize</span><span class="p">();</span><span class="w"></span>
+<span class="cp">#elif defined(HAVE_SYSCONF) &amp;&amp; defined(_SC_PAGE_SIZE)</span>
+<span class="w">    </span><span class="n">pagesize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_PAGE_SIZE</span><span class="p">);</span><span class="w"></span>
+<span class="cp">#else</span>
+<span class="cp">#   error &quot;unsupported platform: resource.getpagesize()&quot;</span>
+<span class="cp">#endif</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">pagesize</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p><a href="https://github.com/python/cpython/blob/53aeb821d4d656ac224c17f48e20af9072a01414/Modules/resource.c#L331-L348">https://github.com/python/cpython/blob/53aeb821d4d656ac224c17f48e20af9072a01414/Modules/resource.c#L331-L348</a></p>
+<h3>C</h3>
+<div class="highlight"><pre><span></span><code>$ cat main.c
+<span class="c1">#include &lt;unistd.h&gt;</span>
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+int main<span class="o">()</span> <span class="o">{</span>
+    printf<span class="o">(</span><span class="s2">&quot;Page size is %d bytes&quot;</span>, getpagesize<span class="o">())</span><span class="p">;</span>
+<span class="o">}</span>
+$ cc main.c <span class="o">&amp;&amp;</span> ./a.out
+Page size is <span class="m">4096</span> bytes
+</code></pre></div>
+
+<h3>Rust</h3>
+<div class="highlight"><pre><span></span><code><span class="cp">$</span><span class="w"> </span><span class="n">cargo</span><span class="w"> </span><span class="n">new</span><span class="w"> </span><span class="n">pagesize</span><span class="w"></span>
+<span class="w">    </span><span class="n">Creating</span><span class="w"> </span><span class="n">binary</span><span class="w"> </span><span class="p">(</span><span class="n">application</span><span class="p">)</span><span class="w"> </span><span class="err">`</span><span class="n">pagesize</span><span class="err">`</span><span class="w"> </span><span class="n">package</span><span class="w"></span>
+<span class="n">note</span>: <span class="nc">see</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="err">`</span><span class="n">Cargo</span><span class="p">.</span><span class="n">toml</span><span class="err">`</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">their</span><span class="w"> </span><span class="n">definitions</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">https</span>:<span class="c1">//doc.rust-lang.org/cargo/reference/manifest.html</span>
+<span class="cp">$</span><span class="w"> </span><span class="n">cd</span><span class="w"> </span><span class="n">pagesize</span><span class="o">/</span><span class="w"></span>
+<span class="cp">$</span><span class="w"> </span><span class="n">cargo</span><span class="w"> </span><span class="n">add</span><span class="w"> </span><span class="n">libc</span><span class="w"></span>
+<span class="o">..</span><span class="p">.</span><span class="w"></span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>#<span class="w"> </span><span class="n">src</span><span class="o">/</span><span class="n">main</span><span class="p">.</span><span class="n">rs</span><span class="w"></span>
+<span class="k">fn</span> <span class="nf">getpagesize</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="kt">usize</span> <span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">libc</span>::<span class="n">sysconf</span><span class="p">(</span><span class="n">libc</span>::<span class="n">_SC_PAGE_SIZE</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Page size is {} bytes&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getpagesize</span><span class="p">());</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Cargo.toml</p>
+<div class="highlight"><pre><span></span><code><span class="k">[package]</span><span class="w"></span>
+<span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;pagesize&quot;</span><span class="w"></span>
+<span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.1.0&quot;</span><span class="w"></span>
+<span class="na">edition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2021&quot;</span><span class="w"></span>
+
+<span class="k">[dependencies]</span><span class="w"></span>
+<span class="na">libc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.2.174&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Kết quả:</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">cargo</span><span class="w"> </span><span class="n">run</span><span class="w"></span>
+<span class="w">   </span><span class="n">Compiling</span><span class="w"> </span><span class="n">libc</span><span class="w"> </span><span class="n">v0</span><span class="mf">.2.174</span><span class="w"></span>
+<span class="w">   </span><span class="n">Compiling</span><span class="w"> </span><span class="n">pagesize</span><span class="w"> </span><span class="n">v0</span><span class="mf">.1.0</span><span class="w"> </span><span class="p">(</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">me</span><span class="o">/</span><span class="n">pagesize</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">Finished</span><span class="w"> </span><span class="n n-Quoted">`dev`</span><span class="w"> </span><span class="k">profile</span><span class="w"> </span><span class="err">[</span><span class="n">unoptimized</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">debuginfo</span><span class="err">]</span><span class="w"> </span><span class="n">target</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mf">0.77</span><span class="n">s</span><span class="w"></span>
+<span class="w">     </span><span class="n">Running</span><span class="w"> </span><span class="n n-Quoted">`target/debug/pagesize`</span><span class="w"></span>
+<span class="k">Page</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="mi">4096</span><span class="w"> </span><span class="n">bytes</span><span class="w"></span>
+</code></pre></div>
+
+<h2>Kết luận</h2>
+<p>Hầu hết các Linux OS đều dùng page size 4096 bytes hay <strong>4k</strong>, thì MacOS M1, M2, M4 lại có page size là 16384 == <strong>16k</strong>.
+Sự khác biệt này dẫn tới nhiều vấn đề <strong>thú vị</strong> như <a href="https://github.com/k3s-io/k3s/issues/7335">k3s 16k kernel page builds to support Apple Silicon (ARM64)</a>, hay <a href="https://forums.rockylinux.org/t/installation-of-rocky-not-proceeding-in-macbook-pro-m1-silicon-chip/4734">installation of rockylinux 8 not proceeding in MacBook Pro m1 silicon chip</a></p>
+<blockquote>
+<p>4K pages made sense back when the Intel 386 came out. They are thoroughly obsolete, and the only reason they are the default on typical ARM64 distros is because 4K is the lowest common denominator supported everywhere and the Linux kernel's poor design does not allow deciding the page size at boot time. 16K is unarguably beneficial for all but the smallest embedded systems, and 64K is the logical choice for large servers. 4K pages increase overhead and do not provide a measurable memory savings. There's a reason Apple went with 16K for their entire 64-bit ARM ecosystem (because it's better, and because they control it all so they can make that decision).</p>
+</blockquote>
+<p>Quote <a href="https://github.com/k3s-io/k3s/issues/7335#issuecomment-1518600436">marcan</a></p>
+<p>Bài viết thực hiện trên:</p>
+<div class="highlight"><pre><span></span><code>$ lsb_release -d<span class="p">;</span> uname -rm
+Description:    Ubuntu <span class="m">22</span>.04.5 LTS
+<span class="m">6</span>.8.0-64-generic x86_64
+</code></pre></div>
+
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-07-19T00:00:00+07:00">Sat 19 July 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#c-ref">c
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#cli-ref">cli
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#pagesize-ref">pagesize
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#python-ref">python
+                    <span class="superscript">13</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

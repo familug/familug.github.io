@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="traefik, go, frontpage, " />
+
+<meta property="og:title" content="Đọc code Go Traefik xem router ưu tiên match theo độ dài rule "/>
+<meta property="og:url" content="./traefik-router-priority.html" />
+<meta property="og:description" content="Traefik là gì Traefik (pronounced traffic) is a modern HTTP reverse proxy and load balancer that makes deploying microservices easy. Traefik integrates with your existing infrastructure components (Docker, Swarm mode, Kubernetes, Consul, Etcd, Rancher v2, Amazon ECS, ...) and configures itself automatically and dynamically. Pointing Traefik at your orchestrator should be …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-09-14T00:00:00+07:00" />
+<meta name="twitter:title" content="Đọc code Go Traefik xem router ưu tiên match theo độ dài rule ">
+<meta name="twitter:description" content="Traefik là gì Traefik (pronounced traffic) is a modern HTTP reverse proxy and load balancer that makes deploying microservices easy. Traefik integrates with your existing infrastructure components (Docker, Swarm mode, Kubernetes, Consul, Etcd, Rancher v2, Amazon ECS, ...) and configures itself automatically and dynamically. Pointing Traefik at your orchestrator should be …">
+
+        <title>Đọc code Go Traefik xem router ưu tiên match theo độ dài rule  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./traefik-router-priority.html">
+                Đọc code Go Traefik xem router ưu tiên match theo độ dài rule
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h2>Traefik là gì</h2>
+<blockquote>
+<p>Traefik (pronounced traffic) is a modern HTTP reverse proxy and load balancer that makes deploying microservices easy. Traefik integrates with your existing infrastructure components (Docker, Swarm mode, Kubernetes, Consul, Etcd, Rancher v2, Amazon ECS, ...) and configures itself automatically and dynamically. Pointing Traefik at your orchestrator should be the only configuration step you need.</p>
+</blockquote>
+<p>Traefik là một HTTP reverse proxy và load balancer giúp triển khai microservices dễ dàng.
+Traefik có tính năng tương tự NGINX, với điểm mạnh lớn nhất là khả năng tích hợp, cấu hình tự động với hệ thống đã chạy như Kubernetes, Docker, ...</p>
+<p>Traefik được viết bằng Go, về hiệu năng chưa có gì vượt trội so với NGINX, nhưng có nhiều tính năng hiện đại như: tích hợp HTTPS dễ dàng, hỗ trợ sẵn dashboard, metrics, rate limit,...</p>
+<h2>Build Traefik từ source</h2>
+<p>Tạo file build.sh</p>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/traefik/traefik --depth <span class="m">1</span> --branch v3.5
+<span class="nb">cd</span> traefik
+touch webui/static/index.html
+make dist
+/usr/bin/time -v make binary
+./dist/linux/amd64/traefik version
+</code></pre></div>
+
+<p>Chạy để build với go1.24:</p>
+<div class="highlight"><pre><span></span><code><span class="n">bash</span><span class="w"> </span><span class="n">build</span><span class="p">.</span><span class="n">sh</span><span class="w"></span>
+<span class="n">Cloning</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="s1">&#39;traefik&#39;</span><span class="p">...</span><span class="w"></span>
+<span class="nl">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Enumerating</span><span class="w"> </span><span class="nl">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">2215</span><span class="p">,</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="nl">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Counting</span><span class="w"> </span><span class="nl">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="p">(</span><span class="mi">2215</span><span class="o">/</span><span class="mi">2215</span><span class="p">),</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="nl">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Compressing</span><span class="w"> </span><span class="nl">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="p">(</span><span class="mi">1713</span><span class="o">/</span><span class="mi">1713</span><span class="p">),</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="nl">remote</span><span class="p">:</span><span class="w"> </span><span class="n">Total</span><span class="w"> </span><span class="mi">2215</span><span class="w"> </span><span class="p">(</span><span class="n">delta</span><span class="w"> </span><span class="mi">654</span><span class="p">),</span><span class="w"> </span><span class="n">reused</span><span class="w"> </span><span class="mi">1107</span><span class="w"> </span><span class="p">(</span><span class="n">delta</span><span class="w"> </span><span class="mi">427</span><span class="p">),</span><span class="w"> </span><span class="n">pack</span><span class="o">-</span><span class="n">reused</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">(</span><span class="k">from</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="n">Receiving</span><span class="w"> </span><span class="nl">objects</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="p">(</span><span class="mi">2215</span><span class="o">/</span><span class="mi">2215</span><span class="p">),</span><span class="w"> </span><span class="mf">12.89</span><span class="w"> </span><span class="n">MiB</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mf">9.15</span><span class="w"> </span><span class="n">MiB</span><span class="o">/</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="n">Resolving</span><span class="w"> </span><span class="nl">deltas</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="o">%</span><span class="w"> </span><span class="p">(</span><span class="mi">654</span><span class="o">/</span><span class="mi">654</span><span class="p">),</span><span class="w"> </span><span class="n">done</span><span class="p">.</span><span class="w"></span>
+<span class="nl">fatal</span><span class="p">:</span><span class="w"> </span><span class="k">No</span><span class="w"> </span><span class="k">names</span><span class="w"> </span><span class="k">found</span><span class="p">,</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="k">describe</span><span class="w"> </span><span class="n">anything</span><span class="p">.</span><span class="w"></span>
+<span class="n">mkdir</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="n">dist</span><span class="w"></span>
+<span class="nl">fatal</span><span class="p">:</span><span class="w"> </span><span class="k">No</span><span class="w"> </span><span class="k">names</span><span class="w"> </span><span class="k">found</span><span class="p">,</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="k">describe</span><span class="w"> </span><span class="n">anything</span><span class="p">.</span><span class="w"></span>
+<span class="nl">SHA</span><span class="p">:</span><span class="w"> </span><span class="mi">27</span><span class="n">a820950a316451da3d52091cdfac7138e4ee8a</span><span class="w"> </span><span class="n">cheddar</span><span class="w"> </span><span class="mi">2025</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span><span class="nl">_04</span><span class="p">:</span><span class="mi">31</span><span class="err">:</span><span class="mi">45</span><span class="n">AM</span><span class="w"></span>
+<span class="n">CGO_ENABLED</span><span class="o">=</span><span class="mi">0</span><span class="w"> </span><span class="n">GOGC</span><span class="o">=</span><span class="w"> </span><span class="n">GOOS</span><span class="o">=</span><span class="n">linux</span><span class="w"> </span><span class="n">GOARCH</span><span class="o">=</span><span class="n">amd64</span><span class="w"> </span><span class="k">go</span><span class="w"> </span><span class="n">build</span><span class="w">  </span><span class="o">-</span><span class="n">ldflags</span><span class="w"> </span><span class="ss">&quot;-s -w \</span>
+<span class="ss">    -X github.com/traefik/traefik/v3/pkg/version.Version=27a820950a316451da3d52091cdfac7138e4ee8a \</span>
+<span class="ss">    -X github.com/traefik/traefik/v3/pkg/version.Codename=cheddar \</span>
+<span class="ss">    -X github.com/traefik/traefik/v3/pkg/version.BuildDate=2025-09-14_04:31:45AM&quot;</span><span class="w"> </span><span class="err">\</span><span class="w"></span>
+<span class="w">    </span><span class="o">-</span><span class="n">installsuffix</span><span class="w"> </span><span class="n">nocgo</span><span class="w"> </span><span class="o">-</span><span class="n">o</span><span class="w"> </span><span class="ss">&quot;./dist/linux/amd64/traefik&quot;</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">traefik</span><span class="w"></span>
+<span class="w">    </span><span class="n">Command</span><span class="w"> </span><span class="n">being</span><span class="w"> </span><span class="nl">timed</span><span class="p">:</span><span class="w"> </span><span class="ss">&quot;make binary&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="k">User</span><span class="w"> </span><span class="nc">time</span><span class="w"> </span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="mf">5.59</span><span class="w"></span>
+<span class="w">    </span><span class="k">System</span><span class="w"> </span><span class="nc">time</span><span class="w"> </span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="mf">1.02</span><span class="w"></span>
+<span class="w">    </span><span class="k">Percent</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">CPU</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">job</span><span class="w"> </span><span class="nl">got</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="o">%</span><span class="w"></span>
+<span class="w">    </span><span class="n">Elapsed</span><span class="w"> </span><span class="p">(</span><span class="n">wall</span><span class="w"> </span><span class="n">clock</span><span class="p">)</span><span class="w"> </span><span class="nc">time</span><span class="w"> </span><span class="p">(</span><span class="nl">h</span><span class="p">:</span><span class="nl">mm</span><span class="p">:</span><span class="n">ss</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nl">m</span><span class="p">:</span><span class="n">ss</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="mi">0</span><span class="err">:</span><span class="mf">04.40</span><span class="w"></span>
+<span class="w">    </span><span class="n">Maximum</span><span class="w"> </span><span class="n">resident</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="k">size</span><span class="w"> </span><span class="p">(</span><span class="n">kbytes</span><span class="p">)</span><span class="err">:</span><span class="w"> </span><span class="mi">2106624</span><span class="w"></span>
+<span class="w">    </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">Exit</span><span class="w"> </span><span class="nl">status</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="nl">Version</span><span class="p">:</span><span class="w">      </span><span class="mi">27</span><span class="n">a820950a316451da3d52091cdfac7138e4ee8a</span><span class="w"></span>
+<span class="nl">Codename</span><span class="p">:</span><span class="w">     </span><span class="n">cheddar</span><span class="w"></span>
+<span class="k">Go</span><span class="w"> </span><span class="nl">version</span><span class="p">:</span><span class="w">   </span><span class="n">go1</span><span class="mf">.24.0</span><span class="w"></span>
+<span class="nl">Built</span><span class="p">:</span><span class="w">        </span><span class="mi">2025</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span><span class="nl">_04</span><span class="p">:</span><span class="mi">31</span><span class="err">:</span><span class="mi">45</span><span class="n">AM</span><span class="w"></span>
+<span class="n">OS</span><span class="o">/</span><span class="nl">Arch</span><span class="p">:</span><span class="w">      </span><span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="w"></span>
+</code></pre></div>
+
+<h2>Sửa code router in ra chi tiết priority</h2>
+<p>Thêm 1 dòng print</p>
+<div class="highlight"><pre><span></span><code><span class="nx">diff</span><span class="w"> </span><span class="o">--</span><span class="nx">git</span><span class="w"> </span><span class="nx">a</span><span class="o">/</span><span class="nx">pkg</span><span class="o">/</span><span class="nx">server</span><span class="o">/</span><span class="nx">router</span><span class="o">/</span><span class="nx">router</span><span class="p">.</span><span class="k">go</span><span class="w"> </span><span class="nx">b</span><span class="o">/</span><span class="nx">pkg</span><span class="o">/</span><span class="nx">server</span><span class="o">/</span><span class="nx">router</span><span class="o">/</span><span class="nx">router</span><span class="p">.</span><span class="k">go</span><span class="w"></span>
+<span class="nx">index</span><span class="w"> </span><span class="mi">44</span><span class="nx">f6950</span><span class="p">.</span><span class="mf">.12</span><span class="nx">c6589</span><span class="w"> </span><span class="mi">100644</span><span class="w"></span>
+<span class="o">---</span><span class="w"> </span><span class="nx">a</span><span class="o">/</span><span class="nx">pkg</span><span class="o">/</span><span class="nx">server</span><span class="o">/</span><span class="nx">router</span><span class="o">/</span><span class="nx">router</span><span class="p">.</span><span class="k">go</span><span class="w"></span>
+<span class="o">+++</span><span class="w"> </span><span class="nx">b</span><span class="o">/</span><span class="nx">pkg</span><span class="o">/</span><span class="nx">server</span><span class="o">/</span><span class="nx">router</span><span class="o">/</span><span class="nx">router</span><span class="p">.</span><span class="k">go</span><span class="w"></span>
+<span class="err">@@</span><span class="w"> </span><span class="o">-</span><span class="mi">142</span><span class="p">,</span><span class="mi">6</span><span class="w"> </span><span class="o">+</span><span class="mi">142</span><span class="p">,</span><span class="mi">8</span><span class="w"> </span><span class="err">@@</span><span class="w"> </span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">Manager</span><span class="p">)</span><span class="w"> </span><span class="nx">buildEntryPointHandler</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">entryPointName</span><span class="w"> </span><span class="nx">str</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">Priority</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">httpmuxer</span><span class="p">.</span><span class="nx">GetRulePriority</span><span class="p">(</span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">Rule</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="p">}</span><span class="w"></span>
+
+<span class="o">+</span><span class="w">               </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;FML priority name: %v rule: &#39;%s&#39; len: %d\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">routerName</span><span class="p">,</span><span class="w"> </span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">Rule</span><span class="p">,</span><span class="w"> </span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">Priority</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">Priority</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="nx">maxUserPriority</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">!</span><span class="nx">strings</span><span class="p">.</span><span class="nx">HasSuffix</span><span class="p">(</span><span class="nx">routerName</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;@internal&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;the router priority %d exceeds the max user-defined priority %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">Priority</span><span class="p">,</span><span class="w"> </span><span class="nx">maxUserPriority</span><span class="p">)</span><span class="w"></span>
+<span class="w">                        </span><span class="nx">routerConfig</span><span class="p">.</span><span class="nx">AddError</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>rồi build lại.</p>
+<h2>Cấu hình Prometheus metrics cho Traefik</h2>
+<div class="highlight"><pre><span></span><code># traefik.yml
+entryPoints:
+  web:
+    address: :2280
+log:
+  level: DEBUG
+accessLog:
+  addInternals: true
+metrics:
+  addInternals: true
+  prometheus:
+    manualRouting: true
+    entryPoint: web
+providers:
+  file:
+    filename: ./traefik_provider.yml
+    watch: true
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="n">traefik_provider</span><span class="p">.</span><span class="n">yml</span><span class="w"></span>
+<span class="nl">http</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nl">routers</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nl">router1</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nl">entryPoints</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">web</span><span class="w"></span>
+<span class="w">      </span><span class="nl">service</span><span class="p">:</span><span class="w"> </span><span class="n">prometheus</span><span class="nv">@internal</span><span class="w"></span>
+<span class="w">      </span><span class="k">rule</span><span class="err">:</span><span class="w"> </span><span class="n">PathPrefix</span><span class="p">(</span><span class="err">`</span><span class="o">/</span><span class="n">metrics</span><span class="err">`</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="nl">observability</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nl">accessLogs</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="w"></span>
+<span class="w">    </span><span class="nl">regexrouter2</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nl">entryPoints</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">web</span><span class="w"></span>
+<span class="w">      </span><span class="nl">service</span><span class="p">:</span><span class="w"> </span><span class="n">prometheus</span><span class="nv">@internal</span><span class="w"></span>
+<span class="w">      </span><span class="k">rule</span><span class="err">:</span><span class="w"> </span><span class="n">PathRegexp</span><span class="p">(</span><span class="err">`</span><span class="o">/</span><span class="n">me</span><span class="p">.</span><span class="o">*</span><span class="err">`</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="nl">observability</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nl">accessLogs</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="w"></span>
+</code></pre></div>
+
+<p>Chạy:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">traefik</span><span class="o">/</span><span class="n">dist</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">amd64</span><span class="o">/</span><span class="n">traefik</span><span class="w"> </span><span class="o">--</span><span class="n">configfile</span><span class="w"> </span><span class="n">traefik</span><span class="p">.</span><span class="n">yml</span><span class="w"></span>
+<span class="mi">2025</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">14</span><span class="nl">T11</span><span class="p">:</span><span class="mi">40</span><span class="err">:</span><span class="mi">01</span><span class="o">+</span><span class="mi">07</span><span class="err">:</span><span class="mi">00</span><span class="w"> </span><span class="n">DBG</span><span class="w"> </span><span class="n">traefik</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">traefik</span><span class="o">/</span><span class="n">traefik</span><span class="p">.</span><span class="k">go</span><span class="err">:</span><span class="mi">114</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">Static</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="n">loaded</span><span class="w"> </span><span class="o">[</span><span class="n">json</span><span class="o">]</span><span class="w"> </span><span class="n">staticConfiguration</span><span class="o">=</span><span class="err">{</span><span class="ss">&quot;accessLog&quot;</span><span class="err">:{</span><span class="ss">&quot;addInternals&quot;</span><span class="err">:</span><span class="k">true</span><span class="p">,</span><span class="ss">&quot;fields&quot;</span><span class="err">:{</span><span class="ss">&quot;defaultMode&quot;</span><span class="err">:</span><span class="ss">&quot;keep&quot;</span><span class="p">,</span><span class="ss">&quot;headers&quot;</span><span class="err">:{</span><span class="ss">&quot;defaultMode&quot;</span><span class="err">:</span><span class="ss">&quot;drop&quot;</span><span class="err">}}</span><span class="p">,</span><span class="ss">&quot;filters&quot;</span><span class="err">:{}</span><span class="p">,</span><span class="ss">&quot;format&quot;</span><span class="err">:</span><span class="ss">&quot;common&quot;</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;entryPoints&quot;</span><span class="err">:{</span><span class="ss">&quot;web&quot;</span><span class="err">:{</span><span class="ss">&quot;address&quot;</span><span class="err">:</span><span class="ss">&quot;:2280&quot;</span><span class="p">,</span><span class="ss">&quot;forwardedHeaders&quot;</span><span class="err">:{}</span><span class="p">,</span><span class="ss">&quot;http&quot;</span><span class="err">:{</span><span class="ss">&quot;maxHeaderBytes&quot;</span><span class="err">:</span><span class="mi">1048576</span><span class="p">,</span><span class="ss">&quot;sanitizePath&quot;</span><span class="err">:</span><span class="k">true</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;http2&quot;</span><span class="err">:{</span><span class="ss">&quot;maxConcurrentStreams&quot;</span><span class="err">:</span><span class="mi">250</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;transport&quot;</span><span class="err">:{</span><span class="ss">&quot;lifeCycle&quot;</span><span class="err">:{</span><span class="ss">&quot;graceTimeOut&quot;</span><span class="err">:</span><span class="ss">&quot;10s&quot;</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;respondingTimeouts&quot;</span><span class="err">:{</span><span class="ss">&quot;idleTimeout&quot;</span><span class="err">:</span><span class="ss">&quot;3m0s&quot;</span><span class="p">,</span><span class="ss">&quot;readTimeout&quot;</span><span class="err">:</span><span class="ss">&quot;1m0s&quot;</span><span class="err">}}</span><span class="p">,</span><span class="ss">&quot;udp&quot;</span><span class="err">:{</span><span class="ss">&quot;timeout&quot;</span><span class="err">:</span><span class="ss">&quot;3s&quot;</span><span class="err">}}}</span><span class="p">,</span><span class="ss">&quot;global&quot;</span><span class="err">:{</span><span class="ss">&quot;checkNewVersion&quot;</span><span class="err">:</span><span class="k">true</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;log&quot;</span><span class="err">:{</span><span class="ss">&quot;format&quot;</span><span class="err">:</span><span class="ss">&quot;common&quot;</span><span class="p">,</span><span class="ss">&quot;level&quot;</span><span class="err">:</span><span class="ss">&quot;DEBUG&quot;</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;metrics&quot;</span><span class="err">:{</span><span class="ss">&quot;addInternals&quot;</span><span class="err">:</span><span class="k">true</span><span class="p">,</span><span class="ss">&quot;prometheus&quot;</span><span class="err">:{</span><span class="ss">&quot;addEntryPointsLabels&quot;</span><span class="err">:</span><span class="k">true</span><span class="p">,</span><span class="ss">&quot;addServicesLabels&quot;</span><span class="err">:</span><span class="k">true</span><span class="p">,</span><span class="ss">&quot;buckets&quot;</span><span class="err">:</span><span class="o">[</span><span class="n">0.1,0.3,1.2,5</span><span class="o">]</span><span class="p">,</span><span class="ss">&quot;entryPoint&quot;</span><span class="err">:</span><span class="ss">&quot;web&quot;</span><span class="p">,</span><span class="ss">&quot;manualRouting&quot;</span><span class="err">:</span><span class="k">true</span><span class="err">}}</span><span class="p">,</span><span class="ss">&quot;providers&quot;</span><span class="err">:{</span><span class="ss">&quot;file&quot;</span><span class="err">:{</span><span class="ss">&quot;filename&quot;</span><span class="err">:</span><span class="ss">&quot;./traefik_provider.yml&quot;</span><span class="p">,</span><span class="ss">&quot;watch&quot;</span><span class="err">:</span><span class="k">true</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;providersThrottleDuration&quot;</span><span class="err">:</span><span class="ss">&quot;2s&quot;</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;serversTransport&quot;</span><span class="err">:{</span><span class="ss">&quot;maxIdleConnsPerHost&quot;</span><span class="err">:</span><span class="mi">200</span><span class="err">}</span><span class="p">,</span><span class="ss">&quot;tcpServersTransport&quot;</span><span class="err">:{</span><span class="ss">&quot;dialKeepAlive&quot;</span><span class="err">:</span><span class="ss">&quot;15s&quot;</span><span class="p">,</span><span class="ss">&quot;dialTimeout&quot;</span><span class="err">:</span><span class="ss">&quot;30s&quot;</span><span class="err">}}</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">FML</span><span class="w"> </span><span class="n">priority</span><span class="w"> </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">router1</span><span class="nv">@file</span><span class="w"> </span><span class="k">rule</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;PathPrefix(`/metrics`)&#39;</span><span class="w"> </span><span class="nf">len</span><span class="err">:</span><span class="w"> </span><span class="mi">22</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">FML</span><span class="w"> </span><span class="n">priority</span><span class="w"> </span><span class="nl">name</span><span class="p">:</span><span class="w"> </span><span class="n">regexrouter2</span><span class="nv">@file</span><span class="w"> </span><span class="k">rule</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;PathRegexp(`/me.*`)&#39;</span><span class="w"> </span><span class="nf">len</span><span class="err">:</span><span class="w"> </span><span class="mi">19</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="mf">127.0.0.1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">14/Sep/2025:04:40:06 +0000</span><span class="o">]</span><span class="w"> </span><span class="ss">&quot;GET /metrics HTTP/1.1&quot;</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="mi">2065</span><span class="w"> </span><span class="ss">&quot;-&quot;</span><span class="w"> </span><span class="ss">&quot;-&quot;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ss">&quot;router1@file&quot;</span><span class="w"> </span><span class="ss">&quot;-&quot;</span><span class="w"> </span><span class="mi">1</span><span class="n">ms</span><span class="w"></span>
+<span class="mf">127.0.0.1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">14/Sep/2025:04:41:31 +0000</span><span class="o">]</span><span class="w"> </span><span class="ss">&quot;GET /metrics_but_longer HTTP/1.1&quot;</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="mi">2057</span><span class="w"> </span><span class="ss">&quot;-&quot;</span><span class="w"> </span><span class="ss">&quot;-&quot;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ss">&quot;router1@file&quot;</span><span class="w"> </span><span class="ss">&quot;-&quot;</span><span class="w"> </span><span class="mi">1</span><span class="n">ms</span><span class="w"></span>
+</code></pre></div>
+
+<h2>Traefik ưu tiên các route có rule dài hơn</h2>
+<p>Khi truy cập <code>curl localhost:2280/metrics_but_longer</code> thấy Traefik log đã match <code>router1@file</code>:</p>
+<ul>
+<li><code>router1</code> chứa rule có độ dài 22 ký tự nên được ưu tiên match trước.</li>
+<li><code>regexrouter2</code> chứa rule chỉ có 19 kí tự</li>
+</ul>
+<blockquote>
+<p>To avoid path overlap, routes are sorted, by default, in descending order using rules length. The priority is directly equal to the length of the rule, and so the longest length has the highest priority. <a href="https://github.com/traefik/traefik/blob/v3.5/docs/content/reference/routing-configuration/http/router/rules-and-priority.md#priority-calculation">source</a></p>
+</blockquote>
+<p>Trong code <a href="https://github.com/traefik/traefik/blob/27a820950a316451da3d52091cdfac7138e4ee8a/pkg/muxer/http/mux.go#L73-L88">https://github.com/traefik/traefik/blob/27a820950a316451da3d52091cdfac7138e4ee8a/pkg/muxer/http/mux.go#L73-L88</a> thực hiện sort các router theo priority:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// AddRoute add a new route to the router.</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">m</span><span class="w"> </span><span class="o">*</span><span class="nx">Muxer</span><span class="p">)</span><span class="w"> </span><span class="nx">AddRoute</span><span class="p">(</span><span class="nx">rule</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">syntax</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">priority</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">handler</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Handler</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">matchers</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">syntax</span><span class="p">,</span><span class="w"> </span><span class="nx">rule</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;error while parsing rule %s: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rule</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">m</span><span class="p">.</span><span class="nx">routes</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">routes</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">route</span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">handler</span><span class="p">:</span><span class="w">  </span><span class="nx">handler</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">matchers</span><span class="p">:</span><span class="w"> </span><span class="nx">matchers</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">priority</span><span class="p">:</span><span class="w"> </span><span class="nx">priority</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">sort</span><span class="p">.</span><span class="nx">Sort</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">routes</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="o">...</span><span class="w"></span>
+<span class="c1">// routes implements sort.Interface.</span><span class="w"></span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">routes</span><span class="w"> </span><span class="p">[]</span><span class="o">*</span><span class="nx">route</span><span class="w"></span>
+
+<span class="c1">// Len implements sort.Interface.</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="nx">routes</span><span class="p">)</span><span class="w"> </span><span class="nx">Len</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="c1">// Swap implements sort.Interface.</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="nx">routes</span><span class="p">)</span><span class="w"> </span><span class="nx">Swap</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">j</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">r</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span><span class="w"> </span><span class="nx">r</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">r</span><span class="p">[</span><span class="nx">j</span><span class="p">],</span><span class="w"> </span><span class="nx">r</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="c1">// Less implements sort.Interface.</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="nx">routes</span><span class="p">)</span><span class="w"> </span><span class="nx">Less</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">j</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">r</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">priority</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="nx">r</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">priority</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p><code>Sort</code> interface sắp xếp theo thứ tự tăng dần:</p>
+<blockquote>
+<p>Sort sorts data in ascending order as determined by the Less method.
+It makes one call to data.Len to determine n and <code>O(n*log(n))</code> calls to
+data.Less and data.Swap. The sort is not guaranteed to be stable.</p>
+</blockquote>
+<p>Nhưng function <code>Less</code> ở đây trả về true khi phần tử <code>r[i].priority &gt; r[j].priority</code>, tức priority càng cao thì xem như càng đứng trước, vì vậy route có priority cao nhất sẽ đứng đầu.</p>
+<p>Khi <code>ServeHTTP</code> nhận HTTP request, nó duyệt qua các routes, route có priority cao hơn được duyệt trước:</p>
+<div class="highlight"><pre><span></span><code><span class="o">//</span><span class="w"> </span><span class="n">ServeHTTP</span><span class="w"> </span><span class="n">forwards</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">matching</span><span class="w"> </span><span class="n">HTTP</span><span class="w"> </span><span class="n">handler</span><span class="o">.</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="n">Serves</span><span class="w"> </span><span class="mi">404</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">found</span><span class="o">.</span><span class="w"></span>
+<span class="k">func</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">*</span><span class="n">Muxer</span><span class="p">)</span><span class="w"> </span><span class="n">ServeHTTP</span><span class="p">(</span><span class="n">rw</span><span class="w"> </span><span class="n">http</span><span class="o">.</span><span class="n">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="w"> </span><span class="o">*</span><span class="n">http</span><span class="o">.</span><span class="n">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="o">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">route</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="nb">range</span><span class="w"> </span><span class="n">m</span><span class="o">.</span><span class="n">routes</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">route</span><span class="o">.</span><span class="n">matchers</span><span class="o">.</span><span class="k">match</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">route</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">ServeHTTP</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">m</span><span class="o">.</span><span class="n">defaultHandler</span><span class="o">.</span><span class="n">ServeHTTP</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Một ngày đẹp trời mà xấu số, người dùng thêm điều kiện kiểm tra Host vào <code>regexrouter2</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">      </span><span class="n">rule</span><span class="o">:</span><span class="w"> </span><span class="n">PathRegexp</span><span class="p">(</span><span class="n n-Quoted">`/me.*`</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">Host</span><span class="p">(</span><span class="n n-Quoted">`localhost`</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>vô tình khiến route <code>regexrouter2</code> có priority là 40 và được match trước:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;</span><span class="w"> </span><span class="n">FML</span><span class="w"> </span><span class="n">priority</span><span class="w"> </span><span class="k">name</span><span class="o">:</span><span class="w"> </span><span class="n">regexrouter2</span><span class="nv">@file</span><span class="w"> </span><span class="n">rule</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;PathRegexp(`/me.*`) &amp;&amp; Host(`localhost`)&#39;</span><span class="w"> </span><span class="n">len</span><span class="o">:</span><span class="w"> </span><span class="mi">40</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="o">&gt;</span><span class="w"> </span><span class="mf">127.0.0.1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="err">[</span><span class="mi">14</span><span class="o">/</span><span class="n">Sep</span><span class="o">/</span><span class="mi">2025</span><span class="o">:</span><span class="mi">08</span><span class="o">:</span><span class="mi">26</span><span class="o">:</span><span class="mi">40</span><span class="w"> </span><span class="o">+</span><span class="mi">0000</span><span class="err">]</span><span class="w"> </span><span class="s2">&quot;GET /metrics_but_longer HTTP/1.1&quot;</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="mi">8682</span><span class="w"> </span><span class="s2">&quot;-&quot;</span><span class="w"> </span><span class="s2">&quot;-&quot;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="s2">&quot;regexrouter2@file&quot;</span><span class="w"> </span><span class="s2">&quot;-&quot;</span><span class="w"> </span><span class="n">0ms</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Kết luận</h3>
+<p>Người dùng nên chỉ định priority cụ thể cho từng route trong config để tránh bất ngờ khi thay đổi config tưởng chừng vô hại lại có thể đảo lộn thứ tự match route:</p>
+<div class="highlight"><pre><span></span><code><span class="n">http</span><span class="o">:</span><span class="w"></span>
+<span class="w">  </span><span class="n">routers</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">router1</span><span class="o">:</span><span class="w"></span>
+<span class="w">      </span><span class="n">entryPoints</span><span class="o">:</span><span class="w"></span>
+<span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">web</span><span class="w"></span>
+<span class="w">      </span><span class="n">service</span><span class="o">:</span><span class="w"> </span><span class="n">prometheus</span><span class="nv">@internal</span><span class="w"></span>
+<span class="w">      </span><span class="n">rule</span><span class="o">:</span><span class="w"> </span><span class="n">PathPrefix</span><span class="p">(</span><span class="n n-Quoted">`/metrics`</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">priority</span><span class="o">:</span><span class="w"> </span><span class="mi">200</span><span class="w"></span>
+<span class="w">    </span><span class="n">regexrouter2</span><span class="o">:</span><span class="w"></span>
+<span class="w">      </span><span class="n">entryPoints</span><span class="o">:</span><span class="w"></span>
+<span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">web</span><span class="w"></span>
+<span class="w">      </span><span class="n">service</span><span class="o">:</span><span class="w"> </span><span class="n">prometheus</span><span class="nv">@internal</span><span class="w"></span>
+<span class="w">      </span><span class="n">rule</span><span class="o">:</span><span class="w"> </span><span class="n">PathRegexp</span><span class="p">(</span><span class="n n-Quoted">`/me.*`</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">Host</span><span class="p">(</span><span class="n n-Quoted">`localhost`</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">priority</span><span class="o">:</span><span class="w"> </span><span class="mi">100</span><span class="w"></span>
+</code></pre></div>
+
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-09-14T00:00:00+07:00">Sun 14 September 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#traefik-ref">traefik
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

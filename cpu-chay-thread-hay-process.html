@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ps, top, thread, process, linux, unix, OS, CPU, rust, Python, frontpage, " />
+
+<meta property="og:title" content="CPU chạy thread hay process? "/>
+<meta property="og:url" content="./cpu-chay-thread-hay-process.html" />
+<meta property="og:description" content="Hay những câu hỏi liên quan: Thread và process khác gì nhau? 1 process chạy multithreading trên mấy CPU? Vì sao Java, Rust không nhắc tới multiprocessing? Khi chạy CPU bound, dùng multi-process hay multi-threaded? bài này sẽ làm cho ra nhẽ. Việc khó khăn nhất khi trả lời các …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-06-26T00:00:00+07:00" />
+<meta name="twitter:title" content="CPU chạy thread hay process? ">
+<meta name="twitter:description" content="Hay những câu hỏi liên quan: Thread và process khác gì nhau? 1 process chạy multithreading trên mấy CPU? Vì sao Java, Rust không nhắc tới multiprocessing? Khi chạy CPU bound, dùng multi-process hay multi-threaded? bài này sẽ làm cho ra nhẽ. Việc khó khăn nhất khi trả lời các …">
+
+        <title>CPU chạy thread hay process?  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./cpu-chay-thread-hay-process.html">
+                CPU chạy thread hay process?
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Hay những câu hỏi liên quan:</p>
+<ul>
+<li>Thread và process khác gì nhau?</li>
+<li>1 process chạy multithreading trên mấy CPU?</li>
+<li>Vì sao Java, Rust không nhắc tới multiprocessing?</li>
+<li>Khi chạy CPU bound, dùng multi-process hay multi-threaded?</li>
+</ul>
+<p>bài này sẽ làm cho ra nhẽ.</p>
+<p>Việc khó khăn nhất khi trả lời các câu hỏi này là tìm được các tài liệu có tính "chuẩn mực"/căn cứ, không phải mấy trang tutorial, wikipedia hay hỏi đáp trên mạng.</p>
+<h2>Process là gì, thread là gì</h2>
+<p>Người dùng máy tính thường biết đến khái niệm <code>process</code> trước, nó hiển thị mặc định trên các chương trình process manager như <code>top</code>, hay <code>ps</code>, hay <code>Monitor</code> trên Ubuntu, hay cả <code>Task manager</code> trên Windows.
+Mỗi process được gán cho 1 số ProcessID (PID), dùng lệnh <code>kill -9 PID</code> để tắt chương trình bị "treo".
+Khi chạy 1 chương trình, hệ điều hành sẽ tạo ra 1 (hay vài) process.</p>
+<p>Cho tới khi học lập trình Python, thấy mỗi chương trình chỉ chạy code tuần tự từ trên xuống, nhận ra rằng mỗi 1 process chỉ chạy 1 "luồng" (thread), học thêm thư viện <code>threading</code>, biết tạo 2 3 4 thread chạy "cùng lúc" trong 1 process.</p>
+<p>Ở đây dùng khái niệm process và thread của hệ điều hành (OS), một số ngôn ngữ lập trình có khái niệm process của riêng mình, VD: Erlang process không giống như OS process.</p>
+<p>Trên hệ điều hành dùng Linux như Ubuntu, gõ <code>man 7 pthreads</code>,
+<code>pthread</code> hay POSIX thread, là "OS thread" trên Linux:</p>
+<blockquote>
+<p>A single process can contain multiple threads, all of
+which are executing the same program.  These threads share the
+same global memory (data and heap segments), but each thread has
+its own stack (automatic variables).</p>
+</blockquote>
+<p>Các thread trong 1 process dùng chung dữ liệu (share data) và file description, nhưng có stack riêng.</p>
+<p>Theo <a href="https://man.openbsd.org/pthreads.3"><code>man 3 pthreads</code> trên OpenBSD</a>:</p>
+<blockquote>
+<p>A thread is a flow of control within a process. Each thread represents a
+minimal amount of state: normally just the CPU state and a signal mask. All
+other process state (such as memory, file descriptors) is shared among all of
+the threads in the process.</p>
+<p>In OpenBSD, threads use a 1-to-1 implementation, where every thread is
+independently scheduled by the kernel.</p>
+</blockquote>
+<p>Theo <a href="https://man.freebsd.org/cgi/man.cgi?query=pthread"><code>man 3 pthread</code> trên FreeBSD</a></p>
+<blockquote>
+<p>POSIX threads are a set of    functions that support applications with re-
+quirements    for multiple flows of control, called threads, within a process.
+Multithreading is used to improve the performance of a program.</p>
+</blockquote>
+<p>Hai BSD OS đều định nghĩa thread là một <code>flow of control</code> trong 1 process.</p>
+<p><a href="https://learn.microsoft.com/en-us/windows/win32/procthread/processes-and-threads">Theo Microsoft</a>, nhà sản xuất hệ điều hành nhiều người dùng nhất trên thế giới định nghĩa: 1 process đơn giản là 1 chương trình đang chạy.
+Hay <a href="https://learn.microsoft.com/en-gb/windows/win32/procthread/about-processes-and-threads">chi tiết hơn</a>: <strong>một process cung cấp các tài nguyên để chạy 1 chương trình (code, file description, memory, ... và ít nhất 1 thread)</strong>, một process bắt đầu với 1 thread, thường được gọi là primary/main thread.</p>
+<p>Còn <strong>thread là đơn vị mà được hệ điều hành cung cấp cho thời gian dùng CPU</strong>.</p>
+<h3>So sánh process và thread</h3>
+<p>Khái niệm process có trước, mãi sau này mới có khái niệm (nhiều) thread.
+Mặc dù khi có 1 process thì nó luôn luôn chạy 1 thread.
+Trong 1 process có thể có nhiều thread, trong 1 thread không thể có nhiều process.</p>
+<p>Nhưng thực ra phần lớn người ta muốn hỏi:</p>
+<h3>So sánh multi thread và multi process</h3>
+<p>Multi thread giống như multi process, ngoại trừ 1 việc: các thread share chung memory còn process thì không.</p>
+<h2>Multitasking - đa nhiệm</h2>
+<p>Máy tính ngày nay CPU 4 lõi, 8 lõi (core)... luôn chạy nhiều chương trình cùng lúc. Máy tính ngày xưa khi chỉ có 1 CPU 1 core cũng vậy, chạy được nhiều chương trình "cùng lúc" nhờ CPU chuyển liên tục chạy các chương trình khác nhau, việc chuyển đổi rất nhanh này khiến người dùng có cảm giác là chạy cùng lúc. Ví dụ chạy 4 process A B C D:</p>
+<div class="highlight"><pre><span></span><code>A B C D A B D C B A C D...
+</code></pre></div>
+
+<p>chuyện này không thay đổi kể cả với máy tính nhiều core do số chương trình chạy luôn lớn hơn số core nhiều lần. Ví dụ:</p>
+<div class="highlight"><pre><span></span><code>$ grep -c processor /proc/cpuinfo
+<span class="m">4</span>
+$ ps -ef <span class="p">|</span> wc -l
+<span class="m">287</span>
+</code></pre></div>
+
+<p>PS: bạn đọc sau khi đọc xong bài và tham khảo <a href="./ps-va-top-hien-thi-so-thread.html">xem thread bằng top</a> sẽ chạy <code>ps -eLf</code></p>
+<h3>CPU Scheduler</h3>
+<p>Việc sắp xếp các chương trình chạy thế nào (dùng CPU thế nào) do một bộ phận của kernel có tên "scheduler" thực hiện.
+Đọc thêm về Linux CPU scheduler tại <a href="https://opensource.com/article/19/2/fair-scheduling-linux">https://opensource.com/article/19/2/fair-scheduling-linux</a>.</p>
+<h2>CPU chạy thread hay process?</h2>
+<p>Tham khảo tại <code>man 7 sched</code></p>
+<div class="highlight"><pre><span></span><code>$ whatis sched
+sched <span class="o">(</span><span class="m">7</span><span class="o">)</span>            - overview of CPU scheduling
+</code></pre></div>
+
+<p>Trong tài liệu viết:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">Scheduling</span><span class="w"> </span><span class="nv">policies</span><span class="w"></span>
+<span class="w">   </span><span class="nv">The</span><span class="w"> </span><span class="nv">scheduler</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="nv">component</span><span class="w"> </span><span class="nv">that</span><span class="w"> </span><span class="nv">decides</span><span class="w"> </span><span class="nv">which</span><span class="w"> </span><span class="nv">runnable</span><span class="w"> </span><span class="nv">thread</span><span class="w"></span>
+<span class="w">   </span><span class="nv">will</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">executed</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">CPU</span><span class="w"> </span><span class="k">next</span>.<span class="w">  </span><span class="nv">Each</span><span class="w"> </span><span class="nv">thread</span><span class="w"> </span><span class="nv">has</span><span class="w"> </span><span class="nv">an</span><span class="w"> </span><span class="nv">associated</span><span class="w"></span>
+<span class="w">   </span><span class="nv">scheduling</span><span class="w"> </span><span class="nv">policy</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">a</span><span class="w">  </span><span class="nv">static</span><span class="w"> </span><span class="nv">scheduling</span><span class="w">  </span><span class="nv">priority</span>,<span class="w"> </span><span class="nv">sched_priority</span>.<span class="w">  </span><span class="nv">The</span><span class="w"></span>
+<span class="w">   </span><span class="nv">scheduler</span><span class="w"> </span><span class="nv">makes</span><span class="w">  </span><span class="nv">its</span><span class="w">  </span><span class="nv">decisions</span><span class="w">  </span><span class="nv">based</span><span class="w">  </span><span class="nv">on</span><span class="w"> </span><span class="nv">knowledge</span><span class="w">  </span><span class="nv">of</span><span class="w">  </span><span class="nv">the</span><span class="w">  </span><span class="nv">scheduling</span><span class="w"></span>
+<span class="w">   </span><span class="nv">policy</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">static</span><span class="w"> </span><span class="nv">priority</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">all</span><span class="w"> </span><span class="nv">threads</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">sys</span>‐<span class="w"> </span><span class="nv">tem</span>.<span class="w"></span>
+...<span class="w"></span>
+<span class="nv">API</span><span class="w"> </span><span class="nv">summary</span><span class="w"></span>
+<span class="w">   </span><span class="nv">Linux</span><span class="w"> </span><span class="nv">provides</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">following</span><span class="w"> </span><span class="nv">system</span><span class="w">  </span><span class="nv">calls</span><span class="w"> </span><span class="k">for</span><span class="w">  </span><span class="nv">controlling</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">CPU</span><span class="w"></span>
+<span class="w">   </span><span class="nv">scheduling</span><span class="w"> </span><span class="nv">behavior</span>,<span class="w"> </span><span class="nv">policy</span>,<span class="w">  </span><span class="nv">and</span><span class="w">  </span><span class="nv">priority</span><span class="w">  </span><span class="nv">of</span><span class="w">  </span><span class="nv">processes</span><span class="w"> </span><span class="ss">(</span><span class="nv">or</span>,<span class="w"> </span><span class="nv">more</span><span class="w"></span>
+<span class="w">   </span><span class="nv">precisely</span>,<span class="w"> </span><span class="nv">threads</span><span class="ss">)</span>.<span class="w"></span>
+</code></pre></div>
+
+<p>Linux kernel scheduler sắp xếp lịch chạy trên CPU cho các thread (hay gọi là task).
+Trong <code>man 1 taskset</code> viết:</p>
+<div class="highlight"><pre><span></span><code><span class="o">-</span><span class="nv">a</span>,<span class="w"> </span><span class="o">--</span><span class="nv">all</span><span class="o">-</span><span class="nv">tasks</span><span class="w"></span>
+<span class="w">  </span><span class="nv">Set</span><span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="nv">retrieve</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">CPU</span><span class="w"> </span><span class="nv">affinity</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">all</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">tasks</span><span class="w"> </span><span class="ss">(</span><span class="nv">threads</span><span class="ss">)</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">given</span><span class="w"> </span><span class="nv">PID</span>.<span class="w"></span>
+</code></pre></div>
+
+<h2>Một process chạy multithreading trên mấy CPU core?</h2>
+<p>Với 10 process, mỗi process chỉ có 1 thread, sẽ là 10 thread cần chạy, kernel sẽ sched (xếp lịch) việc chạy 10 task này cho N CPU.
+Tương tự 1 process, chạy 10 thread, kernel cũng sẽ sched việc chạy 10 task này cho N CPU (N &gt; 0).</p>
+<p>What?!</p>
+<h3>Python multi-threaded vs multi-process</h3>
+<p>Dòng thứ 2 trong tài liệu thư viện <a href="https://docs.python.org/3/library/threading.html#module-threading"><code>threading</code> của Python</a> viết</p>
+<blockquote>
+<p>CPython implementation detail: In CPython, due to the Global Interpreter
+Lock, only one thread can execute Python code at once (even though certain
+performance-oriented libraries might overcome this limitation). If
+you want your application to make better use of the computational resources
+of multi-core machines, you are advised to use multiprocessing or
+concurrent.futures.ProcessPoolExecutor. However, threading is still an
+appropriate model if you want to run multiple I/O-bound tasks simultaneously.</p>
+</blockquote>
+<p>Python là một trong số ít ngôn ngữ mà nhiều thread không chạy được trên nhiều CPU core cùng lúc do giới hạn của <a href="https://docs.python.org/3/glossary.html#term-global-interpreter-lock">Global Interpreter Lock - GIL</a> trong CPython/PyPy.
+Giới hạn này <strong>KHÔNG</strong> tồn tại trong các bản Python khác như Jython (trên JVM) và IronPython (trên .NET).
+Vì GIL, CPython chỉ có thể <strong>chạy trên CPU</strong> 1 thread 1 lúc, nên muốn chạy nhiều thread/process trên nhiều CPU core cùng lúc, Python có thư viện <a href="https://docs.python.org/3/library/multiprocessing.html">multiprocessing</a>.</p>
+<blockquote>
+<p>multiprocessing is a package that supports spawning processes using an API
+similar to the threading module. The multiprocessing package offers both
+local and remote concurrency, effectively side-stepping the Global
+Interpreter Lock by using subprocesses instead of threads. Due to this, the
+multiprocessing module allows the programmer to fully leverage multiple
+processors on a given machine.</p>
+</blockquote>
+<p>Tránh nhầm lẫn rằng python <code>threading</code> thực sự chạy các thread cùng lúc trên nhiều CPU core, việc các thread có vẻ chạy cùng lúc trong Python chỉ là multitasking, chạy chuyển đổi giữa các thread.</p>
+<h3>Java multithreading</h3>
+<p>Java hỗ trợ multithreading với các thread chạy cùng lúc như mong đợi, và nhiều thread này hoàn toàn có thể được chạy trên nhiều CPU core.</p>
+<p>Vì multithreading chạy rất ngon lành, nên ít có lý do gì để sinh ra khái niệm "multiprocessing" như Python.
+Ngoài ra, bật 1 Java process là chạy 1 máy ảo JVM nặng nề, khởi động chậm (so với bật 1 process CPython interpreter 0.1s 8MB RAM) nên việc này rất ít thấy trong thực tế.</p>
+<p>PS: Python <code>threading</code> API <a href="https://docs.python.org/2/library/threading.html">dựa trên API của Java</a></p>
+<h3>Rust multithreading</h3>
+<p>Tương tự Java, không tồn tại thư viện "multiprocessing" trong Rust.</p>
+<blockquote>
+<p>In most current operating systems, an executed program’s code is run in a
+process, and the operating system will manage multiple processes at once.
+Within a program, you can also have independent parts that run
+simultaneously. The features that run these independent parts are called
+threads. For example, a web server could have multiple threads so that it
+could respond to more than one request at the same time.</p>
+</blockquote>
+<p><a href="https://doc.rust-lang.org/book/ch16-01-threads.html">https://doc.rust-lang.org/book/ch16-01-threads.html</a></p>
+<h3>Go multithreading, multiprocessing</h3>
+<p>Go không dùng khái niệm process hay thread của hệ điều hành mà dùng khái niệm Goroutine, tương tự thread, nhưng do Go runtime quản lý thay vì OS kernel.</p>
+<blockquote>
+<p>A goroutine is a lightweight thread managed by the Go runtime.
+Goroutines run in the same address space, so access to shared memory must be synchronized.</p>
+</blockquote>
+<p><a href="https://go.dev/tour/concurrency/1">https://go.dev/tour/concurrency/1</a></p>
+<p>Các goroutine cũng có thể được nhiều CPU core chạy cùng lúc</p>
+<blockquote>
+<p>GOMAXPROCS sets the maximum number of CPUs that can be executing simultaneously and returns the previous setting.</p>
+</blockquote>
+<h2>Khi chạy CPU bound, dùng multi process hay multi thread?</h2>
+<ul>
+<li>CPU bound là chương trình dành phần lớn thời gian dùng CPU xử lý, khác với</li>
+<li>IO bound là chương trình dành phần lớn thời gian đọc ghi file/network.</li>
+</ul>
+<p>Câu hỏi này có thể là trap, cần hỏi lại dùng ngôn ngữ gì, trừ khi hỏi cụ thể tới Python thì trả lời dùng multiprocessing.
+Trong các ngôn ngữ khác như Rust/Java, multithreading là câu trả lời, vì không có thư viện multi-process mà chạy.
+Hay Go chỉ có goroutine chứ không có lựa chọn khác.</p>
+<p>Khi nói chung chung, multi-process có ưu điểm là sự tách biệt giữa các process, một process bị crash sẽ không ảnh hưởng tới process khác, nhược điểm là việc giao tiếp giữa các process để chia sẻ data sẽ phức tạp.
+Nhiều chương trình dùng mô hình này như:</p>
+<ul>
+<li>postgresql</li>
+<li>nginx master-workers</li>
+</ul>
+<p>Multi-threaded giúp dễ dàng truy cập bộ nhớ chung, nhưng có thể gặp trường hợp 1 thread crash khiến cả chương trình tắt ngóm, nhược điểm là dễ xảy ra race-condition: N thread tranh nhau truy cập cùng 1 tài nguyên.</p>
+<p>Không có câu trả lời dễ dàng, vì đây là trường hợp của PostgreSQL, sau vài chục năm chạy multi-process, nay đang khám phá option multi-threaded.</p>
+<p><a href="https://www.postgresql.org/message-id/flat/31cc6df9-53fe-3cd9-af5b-ac0d801163f4%40iki.fi">Let's make PostgreSQL multi-threaded</a></p>
+<h3>Tham khảo</h3>
+<ul>
+<li>OSTEP: <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf">https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf</a></li>
+<li><a href="https://www.postgresql.org/message-id/flat/31cc6df9-53fe-3cd9-af5b-ac0d801163f4%40iki.fi">https://www.postgresql.org/message-id/flat/31cc6df9-53fe-3cd9-af5b-ac0d801163f4%40iki.fi</a></li>
+<li><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf">https://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf</a></li>
+<li><a href="https://opensource.com/article/19/2/fair-scheduling-linux">https://opensource.com/article/19/2/fair-scheduling-linux</a></li>
+<li><a href="https://man.openbsd.org/pthreads.3">https://man.openbsd.org/pthreads.3</a></li>
+<li><a href="https://man.freebsd.org/cgi/man.cgi?query=pthread">https://man.freebsd.org/cgi/man.cgi?query=pthread</a></li>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/procthread/processes-and-threads">https://learn.microsoft.com/en-us/windows/win32/procthread/processes-and-threads</a></li>
+<li><a href="https://learn.microsoft.com/en-gb/windows/win32/procthread/about-processes-and-threads">https://learn.microsoft.com/en-gb/windows/win32/procthread/about-processes-and-threads</a></li>
+<li><a href="https://go.dev/tour/concurrency/1">https://go.dev/tour/concurrency/1</a></li>
+<li><a href="https://docs.python.org/3/library/multiprocessing.html">https://docs.python.org/3/library/multiprocessing.html</a></li>
+<li><a href="https://docs.python.org/3/glossary.html#term-global-interpreter-lock">https://docs.python.org/3/glossary.html#term-global-interpreter-lock</a></li>
+<li><a href="https://docs.python.org/2/library/threading.html">https://docs.python.org/2/library/threading.html</a></li>
+<li><a href="https://doc.rust-lang.org/book/ch16-01-threads.html">https://doc.rust-lang.org/book/ch16-01-threads.html</a></li>
+</ul>
+<h3>Kết luận</h3>
+<p>Thread là đơn vị task được kernel sched chạy trên nhiều CPU, process là 1 chương trình đang chạy.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-06-26T00:00:00+07:00">Mon 26 June 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#cpu-ref">CPU
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#linux-ref">linux
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="./tags.html#os-ref">OS
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#process-ref">process
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#ps-ref">ps
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#python-ref">Python
+                    <span class="superscript">13</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#thread-ref">thread
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#top-ref">top
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#unix-ref">unix
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

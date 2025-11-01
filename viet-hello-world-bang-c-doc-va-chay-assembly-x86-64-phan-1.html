@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="assembly, asm, gcc, gdb, x86-64, frontpage, " />
+
+<meta property="og:title" content="Viết &#34;Hello World&#34; bằng C, đọc và chạy Assembly x86-64 (phần 1) "/>
+<meta property="og:url" content="./viet-hello-world-bang-c-doc-va-chay-assembly-x86-64-phan-1.html" />
+<meta property="og:description" content="Điều đầu tiên và quan trọng nhất khi đọc về C hay assembly là: không được sợ. Code có thể lạ hay dài, nhưng không hề khó, mà thường đơn giản. không yêu cầu biết C không yêu cầu biết assembly biết code đơn giản 1 ngôn ngữ bất kỳ …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-07-28T00:00:00+07:00" />
+<meta name="twitter:title" content="Viết &#34;Hello World&#34; bằng C, đọc và chạy Assembly x86-64 (phần 1) ">
+<meta name="twitter:description" content="Điều đầu tiên và quan trọng nhất khi đọc về C hay assembly là: không được sợ. Code có thể lạ hay dài, nhưng không hề khó, mà thường đơn giản. không yêu cầu biết C không yêu cầu biết assembly biết code đơn giản 1 ngôn ngữ bất kỳ …">
+
+        <title>Viết &#34;Hello World&#34; bằng C, đọc và chạy Assembly x86-64 (phần 1)  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./viet-hello-world-bang-c-doc-va-chay-assembly-x86-64-phan-1.html">
+                Viết "Hello World" bằng C, đọc và chạy Assembly x86-64 (phần 1)
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Điều đầu tiên và quan trọng nhất khi đọc về C hay assembly là: không được sợ. Code có thể lạ hay dài, nhưng không hề khó, mà thường đơn giản.</p>
+<ul>
+<li>không yêu cầu biết C</li>
+<li>không yêu cầu biết assembly</li>
+<li>biết code đơn giản 1 ngôn ngữ bất kỳ</li>
+</ul>
+<p>đọc xong là biết.</p>
+<p>Bài viết liên quan hơi ngược lại với bài <a href="./hello-world-dung-x64-assembly.html">viết hello word bằng x86-64 assembly</a>, viết thì khó hơn đọc, bởi viết cần nghĩ đủ thứ, lên kế hoạch viết gì tiếp, đặt tên ra sao, còn đọc thì chỉ cần đi theo.</p>
+<p>PS: nên đọc trên máy tính hay tablet để có format chuẩn.</p>
+<h3>Cài đặt gcc gdb</h3>
+<p>Trên Ubuntu</p>
+<div class="highlight"><pre><span></span><code>sudo apt update &amp;&amp; sudo apt install -y gcc gdb
+</code></pre></div>
+
+<h3>Viết Hello World bằng C</h3>
+<p>Hơn "hello world" 1 chút, sẽ viết 1 function nhận vào 8 đầu vào và tính tổng.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">e</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">h</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">puts</span><span class="p">(</span><span class="s">&quot;Hello world!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Dòng include như import trong Python để C có thể gọi function <code>puts</code>. Còn lại, code trên tương đương code Python3 sau:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="n">f</span> <span class="o">+</span> <span class="n">g</span> <span class="o">+</span> <span class="n">h</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+    <span class="n">s</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">*</span><span class="mi">2</span>
+</code></pre></div>
+
+<h3>Dùng gcc Compile &amp; link code thành file binary</h3>
+<div class="highlight"><pre><span></span><code><span class="err">$</span><span class="w"> </span><span class="n">gcc</span><span class="w"> </span><span class="o">--</span><span class="n">help</span><span class="w"></span>
+<span class="k">Usage</span><span class="err">:</span><span class="w"> </span><span class="n">gcc</span><span class="w"> </span><span class="o">[</span><span class="n">options</span><span class="o">]</span><span class="w"> </span><span class="k">file</span><span class="p">...</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="w">  </span><span class="o">--</span><span class="n">help</span><span class="o">=</span><span class="err">{</span><span class="n">common</span><span class="w"></span>
+
+<span class="err">$</span><span class="w"> </span><span class="n">gcc</span><span class="w"> </span><span class="o">--</span><span class="n">help</span><span class="o">=</span><span class="n">common</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">grep</span><span class="w"> </span><span class="n">debug</span><span class="w"></span>
+<span class="w">  </span><span class="c1">--debug                     Same as -g.</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="err">$</span><span class="w"> </span><span class="n">gcc</span><span class="w"> </span><span class="o">-</span><span class="n">g</span><span class="w"> </span><span class="n">hello</span><span class="p">.</span><span class="n">c</span><span class="w"></span>
+<span class="err">$</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="k">out</span><span class="w"></span>
+<span class="n">a</span><span class="p">.</span><span class="k">out</span><span class="err">:</span><span class="w"> </span><span class="n">ELF</span><span class="w"> </span><span class="mi">64</span><span class="o">-</span><span class="nc">bit</span><span class="w"> </span><span class="n">LSB</span><span class="w"> </span><span class="n">pie</span><span class="w"> </span><span class="n">executable</span><span class="p">,</span><span class="w"> </span><span class="n">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="n">SYSV</span><span class="p">),</span><span class="w"> </span><span class="n">dynamically</span><span class="w"> </span><span class="n">linked</span><span class="p">,</span><span class="w"> </span><span class="n">interpreter</span><span class="w"> </span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">ld</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86</span><span class="o">-</span><span class="mf">64.</span><span class="n">so</span><span class="mf">.2</span><span class="p">,</span><span class="w"> </span><span class="n">BuildID</span><span class="o">[</span><span class="n">sha1</span><span class="o">]=</span><span class="mi">80</span><span class="n">dbc7d0bdab643730e858ec44e97fcd92dacb7b</span><span class="p">,</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">GNU</span><span class="o">/</span><span class="n">Linux</span><span class="w"> </span><span class="mf">4.4.0</span><span class="p">,</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">debug_info</span><span class="p">,</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">stripped</span><span class="w"></span>
+</code></pre></div>
+
+<p>Chạy code</p>
+<div class="highlight"><pre><span></span><code>$ ./a.out
+Hello world!
+$ <span class="nb">echo</span> <span class="nv">$?</span>
+<span class="m">72</span>
+</code></pre></div>
+
+<p>Vì main return <code>(1+2+3+4+5+6+7+8)*2</code> ta được kết quả 72.</p>
+<h3>Các lệnh gdb cơ bản</h3>
+<ul>
+<li><code>info</code> hiển thị các thông tin, gõ <code>info</code> sẽ hiện các lệnh con như <code>info functions</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nf">File</span><span class="w"> </span><span class="no">hello.c</span><span class="p">:</span><span class="w"></span>
+<span class="err">8:</span><span class="w">  </span><span class="nf">int</span><span class="w"> </span><span class="no">main</span><span class="p">()</span><span class="c1">;</span>
+<span class="err">3:</span><span class="w">  </span><span class="nf">int</span><span class="w"> </span><span class="no">sum</span><span class="p">(</span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="p">)</span><span class="c1">;</span>
+
+<span class="nf">Non-debugging</span><span class="w"> </span><span class="no">symbols</span><span class="p">:</span><span class="w"></span>
+<span class="err">0</span><span class="nf">x0000000000001000</span><span class="w">  </span><span class="no">_init</span><span class="w"></span>
+<span class="err">0</span><span class="nf">x0000000000001030</span><span class="w">  </span><span class="no">puts@plt</span><span class="w"></span>
+<span class="err">0</span><span class="nf">x0000000000001040</span><span class="w">  </span><span class="no">_start</span><span class="w"></span>
+<span class="err">0</span><span class="nf">x00000000000011dc</span><span class="w">  </span><span class="no">_fini</span><span class="w"></span>
+</code></pre></div>
+
+<ul>
+<li>Code assembly có 2 syntax, gdb mặc định là AT&amp;T <code>att</code> , hoặc phổ biến (cả trên Windows) là <code>intel</code>. Lệnh <code>set disassembly-flavor intel</code> để chọn intel syntax.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>(gdb) set disassembly-flavor intel
+</code></pre></div>
+
+<ul>
+<li><code>disas</code> hay <code>disassemble</code> in ra code assembly của function tương ứng.
+Gõ <code>help disas</code> để hiện thêm chi tiết các option</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="ss">(</span><span class="nv">gdb</span><span class="ss">)</span><span class="w"> </span><span class="nv">help</span><span class="w"> </span><span class="nv">disas</span><span class="w"></span>
+<span class="nv">With</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">/</span><span class="nv">s</span><span class="w"> </span><span class="nv">modifier</span>,<span class="w"> </span><span class="nv">source</span><span class="w"> </span><span class="nv">lines</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">included</span><span class="w"> </span><span class="ss">(</span><span class="k">if</span><span class="w"> </span><span class="nv">available</span><span class="ss">)</span>.<span class="w"></span>
+<span class="nv">In</span><span class="w"> </span><span class="nv">this</span><span class="w"> </span><span class="nv">mode</span>,<span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">output</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">displayed</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">PC</span><span class="w"> </span><span class="nv">address</span><span class="w"> </span><span class="nv">order</span>,<span class="w"> </span><span class="nv">and</span><span class="w"></span>
+<span class="nv">file</span><span class="w"> </span><span class="nv">names</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">contents</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">all</span><span class="w"> </span><span class="nv">relevant</span><span class="w"> </span><span class="nv">source</span><span class="w"> </span><span class="nv">files</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">displayed</span>.<span class="w"></span>
+...<span class="w"></span>
+</code></pre></div>
+
+<p>Gõ <code>help disas /s main</code> để hiện code C kèm asm:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">gdb</span><span class="p">)</span><span class="w"> </span><span class="n">disas</span><span class="w"> </span><span class="o">/</span><span class="n">s</span><span class="w"> </span><span class="n">main</span><span class="w"></span>
+<span class="k">Dump</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="nl">main</span><span class="p">:</span><span class="w"></span>
+<span class="n">hello</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="w"></span>
+<span class="mi">8</span><span class="w">   </span><span class="nc">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x000000000000118f</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">0</span><span class="o">&gt;</span><span class="err">:</span><span class="w"> </span><span class="n">push</span><span class="w">   </span><span class="n">rbp</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x0000000000001190</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">1</span><span class="o">&gt;</span><span class="err">:</span><span class="w"> </span><span class="n">mov</span><span class="w">    </span><span class="n">rbp</span><span class="p">,</span><span class="n">rsp</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x0000000000001193</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">4</span><span class="o">&gt;</span><span class="err">:</span><span class="w"> </span><span class="n">sub</span><span class="w">    </span><span class="n">rsp</span><span class="p">,</span><span class="mh">0x10</span><span class="w"></span>
+
+<span class="mi">9</span><span class="w">       </span><span class="n">puts</span><span class="p">(</span><span class="ss">&quot;Hello world!&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x0000000000001197</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">8</span><span class="o">&gt;</span><span class="err">:</span><span class="w"> </span><span class="n">lea</span><span class="w">    </span><span class="n">rax</span><span class="p">,</span><span class="o">[</span><span class="n">rip+0xe66</span><span class="o">]</span><span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="mh">0x2004</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x000000000000119e</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">15</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">rdi</span><span class="p">,</span><span class="n">rax</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011a1</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">18</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="k">call</span><span class="w">   </span><span class="mh">0x1030</span><span class="w"> </span><span class="o">&lt;</span><span class="n">puts</span><span class="nv">@plt</span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="mi">10</span><span class="w">      </span><span class="nc">int</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">);</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011a6</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">23</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">push</span><span class="w">   </span><span class="mh">0x8</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011a8</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">25</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">push</span><span class="w">   </span><span class="mh">0x7</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011aa</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">27</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">r9d</span><span class="p">,</span><span class="mh">0x6</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011b0</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">33</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">r8d</span><span class="p">,</span><span class="mh">0x5</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011b6</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">39</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">ecx</span><span class="p">,</span><span class="mh">0x4</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011bb</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">44</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edx</span><span class="p">,</span><span class="mh">0x3</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011c0</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">49</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">esi</span><span class="p">,</span><span class="mh">0x2</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011c5</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">54</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">edi</span><span class="p">,</span><span class="mh">0x1</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011ca</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">59</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="k">call</span><span class="w">   </span><span class="mh">0x1139</span><span class="w"> </span><span class="o">&lt;</span><span class="nf">sum</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011cf</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">64</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="k">add</span><span class="w">    </span><span class="n">rsp</span><span class="p">,</span><span class="mh">0x10</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011d3</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">68</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="o">[</span><span class="n">rbp-0x4</span><span class="o">]</span><span class="p">,</span><span class="n">eax</span><span class="w"></span>
+
+<span class="mi">11</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011d6</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">71</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">mov</span><span class="w">    </span><span class="n">eax</span><span class="p">,</span><span class="n">DWORD</span><span class="w"> </span><span class="n">PTR</span><span class="w"> </span><span class="o">[</span><span class="n">rbp-0x4</span><span class="o">]</span><span class="w"></span>
+
+<span class="mi">12</span><span class="w">  </span><span class="err">}</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011d9</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">74</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">leave</span><span class="w"></span>
+<span class="w">   </span><span class="mh">0x00000000000011da</span><span class="w"> </span><span class="o">&lt;+</span><span class="mi">75</span><span class="o">&gt;</span><span class="err">:</span><span class="w">    </span><span class="n">ret</span><span class="w"></span>
+<span class="k">End</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">assembler</span><span class="w"> </span><span class="k">dump</span><span class="p">.</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Giải thích code assembly trong hello world</h3>
+<p>Code assembly tuy dài nhưng đơn giản, chỉ dùng vài
+instruction (câu lệnh) như:</p>
+<ul>
+<li>mov</li>
+<li>call</li>
+<li>lea</li>
+<li>push</li>
+<li>add</li>
+<li>sub</li>
+<li>leave</li>
+<li>ret</li>
+</ul>
+<h4>Các register trong assembly x86-64</h4>
+<p>asm x86-64 có 16 register (thanh ghi) thường dùng sau</p>
+<ul>
+<li>rbp: stack-frame base pointer</li>
+<li>rsp: (top of) stack pointer</li>
+<li>rax: accumulator - thường chứa kết quả của các phép tính</li>
+<li>rbx</li>
+<li>rcx</li>
+<li>rdx</li>
+<li>rdi</li>
+<li>rsi</li>
+</ul>
+<p>và các register chỉ có trong x86-64 (64 bits), không có trong x86 (32 bits):</p>
+<ul>
+<li>r8d</li>
+<li>r9d</li>
+<li>...</li>
+<li>r15d</li>
+</ul>
+<p>chúng như các "biến" với tên cố định trên CPU để chứa các giá trị.</p>
+<ul>
+<li>rip: instruction pointer là register đặc biệt, trỏ tới instruction tiếp theo được chạy.</li>
+</ul>
+<p>Các register đều có kích thước 64 bits, ở dạng 32 bits, tên của chúng thay chữ <code>r</code> bằng chữ <code>e</code>: eip, esp, ebp, eax, ebx, ecx, edx, edi, esi.</p>
+<h4>rbp - base pointer register và stack</h4>
+<div class="highlight"><pre><span></span><code><span class="mf">8</span><span class="w">   </span><span class="nb">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">   </span><span class="mf">0</span><span class="n">x000000000000118f</span><span class="w"> </span><span class="o">&lt;+</span><span class="mf">0</span><span class="o">&gt;</span><span class="p">:</span><span class="w"> </span><span class="n">push</span><span class="w">   </span><span class="n">rbp</span><span class="w"></span>
+<span class="w">   </span><span class="mf">0</span><span class="n">x0000000000001190</span><span class="w"> </span><span class="o">&lt;+</span><span class="mf">1</span><span class="o">&gt;</span><span class="p">:</span><span class="w"> </span><span class="n">mov</span><span class="w">    </span><span class="n">rbp</span><span class="p">,</span><span class="n">rsp</span><span class="w"></span>
+<span class="w">   </span><span class="mf">0</span><span class="n">x0000000000001193</span><span class="w"> </span><span class="o">&lt;+</span><span class="mf">4</span><span class="o">&gt;</span><span class="p">:</span><span class="w"> </span><span class="n">sub</span><span class="w">    </span><span class="n">rsp</span><span class="p">,</span><span class="mf">0</span><span class="n">x10</span><span class="w"></span>
+</code></pre></div>
+
+<p>Khi vào 1 function, dòng đầu tiên luôn là <code>push rbp</code> để lưu giá trị hiện tại của <code>rbp</code> vào stack.
+Stack là 1 vùng bộ nhớ liên tục, thường được chia thành các frames.
+Mỗi function khi chạy có 1 stack-frame để lưu các thông tin của function đang chạy (biến local, parameter để gọi function khác ...). Stack giống như chồng sách, xếp vào trước sẽ ở dưới, lấy ra sau cùng.
+<code>rbp</code> khi ở địa chỉ 0x00118f chứa "base pointer" của function <code>_start</code>, function gọi <code>main</code> (lập trình viên C phải viết chương trình chạy từ <code>main</code> vì <code>_start</code> chỉ gọi <code>main</code>).
+<code>rbp</code> sẽ được dùng trong main để lưu "base pointer" của <code>main</code>, nên sẽ đè mất <code>rbp</code> của <code>_start</code>, do vậy phải push <code>rbp</code> vào stack. Tương ứng với nó, cuối function sẽ có instruction <code>leave</code>, thực chất là <code>pop</code> stack để lấy ra <code>rbp</code> đã lưu.</p>
+<div class="highlight"><pre><span></span><code><span class="mf">12</span><span class="w">  </span><span class="err">}</span><span class="w"></span>
+<span class="w">   </span><span class="mf">0</span><span class="n">x00000000000011db</span><span class="w"> </span><span class="o">&lt;+</span><span class="mf">76</span><span class="o">&gt;</span><span class="p">:</span><span class="w">    </span><span class="n">leave</span><span class="w"></span>
+<span class="w">   </span><span class="mf">0</span><span class="n">x00000000000011dc</span><span class="w"> </span><span class="o">&lt;+</span><span class="mf">77</span><span class="o">&gt;</span><span class="p">:</span><span class="w">    </span><span class="n">ret</span><span class="w"></span>
+</code></pre></div>
+
+<h4>Cú pháp asm instruction</h4>
+<p>Hầu hết ở 1 trong các dạng</p>
+<div class="highlight"><pre><span></span><code><span class="n">instruction</span><span class="w"></span>
+<span class="n">instruction</span><span class="w"> </span><span class="n">register</span><span class="w"></span>
+<span class="n">instruction</span><span class="w"> </span><span class="n">register</span><span class="w"> </span><span class="k">value</span><span class="w"></span>
+<span class="n">instruction</span><span class="w"> </span><span class="n">register</span><span class="w"> </span><span class="o">[</span><span class="n">memory</span><span class="o">]</span><span class="w"></span>
+</code></pre></div>
+
+<p>Hai dòng tiếp theo khi bắt đầu main</p>
+<div class="highlight"><pre><span></span><code><span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001190</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">1</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">mov</span><span class="w">    </span><span class="no">rbp</span><span class="p">,</span><span class="no">rsp</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001193</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">4</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">sub</span><span class="w">    </span><span class="no">rsp</span><span class="p">,</span><span class="mi">0x10</span><span class="w"></span>
+</code></pre></div>
+
+<p><code>mov</code> thực hiện lấy giá trị của <code>rsp</code> ghi vào <code>rbp</code>, hay dễ hiểu hơn, như viết <code>rbp = rsp</code> trong C, Python. sub trừ địa chỉ rsp đi 0x10 hay 16 đơn vị.</p>
+<h4>Hiển thị hello world!</h4>
+<div class="highlight"><pre><span></span><code><span class="err">9</span><span class="w">       </span><span class="nf">puts</span><span class="p">(</span><span class="err">&quot;</span><span class="no">Hello</span><span class="w"> </span><span class="no">world</span><span class="p">!</span><span class="err">&quot;</span><span class="p">)</span><span class="c1">;</span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001197</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">8</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">lea</span><span class="w">    </span><span class="no">rax</span><span class="p">,[</span><span class="no">rip</span><span class="err">+</span><span class="mi">0xe66</span><span class="p">]</span><span class="w">        </span><span class="c1"># 0x2004</span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000119e</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">15</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">rdi</span><span class="p">,</span><span class="no">rax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011a1</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">18</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">call</span><span class="w">   </span><span class="mh">0x1030</span> <span class="p">&lt;</span><span class="no">puts@plt</span><span class="p">&gt;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Gồm 3 bước:</p>
+<ul>
+<li>tính vị tri của string "Hello world!" trong file binary.  <code>lea</code> Load effective address tính địa chỉ rồi gán cho rax: <code>rax = rip + 0xe66</code>, ở đây tính địa chỉ, không đọc nội dung.</li>
+<li>gán <code>rdi</code> cho giá trị này <code>rdi = rax</code></li>
+<li><code>call</code> gọi function ở vị trí <code>0x1030</code>, tức function <code>puts</code> với 1 argument được chứa trong <code>rdi</code>. Và bắt buộc phải là <code>rdi</code>, lý do bởi "call convention".</li>
+</ul>
+<h4>Call convention</h4>
+<p>Định nghĩa trong <a href="https://gitlab.com/x86-psABIs/x86-64-ABI/-/jobs/artifacts/master/raw/x86-64-ABI/abi.pdf?job=build">System V AMD64 ABI</a>, mục 3.2.3 Parameter passing:</p>
+<blockquote>
+<ol>
+<li>If the class is INTEGER, the next available register of the sequence %rdi, %rsi, %rdx, %rcx, %r8 and %r9 is used</li>
+</ol>
+</blockquote>
+<ul>
+<li>Lần lượt, rsi, rdi, rdx, rcx, r8, r9 chứa các argument 1-6</li>
+<li>argument thứ 7 trở đi được push vào stack. Đây là lý do các function C thường không dùng hơn 6 argument để tối ưu tốc độ, các register luôn nhanh hơn push vào stack.</li>
+<li>thứ tự các câu lệnh gán argument thực hiện từ phải qua trái (từ 8 đến 1): push 8, push 7, r9d=6, r8d=5, ecx=4, edx=3, esi=2, edi=1. GCC đã thực hiện tối ưu, nó phát hiện giá trị đủ nhỏ để chứa trong 32bits nên dùng ecx chứ không dùng rcx.</li>
+<li>gọi call 0x1139, 0x1139 là địa chỉ của function sum.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="err">10</span><span class="w">      </span><span class="nf">int</span><span class="w"> </span><span class="no">s</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span><span class="c1">;</span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011a6</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">23</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">push</span><span class="w">   </span><span class="mi">0x8</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011a8</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">25</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">push</span><span class="w">   </span><span class="mi">0x7</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011aa</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">27</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">r9d</span><span class="p">,</span><span class="mi">0x6</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011b0</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">33</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">r8d</span><span class="p">,</span><span class="mi">0x5</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011b6</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">39</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">ecx</span><span class="p">,</span><span class="mi">0x4</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011bb</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">44</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="mi">0x3</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011c0</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">49</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">esi</span><span class="p">,</span><span class="mi">0x2</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011c5</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">54</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">edi</span><span class="p">,</span><span class="mi">0x1</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011ca</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">59</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">call</span><span class="w">   </span><span class="mh">0x1139</span> <span class="p">&lt;</span><span class="no">sum</span><span class="p">&gt;</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011cf</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">64</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">rsp</span><span class="p">,</span><span class="mi">0x10</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011d3</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">68</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x4</span><span class="p">],</span><span class="no">eax</span><span class="w"></span>
+</code></pre></div>
+
+<ul>
+<li>kết quả của function sum tự được chứa trong register eax. <code>mov</code> gán giá trị return của sum vào địa chỉ rbp-0x4.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="err">11</span><span class="w">      </span><span class="nf">return</span><span class="w"> </span><span class="no">s</span><span class="p">*</span><span class="mi">2</span><span class="c1">;</span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011d6</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">71</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x4</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x00000000000011d9</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">74</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+</code></pre></div>
+
+<p>giá trị được gán vào eax rồi thực hiện <code>*2</code> bằng cách cộng eax với eax qua <code>add eax,eax</code>. Kết quả của phép tính này tự được chứa trong eax, là giá trị main trả về. Chú ý, ở đây do GCC thực hiện tối ưu, nên thay phép nhân bằng phép cộng 2 số.</p>
+<h4>Các kiểu dữ liệu trong assembly - data type</h4>
+<p>Chapter 4.1 vol 1 Intel SDM viết:</p>
+<blockquote>
+<p>A byte is eight bits, a word is 2 bytes (16 bits), a doubleword is 4 bytes (32 bits), a quadword is 8 bytes (64 bits), and a double quadword is 16 bytes (128 bits).</p>
+</blockquote>
+<p>doubleword trong asm được ký hiệu là DWORD, quadword ký hiệu là QWORD.</p>
+<h3>Đọc assembly function sum</h3>
+<div class="highlight"><pre><span></span><code><span class="err">(</span><span class="nf">gdb</span><span class="p">)</span><span class="w"> </span><span class="no">disas</span><span class="w"> </span><span class="err">/</span><span class="no">s</span><span class="w"> </span><span class="no">sum</span><span class="w"></span>
+<span class="nf">Dump</span><span class="w"> </span><span class="no">of</span><span class="w"> </span><span class="no">assembler</span><span class="w"> </span><span class="no">code</span><span class="w"> </span><span class="no">for</span><span class="w"> </span><span class="no">function</span><span class="w"> </span><span class="no">sum</span><span class="p">:</span><span class="w"></span>
+<span class="nl">hello.c:</span><span class="w"></span>
+<span class="err">3</span><span class="w">   </span><span class="nf">int</span><span class="w"> </span><span class="no">sum</span><span class="p">(</span><span class="no">int</span><span class="w"> </span><span class="no">a</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">b</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">c</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">d</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">e</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">f</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">g</span><span class="p">,</span><span class="w"> </span><span class="no">int</span><span class="w"> </span><span class="no">h</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001139</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">0</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">push</span><span class="w">   </span><span class="no">rbp</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000113a</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">1</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">mov</span><span class="w">    </span><span class="no">rbp</span><span class="p">,</span><span class="no">rsp</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000113d</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">4</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x14</span><span class="p">],</span><span class="no">edi</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001140</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">7</span><span class="err">&gt;</span><span class="p">:</span><span class="w"> </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x18</span><span class="p">],</span><span class="no">esi</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001143</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">10</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x1c</span><span class="p">],</span><span class="no">edx</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001146</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">13</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x20</span><span class="p">],</span><span class="no">ecx</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001149</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">16</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x24</span><span class="p">],</span><span class="no">r8d</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000114d</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">20</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x28</span><span class="p">],</span><span class="no">r9d</span><span class="w"></span>
+</code></pre></div>
+
+<p>gán lần lượt trái qua phải (1-6) các register cho các địa chỉ dưới (nhỏ hơn) rbp. Chú ý chỉ là 6, 2 phần tử 7 8 trong stack chưa được xử lý.</p>
+<div class="highlight"><pre><span></span><code><span class="err">4</span><span class="w">       </span><span class="nf">int</span><span class="w"> </span><span class="no">s</span><span class="w"> </span><span class="err">=</span><span class="w"> </span><span class="no">a</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">b</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">c</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">d</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">e</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">f</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">g</span><span class="w"> </span><span class="err">+</span><span class="w"> </span><span class="no">h</span><span class="c1">;</span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001151</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">24</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x14</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001154</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">27</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x18</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001157</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">30</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001159</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">32</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x1c</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000115c</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">35</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000115e</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">37</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x20</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001161</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">40</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001163</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">42</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x24</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001166</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">45</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001168</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">47</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x28</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000116b</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">50</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000116d</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">52</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp</span><span class="err">+</span><span class="mi">0x10</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001170</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">55</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">edx</span><span class="p">,</span><span class="no">eax</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001172</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">57</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp</span><span class="err">+</span><span class="mi">0x18</span><span class="p">]</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001175</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">60</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">add</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">edx</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x0000000000001177</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">62</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x4</span><span class="p">],</span><span class="no">eax</span><span class="w"></span>
+
+<span class="err">5</span><span class="w">       </span><span class="nf">return</span><span class="w"> </span><span class="no">s</span><span class="c1">;</span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000117a</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">65</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">mov</span><span class="w">    </span><span class="no">eax</span><span class="p">,</span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rbp-0x4</span><span class="p">]</span><span class="w"></span>
+
+<span class="err">6</span><span class="w">   </span><span class="err">}</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000117d</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">68</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">pop</span><span class="w">    </span><span class="no">rbp</span><span class="w"></span>
+<span class="w">   </span><span class="err">0</span><span class="nf">x000000000000117e</span><span class="w"> </span><span class="err">&lt;+</span><span class="mi">69</span><span class="err">&gt;</span><span class="p">:</span><span class="w">    </span><span class="no">ret</span><span class="w"></span>
+</code></pre></div>
+
+<p>Thực hiện cộng rồi trả về kết quả. Truy cập argument 7 8 qua địa chỉ trên (lớn hơn) rbp: rbp+0x10 và rbp+0x18.</p>
+<p>Thực hiện trên</p>
+<div class="highlight"><pre><span></span><code>$ gcc --version
+gcc <span class="o">(</span>GCC<span class="o">)</span> <span class="m">13</span>.1.1 <span class="m">20230429</span>
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2023</span> Free Software Foundation, Inc.
+This is free software<span class="p">;</span> see the <span class="nb">source</span> <span class="k">for</span> copying conditions.  There is NO
+warranty<span class="p">;</span> not even <span class="k">for</span> MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ gdb --version
+GNU gdb <span class="o">(</span>GDB<span class="o">)</span> <span class="m">13</span>.1
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2023</span> Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+$ uname -a
+Linux zb <span class="m">6</span>.1.38-1-MANJARO <span class="c1">#1 SMP PREEMPT_DYNAMIC Wed Jul  5 23:49:30 UTC 2023 x86_64 GNU/Linux</span>
+</code></pre></div>
+
+<h2>Tham khảo</h2>
+<ul>
+<li><a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel SDM</a></li>
+<li><a href="https://gitlab.com/x86-psABIs/x86-64-ABI/-/jobs/artifacts/master/raw/x86-64-ABI/abi.pdf?job=build">System V AMD64 ABI</a></li>
+<li><a href="https://www.timdbg.com/posts/fakers-guide-to-assembly/">https://www.timdbg.com/posts/fakers-guide-to-assembly/</a></li>
+</ul>
+<h2>Kết luận</h2>
+<p>Assembly đơn giản, dễ đọc, khó viết.</p>
+<p>Phần sau sẽ chạy qua từng dòng code với gdb để xem khi chạy các giá trị được lưu trữ và tính toán thế nào.</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-07-28T00:00:00+07:00">Fri 28 July 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#asm-ref">asm
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#assembly-ref">assembly
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#gcc-ref">gcc
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#gdb-ref">gdb
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#x86-64-ref">x86-64
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

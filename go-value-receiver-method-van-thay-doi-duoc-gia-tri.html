@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="go, golang, bashgodaily, pitfall, map, frontpage, " />
+
+<meta property="og:title" content="Go value receiver method vẫn thay đổi được giá trị?! "/>
+<meta property="og:url" content="./go-value-receiver-method-van-thay-doi-duoc-gia-tri.html" />
+<meta property="og:description" content="Bài viết đầu tiên của nhiều bài viết sẽ bán than về &#34;Go&#34; - ngôn ngữ lập trình non trẻ (since 2010) nhưng khá hot trên toàn cầu. Go is simple Go thường được nhìn nhận là &#34;đơn giản&#34;, không phủ nhận việc làm xong gotour https://go.dev/tour/ khiến …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2023-01-27T00:00:00+07:00" />
+<meta name="twitter:title" content="Go value receiver method vẫn thay đổi được giá trị?! ">
+<meta name="twitter:description" content="Bài viết đầu tiên của nhiều bài viết sẽ bán than về &#34;Go&#34; - ngôn ngữ lập trình non trẻ (since 2010) nhưng khá hot trên toàn cầu. Go is simple Go thường được nhìn nhận là &#34;đơn giản&#34;, không phủ nhận việc làm xong gotour https://go.dev/tour/ khiến …">
+
+        <title>Go value receiver method vẫn thay đổi được giá trị?!  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./go-value-receiver-method-van-thay-doi-duoc-gia-tri.html">
+                Go value receiver method vẫn thay đổi được giá trị?!
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Bài viết đầu tiên của nhiều bài viết sẽ bán than về "Go" - ngôn ngữ lập trình
+non trẻ (since 2010) nhưng khá hot trên toàn cầu.</p>
+<h3>Go is simple</h3>
+<p>Go thường được nhìn nhận là "đơn giản", không phủ nhận việc làm xong gotour <a href="https://go.dev/tour/">https://go.dev/tour/</a> khiến người học có thể bắt đầu viết code go, sau 1 tháng có thể tham gia code production (và viết bug).</p>
+<p>Có hẳn cuốn sách giá cả triệu đồng bán rất chạy về những mistake khi dùng
+ngôn ngữ đơn giản này <a href="https://www.manning.com/books/100-go-mistakes-and-how-to-avoid-them">100 Go Mistakes and How to Avoid
+Them</a>.</p>
+<p>Không dùng thì thôi, sao phải chê, thích chiến à?</p>
+<p>Có một sự thật đi làm khá lâu mới nhận ra, rằng 99.99% <strong>BẠN</strong> không phải người quyết định công ty/dự án dùng cái gì. Những người/thứ quyết định sẽ là:</p>
+<ul>
+<li>công nghệ có sẵn của công ty</li>
+<li>công nghệ quen thuộc của team</li>
+<li>bên trên chỉ xuống (CTO/architect...)</li>
+<li>khách hàng yêu cầu</li>
+</ul>
+<p>vậy nên thích hay không vẫn phải dùng. Mà dùng không sướng thì phê bình thôi.
+<img alt="map bug" src="./images/go_map_bug.webp"></p>
+<h3>Go pointer receiver vs value receiver</h3>
+<p>Go receiver có 2 loại là pointer và value.</p>
+<p>Trích từ Go tour <a href="https://go.dev/tour/methods/4">https://go.dev/tour/methods/4</a></p>
+<blockquote>
+<p>Methods with pointer receivers can modify the value to which the receiver points (as Scale does here). Since methods often need to modify their receiver, pointer receivers are more common than value receivers.</p>
+</blockquote>
+<p>và <a href="https://go.dev/tour/methods/8">Choosing a value or pointer receiver</a></p>
+<blockquote>
+<p>There are two reasons to use a pointer receiver.
+The first is so that the method can modify the value that its receiver points to.
+The second is to avoid copying the value on each method call. This can be more efficient if the receiver is a large struct, for example.</p>
+</blockquote>
+<p>Theo hướng dẫn này, người học Go sẽ hiểu rằng khi viết</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="nx">name</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>thì có thể thay đổi t</p>
+<p>và</p>
+<div class="highlight"><pre><span></span><code><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="nx">name</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>thì không thể thay đổi t.</p>
+<p>Ngoài ra, trong Go tour không còn chỗ nào ghi thêm gì nữa.</p>
+<p>Thử ví dụ sau, đừng ôm đầu kêu đau:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">toy</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">names</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ages</span><span class="w">  </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">toy</span><span class="p">)</span><span class="w"> </span><span class="nx">change</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t</span><span class="p">.</span><span class="nx">names</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">names</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;python&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t</span><span class="p">.</span><span class="nx">ages</span><span class="p">[</span><span class="s">&quot;python&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">32</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="nx">toy</span><span class="p">)</span><span class="w"> </span><span class="nx">mayNotChange</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t</span><span class="p">.</span><span class="nx">names</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">names</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;python&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t</span><span class="p">.</span><span class="nx">ages</span><span class="p">[</span><span class="s">&quot;python&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">32</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">toy</span><span class="p">{</span><span class="nx">ages</span><span class="p">:</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="s">&quot;golang&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">}}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">t</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t</span><span class="p">.</span><span class="nx">change</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">t</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">toy</span><span class="p">{</span><span class="nx">ages</span><span class="p">:</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="s">&quot;golang&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">}}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">t2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="nx">t2</span><span class="p">.</span><span class="nx">mayNotChange</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">t2</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>chạy online trên <a href="https://go.dev/play/p/N781b6vT-GF">https://go.dev/play/p/N781b6vT-GF</a></p>
+<p>Theo tài liệu Go tour, change nhận 1 pointer receiver nên sẽ thay đổi toy t và kết quả không có gì bất ngờ khi map giờ chứa thêm python 32.</p>
+<p>Nhưng trong mayNotChange, trong khi slice t.names không đổi thì map t.ages vẫn bị thay đổi dù cho đã dùng value receiver.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{[]</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="nx">golang</span><span class="p">:</span><span class="mi">12</span><span class="p">]}</span><span class="w"></span>
+<span class="p">{[</span><span class="nx">python</span><span class="p">]</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="nx">golang</span><span class="p">:</span><span class="mi">12</span><span class="w"> </span><span class="nx">python</span><span class="p">:</span><span class="mi">32</span><span class="p">]}</span><span class="w"></span>
+<span class="o">====================================</span><span class="w"></span>
+<span class="p">{[]</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="nx">golang</span><span class="p">:</span><span class="mi">12</span><span class="p">]}</span><span class="w"></span>
+<span class="p">{[]</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="nx">golang</span><span class="p">:</span><span class="mi">12</span><span class="w"> </span><span class="nx">python</span><span class="p">:</span><span class="mi">32</span><span class="p">]}</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Golang map là reference</h3>
+<p>Trong <a href="https://go.dev/doc/effective_go#maps">Effective Go</a> có viết</p>
+<blockquote>
+<p>Like slices, maps hold references to an underlying data structure. If you pass a map to a function that changes the contents of the map, the changes will be visible in the caller.</p>
+</blockquote>
+<p>map refers tới cấu trúc dữ liệu bên dưới, thay đổi map sẽ thay đổi cấu trúc dữ liệu đó, còn bản thân map là 1 reference, không thay đổi, đúng như value receiver cam kết.</p>
+<p>Bài tập cho bạn đọc: slice cũng là reference, sao map thay đổi còn slice thì không khi dùng value receiver? (đáp án xem cuối bài)</p>
+<p>Thêm 1 ít tài liệu về 3 kiểu references: slice, map, channel <a href="https://go.dev/doc/effective_go#allocation_make">https://go.dev/doc/effective_go#allocation_make</a></p>
+<blockquote>
+<p>Back to allocation. The built-in function make(T, args) serves a purpose different from new(T). It creates slices, maps, and channels only, and it returns an initialized (not zeroed) value of type T (not *T). The reason for the distinction is that these three types represent, under the covers, references to data structures that must be initialized before use.</p>
+</blockquote>
+<h3>Kết luận</h3>
+<p>Golang map là kiểu reference, có thể thay đổi giá trị nó refer tới bên trong 1 value receiver method.</p>
+<p>Go thật đơn giản, ha!</p>
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+<p>Đáp án: t.names = append(t.names, "python") sẽ gán giá trị mới cho t.names, do dùng value receiver nên không thấy thay đổi gì.
+Nếu thay đổi phần tử của slice, ví dụ t.names[0] = "Python" thì kết quả có thay đổi.
+Tương tự, nếu viết t.ages = map[string]int{} sẽ thấy map ages không thay đổi. Xem code tại <a href="https://go.dev/play/p/yCn-mKVpPSo">https://go.dev/play/p/yCn-mKVpPSo</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2023-01-27T00:00:00+07:00">Fri 27 January 2023</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#bashgodaily-ref">bashgodaily
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#golang-ref">golang
+                    <span class="superscript">6</span>
+</a></li>
+                <li><a href="./tags.html#map-ref">map
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#pitfall-ref">pitfall
+                    <span class="superscript">5</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

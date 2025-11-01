@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="linux, hash, passwd, shadow, mkpasswd, sha512, crypt, python, rust, frontpage, " />
+
+<meta property="og:title" content="Tìm hiểu password hashing trong /etc/shadow trên Linux "/>
+<meta property="og:url" content="./shadow-hash-sha-512-crypt.html" />
+<meta property="og:description" content="Các hệ điều hành Linux sử dụng file /etc/passwd để chứa thông tin các user của hệ thống và /etc/shadow để chứa thông tin về password tương ứng của các user này. Mọi tài khoản đều có thể xem /etc/passwd, nhưng file /etc/shadow được bảo mật …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-07-25T00:00:00+07:00" />
+<meta name="twitter:title" content="Tìm hiểu password hashing trong /etc/shadow trên Linux ">
+<meta name="twitter:description" content="Các hệ điều hành Linux sử dụng file /etc/passwd để chứa thông tin các user của hệ thống và /etc/shadow để chứa thông tin về password tương ứng của các user này. Mọi tài khoản đều có thể xem /etc/passwd, nhưng file /etc/shadow được bảo mật …">
+
+        <title>Tìm hiểu password hashing trong /etc/shadow trên Linux  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./shadow-hash-sha-512-crypt.html">
+                Tìm hiểu password hashing trong /etc/shadow trên Linux
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Các hệ điều hành Linux sử dụng file <code>/etc/passwd</code> để chứa thông tin các user của hệ thống và <code>/etc/shadow</code> để chứa thông tin về password tương ứng của các user này.</p>
+<p>Mọi tài khoản đều có thể xem <code>/etc/passwd</code>, nhưng file <code>/etc/shadow</code> được bảo mật, chỉ có root và các user trong group shadow mới xem được:</p>
+<div class="highlight"><pre><span></span><code># ls -l /etc/passwd /etc/shadow
+-rw-r--r-- 1 root root   3443 Jul 25 21:02 /etc/passwd
+-rw-r----- 1 root shadow 1855 Jul 25 20:52 /etc/shadow
+</code></pre></div>
+
+<p>Admin không chỉnh sửa trực tiếp nội dung file <code>/etc/shadow</code> mà dùng các công cụ quản lý user trên hệ thống như <code>useradd</code>, <code>usermod</code>, <code>passwd</code>.</p>
+<p>Ví dụ nội dung <code>/etc/passwd</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">0</span><span class="o">:</span><span class="mi">0</span><span class="o">:</span><span class="n">root</span><span class="o">:/</span><span class="n">root</span><span class="o">:/</span><span class="n">bin</span><span class="o">/</span><span class="n">bash</span><span class="w"></span>
+<span class="n">bin</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="n">bin</span><span class="o">:/</span><span class="n">bin</span><span class="o">:/</span><span class="n">sbin</span><span class="o">/</span><span class="n">nologin</span><span class="w"></span>
+<span class="n">daemon</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="n">daemon</span><span class="o">:/</span><span class="n">sbin</span><span class="o">:/</span><span class="n">sbin</span><span class="o">/</span><span class="n">nologin</span><span class="w"></span>
+<span class="n">ftp</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">14</span><span class="o">:</span><span class="mi">50</span><span class="o">:</span><span class="n">FTP</span><span class="w"> </span><span class="n">User</span><span class="o">:/</span><span class="n">var</span><span class="sr">/ftp:/sbin/</span><span class="n">nologin</span><span class="w"></span>
+<span class="n">nobody</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="mi">65534</span><span class="o">:</span><span class="n">Kernel</span><span class="w"> </span><span class="n">Overflow</span><span class="w"> </span><span class="n">User</span><span class="o">:/:/</span><span class="n">sbin</span><span class="o">/</span><span class="n">nologin</span><span class="w"></span>
+<span class="n">pika</span><span class="o">:</span><span class="n">x</span><span class="o">:</span><span class="mi">1000</span><span class="o">:</span><span class="mi">1000</span><span class="o">::/</span><span class="n">home</span><span class="sr">/pika:/bin/</span><span class="n">bash</span><span class="w"></span>
+</code></pre></div>
+
+<p>Mỗi dòng trong <code>/etc/passwd</code> chứa <code>login-name:x:uid:gid:username-or-comment:home:shell</code>.</p>
+<div class="highlight"><pre><span></span><code># cat /etc/shadow
+root:$6$rounds=100000$iA2WWPgA5yY1mjXj$dHNFwg4Nh5j30Sq6vC/O74wBuuJGdt23pgU3eV//M9wOF1RcqF3lAc/HZ9rpgqcRawFjw0fiMMAqO9SADvSdo0:20294:0:99999:7:::
+bin:*:19816:0:99999:7:::
+daemon:*:19816:0:99999:7:::
+ftp:*:19816:0:99999:7:::
+nobody:*:19816:0:99999:7:::
+pika:$6$rounds=100000$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0:20294:0:99999:7:::
+</code></pre></div>
+
+<p>Mỗi dòng của <code>/etc/shadow</code> chứa 9 thông tin:</p>
+<ul>
+<li>login name</li>
+<li>password đã được mã hóa, hoặc có thể là dấu <code>!</code> hay <code>*</code>, thể hiện rằng user không thể đăng nhập hệ thống bằng password.</li>
+<li>lần cuối thay đổi password, tính theo số ngày từ 1/1/1970.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import datetime</span>
+<span class="nb">print</span><span class="p">((</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">days</span><span class="p">)</span><span class="s1">&#39;</span>
+<span class="c1"># 20294</span>
+</code></pre></div>
+
+<ul>
+<li>...  xem chi tiết tại <code>man 5 shadow</code>.</li>
+</ul>
+<h3>Đọc chi tiết password đã được mã hóa</h3>
+<p>Sử dụng dấu <code>$</code> để phân cách các phần:</p>
+<div class="highlight"><pre><span></span><code>$6$rounds=100000$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0
+</code></pre></div>
+
+<ul>
+<li><code>$6$</code> là <strong>prefix</strong>, cho biết đây là kết quả của việc sử dụng hashing method <strong>sha512crypt</strong>. Ví dụ trên dùng <code>AlmaLinux 9.6</code> mặc định sử dụng <strong>sha512crypt</strong>, trong khi các OS phiên bản mới hơn như Fedora 35, Debian 12 (bookworm) đã chuyển qua mặc định dùng <strong>yescrypt</strong>, một hashing method có khả năng chống crack tốt hơn. Các prefix thường thấy và hashing method tương ứng:<ul>
+<li><code>$y$</code>: <strong>yescrypt</strong></li>
+<li><code>$7$</code>: <strong>scrypt</strong></li>
+<li><code>$2$</code>: <strong>bcrypt</strong></li>
+</ul>
+</li>
+<li><code>rounds=100000</code>: số vòng lặp khi tính hash, ở đây là <code>100000</code>, giá trị càng lớn, tính hash càng lâu. Đây là một trong các biện pháp chống hacker bruteforce password.</li>
+<li><code>wYEmXgSx4U3GBF0i</code>: giá trị salt. Salt trong crypto là giá trị (thường là ngẫu nhiên) được nối thêm vào password trước khi tính hash, nhằm chống lại việc bruteforce password sử dụng bảng hash tính sẵn (rainbow table). Khi sử dụng salt khác nhau, 2 password giống nhau cho ra 2 mã hash khác nhau. User <code>root</code> và <code>pika</code> đều dùng chung password, nhưng do salt khác nhau nên hash khác nhau.</li>
+<li>Phần còn lại: giá trị hash <code>AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0</code> biểu diễn ở dạng biến thể của base64 , không chứa dấu <code>+=</code> như base64 thông thường, còn gọi là <code>B64</code> (từ khóa: <code>crypt b64</code>).</li>
+</ul>
+<p>Function <code>crypt</code> dùng để đọc viết các giá trị nói trên. Chi tiết xem <code>man 5 crypt</code> và <code>man 3 crypt</code>:</p>
+<div class="highlight"><pre><span></span><code>#<span class="w"> </span><span class="nv">whatis</span><span class="w"> </span><span class="nv">crypt</span><span class="w"></span>
+<span class="nv">crypt</span><span class="w"> </span><span class="ss">(</span><span class="mi">5</span><span class="ss">)</span><span class="w">            </span><span class="o">-</span><span class="w"> </span><span class="nv">storage</span><span class="w"> </span><span class="nv">format</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">hashed</span><span class="w"> </span><span class="nv">passphrases</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">available</span><span class="w"> </span><span class="nv">hashing</span><span class="w"> </span><span class="nv">methods</span><span class="w"></span>
+<span class="nv">crypt</span><span class="w"> </span><span class="ss">(</span><span class="mi">3</span><span class="ss">)</span><span class="w">            </span><span class="o">-</span><span class="w"> </span><span class="nv">passphrase</span><span class="w"> </span><span class="nv">hashing</span><span class="w"></span>
+<span class="nv">crypt</span><span class="w"> </span><span class="ss">(</span><span class="mi">3</span><span class="nv">posix</span><span class="ss">)</span><span class="w">       </span><span class="o">-</span><span class="w"> </span><span class="nv">string</span><span class="w"> </span><span class="nv">encoding</span><span class="w"> </span><span class="nv">function</span><span class="w"> </span><span class="ss">(</span><span class="nv">CRYPT</span><span class="ss">)</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Tạo password có thể dùng cho shadow với mkpasswd</h3>
+<ul>
+<li>Debian/Ubuntu: <code>sudo apt install whois</code></li>
+<li>Fedora/RockyLinux/AlmaLinux: <code>sudo dnf install mkpasswd</code></li>
+</ul>
+<p>Password chưa mã hóa là: <code>familug.org</code>.</p>
+<p>Tạo lại encrypted password cho user pika:</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">echo</span> -n familug.org <span class="p">|</span> mkpasswd --method<span class="o">=</span>sha-512 --round <span class="m">100000</span> --salt wYEmXgSx4U3GBF0i --stdin
+<span class="nv">$6$rounds</span><span class="o">=</span><span class="m">100000</span><span class="nv">$wYEmXgSx4U3GBF0i$AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs</span>.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0
+</code></pre></div>
+
+<p>Tạo lại encrypted password cho user root:</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">echo</span> -n familug.org <span class="p">|</span> mkpasswd --method<span class="o">=</span>sha-512 --round <span class="m">100000</span> --salt iA2WWPgA5yY1mjXj --stdin
+<span class="nv">$6$rounds</span><span class="o">=</span><span class="m">100000</span><span class="nv">$iA2WWPgA5yY1mjXj$dHNFwg4Nh5j30Sq6vC</span>/O74wBuuJGdt23pgU3eV//M9wOF1RcqF3lAc/HZ9rpgqcRawFjw0fiMMAqO9SADvSdo0
+</code></pre></div>
+
+<p>Đặt encrypted password cho user pika:</p>
+<div class="highlight"><pre><span></span><code>#<span class="w"> </span>#<span class="o">-</span><span class="nv">p</span>,<span class="w"> </span><span class="o">--</span><span class="nv">password</span><span class="w"> </span><span class="nv">PASSWORD</span><span class="w">       </span><span class="nv">use</span><span class="w"> </span><span class="nv">encrypted</span><span class="w"> </span><span class="nv">password</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">new</span><span class="w"> </span><span class="nv">password</span><span class="w"></span>
+#<span class="w"> </span><span class="nv">usermod</span><span class="w"> </span><span class="nv">pika</span><span class="w"> </span><span class="o">-</span><span class="nv">p</span><span class="w"> </span><span class="s1">&#39;$6$rounds=100000$iA2WWPgA5yY1mjXj$dHNFwg4Nh5j30Sq6vC/O74wBuuJGdt23pgU3eV//M9wOF1RcqF3lAc/HZ9rpgqcRawFjw0fiMMAqO9SADvSdo0&#39;</span><span class="w"></span>
+#<span class="w"> </span><span class="nv">cat</span><span class="w"> </span><span class="o">/</span><span class="nv">etc</span><span class="o">/</span><span class="nv">shadow</span><span class="w"></span>
+<span class="nv">root</span>:<span class="mh">$6</span>$<span class="nv">rounds</span><span class="o">=</span><span class="mi">100000</span>$<span class="nv">iA2WWPgA5yY1mjXj</span><span class="mh">$d</span><span class="nv">HNFwg4Nh5j30Sq6vC</span><span class="o">/</span><span class="nv">O74wBuuJGdt23pgU3eV</span><span class="o">//</span><span class="nv">M9wOF1RcqF3lAc</span><span class="o">/</span><span class="nv">HZ9rpgqcRawFjw0fiMMAqO9SADvSdo0</span>:<span class="mi">20294</span>:<span class="mi">0</span>:<span class="mi">99999</span>:<span class="mi">7</span>:::<span class="w"></span>
+...<span class="w"></span>
+<span class="nv">pika</span>:<span class="mh">$6</span>$<span class="nv">rounds</span><span class="o">=</span><span class="mi">100000</span>$<span class="nv">iA2WWPgA5yY1mjXj</span><span class="mh">$d</span><span class="nv">HNFwg4Nh5j30Sq6vC</span><span class="o">/</span><span class="nv">O74wBuuJGdt23pgU3eV</span><span class="o">//</span><span class="nv">M9wOF1RcqF3lAc</span><span class="o">/</span><span class="nv">HZ9rpgqcRawFjw0fiMMAqO9SADvSdo0</span>:<span class="mi">20294</span>:<span class="mi">0</span>:<span class="mi">99999</span>:<span class="mi">7</span>:::<span class="w"></span>
+</code></pre></div>
+
+<p>Thấy có thể set cho pika dùng cùng salt với root.</p>
+<h3>Gọi crypt từ Python 3.12</h3>
+<div class="highlight"><pre><span></span><code><span class="err">$</span> <span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import crypt; print(crypt.crypt(&quot;familug.org&quot;, &quot;$6$rounds=100000$wYEmXgSx4U3GBF0i$&quot;))&#39;</span>
+<span class="err">$</span><span class="mi">6</span><span class="err">$</span><span class="n">rounds</span><span class="o">=</span><span class="mi">100000</span><span class="err">$</span><span class="n">wYEmXgSx4U3GBF0i</span><span class="err">$</span><span class="n">AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs</span><span class="o">.</span><span class="n">ItnT8UaiLgl30EjwJq</span><span class="o">.</span><span class="n">ztKqZC6UrnEIM8p1zC6</span><span class="o">.</span><span class="n">d06zBU6gL0</span>
+</code></pre></div>
+
+<p>Module này đã bị <a href="https://docs.python.org/3.12/library/crypt.html">loại bỏ từ 3.13</a>.</p>
+<h3>Tạo encrypted password sha512crypt với Rust</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Cargo.toml</span><span class="w"></span>
+<span class="k">[package]</span><span class="w"></span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;crypt&quot;</span><span class="w"></span>
+<span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.1.0&quot;</span><span class="w"></span>
+<span class="n">edition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2021&quot;</span><span class="w"></span>
+
+<span class="k">[dependencies]</span><span class="w"></span>
+<span class="n">sha-crypt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;0.4.0&quot;</span><span class="w"></span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="c1">// src/main.rs</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sha_crypt</span>::<span class="n">sha512_crypt_b64</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;familug.org&quot;</span><span class="p">.</span><span class="n">as_bytes</span><span class="p">(),</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;wYEmXgSx4U3GBF0i&quot;</span><span class="p">.</span><span class="n">as_bytes</span><span class="p">(),</span><span class="w"></span>
+<span class="w">        </span><span class="o">&amp;</span><span class="n">sha_crypt</span>::<span class="n">Sha512Params</span>::<span class="n">new</span><span class="p">(</span><span class="mi">100000</span><span class="p">).</span><span class="n">unwrap</span><span class="p">(),</span><span class="w"></span>
+<span class="w">    </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="n">expect</span><span class="p">(</span><span class="s">&quot;Failed to get hash&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">encrypted</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">//  cargo run 2&gt;/dev/null</span>
+<span class="c1">// AbEnTG1ag6XlxH9h4nBBaepHe9XWjBK9UxJs.ItnT8UaiLgl30EjwJq.ztKqZC6UrnEIM8p1zC6.d06zBU6gL0</span>
+</code></pre></div>
+
+<p>Xem code <a href="https://github.com/RustCrypto/password-hashes/blob/ed2bea299ca13f8cfe0bfee2619334f102404acf/sha-crypt/src/lib.rs#L143-L174">iterate qua các round</a></p>
+<h3>Kết luận</h3>
+<p><code>shadow</code> là system password database, 1 database ở dạng file plain text, chứa các password đã mã hóa. Nếu sử dụng các <code>hashing method</code> yếu, cũ, có thể bị hacker crack shadow password bằng các công cụ chuyên dùng.</p>
+<p>Hết.</p>
+<h3>Tham khảo</h3>
+<ul>
+<li><code>man 5 crypt</code></li>
+<li><code>man 5 passwd</code></li>
+<li><code>man 5 shadow</code></li>
+<li><a href="https://fedoraproject.org/wiki/Changes/yescrypt_as_default_hashing_method_for_shadow#Release_Notes">Fedora: Changes/yescrypt as default hashing method for shadow</a></li>
+<li><a href="https://www.openwall.com/yescrypt/">https://www.openwall.com/yescrypt/</a> yescrypt homepage</li>
+</ul>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-07-25T00:00:00+07:00">Fri 25 July 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#crypt-ref">crypt
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#hash-ref">hash
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#linux-ref">linux
+                    <span class="superscript">9</span>
+</a></li>
+                <li><a href="./tags.html#mkpasswd-ref">mkpasswd
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#passwd-ref">passwd
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#python-ref">python
+                    <span class="superscript">13</span>
+</a></li>
+                <li><a href="./tags.html#rust-ref">rust
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#sha512-ref">sha512
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#shadow-ref">shadow
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
