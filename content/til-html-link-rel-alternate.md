@@ -4,7 +4,7 @@ Category: frontpage
 Tags: html, link, alternate
 Slug: til-html-link-rel-alternate
 
-Trong HTML, thẻ `<link>` thường dùng để chỉ định việc dùng file CSS hay favicon:
+Trong HTML, thẻ `<link>` thường dùng để liên kết các file file CSS hay favicon:
 
 ```html
 <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
@@ -12,12 +12,13 @@ Trong HTML, thẻ `<link>` thường dùng để chỉ định việc dùng file
 ```
 > The `<link>` HTML element specifies relationships between the current document and an external resource. This element is most commonly used to link to stylesheets, but is also used to establish site icons (both "favicon" style icons and icons for the home screen and apps on mobile devices) among other things. <https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/link>
 
-Ngoài hai [`rel` (relation)](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel) `stylesheet`, `icon` nói trên, còn nhiều giá trị khác, trong đó đáng chú ý là `alternate`
+Ngoài hai giá trị [`rel` (relation)](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel) `stylesheet`, `icon` nói trên, còn nhiều giá trị khác, trong đó đáng chú ý là `alternate`
 
 > The rel attribute defines the relationship between a linked resource and the current document
+>
 > Alternate representations of the current document.
 
-`rel="alternate"` dùng để link tới các biểu diễn khác của trang web hiện tại:
+`rel="alternate"` dùng để liên kết tới các phiên bản, định dạng thay thế của trang web hiện tại:
 
 - trang dành riêng cho ngôn ngữ khác
 - biểu diễn khác thay vì HTML: RSS/XML - RSS feed
@@ -31,10 +32,10 @@ Ví dụ trên <https://wordpress.com>:
 <link rel="alternate" type="application/rss+xml" title="WordPress.com Discover" href="//discover.wordpress.com/feed/" />
 ```
 
-Các chương trình đọc RSS có thể tự tìm trong pagesource các thẻ link để tìm ra đường dẫn tới feed, kể cả chúng không hiện lên trang chủ.
+Các chương trình đọc RSS (RSS reader) có thể tự tìm trong mã nguồn HTML của trang (page source) các thẻ `<link rel="alternate" type="application/rss+xml">` để tìm ra đường dẫn tới feed, ngay cả khi chúng không hiện trực tiếp lên trang chủ.
 
 ### Kết luận
-`<link rel="alternate">` là nơi chứa thông tin bất ngờ, dù không hiện lên màn hình.
+`<link rel="alternate">` là nơi chứa thông tin quan trọng, dù không hiện trực tiếp lên giao diện người dùng.
 
 Hết.
 
