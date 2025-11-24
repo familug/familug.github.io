@@ -1,7 +1,7 @@
-Title: Ansible group priority thay đổi thứ tự gộp group vars
+Title: Đọc code Python xem Ansible group priority thay đổi thứ tự gộp group vars
 Date: 2025/11/24
 Category: frontpage
-Tags: ansible, devops
+Tags: ansible, devops, python
 Slug: ansible-group-priority
 
 Ansible group dùng để nhóm các máy lại thành từng nhóm trong kho inventory.
