@@ -1,4 +1,4 @@
-Title: Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04 (IPv4 & IPv6)
+Title: Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04
 Date: 2022-11-22
 Category: frontpage
 Tags: vpn, wireguard, privacy
