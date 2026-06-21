@@ -1,4 +1,4 @@
-Title: Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04
+Title: Cài VPN với WireGuard trên Debian 11 / Ubuntu 22.04 (IPv4 & IPv6)
 Date: 2022-11-22
 Category: frontpage
 Tags: vpn, wireguard, privacy
@@ -90,19 +90,19 @@ Gõ man wg-quick rồi copy config mẫu.
 
 ```
 [Interface]
-Address = 10.10.0.1/16
+Address = 10.10.0.1/16, fd10::1/64
 PrivateKey = THAY_NOIDUNG_PRIVATE_KEY_VAO_DAY
 ListenPort = 51820
 
 [Peer]
 PublicKey = THAY_NOIDUNG_PUBKEY_PEER1_VAO_DAY
-AllowedIPs = 10.10.0.2/32
+AllowedIPs = 10.10.0.2/32, fd10::2/128
 
 # [Peer]
 # PublicKey = THAY_NOIDUNG_PUBKEY_PEER2_VAO_DAY
-# AllowedIPs = 10.10.0.3/32
+# AllowedIPs = 10.10.0.3/32, fd10::3/128
 ```
-Address là địa chỉ IP gán cho interface của server, ví dụ này chọn private network : 10.10.0.1/16, các peer khác sẽ có IP tùy ý trong 10.10.0.2 -> 10.10.xx.yy
+Address là địa chỉ IP gán cho interface của server, ví dụ này chọn private network : 10.10.0.1/16 (IPv4) và fd10::1/64 (IPv6 ULA). Các peer khác sẽ có IPv4 tùy ý trong 10.10.0.2 -> 10.10.xx.yy, và IPv6 trong fd10::2 -> fd10::ffff.
 
 Gõ `ip ad | grep inet` để lấy public IP của server, dùng để config peer.
 
@@ -111,14 +111,16 @@ Trên máy peer, làm tương tự các bước sinh private/public key rồi g�
 
 ```
 [Interface]
-Address = 10.10.0.2/32
+Address = 10.10.0.2/32, fd10::2/128
 PrivateKey = PRIVATE_KEY_CUA_PEER
 
 [Peer]
 PublicKey = PUBLIC_KEY_CUA_SERVER
 Endpoint = PUBLIC_IP_CUA_SERVER:51820
-AllowedIPs = 0.0.0.0/0
+AllowedIPs = 0.0.0.0/0, ::/0
 ```
+
+`AllowedIPs = 0.0.0.0/0, ::/0` cho phép tất cả traffic IPv4 và IPv6 đều đi qua VPN.
 rồi bật:
 
 ```
@@ -143,7 +145,7 @@ interface: wg0
 
 peer: pXXXvEXXXX=
   endpoint: XXXX:57226
-  allowed ips: 10.10.0.2/32
+  allowed ips: 10.10.0.2/32, fd10::2/128
   latest handshake: 23 hours, 14 minutes, 44 seconds ago
   transfer: 512.48 KiB received, 824.25 KiB sent
 
@@ -152,6 +154,8 @@ peer: pXXXvEXXXX=
 4: wg0: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1420 qdisc noqueue state UNKNOWN group default qlen 1000
     link/none
     inet 10.10.0.1/16 scope global wg0
+       valid_lft forever preferred_lft forever
+    inet6 fd10::1/64 scope global
        valid_lft forever preferred_lft forever
 ```
 
@@ -181,6 +185,7 @@ Tạo /etc/rc.local
 ```
 #!/bin/sh
 iptables -t nat -A POSTROUTING -s 10.10.0.0/16 -o $THAY_DEFAULT_INTERFACE -j MASQUERADE
+ip6tables -t nat -A POSTROUTING -s fd10::/64 -o $THAY_DEFAULT_INTERFACE -j MASQUERADE
 ```
 
 với `$THAY_DEFAULT_INTERFACE` là interface mặc định xuất hiện ở output:
