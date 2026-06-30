@@ -40,10 +40,10 @@ Go net package <https://pkg.go.dev/net#hdr-Name_Resolution> writes:
 > The resolver decision can be overridden by setting the netdns value of the GODEBUG environment variable (see package runtime) to go or cgo, as in:
 
 ```
-export GODEBUG=netdns=go    # force pure Go resolver
+GODEBUG=netdns=go agy   # force pure Go resolver
 ```
 
-set that and problem solved.
+and problem solved.
 
 ## The problem
 It turns out the MacOS DNS daemon failed after multiple sleep/wakeup cycles.
