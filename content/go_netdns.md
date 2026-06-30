@@ -54,10 +54,13 @@ sudo killall -HUP mDNSResponder
 
 would give a new fresh one and now everything is fresh, again.
 
-### Kết luận
+## why dig work?
+dig/nslookup uses it own DNS resolver, other programs like ping, curl, or agy use system DNS resolver. A hanging DNS resolver would not affect dig/nslookup.
+
+## Conclusion
 It's always DNS.
 
-### Tham khảo
+### Ref
 - <https://pkg.go.dev/net#hdr-Name_Resolution>
 
 Hết.
