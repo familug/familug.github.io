@@ -1,0 +1,54 @@
+<!-- === FAMILUG: Code block styling + syntax highlighting === -->
+<!-- Paste this into Blogger → Theme → Edit HTML, just before </head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<style>
+/* Code blocks */
+pre {
+  background: #0d1117 !important;
+  color: #e6edf3 !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  overflow-x: auto !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  margin: 1em 0 !important;
+  border: 1px solid #30363d !important;
+}
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  overflow-wrap: normal !important;
+  display: block !important;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+}
+pre code.hljs {
+  padding: 0 !important;
+  background: transparent !important;
+}
+/* Inline code (not inside pre) */
+:not(pre) > code {
+  background: #eff1f3 !important;
+  color: #0550ae !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.9em !important;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace !important;
+}
+/* Prevent code from overflowing post container */
+.post-body {
+  overflow-x: hidden;
+}
+.post-body pre {
+  max-width: 100% !important;
+}
+</style>
+<!-- === END Code block styling === -->
