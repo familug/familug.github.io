@@ -1,3 +1,6 @@
 pelican[markdown]
 invoke  # run task, make not avail somewhere
 ghp-import  # github pages support
+google-api-python-client  # Blogger API v3
+google-auth-oauthlib       # OAuth 2.0 for Blogger
+markdown                   # MD → HTML for Blogger posts
