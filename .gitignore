@@ -4,3 +4,6 @@ __pycache__
 *.swp
 credentials.json
 token.json
+.venv
+*.py[oc]
+*.egg-info

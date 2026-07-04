@@ -1,0 +1,15 @@
+[project]
+name = "familug-blog"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "pelican[markdown]",
+    "invoke",
+    "ghp-import",
+    "google-api-python-client",
+    "google-auth-oauthlib",
+    "markdown",
+]
+
+[project.scripts]
+sync-to-blogger = "sync_to_blogger:main"
