@@ -338,12 +338,45 @@ def sync_post(
         time.sleep(1)  # Rate limit: Blogger API allows ~100 req/100s
         return SyncResult(SyncAction.CREATE, post.title)
 
-    # Existing post — check if content actually changed
+    # Existing post — check if content, title, labels, or publication date changed
     marker_re = rf"<!-- {MARKER_PREFIX}: [a-zA-Z0-9_-]+ -->\n?"
     old = re.sub(marker_re, "", existing.get("content", "")).strip()
     new = html_content.strip()
 
-    if old == new and existing.get("title") == post.title:
+    # Avoid TypeError if labels is None or missing
+    old_labels = sorted(existing.get("labels") or [])
+    new_labels = sorted(post_body.get("labels") or [])
+
+    old_pub = existing.get("published")
+    new_pub = post_body.get("published")
+
+    dates_match = True
+    if new_pub:  # Only compare dates if local metadata defines a publication date
+        if old_pub:
+            try:
+                # Parse to timezone-aware datetimes and compare UNIX timestamps
+                old_dt = datetime.fromisoformat(old_pub)
+                new_dt = datetime.fromisoformat(new_pub)
+                dates_match = int(old_dt.timestamp()) == int(new_dt.timestamp())
+            except ValueError:
+                # Fallback to standard string slice comparison if parsing fails
+                dates_match = old_pub[:19] == new_pub[:19]
+        else:
+            dates_match = False
+
+    # Debug print to troubleshoot skip condition
+    print(f"  DEBUG: {post.title}")
+    print(f"    - content matches: {old == new}")
+    print(f"    - title matches: {existing.get('title') == post.title} (Blogger: '{existing.get('title')}', Local: '{post.title}')")
+    print(f"    - labels match: {old_labels == new_labels} (Blogger: {old_labels}, Local: {new_labels})")
+    print(f"    - dates match: {dates_match} (Blogger: '{old_pub}', Local: '{new_pub}')")
+
+    if (
+        old == new
+        and existing.get("title") == post.title
+        and old_labels == new_labels
+        and dates_match
+    ):
         print(f"  SKIP (unchanged): {post.title}")
         return SyncResult(SyncAction.SKIP, post.title)
 
