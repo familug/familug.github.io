@@ -1,5 +1,5 @@
 Title: Tìm hiểu password hashing trong /etc/shadow trên Linux
-Date: 2025/07/25
+Date: 2025-07-25
 Category: frontpage
 Tags: linux, hash, passwd, shadow, mkpasswd, sha512, crypt, python, rust
 Slug: shadow-hash-sha-512-crypt

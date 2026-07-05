@@ -1,5 +1,5 @@
 Title: [TIL] SQL join có cả cross join
-Date: 2025/03/04
+Date: 2025-03-04
 Category: frontpage
 Tags: sql, join, sqlite
 Slug: sql_join_op

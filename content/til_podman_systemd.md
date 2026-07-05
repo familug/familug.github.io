@@ -1,5 +1,5 @@
 Title: [TIL] podman có thể tạo ra systemd unit config file
-Date: 2025/03/19
+Date: 2025-03-19
 Category: frontpage
 Tags: podman, systemd
 Slug: podman-systemd

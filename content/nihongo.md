@@ -1,5 +1,5 @@
 Title: Tổng hợp tài liệu tự học tiếng Nhật giao tiếp N5 N4
-Date: 2025/03/11
+Date: 2025-03-11
 Category: frontpage
 Tags: japanese, language
 Slug: nihongo

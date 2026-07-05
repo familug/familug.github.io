@@ -265,13 +265,21 @@ def fetch_existing_posts(service: Any, blog_id: str) -> dict[str, dict[str, Any]
 
 
 def format_date_for_blogger(date_str: str) -> str | None:
-    """Convert Pelican date (``2021-02-20`` or ``2025/02/20``) to RFC 3339."""
+    """Convert Pelican date (e.g. ``2021-02-20``, ``2025/02/20``, ``2021-02-13 14:00:00``, or ``20260630``) to RFC 3339."""
     date_str = date_str.strip().replace("/", "-")
-    try:
-        dt = datetime.strptime(date_str, "%Y-%m-%d")
-        return dt.strftime("%Y-%m-%dT%H:%M:%S+07:00")
-    except ValueError:
-        return None
+    formats = [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d",
+        "%Y%m%d",
+    ]
+    for fmt in formats:
+        try:
+            dt = datetime.strptime(date_str, fmt)
+            return dt.strftime("%Y-%m-%dT%H:%M:%S+07:00")
+        except ValueError:
+            continue
+    return None
+
 
 
 def build_post_body(post: PelicanPost, html_content: str) -> dict[str, Any]:

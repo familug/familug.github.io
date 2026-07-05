@@ -1,5 +1,5 @@
 Title: Thẻ HTML link rel=alternate
-Date: 2025/11/12
+Date: 2025-11-12
 Category: frontpage
 Tags: html, link, alternate
 Slug: til-html-link-rel-alternate

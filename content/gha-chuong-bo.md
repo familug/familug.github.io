@@ -1,5 +1,5 @@
 Title: Điều gì tệ hơn "mất bò mới lo làm chuồng"
-Date: 2025/03/30
+Date: 2025-03-30
 Category: frontpage
 Tags: github action, gha, security
 Slug: gha-chuong-bo

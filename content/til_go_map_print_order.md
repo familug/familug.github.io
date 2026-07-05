@@ -1,5 +1,5 @@
 Title: [TIL] Go map format/print có thứ tự
-Date: 2025/03/24
+Date: 2025-03-24
 Category: frontpage
 Tags: go, golang, map, 
 Slug: til_go_map_print_order

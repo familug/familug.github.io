@@ -1,5 +1,5 @@
 Title: [TIL] RFC cho định dạng CSV chỉ có 7 dòng 
-Date: 2025/04/04
+Date: 2025-04-04
 Category: frontpage
 Tags: csv, rfc
 Slug: csv-rfc

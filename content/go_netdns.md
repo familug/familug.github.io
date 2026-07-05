@@ -1,5 +1,5 @@
 Title: antigravity agy failed to login, it's always DNS
-Date: 20260630
+Date: 2026-06-30
 Category: frontpage
 Tags: golang, dns, network 
 Slug: go_netdns

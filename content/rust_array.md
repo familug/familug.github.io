@@ -1,5 +1,5 @@
 Title: Rust tuple, array, slice và compile time size 
-Date: 2025/03/27
+Date: 2025-03-27
 Category: frontpage
 Tags: rust, array, tuple, slice, oob, stackoverflow
 Slug: rust_array

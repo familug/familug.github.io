@@ -1,5 +1,5 @@
 Title: [TIL] script cài Rust dùng 20 bytes đầu để nhận biết hệ thống
-Date: 2025/02/19
+Date: 2025-02-19
 Category: frontpage
 Tags: til, shell, sh, bash, rust
 Slug: til_rustup

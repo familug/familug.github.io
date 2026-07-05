@@ -1,5 +1,5 @@
 Title: Cài đặt và chạy máy ảo OpenBSD 6.8 trên VirtualBox 6.0
-Date: 2021-02-13 14:00:00
+Date: 2021-02-13
 Category: frontpage
 Tags: openbsd, virtualbox
 

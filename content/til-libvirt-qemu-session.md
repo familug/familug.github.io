@@ -1,5 +1,5 @@
 Title: [TIL] Libvirt QEMU://session has limited network funtions
-Date: 2025/04/06
+Date: 2025-04-06
 Category: frontpage
 Tags: en, libvirt,
 Slug: til-libvirt-qemu-session

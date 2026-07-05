@@ -1,5 +1,5 @@
 Title: AWS SDK không tự chuyển tới S3 bucket khác region
-Date: 2025/04/04
+Date: 2025-04-04
 Category: frontpage
 Tags: aws, boto3, python, java
 Slug: aws-s3-cross

@@ -1,5 +1,5 @@
 Title: Đọc code Go Traefik xem router ưu tiên match theo độ dài rule
-Date: 2025/09/14
+Date: 2025-09-14
 Category: frontpage
 Tags: traefik, go,
 Slug: traefik-router-priority

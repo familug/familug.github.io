@@ -1,5 +1,5 @@
 Title: [TIL] Bài học từ vụ GitHub Action tj-actions/changed-file bị hack
-Date: 2025/03/19
+Date: 2025-03-19
 Category: frontpage
 Tags: GHA, GitHub, security, pinning
 Slug: github-action-pinning

@@ -1,5 +1,5 @@
 Title: Vagrant ssh (với VirtualBox backend) hoạt động thế nào?
-Date: 2021-02-13 01:00:00
+Date: 2021-02-13
 Category: frontpage
 Tags: sysadmin, virtualbox, vagrant
 

@@ -1,5 +1,5 @@
 Title: Máy làm việc có nên cùng hệ điều hành với server?
-Date: 2021-03-01 01:02:03
+Date: 2021-03-01
 Category: frontpage
 Tags: sysadmin, workstation, opinion
 

@@ -1,5 +1,5 @@
 Title: [TIL] Tên group trong inventory của Ansible là duy nhất
-Date: 2025/08/13
+Date: 2025-08-13
 Category: frontpage
 Tags: til, ansible, inventory
 Slug: til-ansible-group-names

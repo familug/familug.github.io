@@ -1,5 +1,5 @@
 Title: [TIL] Go http server không set status header sau khi write
-Date: 2025/03/04
+Date: 2025-03-04
 Category: frontpage
 Tags: til, go, http, header
 Slug: go_header

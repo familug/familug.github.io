@@ -1,5 +1,5 @@
 Title: [Python] Tính toán IP trong mạng
-Date: 2025/10/26
+Date: 2025-10-26
 Category: frontpage
 Tags: python, network, subnet, ipv4
 Slug: py_ipaddress

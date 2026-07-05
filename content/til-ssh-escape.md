@@ -1,5 +1,5 @@
 Title: [TIL] SSH client escape characters - hay xử lý ssh client treo
-Date: 2025/09/23
+Date: 2025-09-23
 Category: frontpage
 Tags: ssh,
 Slug: til-ssh-escape

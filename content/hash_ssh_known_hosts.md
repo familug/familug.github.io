@@ -1,5 +1,5 @@
 Title: Tính hash cho hostname trong SSH known_hosts
-Date: 20260428
+Date: 2026-04-28
 Category: frontpage
 Tags: ssh, hash, hmac, sha1
 Slug: hash_ssh_known_hosts

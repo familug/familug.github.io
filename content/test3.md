@@ -1,5 +1,5 @@
 Title: Luôn test ít nhất 3 case
-Date: 2025/03/05
+Date: 2025-03-05
 Category: frontpage
 Tags: test, testing,
 Slug: test3

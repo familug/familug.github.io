@@ -1,5 +1,5 @@
 Title: Ansible role luôn chạy trước task
-Date: 2025/10/31
+Date: 2025-10-31
 Category: frontpage
 Tags: ansible, sysadmin,
 Slug: ansible-order-role-task

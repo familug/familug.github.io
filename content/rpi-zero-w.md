@@ -1,5 +1,5 @@
 Title: Cài đặt Raspberry Pi OS Bookworm trên Raspberry Pi Zero W với rpi-imager hỏng
-Date: 2025/08/11
+Date: 2025-08-11
 Category: frontpage
 Tags: raspberry, rpi, pi, raspios, raspbian, debian, wpa_supplicant, networkmanager
 Slug: rpi-zero-w

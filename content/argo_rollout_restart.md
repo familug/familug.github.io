@@ -1,5 +1,5 @@
 Title: [TIL] Argo Rollouts có nút bấm restart trên giao diện ArgoCD
-Date: 2025/03/10
+Date: 2025-03-10
 Category: frontpage
 Tags: argo, k8s, kubernetes,
 Slug: argo_rollout_restart

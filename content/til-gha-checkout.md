@@ -1,5 +1,5 @@
 Title: [TIL] GitHub Action actions/checkout mặc định checkout merge commit với pull_request
-Date: 2025/05/21
+Date: 2025-05-21
 Category: frontpage
 Tags: github action, gha, checkout
 Slug: til-gha-checkout

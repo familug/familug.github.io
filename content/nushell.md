@@ -1,5 +1,5 @@
 Title: Tìm kiếm công cụ xử lý JSON, YAML xịn nhất: jq, yq, jmes... nushell
-Date: 2025/04/16
+Date: 2025-04-16
 Category: frontpage
 Tags: nushell, jq, yq, jmespath, json, yaml, csv, cli
 Slug: nushell

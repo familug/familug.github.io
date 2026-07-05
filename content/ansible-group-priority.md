@@ -1,5 +1,5 @@
 Title: Đọc code Python xem Ansible group priority thay đổi thứ tự gộp group vars
-Date: 2025/11/24
+Date: 2025-11-24
 Category: frontpage
 Tags: ansible, devops, python
 Slug: ansible-group-priority

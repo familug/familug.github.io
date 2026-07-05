@@ -1,5 +1,5 @@
 Title: [TIL] requests đoán "có giáo dục" encoding và có thể sai
-Date: 2025/10/04
+Date: 2025-10-04
 Category: frontpage
 Tags: python, requests, encoding, http
 Slug: til_requests_encoding

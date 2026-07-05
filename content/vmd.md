@@ -1,5 +1,5 @@
 Title: Using virtual machine via vmd on OpenBSD 6.8
-Date: 2021-02-20 16:00:00
+Date: 2021-02-20
 Category: en,
 Tags: openbsd, vmm, alpine, debian
 

@@ -1,5 +1,5 @@
 Title: Ansible không ưu tiên CLI option --user cao bằng inventory
-Date: 2025/11/01
+Date: 2025-11-01
 Category: frontpage
 Tags: ansible, inventory
 Slug: ansible-remote-user-option

@@ -1,5 +1,5 @@
 Title: [TIL] Docker trên MacOS share toàn bộ thư mục $HOME /Users/you với Docker Machine
-Date: 2025/09/26
+Date: 2025-09-26
 Category: frontpage
 Tags: docker, podman, container, vm, macos
 Slug: til-docker-desktop-mount

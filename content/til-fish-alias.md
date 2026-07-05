@@ -1,5 +1,5 @@
 Title: [TIL] Tạo alias trong fish shell với funcsave
-Date: 2025/04/29
+Date: 2025-04-29
 Category: frontpage
 Tags: fish, shell, alias
 Slug: til-fish-alias

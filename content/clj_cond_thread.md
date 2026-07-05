@@ -1,5 +1,5 @@
 Title: [clojure] update map với cond->
-Date: 2025/03/12
+Date: 2025-03-12
 Category: frontpage
 Tags: clj, clojure, python
 Slug: clj_cond_thread
