@@ -1,0 +1,46 @@
+<!-- === FAMILUG: Code block styling + syntax highlighting (Mobile + Desktop Gadget) === -->
+<!-- Add an HTML/JavaScript gadget in Blogger → Layout, paste this in the Content box, -->
+<!-- and edit your Theme XML to add mobile='yes' to its b:widget tag. -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    hljs.highlightAll();
+  });
+</script>
+<style>
+/* Code blocks */
+pre {
+  background: #0d1117 !important;
+  color: #e6edf3 !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  overflow-x: auto !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  margin: 1em 0 !important;
+  border: 1px solid #30363d !important;
+}
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  overflow-wrap: normal !important;
+  display: block !important;
+  font-family: monospace !important;
+}
+/* Responsive images */
+.post-body img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 1.5em auto !important;
+}
+</style>
+<!-- === END Code block styling === -->
