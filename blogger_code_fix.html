@@ -58,5 +58,35 @@ pre code.hljs {
   display: block;
   margin: 1.5em auto !important;
 }
+
+/* === Mobile / Responsive Adjustments === */
+@media (max-width: 768px) {
+  pre {
+    padding: 10px !important;
+    font-size: 12px !important;
+    border-radius: 4px !important;
+    margin: 0.8em 0 !important;
+  }
+  :not(pre) > code {
+    font-size: 0.85em !important;
+    padding: 1px 4px !important;
+  }
+}
+
+/* Blogger mobile template selector override */
+.mobile pre {
+  padding: 10px !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  margin: 0.8em 0 !important;
+}
+.mobile :not(pre) > code {
+  font-size: 0.85em !important;
+  padding: 1px 4px !important;
+}
+.mobile .post-body img {
+  margin: 1em auto !important;
+}
 </style>
 <!-- === END Code block styling === -->
+
