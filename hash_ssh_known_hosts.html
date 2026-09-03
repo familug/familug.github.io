@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="ssh, hash, hmac, sha1, frontpage, " />
+
+<meta property="og:title" content="Tính hash cho hostname trong SSH known_hosts "/>
+<meta property="og:url" content="./hash_ssh_known_hosts.html" />
+<meta property="og:description" content="SSH known host là gì SSH client lưu trữ danh sách các host key của tất cả các host mà người dùng đã truy cập (ssh vào) trong ~/.ssh/known_hosts để kiểm tra giá trị này vào lần SSH sau (ngoại lệ xem cuối bài). ~/.ssh/known_hosts Contains a list …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2026-04-28T00:00:00+07:00" />
+<meta name="twitter:title" content="Tính hash cho hostname trong SSH known_hosts ">
+<meta name="twitter:description" content="SSH known host là gì SSH client lưu trữ danh sách các host key của tất cả các host mà người dùng đã truy cập (ssh vào) trong ~/.ssh/known_hosts để kiểm tra giá trị này vào lần SSH sau (ngoại lệ xem cuối bài). ~/.ssh/known_hosts Contains a list …">
+
+        <title>Tính hash cho hostname trong SSH known_hosts  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./hash_ssh_known_hosts.html">
+                Tính hash cho hostname trong SSH known_hosts
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h3>SSH known host là gì</h3>
+<p>SSH client lưu trữ danh sách các host key của tất cả các host mà người dùng đã truy cập (ssh vào) trong <code>~/.ssh/known_hosts</code> để kiểm tra giá trị này vào lần SSH sau (ngoại lệ xem cuối bài).</p>
+<blockquote>
+<p>~/.ssh/known_hosts
+Contains a list of host keys for all hosts the user has logged into that are not already in the systemwide list of known host keys.</p>
+</blockquote>
+<p>Ví dụ 2 dòng trong file known_hosts:</p>
+<div class="highlight"><pre><span></span><code>github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz
+</code></pre></div>
+
+<p>Mỗi dòng có định dạng: tên host đã dùng khi kết nối, loại key, và dạng base64 của public host key của host được ssh vào, ngoài ra có thể có comment, mỗi phần cách nhau bởi dấu khoảng trắng (space).</p>
+<blockquote>
+<p>Each line in these files contains the following fields: marker (optional), hostnames, keytype, base64-encoded key, comment.</p>
+</blockquote>
+<h3>Host key</h3>
+<p>Mỗi OpenSSH server đều tự sinh (nhiều) cặp host key trong lần đầu chạy. Các cặp host key này nằm trong <code>/etc/ssh/ssh_host*</code></p>
+<div class="highlight"><pre><span></span><code>$ ls -la /etc/ssh/ssh_host_*                                                                                                                                                                    
+-rw------- <span class="m">1</span> root root  <span class="m">505</span> Apr <span class="m">27</span> <span class="m">21</span>:18 /etc/ssh/ssh_host_ecdsa_key
+-rw-r--r-- <span class="m">1</span> root root  <span class="m">173</span> Apr <span class="m">27</span> <span class="m">21</span>:18 /etc/ssh/ssh_host_ecdsa_key.pub
+-rw------- <span class="m">1</span> root root  <span class="m">399</span> Apr <span class="m">27</span> <span class="m">21</span>:18 /etc/ssh/ssh_host_ed25519_key
+-rw-r--r-- <span class="m">1</span> root root   <span class="m">93</span> Apr <span class="m">27</span> <span class="m">21</span>:18 /etc/ssh/ssh_host_ed25519_key.pub
+-rw------- <span class="m">1</span> root root <span class="m">2590</span> Apr <span class="m">27</span> <span class="m">21</span>:18 /etc/ssh/ssh_host_rsa_key
+-rw-r--r-- <span class="m">1</span> root root  <span class="m">565</span> Apr <span class="m">27</span> <span class="m">21</span>:18 /etc/ssh/ssh_host_rsa_key.pub
+</code></pre></div>
+
+<p>Nhiều hệ thống tạo các host key cho các thuật toán như rsa, ecdsa và ed25519.
+Khi ssh vào một host, ssh server chọn rồi hiển thị một pub key cho ssh client, client sẽ ghi nội dung này vào file known_hosts.</p>
+<div class="highlight"><pre><span></span><code>ssh <span class="m">127</span>.0.0.1                                                                                                                                                                                 
+The authenticity of host <span class="s1">&#39;127.0.0.1 (127.0.0.1)&#39;</span> can<span class="s1">&#39;t be established.</span>
+<span class="s1">ED25519 key fingerprint is: SHA256:pyugW2eDd0Zdb0cpDUNXQltJQSsIudBGrRgnedlL5lg</span>
+<span class="s1">This host key is known by the following other names/addresses:</span>
+<span class="s1">    ~/.ssh/known_hosts:4: localhost</span>
+<span class="s1">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span>
+<span class="s1">Warning: Permanently added &#39;</span><span class="m">127</span>.0.0.1<span class="err">&#39;</span> <span class="o">(</span>ED25519<span class="o">)</span> to the list of known hosts.
+</code></pre></div>
+
+<p>Tương tự nếu ssh localhost, sẽ có thêm một dòng trong file known_hosts:</p>
+<div class="highlight"><pre><span></span><code><span class="mf">127.0.0.1</span><span class="w"> </span><span class="n">ssh</span><span class="o">-</span><span class="n">ed25519</span><span class="w"> </span><span class="n">AAAAC3NzaC1lZDI1NTE5AAAAIENupkYnPGH10sMOBKaABnYSfVl8KSNo2bO2B83QYRWJ</span><span class="w"></span>
+<span class="n">localhost</span><span class="w"> </span><span class="n">ssh</span><span class="o">-</span><span class="n">ed25519</span><span class="w"> </span><span class="n">AAAAC3NzaC1lZDI1NTE5AAAAIENupkYnPGH10sMOBKaABnYSfVl8KSNo2bO2B83QYRWJ</span><span class="w"></span>
+</code></pre></div>
+
+<p>2 dòng này dù có hostname/IP khác nhau (của cùng 1 server), nhưng cùng một public host key (nội dung /etc/ssh/ssh_host_ed25519_key.pub trên server).</p>
+<h3>Dùng hash để ẩn hostname và địa chỉ IP</h3>
+<p>Để tránh bị lộ các hostname/IP mà người dùng đã truy cập, trong trường hợp bị hacker chiếm quyền SSH vẫn không biết có thể SSH vào các địa chỉ nào, OpenSSH có thêm tính năng cho phép thay domain/IP ở phần đầu mỗi dòng thành dạng hash.</p>
+<p>Chạy <code>ssh-keygen -H</code> để thực hiện hash các tên hostname/IP trong file known_hosts, và chuyển file ban đầu tới file có thêm đuôi <code>.old</code>:</p>
+<blockquote>
+<p>-H      Hash a known_hosts file.  This replaces all hostnames and addresses with hashed representations within the specified file; the original content is moved to a file with a .old suffix. </p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>$ ssh-keygen -H -f ~/.ssh/known_hosts                                                                                                                                                         
+/home/hvn/.ssh/known_hosts updated.
+Original contents retained as /home/hvn/.ssh/known_hosts.old
+WARNING: /home/hvn/.ssh/known_hosts.old contains unhashed entries
+Delete this file to ensure privacy of hostnames
+</code></pre></div>
+
+<p>Ví dụ sau khi hash:</p>
+<div class="highlight"><pre><span></span><code>|1|1yLv1MYg3e3HDK+8IKFfJhtCNCw=|CrQpRw2fNTP3SZJ+povIK/ko2Ys= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+|1|om6Oxzr+1drcW1yy15GKEjwZe/o=|Nxqyg7tgIHut5QsMJWbuwDLbRis= ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+</code></pre></div>
+
+<p>Định dạng sau khi hash: <code>|1|SALT|hashed_hostname|key_type b64_public_host_key comment</code>. Với |1| là đánh dấu phiên bản cho HMAC-SHA1.</p>
+<h3>Tự tính hashed hostname bằng Python</h3>
+<p>Hashed hostname được tính bằng <code>hmac_sha1(SALT, hostname)</code>, với SALT được sinh ngẫu nhiên khi tính.</p>
+<p>Trong ví dụ: 
+<code>|1|1yLv1MYg3e3HDK+8IKFfJhtCNCw=|CrQpRw2fNTP3SZJ+povIK/ko2Ys= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl</code>
+Salt đã được biểu diễn ở dạng base64, giá trị: <code>1yLv1MYg3e3HDK+8IKFfJhtCNCw=</code>.
+Code Python:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hmac</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+
+<span class="k">def</span> <span class="nf">calculate_ssh_hash</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">salt_base64</span><span class="p">):</span>
+    <span class="c1"># 1. Decode the salt from base64</span>
+    <span class="n">salt</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">salt_base64</span><span class="p">)</span>
+
+    <span class="c1"># 2. Compute HMAC-SHA1(salt, hostname)</span>
+    <span class="c1"># The hostname must be encoded as bytes</span>
+    <span class="n">hasher</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">salt</span><span class="p">,</span> <span class="n">hostname</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">)</span>
+
+    <span class="c1"># 3. Base64 encode the result</span>
+    <span class="n">digest</span> <span class="o">=</span> <span class="n">hasher</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">digest</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+<span class="c1"># Example Usage</span>
+<span class="c1"># Salt found in known_hosts (after |1|)</span>
+<span class="n">salt_b64</span> <span class="o">=</span> <span class="s2">&quot;1yLv1MYg3e3HDK+8IKFfJhtCNCw=&quot;</span>
+<span class="n">hostname</span> <span class="o">=</span> <span class="s2">&quot;github.com&quot;</span>
+
+<span class="n">hashed_host</span> <span class="o">=</span> <span class="n">calculate_ssh_hash</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">salt_b64</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hashed Hostname: </span><span class="si">{</span><span class="n">hashed_host</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># python3 gen.py                                                                                                                                                                    </span>
+<span class="n">Hashed</span> <span class="n">Hostname</span><span class="p">:</span> <span class="n">CrQpRw2fNTP3SZJ</span><span class="o">+</span><span class="n">povIK</span><span class="o">/</span><span class="n">ko2Ys</span><span class="o">=</span>
+</code></pre></div>
+
+<p>Hoặc dùng một câu lệnh openssl:</p>
+<div class="highlight"><pre><span></span><code>$ <span class="nb">echo</span> -n <span class="s2">&quot;github.com&quot;</span> <span class="p">|</span> openssl sha1 -binary -mac HMAC -macopt hexkey:<span class="k">$(</span><span class="nb">echo</span> <span class="s2">&quot;1yLv1MYg3e3HDK+8IKFfJhtCNCw=&quot;</span> <span class="p">|</span> base64 --decode <span class="p">|</span> xxd -p<span class="k">)</span> <span class="p">|</span> base64
+CrQpRw2fNTP3SZJ+povIK/ko2Ys<span class="o">=</span>
+</code></pre></div>
+
+<h3>Đọc code ssh-keygen xem code C để tính hashed host key</h3>
+<div class="highlight"><pre><span></span><code><span class="cm">/* XXX hmac is too easy to dictionary attack; use bcrypt? */</span><span class="w"></span>
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
+<span class="nf">host_hash</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name_from_hostfile</span><span class="p">,</span><span class="w"> </span><span class="n">u_int</span><span class="w"> </span><span class="n">src_len</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">ssh_hmac_ctx</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">u_char</span><span class="w"> </span><span class="n">salt</span><span class="p">[</span><span class="mi">256</span><span class="p">],</span><span class="w"> </span><span class="n">result</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">uu_salt</span><span class="p">[</span><span class="mi">512</span><span class="p">],</span><span class="w"> </span><span class="n">uu_result</span><span class="p">[</span><span class="mi">512</span><span class="p">];</span><span class="w"></span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">encoded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">u_int</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ssh_digest_bytes</span><span class="p">(</span><span class="n">SSH_DIGEST_SHA1</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">name_from_hostfile</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/* Create new salt */</span><span class="w"></span>
+<span class="w">        </span><span class="n">arc4random_buf</span><span class="p">(</span><span class="n">salt</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/* Extract salt from known host entry */</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">extract_salt</span><span class="p">(</span><span class="n">name_from_hostfile</span><span class="p">,</span><span class="w"> </span><span class="n">src_len</span><span class="p">,</span><span class="w"> </span><span class="n">salt</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="k">sizeof</span><span class="p">(</span><span class="n">salt</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ssh_hmac_start</span><span class="p">(</span><span class="n">SSH_DIGEST_SHA1</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">||</span><span class="w"></span>
+<span class="w">        </span><span class="n">ssh_hmac_init</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">salt</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"></span>
+<span class="w">        </span><span class="n">ssh_hmac_update</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">host</span><span class="p">,</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">host</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"></span>
+<span class="w">        </span><span class="n">ssh_hmac_final</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">result</span><span class="p">)))</span><span class="w"></span>
+<span class="w">        </span><span class="n">fatal_f</span><span class="p">(</span><span class="s">&quot;ssh_hmac failed&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">ssh_hmac_free</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">__b64_ntop</span><span class="p">(</span><span class="n">salt</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">uu_salt</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">uu_salt</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">||</span><span class="w"></span>
+<span class="w">        </span><span class="n">__b64_ntop</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">uu_result</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">uu_result</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="n">fatal_f</span><span class="p">(</span><span class="s">&quot;__b64_ntop failed&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">xasprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoded</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%s%s%c%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">HASH_MAGIC</span><span class="p">,</span><span class="w"> </span><span class="n">uu_salt</span><span class="p">,</span><span class="w"> </span><span class="n">HASH_DELIM</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="n">uu_result</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">encoded</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p><a href="https://github.com/openssh/openssh-portable/blob/b9ccca0edfbd46b3114192956d9aaea3e7bc3c08/hostfile.c#L115-L151">openssh/openssh-portable/hostfile.c</a></p>
+<h3>Khi ssh không dùng known host</h3>
+<p>Câu lệnh ssh có option để chọn file known_hosts, chọn file khác sẽ khiến ssh không update file mặc định ~/.ssh/known_hosts:</p>
+<div class="highlight"><pre><span></span><code>ssh -o UserKnownHostsFile=/dev/null 192.168.1.15
+</code></pre></div>
+
+<h3>Kết luận</h3>
+<p>Hashed hostname không dịch ngược được, nhưng khi có danh sách domain/IP để làm đầu vào, hoàn toàn có thể tính ra.</p>
+<h3>Tham khảo</h3>
+<ul>
+<li>HMAC tại <a href="https://docs.python.org/3.14/library/hmac.html">python hmac stdlib</a>.</li>
+</ul>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2026-04-28T00:00:00+07:00">Tue 28 April 2026</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#hash-ref">hash
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#hmac-ref">hmac
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#sha1-ref">sha1
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#ssh-ref">ssh
+                    <span class="superscript">2</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

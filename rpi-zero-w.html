@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="raspberry, rpi, pi, raspios, raspbian, debian, wpa_supplicant, networkmanager, frontpage, " />
+
+<meta property="og:title" content="Cài đặt Raspberry Pi OS Bookworm trên Raspberry Pi Zero W với rpi-imager hỏng "/>
+<meta property="og:url" content="./rpi-zero-w.html" />
+<meta property="og:description" content="Gã nhẹ nhàng mở nắp chiếc hộp nhựa, nó đã theo gã đi về tương lai 2 múi giờ suốt 1 năm trời rồi lại quay trở về, vẫn chỉ nằm im trong đó. Lớp kim loại sáng bóng khi xưa nay đã lốm đốm đen như làn da của …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-08-11T00:00:00+07:00" />
+<meta name="twitter:title" content="Cài đặt Raspberry Pi OS Bookworm trên Raspberry Pi Zero W với rpi-imager hỏng ">
+<meta name="twitter:description" content="Gã nhẹ nhàng mở nắp chiếc hộp nhựa, nó đã theo gã đi về tương lai 2 múi giờ suốt 1 năm trời rồi lại quay trở về, vẫn chỉ nằm im trong đó. Lớp kim loại sáng bóng khi xưa nay đã lốm đốm đen như làn da của …">
+
+        <title>Cài đặt Raspberry Pi OS Bookworm trên Raspberry Pi Zero W với rpi-imager hỏng  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./rpi-zero-w.html">
+                Cài đặt Raspberry Pi OS Bookworm trên Raspberry Pi Zero W với rpi-imager hỏng
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Gã nhẹ nhàng mở nắp chiếc hộp nhựa, nó đã theo gã đi về tương lai 2 múi giờ suốt 1 năm trời rồi lại quay trở về, vẫn chỉ nằm im trong đó.
+Lớp kim loại sáng bóng khi xưa nay đã lốm đốm đen như làn da của những bạn trẻ U40.
+Rút chiếc thẻ nhớ, cắm vào khe đọc. Bật <code>nautilus</code>, kết nối thành công. Sửa password wifi trong <code>/etc/wpa_supplicant/wpa_supplicant.conf</code> rồi cắm trở lại.
+Một đầu kết nối cổng USB-A, đầu kia cắm vào cổng micro USB power, đèn xanh nháy liên tục rồi sáng hẳn, nó còn sống.
+Nó là chiếc Raspberry Pi Zero W(ireless) mua từ <a href="https://www.familug.org/2018/12/chia-se-file-nhacanh-cung-mang-noi-bo.html">2018</a>.</p>
+<h3>Upgrade từ Buster lên Bookworm không thành</h3>
+<p>Chiếc Raspberry Pi vẫn chạy "ngon", vì "ngon" là do người ăn đánh giá. Nhưng phần mềm lẫn hệ điều hành đều đã cũ, bản <a href="https://www.raspberrypi.com/news/buster-the-new-version-of-raspbian/">Raspbian Buster</a> hết hạn vào <a href="https://wiki.debian.org/LTS">tháng 6 năm 2024</a>.
+Hệ điều hành mặc định cho Raspberry Pi từng có tên là Raspbian, phát triển dựa trên Debian.
+Năm 2020, <a href="https://forums.raspberrypi.com/viewtopic.php?f=66&amp;t=275380#p1668466">hệ điều hành chính thức của Raspberry Pi có tên là <strong>Raspberry Pi OS</strong></a> hay gọi tắt là <strong>raspios</strong>.
+Tiếp tục dựa trên Debian, raspios trải qua bản <a href="https://www.raspberrypi.com/news/raspberry-pi-os-debian-bullseye/">Bullseye</a> phát hành năm 2021, rồi tới <a href="https://www.raspberrypi.com/news/bookworm-the-new-version-of-raspberry-pi-os/">Bookworm</a> vào năm 2023.
+Việc upgrade không được hỗ trợ hay khuyên dùng bởi nhà sản xuất, nên cố làm chỉ dẫn đến thương đau. Nhưng nhỡ đâu bạn lại thích đau, thì sau khi thay đổi chữ <code>buster</code> thành <code>bullseye</code> trong <code>/etc/apt/source.list</code>, gõ <code>apt upgrade</code>, kết quả:</p>
+<div class="highlight"><pre><span></span><code># apt --fix-broken install
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+Correcting dependencies... failed.
+The following packages have unmet dependencies:
+ bsdmainutils : Depends: ncal but it is not installed
+ libc-bin : Depends: libc6 (&lt; 2.29) but 2.31-13+rpi1+deb11u13 is installed
+ libc-dev-bin : Depends: libc6 (&lt; 2.29) but 2.31-13+rpi1+deb11u13 is installed
+ libc6-dbg : Depends: libc6 (= 2.28-10+rpt2+rpi1+deb10u2) but 2.31-13+rpi1+deb11u13 is installed
+ libc6-dev : Depends: libc6 (= 2.28-10+rpt2+rpi1+deb10u2) but 2.31-13+rpi1+deb11u13 is installed
+ locales : Depends: libc-bin (&gt; 2.31) but 2.28-10+rpt2+rpi1+deb10u2 is installed
+ mailutils : Depends: mailutils-common (= 1:3.10-3) but 1:3.5-4 is installed
+             Depends: libmailutils7 but it is not installed
+             Recommends: default-mta or
+                         mail-transport-agent
+ openssh-sftp-server : Depends: openssh-client (= 1:7.9p1-10+deb10u4) but 1:8.4p1-5+deb11u5 is installed
+E: Error, pkgProblemResolver::Resolve generated breaks, this may be caused by held packages.
+E: Unable to correct dependencies
+</code></pre></div>
+
+<p>Cách được khuyên dùng, là cài lại từ đầu:</p>
+<blockquote>
+<p>We have always said that for a major version upgrade, you should re-image your SD card and start again with a clean image. In the past, we have suggested procedures for updating an existing image to the new version, but always with the caveat that we do not recommend it, and you do this at your own risk.
+This time, because the changes to the underlying architecture are so significant, we are not suggesting any procedure for upgrading a Bullseye image to Bookworm; any attempt to do this will almost certainly end up with a non-booting desktop and data loss. The only way to get Bookworm is either to create an SD card using Raspberry Pi Imager, or to download and flash a Bookworm image from here with your tool of choice.
+trích <a href="https://www.raspberrypi.com/news/bookworm-the-new-version-of-raspberry-pi-os/">https://www.raspberrypi.com/news/bookworm-the-new-version-of-raspberry-pi-os/</a></p>
+</blockquote>
+<p>Sau 7 năm, một số thay đổi đáng chú ý là:</p>
+<ul>
+<li>Bookworm sử dụng <a href="https://github.com/raspberrypi/documentation/blob/fae9204611e1b508fe60326299546e04edaecdc0/documentation/asciidoc/computers/configuration/headless.adoc?plain=1#L22">NetworkManager để quản lý mạng (wifi), không còn sử dụng <code>wpa_supplicant</code> như bản cũ nữa</a>. NetworkManager tuy là mới cho Raspberry Pi OS, nhưng đã có trên Ubuntu từ rất rất rất lâu rồi.</li>
+<li>Raspberry Pi OS hỗ trợ thêm bản <a href="https://downloads.raspberrypi.com/raspios_lite_arm64/images/">ARM 64-bit</a>, nhưng chỉ phù hợp với các thiết bị mới: 3B, 3B+, 3A+, 4B, 400, 5, 500, CM3, CM3+, CM4, CM4S, CM5, Zero 2 W. <strong>Không hỗ trợ Zero W</strong>, nên vẫn phải dùng bản 32-bit.</li>
+<li>Thay vì dùng lệnh <a href="https://www.familug.org/2013/05/tao-usb-cai-ubuntu-voi-1-cau-lenh.html"><code>dd</code></a> để ghi file image ra thẻ nhớ, giờ có app desktop <a href="https://github.com/raspberrypi/rpi-imager/">rpi-imager</a> viết bằng C++ và Qt hỗ trợ ghi thẻ nhớ và cấu hình sau cài đặt: tạo user, nhét SSH key, cấu hình wifi, chọn địa điểm, ...</li>
+</ul>
+<h3>Dùng phiên bản ARM 64-bit không được hỗ trợ</h3>
+<p>Không hỗ trợ nghĩa là gì? là không chạy được. Không chạy được thì thế nào? Thì sau khi ghi file image ra thẻ nhớ rồi bật lên, đèn ACT sẽ nháy 7 cái liên tiếp.</p>
+<p><img alt="RPI Zero W" src="./images/rpi-zero-w.jpg">
+Đèn ACT đang phát sáng trong hình.</p>
+<p>Tài liệu có hỗ trợ <a href="https://github.com/raspberrypi/documentation/blob/a08e5b988ce3a130c2693490f99a6df24a10c646/documentation/asciidoc/computers/configuration/led_blink_warnings.adoc">bảng tra cứu số lần nháy đèn với lỗi tương ứng</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Long flashes</th>
+<th>Short flashes</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>7</td>
+<td>Kernel image not found</td>
+</tr>
+</tbody>
+</table>
+<p>7 lần nháy ngắn tương ứng với lỗi "Kernel image not found". Phần cứng chỉ hỗ trợ 32-bit không đọc được nội dung file kernel 64-bit.</p>
+<h3>Ghi file image ra thẻ nhớ với rpi-imager hỏng</h3>
+<p>Tải lại file <a href="https://downloads.raspberrypi.com/raspios_lite_armhf/images/raspios_lite_armhf-2025-05-13/2025-05-13-raspios-bookworm-armhf-lite.img.xz">image 32-bit</a>, giải nén ra rồi chạy <code>rpi-imager</code>.</p>
+<p><code>rpi-imager</code> có sẵn trên Ubuntu 22.04, bản đã cũ</p>
+<div class="highlight"><pre><span></span><code>apt-cache policy rpi-imager
+rpi-imager:
+  Installed: (none)
+  Candidate: 1.7.2+noembed-0ubuntu1
+</code></pre></div>
+
+<p>Tải bản mới từ trang chủ <a href="https://downloads.raspberrypi.com/imager/imager_latest_amd64.deb">https://downloads.raspberrypi.com/imager/imager_latest_amd64.deb</a>. Nhưng nếu làm vào 1 ngày kém may mắn, thì phiên bản 1.9.4 có <a href="https://github.com/raspberrypi/rpi-imager/issues/1094">bug khiến thiết bị không kết nối wifi sau khi cài đặt xong</a>. Bản 1.9.6 đã fix lỗi này.</p>
+<p>Đây không phải lần đầu tiên <code>rpi-imager</code> có bug, không ít người dùng đã đào tận đến source code C++ để xem app này làm gì.
+Đa phần công việc được thực hiện bởi <a href="https://github.com/RPi-Distro/raspberrypi-sys-mods/blob/31aed138d84d15d3934fae9110f1f439b694d756/usr/lib/raspberrypi-sys-mods/init_config">python script raspberrypi-sys-mod</a>.</p>
+<h4>Phụ lục</h4>
+<p>Nội dung file cấu hình wifi NetworkManager:</p>
+<div class="highlight"><pre><span></span><code><span class="err">#</span><span class="w"> </span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">NetworkManager</span><span class="o">/</span><span class="k">system</span><span class="o">-</span><span class="n">connections</span><span class="o">/</span><span class="n">preconfigured</span><span class="p">.</span><span class="n">nmconnection</span><span class="w"></span>
+<span class="o">[</span><span class="n">connection</span><span class="o">]</span><span class="w"></span>
+<span class="n">id</span><span class="o">=</span><span class="n">preconfigured</span><span class="w"></span>
+<span class="n">uuid</span><span class="o">=</span><span class="mf">1108742e-4</span><span class="n">ca3</span><span class="o">-</span><span class="mi">425</span><span class="n">d</span><span class="o">-</span><span class="n">aedb</span><span class="o">-</span><span class="mi">10</span><span class="n">bc7a4418f6</span><span class="w"></span>
+<span class="n">type</span><span class="o">=</span><span class="n">wifi</span><span class="w"></span>
+<span class="o">[</span><span class="n">wifi</span><span class="o">]</span><span class="w"></span>
+<span class="n">mode</span><span class="o">=</span><span class="n">infrastructure</span><span class="w"></span>
+<span class="n">ssid</span><span class="o">=</span><span class="n">FAMILUG</span><span class="w"></span>
+<span class="n">hidden</span><span class="o">=</span><span class="k">false</span><span class="w"></span>
+<span class="o">[</span><span class="n">ipv4</span><span class="o">]</span><span class="w"></span>
+<span class="k">method</span><span class="o">=</span><span class="n">auto</span><span class="w"></span>
+<span class="o">[</span><span class="n">ipv6</span><span class="o">]</span><span class="w"></span>
+<span class="n">addr</span><span class="o">-</span><span class="n">gen</span><span class="o">-</span><span class="n">mode</span><span class="o">=</span><span class="k">default</span><span class="w"></span>
+<span class="k">method</span><span class="o">=</span><span class="n">auto</span><span class="w"></span>
+<span class="o">[</span><span class="n">proxy</span><span class="o">]</span><span class="w"></span>
+<span class="o">[</span><span class="n">wifi-security</span><span class="o">]</span><span class="w"></span>
+<span class="k">key</span><span class="o">-</span><span class="n">mgmt</span><span class="o">=</span><span class="n">wpa</span><span class="o">-</span><span class="n">psk</span><span class="w"></span>
+<span class="n">psk</span><span class="o">=</span><span class="mi">233</span><span class="n">d24fa21efc0f9c457436cec78fa1096d38b95201546105eb9f104993aaf69</span><span class="w"></span>
+</code></pre></div>
+
+<p>Mật khẩu có thể được sinh với câu lệnh <code>wpa_passphrase FAMILUG 80namquockhanh</code>.</p>
+<h3>Tham khảo</h3>
+<ul>
+<li><a href="https://www.zansara.dev/posts/2024-01-06-raspberrypi-headless-bookworm-wifi-config/">Headless WiFi setup on Raspberry Pi OS "Bookworm" without the Raspberry Pi Imager</a></li>
+</ul>
+<h3>Kết luận</h3>
+<p>Thế giới đã bớt đi một chiếc Raspberry Pi vô dụng.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-08-11T00:00:00+07:00">Mon 11 August 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#debian-ref">debian
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#networkmanager-ref">networkmanager
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#pi-ref">pi
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#raspberry-ref">raspberry
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#raspbian-ref">raspbian
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#raspios-ref">raspios
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#rpi-ref">rpi
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#wpa_supplicant-ref">wpa_supplicant
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

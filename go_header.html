@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="til, go, http, header, frontpage, " />
+
+<meta property="og:title" content="[TIL] Go http server không set status header sau khi write "/>
+<meta property="og:url" content="./go_header.html" />
+<meta property="og:description" content="Cộng đồng Go ưa chuộng cách làm web không dùng framework, chủ yếu chỉ dùng stdlib như net/http. Uư điểm này giúp web app Go bớt đi nhiều dependency, bù lại, nhiều thứ phải tự làm/low level. Ví dụ sau đúng cho cả gorilla/mux lẫn net/http …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-03-04T00:00:00+07:00" />
+<meta name="twitter:title" content="[TIL] Go http server không set status header sau khi write ">
+<meta name="twitter:description" content="Cộng đồng Go ưa chuộng cách làm web không dùng framework, chủ yếu chỉ dùng stdlib như net/http. Uư điểm này giúp web app Go bớt đi nhiều dependency, bù lại, nhiều thứ phải tự làm/low level. Ví dụ sau đúng cho cả gorilla/mux lẫn net/http …">
+
+        <title>[TIL] Go http server không set status header sau khi write  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./go_header.html">
+                [TIL] Go http server không set status header sau khi write
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Cộng đồng Go ưa chuộng cách làm web không dùng framework, chủ yếu chỉ dùng stdlib như net/http.
+Uư điểm này giúp web app Go bớt đi nhiều dependency, bù lại, nhiều thứ phải tự làm/low level.</p>
+<p>Ví dụ sau đúng cho cả gorilla/mux lẫn net/http:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nx">main</span><span class="w"></span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;html&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;log&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="s">&quot;net/http&quot;</span><span class="w"></span>
+<span class="p">)</span><span class="w"></span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/bar&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, %q&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nx">EscapeString</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">Path</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusText</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">),</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">))</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Output khi truy cập <code>/bar</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="mi">2025</span><span class="o">/</span><span class="mi">03</span><span class="o">/</span><span class="mi">04</span><span class="w"> </span><span class="mi">06</span><span class="err">:</span><span class="mi">57</span><span class="err">:</span><span class="mi">11</span><span class="w"> </span><span class="nl">http</span><span class="p">:</span><span class="w"> </span><span class="n">superfluous</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">WriteHeader</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">func1</span><span class="w"> </span><span class="p">(</span><span class="n">main</span><span class="p">.</span><span class="k">go</span><span class="err">:</span><span class="mi">15</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>Do dòng trên đã viết "Hello" vào response, nó đã tự set HTTP status code 200.
+Dòng http.Error set status code 400 nhưng không có tác dụng gì.
+Trong go doc <a href="https://pkg.go.dev/net/http#ResponseWriter">ResponseWriter viết</a>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">//</span><span class="w"> </span><span class="nv">WriteHeader</span><span class="w"> </span><span class="nv">sends</span><span class="w"> </span><span class="nv">an</span><span class="w"> </span><span class="nv">HTTP</span><span class="w"> </span><span class="nv">response</span><span class="w"> </span><span class="nv">header</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">provided</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">status</span><span class="w"> </span><span class="nv">code</span>.<span class="w"></span>
+<span class="o">//</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="k">If</span><span class="w"> </span><span class="nv">WriteHeader</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">not</span><span class="w"> </span><span class="nv">called</span><span class="w"> </span><span class="nv">explicitly</span>,<span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">first</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="nl">to</span><span class="w"> </span><span class="nv">Write</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">will</span><span class="w"> </span><span class="nv">trigger</span><span class="w"> </span><span class="nv">an</span><span class="w"> </span><span class="nv">implicit</span><span class="w"> </span><span class="nv">WriteHeader</span><span class="ss">(</span><span class="nv">http</span>.<span class="nv">StatusOK</span><span class="ss">)</span>.<span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">Thus</span><span class="w"> </span><span class="nv">explicit</span><span class="w"> </span><span class="nv">calls</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">WriteHeader</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">mainly</span><span class="w"> </span><span class="nv">used</span><span class="w"> </span><span class="nv">to</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="k">send</span><span class="w"> </span><span class="nv">error</span><span class="w"> </span><span class="nv">codes</span><span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="mi">1</span><span class="nv">xx</span><span class="w"> </span><span class="nv">informational</span><span class="w"> </span><span class="nv">responses</span>.<span class="w"></span>
+<span class="o">//</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">provided</span><span class="w"> </span><span class="nv">code</span><span class="w"> </span><span class="nv">must</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">valid</span><span class="w"> </span><span class="nv">HTTP</span><span class="w"> </span><span class="mi">1</span><span class="nv">xx</span><span class="o">-</span><span class="mi">5</span><span class="nv">xx</span><span class="w"> </span><span class="nv">status</span><span class="w"> </span><span class="nv">code</span>.<span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">Any</span><span class="w"> </span><span class="nv">number</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="mi">1</span><span class="nv">xx</span><span class="w"> </span><span class="nv">headers</span><span class="w"> </span><span class="nv">may</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">written</span>,<span class="w"> </span><span class="nv">followed</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">at</span><span class="w"> </span><span class="nv">most</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">one</span><span class="w"> </span><span class="mi">2</span><span class="nv">xx</span><span class="o">-</span><span class="mi">5</span><span class="nv">xx</span><span class="w"> </span><span class="nv">header</span>.<span class="w"> </span><span class="mi">1</span><span class="nv">xx</span><span class="w"> </span><span class="nv">headers</span><span class="w"> </span><span class="nv">are</span><span class="w"> </span><span class="nv">sent</span><span class="w"> </span><span class="nv">immediately</span>,<span class="w"> </span><span class="nv">but</span><span class="w"> </span><span class="mi">2</span><span class="nv">xx</span><span class="o">-</span><span class="mi">5</span><span class="nv">xx</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">headers</span><span class="w"> </span><span class="nv">may</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">buffered</span>.<span class="w"> </span><span class="nv">Use</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">Flusher</span><span class="w"> </span><span class="nv">interface</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="k">send</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">buffered</span><span class="w"> </span><span class="nv">data</span>.<span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">header</span><span class="w"> </span><span class="nv">map</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">cleared</span><span class="w"> </span><span class="nv">when</span><span class="w"> </span><span class="mi">2</span><span class="nv">xx</span><span class="o">-</span><span class="mi">5</span><span class="nv">xx</span><span class="w"> </span><span class="nv">headers</span><span class="w"> </span><span class="nv">are</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">sent</span>,<span class="w"> </span><span class="nv">but</span><span class="w"> </span><span class="nv">not</span><span class="w"> </span><span class="nv">with</span><span class="w"> </span><span class="mi">1</span><span class="nv">xx</span><span class="w"> </span><span class="nv">headers</span>.<span class="w"></span>
+<span class="o">//</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">The</span><span class="w"> </span><span class="nv">server</span><span class="w"> </span><span class="nv">will</span><span class="w"> </span><span class="nv">automatically</span><span class="w"> </span><span class="k">send</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="ss">(</span><span class="k">Continue</span><span class="ss">)</span><span class="w"> </span><span class="nv">header</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">first</span><span class="w"> </span><span class="nv">read</span><span class="w"> </span><span class="nv">from</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">request</span><span class="w"> </span><span class="nv">body</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">request</span><span class="w"> </span><span class="nv">has</span><span class="w"></span>
+<span class="o">//</span><span class="w"> </span><span class="nv">an</span><span class="w"> </span><span class="s2">&quot;Expect: 100-continue&quot;</span><span class="w"> </span><span class="nv">header</span>.<span class="w"></span>
+</code></pre></div>
+
+<p>hay trong Gorilla/mux viết:</p>
+<blockquote>
+<p>Middlewares should write to ResponseWriter if they are going to terminate the request, and they should not write to ResponseWriter if they are not going to terminate it.
+<a href="https://github.com/gorilla/mux/tree/v1.8.1?tab=readme-ov-file#middleware">source</a></p>
+</blockquote>
+<h3>Kết luận</h3>
+<p>Happy bug fixing.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-03-04T00:00:00+07:00">Tue 04 March 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#go-ref">go
+                    <span class="superscript">12</span>
+</a></li>
+                <li><a href="./tags.html#header-ref">header
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#http-ref">http
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#til-ref">til
+                    <span class="superscript">7</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

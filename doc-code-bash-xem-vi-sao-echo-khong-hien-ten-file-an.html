@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="bash, C, shell, POSIX, readcode, glob, clang, lldb, frontpage, " />
+
+<meta property="og:title" content="Đọc code bash xem vì sao echo * không hiện tên file ẩn "/>
+<meta property="og:url" content="./doc-code-bash-xem-vi-sao-echo-khong-hien-ten-file-an.html" />
+<meta property="og:description" content="glob là gì $ whatis glob glob (7) - globbing pathnames Gõ man 7 glob có viết: NAME glob - globbing pathnames DESCRIPTION Long ago, in UNIX V6, there was a program /etc/glob that would expand wildcard patterns. Soon afterward this became a shell built-in. glob là khái niệm để &#34;match&#34; (chọn …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2024-09-10T00:00:00+07:00" />
+<meta name="twitter:title" content="Đọc code bash xem vì sao echo * không hiện tên file ẩn ">
+<meta name="twitter:description" content="glob là gì $ whatis glob glob (7) - globbing pathnames Gõ man 7 glob có viết: NAME glob - globbing pathnames DESCRIPTION Long ago, in UNIX V6, there was a program /etc/glob that would expand wildcard patterns. Soon afterward this became a shell built-in. glob là khái niệm để &#34;match&#34; (chọn …">
+
+        <title>Đọc code bash xem vì sao echo * không hiện tên file ẩn  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./doc-code-bash-xem-vi-sao-echo-khong-hien-ten-file-an.html">
+                Đọc code bash xem vì sao echo * không hiện tên file ẩn
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <h3>glob là gì</h3>
+<div class="highlight"><pre><span></span><code>$ whatis glob
+glob <span class="o">(</span><span class="m">7</span><span class="o">)</span>             - globbing pathnames
+</code></pre></div>
+
+<p>Gõ <a href="https://man7.org/linux/man-pages/man7/glob.7.html"><code>man 7 glob</code></a> có viết:</p>
+<div class="highlight"><pre><span></span><code>NAME
+       glob - globbing pathnames
+
+DESCRIPTION
+       Long ago, in UNIX V6, there was a program /etc/glob that would expand wildcard patterns.  Soon afterward this became a shell built-in.
+</code></pre></div>
+
+<p><code>glob</code> là khái niệm để "match" (chọn) filename sử dụng "pattern", gần giống với Regular Expression. Ví dụ trên shell gõ <code>ls *.py</code> sẽ hiện tên các file có đuôi <code>.py</code>.</p>
+<p>Điểm khác biệt so với Regular Expression: glob chỉ dùng để match filename, và các ký tự đặc biệt trong glob có ý nghĩa khác so với Regular Expression (ví dụ <code>*</code> có nghĩa khác).</p>
+<h3>Wildcard pattern là gì</h3>
+<p>Một string là 1 wildcard pattern nếu chứa <code>?</code> <code>*</code> hoặc <code>[</code>, glob là việc biến wildcard pattern thành list các filename "match" pattern.</p>
+<div class="highlight"><pre><span></span><code>   A &#39;?&#39; (not between brackets) matches any single character.
+   A &#39;*&#39; (not between brackets) matches any string, including the empty string.
+</code></pre></div>
+
+<p>Ví dụ</p>
+<div class="highlight"><pre><span></span><code>$ touch error.c error.h
+$ <span class="nb">echo</span> er??r.c
+error.c
+$ <span class="nb">echo</span> error.*
+error.c  error.h
+</code></pre></div>
+
+<p>Một điểm đáng chú ý là <code>*</code> không match các filename bắt đầu bằng dấu <code>.</code> - hay còn gọi là <strong>file ẩn</strong> (hidden file) trên các hệ điều hành UNIX/Linux. Muốn chọn cả các file bắt đầu bằng <code>.</code>, phải dùng <code>.*</code>.</p>
+<div class="highlight"><pre><span></span><code>$ touch error.c error.h
+$ touch .flag
+$ <span class="nb">echo</span> *
+error.c error.h
+$ <span class="nb">echo</span> .*
+.flag
+</code></pre></div>
+
+<h3>Đọc code bash xem tại sao glob <code>echo *</code> không hiện filename bắt đầu bằng dấu <code>.</code></h3>
+<p>Tải code bash 5.1 về</p>
+<div class="highlight"><pre><span></span><code>$ wget https://ftp.gnu.org/gnu/bash/bash-5.1.16.tar.gz
+--2024-09-10 <span class="m">21</span>:59:27--  https://ftp.gnu.org/gnu/bash/bash-5.1.16.tar.gz
+Resolving ftp.gnu.org <span class="o">(</span>ftp.gnu.org<span class="o">)</span>... <span class="m">209</span>.51.188.20, <span class="m">2001</span>:470:142:3::b
+Connecting to ftp.gnu.org <span class="o">(</span>ftp.gnu.org<span class="o">)</span><span class="p">|</span><span class="m">209</span>.51.188.20<span class="p">|</span>:443... connected.
+HTTP request sent, awaiting response... <span class="m">200</span> OK
+Length: <span class="m">10522932</span> <span class="o">(</span>10M<span class="o">)</span> <span class="o">[</span>application/x-gzip<span class="o">]</span>
+Saving to: ‘bash-5.1.16.tar.gz’
+
+bash-5.1.16.tar.gz           <span class="m">100</span>%<span class="o">[============================================</span>&gt;<span class="o">]</span>  <span class="m">10</span>,04M  <span class="m">3</span>,52MB/s    <span class="k">in</span> <span class="m">2</span>,8s
+
+<span class="m">2024</span>-09-10 <span class="m">21</span>:59:31 <span class="o">(</span><span class="m">3</span>,52 MB/s<span class="o">)</span> - ‘bash-5.1.16.tar.gz’ saved <span class="o">[</span><span class="m">10522932</span>/10522932<span class="o">]</span>
+
+$ tar xf bash-5.1.16.tar.gz
+$ <span class="nb">cd</span> bash-5.1.16
+</code></pre></div>
+
+<p>Tìm từ khóa glob</p>
+<div class="highlight"><pre><span></span><code>$ find . -name <span class="s1">&#39;*.c&#39;</span> <span class="p">|</span> xargs grep -l glob
+...
+./lib/glob/gmisc.c
+./lib/glob/smatch.c
+./lib/glob/xmbsrtowcs.c
+./lib/glob/strmatch.c
+./lib/glob/glob_loop.c
+./lib/glob/sm_loop.c
+./lib/glob/glob.c
+...
+</code></pre></div>
+
+<p>Thấy có riêng 1 thư mục tên <code>lib/glob</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="w"></span>
+<span class="cm">/* glob.c -- file-name wildcard pattern matching for Bash.</span>
+<span class="cm">...</span>
+<span class="cm">/* To whomever it may concern: I have never seen the code which most</span>
+<span class="cm">   Unix programs use to perform this function.  I wrote this from scratch</span>
+<span class="cm">   based on specifications for the pattern matching.  --RMS.  */</span><span class="w"></span>
+</code></pre></div>
+
+<p>Viết bởi <a href="https://en.wikipedia.org/wiki/Richard_Stallman">RMS - Richard Stallman</a> tác giả của GNU.</p>
+<p>Trong file này chỉ có 10 function:</p>
+<div class="highlight"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">extglob_skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">wskipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">wextglob_skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">mbskipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"></span>
+<span class="n">wdequote_pathname</span><span class="w"> </span><span class="p">(</span><span class="n">pathname</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"></span>
+<span class="n">dequote_pathname</span><span class="w"> </span><span class="p">(</span><span class="n">pathname</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="n">glob_testdir</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">globval</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
+<span class="n">finddirs</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">sdir</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">,</span><span class="w"> </span><span class="n">ep</span><span class="p">,</span><span class="w"> </span><span class="n">np</span><span class="p">)</span><span class="w"></span>
+<span class="o">--</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="w"></span>
+<span class="n">glob_dir_to_array</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="w"> </span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+</code></pre></div>
+
+<p>nhìn tên đoán <code>skipname</code> có vẻ là thứ cần tìm:</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/* Return 1 if DNAME should be skipped according to PAT.  Mostly concerned</span>
+<span class="cm">   with matching leading `.&#39;. */</span><span class="w"></span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"></span>
+<span class="nf">skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">pat</span><span class="p">;</span><span class="w"></span>
+<span class="w">     </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dname</span><span class="p">;</span><span class="w"></span>
+<span class="w">     </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="cp">#if EXTENDED_GLOB</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_pattern_p</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">))</span><span class="w">      </span><span class="cm">/* XXX */</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">));</span><span class="w"></span>
+<span class="cp">#endif</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">glob_always_skip_dot_and_dotdot</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">DOT_OR_DOTDOT</span><span class="w"> </span><span class="p">(</span><span class="n">dname</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="cm">/* If a leading dot need not be explicitly matched, and the pattern</span>
+<span class="cm">     doesn&#39;t start with a `.&#39;, don&#39;t match `.&#39; or `..&#39; */</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">noglob_dot_filenames</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;\\&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="n">DOT_OR_DOTDOT</span><span class="w"> </span><span class="p">(</span><span class="n">dname</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="cm">/* If a dot must be explicitly matched, check to see if they do. */</span><span class="w"></span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">noglob_dot_filenames</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;\\&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+
+<p>Comment rất rõ ràng:</p>
+<blockquote>
+<p>Return 1 if DNAME should be skipped according to PAT.  Mostly concerned with matching leading <code>.</code></p>
+</blockquote>
+<p>Xem trong các điều kiện return 1 trong function trên, thấy</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">noglob_dot_filenames</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;\\&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="p">))</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<p>nếu <code>noglob_dot_filenames</code> và filename tại index 0 có giá trị là . <code>dname[0] == '.'</code> và kí tự đầu tiên trong pattern không phải . <code>pat[0] != '.'</code> thì return 1 - tức bỏ qua file này.</p>
+<p><code>noglob_dot_filenames</code> là 1 global var:</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/* Global variable which controls whether or not * matches .*.</span>
+<span class="cm">   Non-zero means don&#39;t match .*.  */</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">noglob_dot_filenames</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Chạy debugger lldb xem code chạy</h3>
+<p>Thay vì các bài trước sửa code, thêm print, build lại, bài này dùng C debugger LLDB để debug và in ra.</p>
+<p>Clang là C compiler hiện đại, có debugger tương ứng là LLDB, combo hiện đại này xuất hiện trên MacOS và các hệ điều hành BSD khác. Combo khác hay dùng là gcc và gdb.</p>
+<div class="highlight"><pre><span></span><code>$ sudo apt install -y clang lldb
+...
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">CC</span><span class="o">=</span><span class="n">clang</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">configure</span><span class="w"></span>
+<span class="n">$</span><span class="w"> </span><span class="n">make</span><span class="w"> </span><span class="o">-</span><span class="n">j</span><span class="w"> </span><span class="n n-Quoted">`nproc`</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">make</span><span class="w"> </span><span class="o">-</span><span class="n">j</span><span class="w"> </span><span class="n n-Quoted">`nproc`</span><span class="w">  </span><span class="mi">28</span><span class="p">,</span><span class="n">47s</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="n">28s</span><span class="w"> </span><span class="k">system</span><span class="w"> </span><span class="mi">364</span><span class="o">%</span><span class="w"> </span><span class="k">cpu</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="mi">716</span><span class="w"> </span><span class="n">total</span><span class="w"></span>
+<span class="n">$</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="p">.</span><span class="o">/</span><span class="n">bash</span><span class="w"></span>
+<span class="p">.</span><span class="o">/</span><span class="n">bash</span><span class="o">:</span><span class="w"> </span><span class="n">ELF</span><span class="w"> </span><span class="mi">64</span><span class="o">-</span><span class="kt">bit</span><span class="w"> </span><span class="n">LSB</span><span class="w"> </span><span class="n">pie</span><span class="w"> </span><span class="n">executable</span><span class="p">,</span><span class="w"> </span><span class="n">x86</span><span class="o">-</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="n">SYSV</span><span class="p">),</span><span class="w"> </span><span class="n">dynamically</span><span class="w"> </span><span class="n">linked</span><span class="p">,</span><span class="w"> </span><span class="n">interpreter</span><span class="w"> </span><span class="o">/</span><span class="n">lib64</span><span class="o">/</span><span class="n">ld</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86</span><span class="o">-</span><span class="mf">64.</span><span class="n">so</span><span class="mf">.2</span><span class="p">,</span><span class="w"> </span><span class="n">BuildID</span><span class="err">[</span><span class="n">sha1</span><span class="err">]</span><span class="o">=</span><span class="n">cbc1d1b6f48f5881c417e988c2253f29d1a5900d</span><span class="p">,</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">GNU</span><span class="o">/</span><span class="n">Linux</span><span class="w"> </span><span class="mf">3.2.0</span><span class="p">,</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">debug_info</span><span class="p">,</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="n">stripped</span><span class="w"></span>
+</code></pre></div>
+
+<p>Mất 8s trên máy AMD Ryzen 3 4300U.</p>
+<h4>Các lệnh cơ bản của LLDB</h4>
+<ul>
+<li><code>b skipname</code> : tạo breakpoint tại function <code>skipname</code></li>
+<li><code>process launch -- -c 'echo *'</code> chạy chương trình với argument <code>-c 'echo *'</code></li>
+<li><code>bt</code> - in ra backtrace, hiển thị call-stack - tức function nào gọi function nào.</li>
+<li><code>n</code> chạy đến dòng code tiếp theo</li>
+<li><code>c</code> chạy đến breakpoint tiếp theo</li>
+<li><code>frame var</code> in ra các variable trong frame hiện tại</li>
+<li><code>finish</code> kết thúc function và in ra return value.</li>
+</ul>
+<p>gõ lệnh xong gõ enter để chạy.</p>
+<h4>dùng lldb chạy chương trình bash với argument <code>-c 'echo *'</code></h4>
+<div class="highlight"><pre><span></span><code><span class="n">$</span><span class="w"> </span><span class="n">mkdir</span><span class="w"> </span><span class="n">test</span><span class="w"></span>
+<span class="n">$</span><span class="w"> </span><span class="n">cd</span><span class="w"> </span><span class="n">test</span><span class="w"></span>
+<span class="n">$</span><span class="w"> </span><span class="n">touch</span><span class="w"> </span><span class="n">main</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="n">lib</span><span class="p">.</span><span class="n">py</span><span class="w"> </span><span class="p">.</span><span class="n">flag</span><span class="w"></span>
+<span class="n">$</span><span class="w"> </span><span class="n">lldb</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">bash</span><span class="w"></span>
+<span class="n">Traceback</span><span class="w"> </span><span class="p">(</span><span class="n">most</span><span class="w"> </span><span class="n">recent</span><span class="w"> </span><span class="n">call</span><span class="w"> </span><span class="n">last</span><span class="p">)</span><span class="o">:</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="n">create</span><span class="w"> </span><span class="s">&quot;../bash&quot;</span><span class="w"></span>
+<span class="n">Current</span><span class="w"> </span><span class="n">executable</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="err">&#39;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">me</span><span class="o">/</span><span class="n">bash</span><span class="mf">-5.1.16</span><span class="o">/</span><span class="n">bash</span><span class="err">&#39;</span><span class="w"> </span><span class="p">(</span><span class="n">x86_64</span><span class="p">).</span><span class="w"></span>
+
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="n">skipname</span><span class="w"></span>
+<span class="n">Breakpoint</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">22</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">268</span><span class="o">:</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00000000000b0fe6</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="o">--</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="err">&#39;</span><span class="n">echo</span><span class="w"> </span><span class="o">*</span><span class="err">&#39;</span><span class="w"></span>
+<span class="nl">error</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="n">launch</span><span class="err">&#39;</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">valid</span><span class="w"> </span><span class="n">command</span><span class="p">.</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="n">launch</span><span class="w"> </span><span class="o">--</span><span class="w"> </span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="err">&#39;</span><span class="n">echo</span><span class="w"> </span><span class="o">*</span><span class="err">&#39;</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">launched</span><span class="o">:</span><span class="w"> </span><span class="err">&#39;</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">me</span><span class="o">/</span><span class="n">bash</span><span class="mf">-5.1.16</span><span class="o">/</span><span class="n">bash</span><span class="err">&#39;</span><span class="w"> </span><span class="p">(</span><span class="n">x86_64</span><span class="p">)</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">stopped</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">breakpoint</span><span class="w"> </span><span class="mf">1.1</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604fe6</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s">&quot;*&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">268</span><span class="o">:</span><span class="mi">7</span><span class="w"></span>
+<span class="w">   </span><span class="mi">265</span><span class="w">       </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">266</span><span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="mi">267</span><span class="w">  </span><span class="err">#</span><span class="k">if</span><span class="w"> </span><span class="n">EXTENDED_GLOB</span><span class="w"></span>
+<span class="o">-&gt;</span><span class="w"> </span><span class="mi">268</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_pattern_p</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">))</span><span class="w">      </span><span class="cm">/* XXX */</span><span class="w"></span>
+<span class="w">   </span><span class="mi">269</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">));</span><span class="w"></span>
+<span class="w">   </span><span class="mi">270</span><span class="w">  </span><span class="err">#</span><span class="n">endif</span><span class="w"></span>
+<span class="w">   </span><span class="mi">271</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">bt</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">breakpoint</span><span class="w"> </span><span class="mf">1.1</span><span class="w"></span>
+<span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604fe6</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s">&quot;*&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">268</span><span class="o">:</span><span class="mi">7</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604d68</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">mbskipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">386</span><span class="o">:</span><span class="mi">13</span><span class="w"> </span><span class="p">[</span><span class="n">artificial</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">2</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555556040cf</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">glob_vector</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s">&quot;*&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dir</span><span class="o">=</span><span class="s">&quot;.&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">812</span><span class="o">:</span><span class="mi">26</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">3</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555556053e0</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">glob_filename</span><span class="p">(</span><span class="n">pathname</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">1492</span><span class="o">:</span><span class="mi">22</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">4</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555555d09fc</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">shell_glob_filename</span><span class="p">(</span><span class="n">pathname</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">qflags</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">pathexp</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">470</span><span class="o">:</span><span class="mi">13</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">5</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555555c2b46</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">expand_word_list_internal</span><span class="w"> </span><span class="p">[</span><span class="n">inlined</span><span class="p">]</span><span class="w"> </span><span class="n">glob_expand_word_list</span><span class="p">(</span><span class="n">tlist</span><span class="o">=</span><span class="mh">0x00005555556acc90</span><span class="p">,</span><span class="w"> </span><span class="n">eflags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">subst</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">11409</span><span class="o">:</span><span class="mi">17</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">6</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555555c2aca</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">expand_word_list_internal</span><span class="p">(</span><span class="n">list</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">eflags</span><span class="o">=</span><span class="mi">31</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">subst</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">12022</span><span class="o">:</span><span class="mi">13</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">7</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555555c2135</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">expand_words</span><span class="p">(</span><span class="n">list</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">subst</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">11357</span><span class="o">:</span><span class="mi">11</span><span class="w"> </span><span class="p">[</span><span class="n">artificial</span><span class="p">]</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">8</span><span class="o">:</span><span class="w"> </span><span class="mh">0x000055555559aa00</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">execute_simple_command</span><span class="p">(</span><span class="n">simple_command</span><span class="o">=</span><span class="mh">0x00005555556ac850</span><span class="p">,</span><span class="w"> </span><span class="n">pipe_in</span><span class="o">=</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">pipe_out</span><span class="o">=</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">async</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">fds_to_close</span><span class="o">=</span><span class="mh">0x00005555556ac910</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">execute_cmd</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">4381</span><span class="o">:</span><span class="mi">15</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">9</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555599638</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">execute_command_internal</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="mh">0x00005555556ac810</span><span class="p">,</span><span class="w"> </span><span class="n">asynchronous</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">pipe_in</span><span class="o">=</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">pipe_out</span><span class="o">=</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="n">fds_to_close</span><span class="o">=</span><span class="mh">0x00005555556ac910</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">execute_cmd</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">846</span><span class="o">:</span><span class="mi">4</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">10</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555555f0f87</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">parse_and_execute</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s">&quot;echo *&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">from_file</span><span class="o">=</span><span class="s">&quot;-c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">evalstring</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">489</span><span class="o">:</span><span class="mi">17</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">11</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555585f60</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">run_one_command</span><span class="p">(</span><span class="n">command</span><span class="o">=</span><span class="s">&quot;echo *&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">shell</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">1440</span><span class="o">:</span><span class="mi">12</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">12</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555555854f3</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">main</span><span class="p">(</span><span class="n">argc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="o">=</span><span class="mh">0x00007fffffffe6c8</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">shell</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">741</span><span class="o">:</span><span class="mi">7</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">13</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00007ffff7c29d90</span><span class="w"> </span><span class="n">libc</span><span class="p">.</span><span class="n">so</span><span class="mf">.6</span><span class="err">`</span><span class="n">__libc_start_call_main</span><span class="p">(</span><span class="n">main</span><span class="o">=</span><span class="p">(</span><span class="n">bash</span><span class="err">`</span><span class="n">main</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">shell</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">368</span><span class="p">),</span><span class="w"> </span><span class="n">argc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="o">=</span><span class="mh">0x00007fffffffe6c8</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">libc_start_call_main</span><span class="p">.</span><span class="n">h</span><span class="o">:</span><span class="mi">58</span><span class="o">:</span><span class="mi">16</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">14</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00007ffff7c29e40</span><span class="w"> </span><span class="n">libc</span><span class="p">.</span><span class="n">so</span><span class="mf">.6</span><span class="err">`</span><span class="n">__libc_start_main_impl</span><span class="p">(</span><span class="n">main</span><span class="o">=</span><span class="p">(</span><span class="n">bash</span><span class="err">`</span><span class="n">main</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">shell</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">368</span><span class="p">),</span><span class="w"> </span><span class="n">argc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="o">=</span><span class="mh">0x00007fffffffe6c8</span><span class="p">,</span><span class="w"> </span><span class="n">init</span><span class="o">=</span><span class="mh">0x00007ffff7ffd040</span><span class="p">,</span><span class="w"> </span><span class="n">fini</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">rtld_fini</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">stack_end</span><span class="o">=</span><span class="mh">0x00007fffffffe6b8</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">libc</span><span class="o">-</span><span class="n">start</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">392</span><span class="o">:</span><span class="mi">3</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">15</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555583de5</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">_start</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">37</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="n">var</span><span class="w"></span>
+<span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">pat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="n">variable</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">dname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00005555556af053</span><span class="w"> </span><span class="s">&quot;.&quot;</span><span class="w"></span>
+<span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">location</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">been</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="n">out</span><span class="o">&gt;</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">c</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">resuming</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">stopped</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">breakpoint</span><span class="w"> </span><span class="mf">1.1</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604fe6</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s">&quot;*&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=</span><span class="s">&quot;.flag&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">268</span><span class="o">:</span><span class="mi">7</span><span class="w"></span>
+<span class="w">   </span><span class="mi">265</span><span class="w">       </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">266</span><span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="mi">267</span><span class="w">  </span><span class="err">#</span><span class="k">if</span><span class="w"> </span><span class="n">EXTENDED_GLOB</span><span class="w"></span>
+<span class="o">-&gt;</span><span class="w"> </span><span class="mi">268</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_pattern_p</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">))</span><span class="w">      </span><span class="cm">/* XXX */</span><span class="w"></span>
+<span class="w">   </span><span class="mi">269</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">));</span><span class="w"></span>
+<span class="w">   </span><span class="mi">270</span><span class="w">  </span><span class="err">#</span><span class="n">endif</span><span class="w"></span>
+<span class="w">   </span><span class="mi">271</span><span class="w"></span>
+
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="n">var</span><span class="w"></span>
+<span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">pat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="n">variable</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="w"></span>
+
+<span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">dname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x00005555556af06b</span><span class="w"> </span><span class="s">&quot;.flag&quot;</span><span class="w"></span>
+<span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">location</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">have</span><span class="w"> </span><span class="n">been</span><span class="w"> </span><span class="n">optimized</span><span class="w"> </span><span class="n">out</span><span class="o">&gt;</span><span class="w"></span>
+</code></pre></div>
+
+<p>Tới đây ta có filename đang được xét là <code>.flag</code>,và <code>pat="*"</code></p>
+<div class="highlight"><pre><span></span><code>    frame #0: 0x0000555555604fe6 bash`skipname(pat=&quot;*&quot;, dname=&quot;.flag&quot;, flags=&lt;unavailable&gt;) at glob.c:268:7
+</code></pre></div>
+
+<p>bấm <code>n</code> cho tới khi thấy</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w">  </span><span class="n">n</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">stopped</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">over</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555605180</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=</span><span class="s">&quot;.flag&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">283</span><span class="o">:</span><span class="mi">45</span><span class="w"></span>
+<span class="w">   </span><span class="mi">280</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">281</span><span class="w"></span>
+<span class="w">   </span><span class="mi">282</span><span class="w">    </span><span class="cm">/* If a dot must be explicitly matched, check to see if they do. */</span><span class="w"></span>
+<span class="o">-&gt;</span><span class="w"> </span><span class="mi">283</span><span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">noglob_dot_filenames</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">dname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">284</span><span class="w">      </span><span class="p">(</span><span class="n">pat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;\\&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">pat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;.&#39;</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="mi">285</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">286</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">stopped</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">over</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mh">0x00005555556051e3</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=</span><span class="s">&quot;.flag&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">288</span><span class="o">:</span><span class="mi">1</span><span class="w"></span>
+<span class="w">   </span><span class="mi">285</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">286</span><span class="w"></span>
+<span class="w">   </span><span class="mi">287</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="o">-&gt;</span><span class="w"> </span><span class="mi">288</span><span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">   </span><span class="mi">289</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">finish</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">out</span><span class="w"></span>
+<span class="n">Stepped</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="n">past</span><span class="o">:</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604d68</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">mbskipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">summary</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">386</span><span class="o">:</span><span class="mi">13</span><span class="w"> </span><span class="p">[</span><span class="n">artificial</span><span class="p">]</span><span class="w"></span>
+
+<span class="n">Return</span><span class="w"> </span><span class="n">value</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">$13</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+</code></pre></div>
+
+<p>thấy sau khi <code>finish</code> function trả về <code>1</code> tức skip file <code>.flag</code>.</p>
+<p>Làm tương tự, thấy trả về <code>0</code> với <code>lib.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">c</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">resuming</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">stopped</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">breakpoint</span><span class="w"> </span><span class="mf">8.1</span><span class="w"></span>
+<span class="w">    </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">0</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604fe6</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">skipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=</span><span class="s">&quot;*&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=</span><span class="s">&quot;lib.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">unavailable</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">268</span><span class="o">:</span><span class="mi">7</span><span class="w"></span>
+<span class="w">   </span><span class="mi">265</span><span class="w">       </span><span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="mi">266</span><span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="mi">267</span><span class="w">  </span><span class="err">#</span><span class="k">if</span><span class="w"> </span><span class="n">EXTENDED_GLOB</span><span class="w"></span>
+<span class="o">-&gt;</span><span class="w"> </span><span class="mi">268</span><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_pattern_p</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">))</span><span class="w">      </span><span class="cm">/* XXX */</span><span class="w"></span>
+<span class="w">   </span><span class="mi">269</span><span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">extglob_skipname</span><span class="w"> </span><span class="p">(</span><span class="n">pat</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="p">));</span><span class="w"></span>
+<span class="w">   </span><span class="mi">270</span><span class="w">  </span><span class="err">#</span><span class="n">endif</span><span class="w"></span>
+<span class="w">   </span><span class="mi">271</span><span class="w"></span>
+<span class="p">(</span><span class="n">lldb</span><span class="p">)</span><span class="w"> </span><span class="n">finish</span><span class="w"></span>
+<span class="n">Process</span><span class="w"> </span><span class="mi">17373</span><span class="w"> </span><span class="n">stopped</span><span class="w"></span>
+<span class="o">*</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">bash</span><span class="err">&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="n">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="n">out</span><span class="w"></span>
+<span class="n">Stepped</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="n">past</span><span class="o">:</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="err">#</span><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="mh">0x0000555555604d68</span><span class="w"> </span><span class="n">bash</span><span class="err">`</span><span class="n">mbskipname</span><span class="p">(</span><span class="n">pat</span><span class="o">=&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">dname</span><span class="o">=&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="o">=&lt;</span><span class="n">no</span><span class="w"> </span><span class="n">summary</span><span class="w"> </span><span class="n">available</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="n">at</span><span class="w"> </span><span class="n">glob</span><span class="p">.</span><span class="n">c</span><span class="o">:</span><span class="mi">386</span><span class="o">:</span><span class="mi">13</span><span class="w"> </span><span class="p">[</span><span class="n">artificial</span><span class="p">]</span><span class="w"></span>
+
+<span class="n">Return</span><span class="w"> </span><span class="n">value</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">$14</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Tham khảo</h3>
+<p><code>man 7 glob</code></p>
+<h2>Kết luận</h2>
+<p>glob không match file ẩn có tên bắt đầu bằng <code>.</code>.
+Đọc code C khó quá thì chạy debugger LLDB.</p>
+<p>Written using</p>
+<div class="highlight"><pre><span></span><code>$ bash --version
+GNU bash, version <span class="m">5</span>.1.16<span class="o">(</span><span class="m">1</span><span class="o">)</span>-release <span class="o">(</span>x86_64-pc-linux-gnu<span class="o">)</span>
+</code></pre></div>
+
+<p>Hết.</p>
+<p>HVN at <a href="http://pymi.vn">http://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://tuoitre.vn/ban-doc-tuoi-tre-lien-tuc-dong-gop-gui-den-nguoi-dan-mien-bac-20240910182204886.htm">Ủng hộ đồng bào bị ảnh hưởng bởi cơn bão số 3.</a></p>
+<blockquote>
+<p>Báo Tuổi Trẻ, Ngân hàng Công thương chi nhánh 3, TP.HCM. Số tài khoản: 113000006100 (Việt Nam đồng). Nội dung: Ủng hộ đồng bào bị ảnh hưởng bởi cơn bão số 3.</p>
+</blockquote>
+<p><img alt="yagi" src="./images/yagi.webp"></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2024-09-10T00:00:00+07:00">Tue 10 September 2024</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#bash-ref">bash
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#c-ref">C
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#clang-ref">clang
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#glob-ref">glob
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#lldb-ref">lldb
+                    <span class="superscript">1</span>
+</a></li>
+                <li><a href="./tags.html#posix-ref">POSIX
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#readcode-ref">readcode
+                    <span class="superscript">5</span>
+</a></li>
+                <li><a href="./tags.html#shell-ref">shell
+                    <span class="superscript">5</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="openbsd, vmm, alpine, debian, en,, " />
+
+<meta property="og:title" content="Using virtual machine via vmd on OpenBSD 6.8 "/>
+<meta property="og:url" content="./using-virtual-machine-via-vmd-on-openbsd-68.html" />
+<meta property="og:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2021-02-20T16:00:00+07:00" />
+<meta name="twitter:title" content="Using virtual machine via vmd on OpenBSD 6.8 ">
+<meta name="twitter:description" content="OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon. Instead of installing VirtualBox or look for kvm on OpenBSD, everything is already there, a built-in virtualization solution. Check wiki FAQ first https://www.openbsd.org/faq/faq16.html it lists all features, not ready features, prequisites …">
+
+        <title>Using virtual machine via vmd on OpenBSD 6.8  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./using-virtual-machine-via-vmd-on-openbsd-68.html">
+                Using virtual machine via vmd on OpenBSD 6.8
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>OpenBSD 6.8 comes with the vmm(4) hypervisor and vmd(8) daemon.
+Instead of installing VirtualBox or look for kvm on OpenBSD, everything
+is already there, a built-in virtualization solution.</p>
+<h3>Check wiki FAQ first</h3>
+<p>https://www.openbsd.org/faq/faq16.html</p>
+<p>it lists all features, not ready features, prequisites, basic commands.</p>
+<h2>Distro</h2>
+<p>Sure run OpenBSD guest on OpenBSD host is "should just work", it's fully tested.
+But for Linux based OS, the options are not much:</p>
+<p>It's a real coincidence, someone asked the question two days ago on Reddit:
+https://www.reddit.com/r/openbsd/comments/llscql/most_easiest_linux_distro_to_install_in_vmd/</p>
+<p>Thanks to the answers there, I tried many but success only some:</p>
+<ul>
+<li>AlpineLinux: use "Virtual" edition https://alpinelinux.org/downloads/
+  "it just works", just boot on and run <code>setup-alpine</code></li>
+<li>Debian: I used <code>debian-10.8.0-amd64-netinst.iso</code>,
+  after start, type Tab, then enter <code>console=ttyS0,115200</code> then enter,
+  the text-based-curse-like UI would work.</li>
+</ul>
+<p>And these failed:</p>
+<ul>
+<li>Ubuntu: <code>ubuntu-20.04.2-live-server-amd64.iso</code>, failed.</li>
+<li>NixOS: failed at phase 2/3 of systemd.</li>
+<li>ArchLinux: failed with error <code>ACPI BIOS Error (bug): A valid RSDP was not found (20200925/tbxfroot-210)</code></li>
+</ul>
+<p>Most of these default to use Video, thus must add boot parameter:</p>
+<blockquote>
+<p>type Tab, then enter <code>console=ttyS0,115200</code> then enter,</p>
+</blockquote>
+<p>https://help.ubuntu.com/lts/installation-guide/amd64/ch05s03.html</p>
+<h3>Network</h3>
+<p>Setup <code>pf</code> and <code>sysctl net.inet.ip.forwarding=1</code>
+as metioned in <a href="http://www.openbsd.org/faq/faq16.html#VMMnet">FAQ, <code>NAT for the VMs</code></a></p>
+<p>After installed, can ssh from OpenBSD host to guest via, change to your IP get from
+output of <code>ip ad</code> after installed:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ssh</span><span class="w"> </span><span class="n">root</span><span class="mf">@100.64.1.3</span><span class="w"> </span><span class="o">-</span><span class="n">v</span><span class="w"></span>
+</code></pre></div>
+
+<p>Note that password login seems always fail even put correct password
+(or maybe Linux-based OS disabled them by default). Copy your pubkey
+to <code>/root/.ssh/authorized_keys</code> then ssh would work.</p>
+<h3>Commands</h3>
+<p>Two major important commands:</p>
+<h4>Create image</h4>
+<div class="highlight"><pre><span></span><code>vmctl create -s 10G image.qcow2
+</code></pre></div>
+
+<h4>Start VM</h4>
+<div class="highlight"><pre><span></span><code><span class="nv">vmctl</span><span class="w"> </span><span class="nv">start</span><span class="w"> </span>\<span class="w"></span>
+<span class="w">  </span><span class="o">-</span><span class="nv">i</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span>\<span class="w"> </span>#<span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="nv">interface</span><span class="w"></span>
+<span class="w">  </span><span class="o">-</span><span class="nv">L</span><span class="w"> </span>\<span class="w"> </span>#<span class="w"> </span><span class="nv">create</span><span class="w"> </span><span class="nv">interface</span><span class="w"></span>
+<span class="w">  </span><span class="o">-</span><span class="nv">c</span><span class="w"> </span>\<span class="w"> </span>#<span class="w"> </span><span class="nv">auto</span><span class="w"> </span><span class="k">connect</span><span class="w"> </span><span class="nv">console</span><span class="w"> </span><span class="nv">after</span><span class="w"> </span><span class="nv">started</span><span class="w"></span>
+<span class="w">  </span><span class="o">-</span><span class="nv">m</span><span class="w"> </span><span class="mi">1</span><span class="nv">G</span><span class="w"> </span>\<span class="w"> </span>#<span class="w"> </span><span class="mi">1</span><span class="nv">G</span><span class="w"> </span><span class="nv">memory</span><span class="w"></span>
+<span class="w">  </span><span class="o">-</span><span class="nv">r</span><span class="w"> </span><span class="nv">file</span>.<span class="nv">iso</span><span class="w"> </span>\<span class="w"> </span>#<span class="w"> </span><span class="nv">path</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">ISO</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="ss">(</span><span class="nv">CD</span><span class="ss">)</span><span class="w"></span>
+<span class="w">  </span><span class="o">-</span><span class="nv">d</span><span class="w"> </span><span class="nv">image</span>.<span class="nv">qcow2</span><span class="w"> </span>\<span class="w"> </span>#<span class="w"> </span><span class="nv">image</span><span class="w"> </span><span class="nv">created</span><span class="w"> </span><span class="nv">above</span><span class="w"></span>
+<span class="w">  </span><span class="nv">myvm</span><span class="w"> </span>#<span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">VM</span><span class="w"></span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code>vmctl status
+vmctl stop ID
+</code></pre></div>
+
+<p>The start command would start and give the name temporary, after installed,
+create a file at <code>/etc/vm.conf</code> with config like:</p>
+<div class="highlight"><pre><span></span><code>vm &quot;alpine&quot; {
+    disable  # disable auto start when boot
+    memory 1G
+    disk &quot;/root/linux.qcow2&quot;
+    local interface
+}
+</code></pre></div>
+
+<h3>Result</h3>
+<p>VMs installed successfully run smoothly on vmd, low CPU usage (compare to
+VirtualBox on MacOS).</p>
+<p>Have fun.</p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2021-02-20T16:00:00+07:00">Sat 20 February 2021</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#en-ref">en,</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#alpine-ref">alpine
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#debian-ref">debian
+                    <span class="superscript">4</span>
+</a></li>
+                <li><a href="./tags.html#openbsd-ref">openbsd
+                    <span class="superscript">7</span>
+</a></li>
+                <li><a href="./tags.html#vmm-ref">vmm
+                    <span class="superscript">1</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>

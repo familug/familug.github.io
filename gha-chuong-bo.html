@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="./theme/css/elegant.prod.9e9d5ce754.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./theme/css/custom.css" media="screen">
+
+        <link rel="dns-prefetch" href="//fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+
+        <meta name="author" content="hvn" />
+
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
+<meta name="keywords" content="github action, gha, security, frontpage, " />
+
+<meta property="og:title" content="Điều gì tệ hơn &#34;mất bò mới lo làm chuồng&#34; "/>
+<meta property="og:url" content="./gha-chuong-bo.html" />
+<meta property="og:description" content="Nửa tháng sau khi GitHub action tj-actions/changed-file bị hack, thế giới có gì thay đổi? Xưa các cụ có câu &#34;mất bò mới lo làm chuồng&#34;, nhằm phê phán việc không quan tâm đến chuồng của con bò. Nhưng điều tệ hơn là gì? mất bò xong vẫn không …" />
+<meta property="og:site_name" content="FAMILUG.org Vietnam" />
+<meta property="og:article:author" content="hvn" />
+<meta property="og:article:published_time" content="2025-03-30T00:00:00+07:00" />
+<meta name="twitter:title" content="Điều gì tệ hơn &#34;mất bò mới lo làm chuồng&#34; ">
+<meta name="twitter:description" content="Nửa tháng sau khi GitHub action tj-actions/changed-file bị hack, thế giới có gì thay đổi? Xưa các cụ có câu &#34;mất bò mới lo làm chuồng&#34;, nhằm phê phán việc không quan tâm đến chuồng của con bò. Nhưng điều tệ hơn là gì? mất bò xong vẫn không …">
+
+        <title>Điều gì tệ hơn &#34;mất bò mới lo làm chuồng&#34;  · FAMILUG.org Vietnam
+</title>
+
+
+
+    </head>
+    <body>
+        <div id="content">
+            <div class="navbar navbar-static-top">
+                <div class="navbar-inner">
+                    <div class="container-fluid">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <a class="brand" href="./"><span class=site-name>FAMILUG.org Vietnam</span></a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav pull-right top-menu">
+                                <li >
+                                    <a href=
+                                       .
+                                    >Home</a>
+                                </li>
+                                <li ><a href="./categories.html">Categories</a></li>
+                                <li ><a href="./tags.html">Tags</a></li>
+                                <li ><a href="./archives.html">Archives</a></li>
+                                <li><form class="navbar-search" action="./search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span1"></div>
+                    <div class="span10">
+<article itemscope>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+        <h1>
+            <a href="./gha-chuong-bo.html">
+                Điều gì tệ hơn "mất bò mới lo làm chuồng"
+            </a>
+        </h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+            
+            <p>Nửa tháng sau khi <a href="./github-action-pinning.html">GitHub action tj-actions/changed-file bị hack</a>, thế giới có gì thay đổi? </p>
+<p>Xưa các cụ có câu "mất bò mới lo làm chuồng", nhằm phê phán việc không quan tâm đến chuồng của con bò. Nhưng điều tệ hơn là gì? </p>
+<h3>mất bò xong vẫn không làm chuồng</h3>
+<p>Trong ngành IT (hay việc gì cũng thế), thất bại là chỗ người ta rút kinh nhiệm để tiến bộ hơn, phát triển hơn hôm qua. Thôi thì qua đã mất bò thì làm chuồng để mai không mất nữa.
+Nhưng như mọi "kinh nghiệm", nó không được học qua "chuyện kể"/"lời khuyên" mà chỉ thực sự thấm nếu đã phải trả giá. Internet vẫn tiếp tục dùng GitHub action không pinning tới SHA1 commit hash...</p>
+<p>Blog FAMILUG do 1 phút lười biếng cũng dùng GHA <code>nelsonjchen/gh-pages-pelican-action@master</code>, để rồi hôm nay trả giá 30 phút <a href="https://github.com/familug/familug.github.io/commit/e64e5b345379595003cd665efb70067a8a9333cf">gỡ bỏ GHA</a> này.
+GHA build blog FAMILUG giờ chỉ còn dùng action chính thức của GitHub. Mà nếu GitHub bị hack... thì mọi lo lắng khác đều không có nghĩa lý gì khi blog familug.github.io chạy trên GitHub page.</p>
+<p>Thêm 1 điều <strong>thú vị</strong> rằng: GHA  <a href="https://github.com/nelsonjchen/gh-pages-pelican-action">https://github.com/nelsonjchen/gh-pages-pelican-action</a> cũng đã chuyển sang chế độ "archived" mà người dùng không hề hay biết:</p>
+<blockquote>
+<p>This repository was archived by the owner on Mar 23, 2025. It is now read-only. </p>
+</blockquote>
+<h3>Kết luận</h3>
+<p>Cuối cùng cũng đã làm chuồng.</p>
+<p>Hết.</p>
+<p>HVN at <a href="https://pymi.vn">https://pymi.vn</a> and <a href="https://www.familug.org">https://www.familug.org</a>.</p>
+<p><a href="https://www.familug.org/p/ung-ho.html">Ủng hộ tác giả 🍺</a></p>
+
+
+             
+ 
+            
+            
+            
+
+
+
+
+
+
+
+            <hr/>
+        </div>
+        <section id="article-sidebar" class="span2">
+            <h4>Published</h4>
+            <time itemprop="dateCreated" datetime="2025-03-30T00:00:00+07:00">Sun 30 March 2025</time>
+            <h4>Category</h4>
+            <a class="category-link" href="./categories.html#frontpage-ref">frontpage</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="./tags.html#gha-ref">gha
+                    <span class="superscript">3</span>
+</a></li>
+                <li><a href="./tags.html#github-action-ref">github action
+                    <span class="superscript">2</span>
+</a></li>
+                <li><a href="./tags.html#security-ref">security
+                    <span class="superscript">3</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+<div id="sidebar-social-link">
+</div>
+            
+
+
+
+
+
+            
+
+
+
+
+
+        </section>
+</div>
+</article>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe.
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>                    </div>
+                    <div class="span1"></div>
+                </div>
+            </div>
+        </div>
+<footer>
+
+
+
+
+    <div id="fpowered">
+        Powered by: <a href="http://getpelican.com/" title="Pelican Home Page" target="_blank" rel="nofollow noopener noreferrer">Pelican</a>
+        Theme: <a href="https://elegant.oncrashreboot.com/" title="Theme Elegant Home Page" target="_blank" rel="nofollow noopener noreferrer">Elegant</a>
+    </div>
+</footer>            <script src="//code.jquery.com/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="./theme/js/elegant.prod.9e9d5ce754.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    <script>
+    (function () {
+        if (window.location.hash.match(/^#comment-\d+$/)) {
+            $('#comment_thread').collapse('show');
+        }
+    })();
+    window.onhashchange=function(){
+        if (window.location.hash.match(/^#comment-\d+$/))
+            window.location.reload(true);
+    }
+    $('#comment_thread').on('shown', function () {
+        var link = document.getElementById('comment-accordion-toggle');
+        var old_innerHTML = link.innerHTML;
+        $(link).fadeOut(200, function() {
+            $(this).text('Click here to hide comments').fadeIn(200);
+        });
+        $('#comment_thread').on('hidden', function () {
+            $(link).fadeOut(200, function() {
+                $(this).text(old_innerHTML).fadeIn(200);
+            });
+        })
+    })
+</script>
+
+    </body>
+    <!-- Theme: Elegant built for Pelican
+        License : MIT -->
+</html>
